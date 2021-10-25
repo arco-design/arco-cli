@@ -1,0 +1,51 @@
+.ac-browser {
+  width: 100%;
+  min-height: 40px;
+  height: auto;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    height: 28px;
+    margin: 0;
+    padding: 0 12px;
+    border-radius: 2px 2px 0 0;
+    background-color: #23272e;
+
+    &::before {
+      display: block;
+      width: 12px;
+      height: 12px;
+      background-color: #ff5959;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 #ff5959, 1.5em 0 0 0 #ffc75a, 3em 0 0 0 #6bdb43;
+      content: '';
+    }
+  }
+
+  &-with-url &-header {
+    &::after {
+      position: absolute;
+      top: 8px;
+      left: 90px;
+      display: block;
+      width: calc(100% - 120px);
+      height: 16px;
+      background-color: #fff;
+      border-radius: 2px;
+      content: '';
+    }
+  }
+
+  &-content {
+    max-height: 400px;
+    border: 1px solid #e8e9ea;
+    border-top: none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    overflow: auto;
+  }
+}

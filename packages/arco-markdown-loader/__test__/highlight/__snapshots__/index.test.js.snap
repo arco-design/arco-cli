@@ -1,0 +1,223 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`markdown highlight code 1`] = `
+"import React, { useState } from \\"react\\";
+export default function (props) {
+  const [isUsage, setIsUsage] = useState(false);
+  const [showChangelog, setShowChangelog] = useState(false);
+  const lang = localStorage.getItem(\\"arco-lang\\") || \\"zh-CN\\";
+  return (
+    <span style={props.style} className=\\"markdown-body\\">
+      <h1 id=\\"markdown-highlight\\">Markdown Highlight</h1>
+      <p>Markdown highlight code.</p>
+      <pre className=\\"code_block\\">
+        <code className=\\"language-js\\">
+          <span className=\\"token keyword module\\">import</span>{\\" \\"}
+          <span className=\\"token imports\\">
+            <span className=\\"token punctuation\\">{\\"{\\"}</span>{\\" \\"}
+            <span className=\\"token maybe-class-name\\">Avatar</span>
+            <span className=\\"token punctuation\\">,</span>{\\" \\"}
+            <span className=\\"token maybe-class-name\\">Typography</span>
+            <span className=\\"token punctuation\\">,</span>{\\" \\"}
+            <span className=\\"token maybe-class-name\\">Space</span>{\\" \\"}
+            <span className=\\"token punctuation\\">{\\"}\\"}</span>
+          </span>{\\" \\"}
+          <span className=\\"token keyword module\\">from</span>{\\" \\"}
+          <span className=\\"token string\\">'@arco-design/web-react'</span>
+          <span className=\\"token punctuation\\">;</span>
+          <br />
+          <span className=\\"token keyword module\\">import</span>{\\" \\"}
+          <span className=\\"token imports\\">
+            <span className=\\"token punctuation\\">{\\"{\\"}</span>{\\" \\"}
+            <span className=\\"token maybe-class-name\\">IconUser</span>{\\" \\"}
+            <span className=\\"token punctuation\\">{\\"}\\"}</span>
+          </span>{\\" \\"}
+          <span className=\\"token keyword module\\">from</span>{\\" \\"}
+          <span className=\\"token string\\">'@arco-design/web-react/icon'</span>
+          <span className=\\"token punctuation\\">;</span>
+          <br />
+          <br />
+          <span className=\\"token keyword\\">const</span>{\\" \\"}
+          <span className=\\"token punctuation\\">{\\"{\\"}</span>{\\" \\"}
+          <span className=\\"token maybe-class-name\\">Text</span>{\\" \\"}
+          <span className=\\"token punctuation\\">{\\"}\\"}</span>{\\" \\"}
+          <span className=\\"token operator\\">=</span>{\\" \\"}
+          <span className=\\"token maybe-class-name\\">Typography</span>
+          <span className=\\"token punctuation\\">;</span>
+          <br />
+          <br />
+          <span className=\\"token maybe-class-name\\">ReactDOM</span>
+          <span className=\\"token punctuation\\">.</span>
+          <span className=\\"token method function property-access\\">render</span>
+          <span className=\\"token punctuation\\">(</span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;</span>
+              <span className=\\"token class-name\\">Space</span>
+            </span>{\\" \\"}
+            <span className=\\"token attr-name\\">size</span>
+            <span className=\\"token attr-value\\">
+              <span className=\\"token punctuation attr-equals\\">=</span>
+              <span className=\\"token punctuation\\">\\"</span>large
+              <span className=\\"token punctuation\\">\\"</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <span className=\\"token constant\\">A</span>
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;/</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>{\\" \\"}
+            <span className=\\"token attr-name\\">style</span>
+            <span className=\\"token script language-javascript\\">
+              <span className=\\"token script-punctuation punctuation\\">=</span>
+              <span className=\\"token punctuation\\">{\\"{\\"}</span>
+              <span className=\\"token punctuation\\">{\\"{\\"}</span> backgroundColor
+              <span className=\\"token operator\\">:</span>{\\" \\"}
+              <span className=\\"token string\\">'#3370ff'</span>{\\" \\"}
+              <span className=\\"token punctuation\\">{\\"}\\"}</span>
+              <span className=\\"token punctuation\\">{\\"}\\"}</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;</span>
+              <span className=\\"token class-name\\">IconUser</span>
+            </span>{\\" \\"}
+            <span className=\\"token punctuation\\">/></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;/</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>{\\" \\"}
+            <span className=\\"token attr-name\\">style</span>
+            <span className=\\"token script language-javascript\\">
+              <span className=\\"token script-punctuation punctuation\\">=</span>
+              <span className=\\"token punctuation\\">{\\"{\\"}</span>
+              <span className=\\"token punctuation\\">{\\"{\\"}</span> backgroundColor
+              <span className=\\"token operator\\">:</span>{\\" \\"}
+              <span className=\\"token string\\">'#14a9f8'</span>{\\" \\"}
+              <span className=\\"token punctuation\\">{\\"}\\"}</span>
+              <span className=\\"token punctuation\\">{\\"}\\"}</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <span className=\\"token maybe-class-name\\">Arco</span>
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;/</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>{\\" \\"}
+            <span className=\\"token attr-name\\">style</span>
+            <span className=\\"token script language-javascript\\">
+              <span className=\\"token script-punctuation punctuation\\">=</span>
+              <span className=\\"token punctuation\\">{\\"{\\"}</span>
+              <span className=\\"token punctuation\\">{\\"{\\"}</span> backgroundColor
+              <span className=\\"token operator\\">:</span>{\\" \\"}
+              <span className=\\"token string\\">'#00d0b6'</span>{\\" \\"}
+              <span className=\\"token punctuation\\">{\\"}\\"}</span>
+              <span className=\\"token punctuation\\">{\\"}\\"}</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <span className=\\"token maybe-class-name\\">Design</span>
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;/</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;</span>img
+            </span>{\\" \\"}
+            <span className=\\"token attr-name\\">alt</span>
+            <span className=\\"token attr-value\\">
+              <span className=\\"token punctuation attr-equals\\">=</span>
+              <span className=\\"token punctuation\\">\\"</span>avatar
+              <span className=\\"token punctuation\\">\\"</span>
+            </span>{\\" \\"}
+            <span className=\\"token attr-name\\">src</span>
+            <span className=\\"token attr-value\\">
+              <span className=\\"token punctuation attr-equals\\">=</span>
+              <span className=\\"token punctuation\\">\\"</span>xx.png
+              <span className=\\"token punctuation\\">\\"</span>
+            </span>{\\" \\"}
+            <span className=\\"token punctuation\\">/></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;/</span>
+              <span className=\\"token class-name\\">Avatar</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <br />{\\" \\"}
+          <span className=\\"token tag\\">
+            <span className=\\"token tag\\">
+              <span className=\\"token punctuation\\">&lt;/</span>
+              <span className=\\"token class-name\\">Space</span>
+            </span>
+            <span className=\\"token punctuation\\">></span>
+          </span>
+          <span className=\\"token punctuation\\">,</span>
+          <br /> <span className=\\"token constant\\">CONTAINER</span>
+          <br />
+          <span className=\\"token punctuation\\">)</span>
+          <span className=\\"token punctuation\\">;</span>
+        </code>
+      </pre>
+    </span>
+  );
+}
+"
+`;

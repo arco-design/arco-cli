@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "CommonJS",
+    "target": "es6",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "lib": ["ES2015"]
+  },
+  "exclude": ["node_modules", "packages/arco-components"]
+}

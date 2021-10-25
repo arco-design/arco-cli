@@ -1,0 +1,22 @@
+{
+  "name": "@arco-design/arco-cli-config",
+  "version": "1.10.0",
+  "description": "Global config module of Arco CLI",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-design/arco-dev-utils": "^2.2.0",
+    "fs-extra": "^9.0.1",
+    "glob": "^7.1.6"
+  },
+  "files": [
+    "lib",
+    "template"
+  ],
+  "license": "MIT"
+}

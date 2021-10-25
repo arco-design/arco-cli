@@ -1,0 +1,403 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`simple markdown 1`] = `
+"import React, { useState } from \\"react\\";
+import {
+  CodeBlockWrapper,
+  CellCode,
+  CellDemo,
+  CellDescription,
+  Browser,
+  Changelog,
+} from \\"@arco-design/arco-components\\";
+import {
+  Radio as NavRadio,
+  Button as ChangelogBtn,
+  Drawer as ChangelogDrawer,
+} from \\"@arco-design/web-react\\";
+const changelog = [];
+function Demo0() {
+  import { Button } from \\"@arco-design/web-react\\";
+
+  const __export = (
+    <CodeBlockWrapper id=\\"Basic\\">
+      <CellDescription isFirst>
+        <div
+          className=\\"code-preview\\"
+          dangerouslySetInnerHTML={{
+            __html:
+              \\"<div><h2 class='ac-demo-title'><a href='#Basic'><svg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' stroke='currentColor' stroke-width='4'>\\\\
+<path d='M14.1006 25.4142L9.15084 30.3639C6.8077 32.7071 6.8077 36.5061 9.15084 38.8492C11.494 41.1924 15.293 41.1924 17.6361 38.8492L26.1214 30.3639C28.4646 28.0208 28.4645 24.2218 26.1214 21.8786M33.8996 22.5858L38.8493 17.636C41.1925 15.2929 41.1925 11.4939 38.8493 9.15072C36.5062 6.80758 32.7072 6.80758 30.364 9.15072L21.8788 17.636C19.5356 19.9792 19.5356 23.7781 21.8788 26.1213' stroke-linecap='butt'></path>\\\\
+</svg></a>Basic</h2><p>Basic Button usage.</p>\\\\
+</div>\\",
+          }}
+        />
+      </CellDescription>
+      <CellDemo>
+        <Button />
+      </CellDemo>
+      <CellCode>
+        <div
+          className=\\"code-preview\\"
+          dangerouslySetInnerHTML={{
+            __html:
+              \\"<div><pre class='code_block'><code class='language-js'><span class='token keyword module'>import</span> <span class='token imports'><span class='token punctuation'>{</span> <span class='token maybe-class-name'>Button</span> <span class='token punctuation'>}</span></span> <span class='token keyword module'>from</span> <span class='token string'>'@arco-design/web-react'</span><span class='token punctuation'>;</span><br /><br /><span class='token maybe-class-name'>ReactDOM</span><span class='token punctuation'>.</span><span class='token method function property-access'>render</span><span class='token punctuation'>(</span><span class='token tag'><span class='token tag'><span class='token punctuation'>&lt;</span><span class='token class-name'>Button</span></span> <span class='token punctuation'>/></span></span><span class='token punctuation'>,</span> <span class='token constant'>CONTAINER</span><span class='token punctuation'>)</span><span class='token punctuation'>;</span><br /></code></pre>\\\\
+</div>\\",
+          }}
+        />
+      </CellCode>
+    </CodeBlockWrapper>
+  );
+  return __export;
+}
+function Demo1() {
+  import { Button } from \\"@arco-design/web-react\\";
+
+  const __export = (
+    <CodeBlockWrapper id=\\"Size\\">
+      <CellDescription>
+        <div
+          className=\\"code-preview\\"
+          dangerouslySetInnerHTML={{
+            __html:
+              \\"<div><h2 class='ac-demo-title'><a href='#Size'><svg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' stroke='currentColor' stroke-width='4'>\\\\
+<path d='M14.1006 25.4142L9.15084 30.3639C6.8077 32.7071 6.8077 36.5061 9.15084 38.8492C11.494 41.1924 15.293 41.1924 17.6361 38.8492L26.1214 30.3639C28.4646 28.0208 28.4645 24.2218 26.1214 21.8786M33.8996 22.5858L38.8493 17.636C41.1925 15.2929 41.1925 11.4939 38.8493 9.15072C36.5062 6.80758 32.7072 6.80758 30.364 9.15072L21.8788 17.636C19.5356 19.9792 19.5356 23.7781 21.8788 26.1213' stroke-linecap='butt'></path>\\\\
+</svg></a>Size</h2><p>Button sizes.</p>\\\\
+</div>\\",
+          }}
+        />
+      </CellDescription>
+      <CellDemo>
+        <Button size=\\"mini\\" />
+      </CellDemo>
+      <CellCode>
+        <div
+          className=\\"code-preview\\"
+          dangerouslySetInnerHTML={{
+            __html:
+              \\"<div><pre class='code_block'><code class='language-js'><span class='token keyword module'>import</span> <span class='token imports'><span class='token punctuation'>{</span> <span class='token maybe-class-name'>Button</span> <span class='token punctuation'>}</span></span> <span class='token keyword module'>from</span> <span class='token string'>'@arco-design/web-react'</span><span class='token punctuation'>;</span><br /><br /><span class='token maybe-class-name'>ReactDOM</span><span class='token punctuation'>.</span><span class='token method function property-access'>render</span><span class='token punctuation'>(</span><span class='token tag'><span class='token tag'><span class='token punctuation'>&lt;</span><span class='token class-name'>Button</span></span> <span class='token attr-name'>size</span><span class='token attr-value'><span class='token punctuation attr-equals'>=</span><span class='token punctuation'>'</span>mini<span class='token punctuation'>'</span></span> <span class='token punctuation'>/></span></span><span class='token punctuation'>,</span> <span class='token constant'>CONTAINER</span><span class='token punctuation'>)</span><span class='token punctuation'>;</span><br /></code></pre>\\\\
+</div>\\",
+          }}
+        />
+      </CellCode>
+    </CodeBlockWrapper>
+  );
+  return __export;
+}
+
+class Component extends React.Component {
+  render() {
+    return React.createElement(
+      \\"span\\",
+      {
+        className: \\"arco-components-wrapper\\",
+        style: this.props.style,
+      },
+      React.createElement(Demo0, {
+        key: 0,
+      }),
+      React.createElement(Demo1, {
+        key: 1,
+      })
+    );
+  }
+}
+
+function Usage(props) {
+  return (
+    <div className=\\"markdown-body ac-usage\\" style={props.style}>
+      <h1 id=\\"usage\\">Usage</h1>
+      <p>This is usage</p>
+    </div>
+  );
+}
+
+export default function (props) {
+  const [isUsage, setIsUsage] = useState(false);
+  const [showChangelog, setShowChangelog] = useState(false);
+  const lang = localStorage.getItem(\\"arco-lang\\") || \\"zh-CN\\";
+  return (
+    <span style={props.style}>
+      <span className=\\"markdown-body\\">
+        <pre>
+          <code>
+            Component <span className=\\"token operator\\">/</span> General
+            <br />
+            <br /># Button
+            <br />
+            <br />
+            Button component。
+          </code>
+        </pre>
+      </span>
+      <>
+        <div className=\\"ac-toolbar\\">
+          <NavRadio.Group
+            options={[
+              {
+                label: lang === \\"en-US\\" ? \\"Component\\" : \\"组件\\",
+                value: \\"component\\",
+              },
+              {
+                label: lang === \\"en-US\\" ? \\"Usage\\" : \\"用法\\",
+                value: \\"usage\\",
+              },
+            ]}
+            onChange={(value) => setIsUsage(value === \\"usage\\")}
+            type=\\"button\\"
+            value={isUsage ? \\"usage\\" : \\"component\\"}
+            size=\\"large\\"
+          />
+          <ChangelogBtn
+            size=\\"large\\"
+            className=\\"changelog-btn\\"
+            onClick={() => setShowChangelog(true)}
+          >
+            {lang === \\"en-US\\" ? \\"Changelog\\" : \\"更新记录\\"}
+          </ChangelogBtn>
+        </div>
+
+        <Usage
+          style={
+            !isUsage
+              ? {
+                  display: \\"none\\",
+                }
+              : {}
+          }
+        />
+        <Component
+          style={
+            isUsage
+              ? {
+                  display: \\"none\\",
+                }
+              : {}
+          }
+        />
+        <ChangelogDrawer
+          title=\\"发版记录\\"
+          visible={showChangelog}
+          onOk={() => setShowChangelog(false)}
+          onCancel={() => setShowChangelog(false)}
+          width={800}
+        >
+          <Changelog changelog={changelog} />
+        </ChangelogDrawer>
+      </>
+      <span
+        className=\\"markdown-body api-container\\"
+        style={
+          isUsage
+            ? {
+                display: \\"none\\",
+              }
+            : {}
+        }
+      ></span>
+    </span>
+  );
+}
+"
+`;
+
+exports[`simple markdown 2`] = `
+"import React, { useState } from \\"react\\";
+import {
+  CodeBlockWrapper,
+  CellCode,
+  CellDemo,
+  CellDescription,
+  Browser,
+  Changelog,
+} from \\"@arco-design/arco-components\\";
+import {
+  Radio as NavRadio,
+  Button as ChangelogBtn,
+  Drawer as ChangelogDrawer,
+} from \\"@arco-design/web-react\\";
+const changelog = [];
+function Demo0() {
+  import { Button } from \\"@arco-design/web-react\\";
+
+  const __export = (
+    <CodeBlockWrapper id=\\"\\\\u57FA\\\\u7840\\">
+      <CellDescription isFirst>
+        <div
+          className=\\"code-preview\\"
+          dangerouslySetInnerHTML={{
+            __html:
+              \\"<div><h2 class='ac-demo-title'><a href='#基础'><svg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' stroke='currentColor' stroke-width='4'>\\\\
+<path d='M14.1006 25.4142L9.15084 30.3639C6.8077 32.7071 6.8077 36.5061 9.15084 38.8492C11.494 41.1924 15.293 41.1924 17.6361 38.8492L26.1214 30.3639C28.4646 28.0208 28.4645 24.2218 26.1214 21.8786M33.8996 22.5858L38.8493 17.636C41.1925 15.2929 41.1925 11.4939 38.8493 9.15072C36.5062 6.80758 32.7072 6.80758 30.364 9.15072L21.8788 17.636C19.5356 19.9792 19.5356 23.7781 21.8788 26.1213' stroke-linecap='butt'></path>\\\\
+</svg></a>基础</h2><p>基础使用。</p>\\\\
+</div>\\",
+          }}
+        />
+      </CellDescription>
+      <CellDemo>
+        <Button />
+      </CellDemo>
+      <CellCode>
+        <div
+          className=\\"code-preview\\"
+          dangerouslySetInnerHTML={{
+            __html:
+              \\"<div><pre class='code_block'><code class='language-js'><span class='token keyword module'>import</span> <span class='token imports'><span class='token punctuation'>{</span> <span class='token maybe-class-name'>Button</span> <span class='token punctuation'>}</span></span> <span class='token keyword module'>from</span> <span class='token string'>'@arco-design/web-react'</span><span class='token punctuation'>;</span><br /><br /><span class='token maybe-class-name'>ReactDOM</span><span class='token punctuation'>.</span><span class='token method function property-access'>render</span><span class='token punctuation'>(</span><span class='token tag'><span class='token tag'><span class='token punctuation'>&lt;</span><span class='token class-name'>Button</span></span> <span class='token punctuation'>/></span></span><span class='token punctuation'>,</span> <span class='token constant'>CONTAINER</span><span class='token punctuation'>)</span><span class='token punctuation'>;</span><br /></code></pre>\\\\
+</div>\\",
+          }}
+        />
+      </CellCode>
+    </CodeBlockWrapper>
+  );
+  return __export;
+}
+function Demo1() {
+  import { Button } from \\"@arco-design/web-react\\";
+
+  const __export = (
+    <CodeBlockWrapper id=\\"\\\\u5C3A\\\\u5BF8\\">
+      <CellDescription>
+        <div
+          className=\\"code-preview\\"
+          dangerouslySetInnerHTML={{
+            __html:
+              \\"<div><h2 class='ac-demo-title'><a href='#尺寸'><svg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' stroke='currentColor' stroke-width='4'>\\\\
+<path d='M14.1006 25.4142L9.15084 30.3639C6.8077 32.7071 6.8077 36.5061 9.15084 38.8492C11.494 41.1924 15.293 41.1924 17.6361 38.8492L26.1214 30.3639C28.4646 28.0208 28.4645 24.2218 26.1214 21.8786M33.8996 22.5858L38.8493 17.636C41.1925 15.2929 41.1925 11.4939 38.8493 9.15072C36.5062 6.80758 32.7072 6.80758 30.364 9.15072L21.8788 17.636C19.5356 19.9792 19.5356 23.7781 21.8788 26.1213' stroke-linecap='butt'></path>\\\\
+</svg></a>尺寸</h2><p>按钮尺寸。</p>\\\\
+</div>\\",
+          }}
+        />
+      </CellDescription>
+      <CellDemo>
+        <Button size=\\"mini\\" />
+      </CellDemo>
+      <CellCode>
+        <div
+          className=\\"code-preview\\"
+          dangerouslySetInnerHTML={{
+            __html:
+              \\"<div><pre class='code_block'><code class='language-js'><span class='token keyword module'>import</span> <span class='token imports'><span class='token punctuation'>{</span> <span class='token maybe-class-name'>Button</span> <span class='token punctuation'>}</span></span> <span class='token keyword module'>from</span> <span class='token string'>'@arco-design/web-react'</span><span class='token punctuation'>;</span><br /><br /><span class='token maybe-class-name'>ReactDOM</span><span class='token punctuation'>.</span><span class='token method function property-access'>render</span><span class='token punctuation'>(</span><span class='token tag'><span class='token tag'><span class='token punctuation'>&lt;</span><span class='token class-name'>Button</span></span> <span class='token attr-name'>size</span><span class='token attr-value'><span class='token punctuation attr-equals'>=</span><span class='token punctuation'>'</span>mini<span class='token punctuation'>'</span></span> <span class='token punctuation'>/></span></span><span class='token punctuation'>,</span> <span class='token constant'>CONTAINER</span><span class='token punctuation'>)</span><span class='token punctuation'>;</span><br /></code></pre>\\\\
+</div>\\",
+          }}
+        />
+      </CellCode>
+    </CodeBlockWrapper>
+  );
+  return __export;
+}
+
+class Component extends React.Component {
+  render() {
+    return React.createElement(
+      \\"span\\",
+      {
+        className: \\"arco-components-wrapper\\",
+        style: this.props.style,
+      },
+      React.createElement(Demo0, {
+        key: 0,
+      }),
+      React.createElement(Demo1, {
+        key: 1,
+      })
+    );
+  }
+}
+
+function Usage(props) {
+  return (
+    <div className=\\"markdown-body ac-usage\\" style={props.style}>
+      <h1 id=\\"用法\\">用法</h1>
+      <p>这是用法。</p>
+    </div>
+  );
+}
+
+export default function (props) {
+  const [isUsage, setIsUsage] = useState(false);
+  const [showChangelog, setShowChangelog] = useState(false);
+  const lang = localStorage.getItem(\\"arco-lang\\") || \\"zh-CN\\";
+  return (
+    <span style={props.style}>
+      <span className=\\"markdown-body\\">
+        <pre>
+          <code>
+            组件 <span className=\\"token operator\\">/</span> 通用
+            <br />
+            <br /># 按钮 Button
+            <br />
+            <br />
+            按钮组件。
+          </code>
+        </pre>
+      </span>
+      <>
+        <div className=\\"ac-toolbar\\">
+          <NavRadio.Group
+            options={[
+              {
+                label: lang === \\"en-US\\" ? \\"Component\\" : \\"组件\\",
+                value: \\"component\\",
+              },
+              {
+                label: lang === \\"en-US\\" ? \\"Usage\\" : \\"用法\\",
+                value: \\"usage\\",
+              },
+            ]}
+            onChange={(value) => setIsUsage(value === \\"usage\\")}
+            type=\\"button\\"
+            value={isUsage ? \\"usage\\" : \\"component\\"}
+            size=\\"large\\"
+          />
+          <ChangelogBtn
+            size=\\"large\\"
+            className=\\"changelog-btn\\"
+            onClick={() => setShowChangelog(true)}
+          >
+            {lang === \\"en-US\\" ? \\"Changelog\\" : \\"更新记录\\"}
+          </ChangelogBtn>
+        </div>
+
+        <Usage
+          style={
+            !isUsage
+              ? {
+                  display: \\"none\\",
+                }
+              : {}
+          }
+        />
+        <Component
+          style={
+            isUsage
+              ? {
+                  display: \\"none\\",
+                }
+              : {}
+          }
+        />
+        <ChangelogDrawer
+          title=\\"发版记录\\"
+          visible={showChangelog}
+          onOk={() => setShowChangelog(false)}
+          onCancel={() => setShowChangelog(false)}
+          width={800}
+        >
+          <Changelog changelog={changelog} />
+        </ChangelogDrawer>
+      </>
+      <span
+        className=\\"markdown-body api-container\\"
+        style={
+          isUsage
+            ? {
+                display: \\"none\\",
+              }
+            : {}
+        }
+      ></span>
+    </span>
+  );
+}
+"
+`;

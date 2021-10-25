@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "moduleResolution": "node",
+    "module": "es6",
+    "target": "es5",
+    "outDir": "es",
+    "lib": ["es5", "dom"],
+    "declaration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true
+  },
+  "include": ["components/**/*.ts", "components/**/*.tsx"],
+  "exclude": ["node_modules"]
+}

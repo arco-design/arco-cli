@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react component in markdown 1`] = `
+"import { C } from \\"pkg\\";
+import { A, B, E, F } from \\"pkg4\\";
+import {
+  Avatar,
+  Button,
+  Divider,
+  Typography,
+  Select,
+  Table,
+  Form,
+  Cascader,
+  Menu,
+  Comment,
+} from \\"pkg5\\";
+import D from \\"pkg2\\";
+import Text from \\"./Text\\";
+import * as FF from \\"pkg2\\";
+import React, { useState } from \\"react\\";
+export default function (props) {
+  const [isUsage, setIsUsage] = useState(false);
+  const [showChangelog, setShowChangelog] = useState(false);
+  const lang = localStorage.getItem(\\"arco-lang\\") || \\"zh-CN\\";
+  return (
+    <span style={props.style} className=\\"markdown-body\\">
+      <h1 id=\\"markdown-react-component\\">Markdown React Component</h1>
+      <p>Write react component in markdown.</p>
+      <Button>Click</Button>
+      <Text />
+    </span>
+  );
+}
+"
+`;

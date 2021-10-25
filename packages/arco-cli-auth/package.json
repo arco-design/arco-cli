@@ -1,0 +1,27 @@
+{
+  "name": "@arco-design/arco-cli-auth",
+  "version": "1.8.1",
+  "description": "Auth module of Arco CLI",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-design/arco-dev-utils": "^2.2.0",
+    "axios": "^0.19.2",
+    "connect": "^3.7.0",
+    "fs-extra": "^9.0.1",
+    "nanoid": "^3.1.10",
+    "open": "^7.0.4",
+    "os": "^0.1.1",
+    "qs": "^6.9.4"
+  },
+  "files": [
+    "lib",
+    "template"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@arco-design/arco-cli-publish",
+  "version": "1.8.0",
+  "description": "Module of Arco CLI to publish NPM package",
+  "main": "lib/publish.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-design/arco-cli-auth": "^1.8.0",
+    "@arco-design/arco-cli-config": "^1.10.0",
+    "@arco-design/arco-dev-utils": "^2.2.0",
+    "fs-extra": "^9.0.1",
+    "inquirer": "^7.2.0",
+    "relix": "^1.2.0",
+    "semver": "^7.3.5"
+  },
+  "files": [
+    "lib"
+  ],
+  "license": "MIT"
+}

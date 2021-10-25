@@ -1,0 +1,273 @@
+import React, { PropsWithChildren, ReactNode } from 'react';
+import { findDOMNode } from 'react-dom';
+import { Button, Message, Tabs, Tooltip } from '@arco-design/web-react';
+import { IconCopy, IconCodepen, IconCodeSandbox, IconCode } from '@arco-design/web-react/icon';
+import ClipboardJS from 'clipboard';
+import { getParameters } from 'codesandbox/lib/api/define';
+import Css from './css';
+import Short from './short';
+
+// CodePen
+const CODEPEN_ENABLE = (window as any).CODEPEN_ENABLE;
+const SHOW_TSCODE = (window as any).SHOW_TSCODE;
+const HTML =
+  (window as any).CODEPEN_HTML ||
+  '<div id="root" style="padding: 20px;"></div>\n<script>\nconst CONTAINER = document.getElementById("root")\n</script>';
+const CSS_EXTERNAL = (window as any).CODEPEN_CSS_EXTERNAL || [
+  'https://unpkg.com/@arco-design/web-react/dist/css/arco.css',
+];
+const JS_EXTERNAL = (window as any).CODEPEN_JS_EXTERNAL || [
+  'https://unpkg.com/react@16.x/umd/react.development.js',
+  'https://unpkg.com/react-dom@16.x/umd/react-dom.development.js',
+  'https://unpkg.com/dayjs@1.x/dayjs.min.js',
+  'https://unpkg.com@arco-design/web-react/dist/arco.min.js',
+  'https://unpkg.com@arco-design/web-react/dist/arco-icon.min.js',
+];
+
+// CodeSandBox
+const html = '<div id="root" style="padding: 20px;"></div>';
+
+interface CellCodeProps {
+  tsx?: ReactNode;
+  cssCode?: string;
+}
+
+interface CellCodeState {
+  showAll: boolean;
+  activeTab: 'jsx' | 'tsx';
+}
+
+const locales = {
+  'zh-CN': {
+    copy: '复制',
+    copied: '复制成功',
+    expand: '展开代码',
+    collapse: '收起代码',
+    codePen: '在 CodePen 打开',
+    codeSandbox: '在 CodeSandBox 打开',
+  },
+  'en-US': {
+    copy: 'Copy',
+    copied: 'Copied Success!',
+    expand: 'Expand Code',
+    collapse: 'Collapse Code',
+    codePen: 'Open in CodePen',
+    codeSandbox: 'Open in CodeSandBox',
+  },
+};
+
+class CellCode extends React.Component<PropsWithChildren<CellCodeProps>, CellCodeState> {
+  private btnCopy = null;
+
+  private codeEle = null;
+
+  private lang = localStorage.getItem('arco-lang') || 'zh-CN';
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showAll: false,
+      activeTab: 'jsx',
+    };
+  }
+
+  componentDidMount() {
+    const t = locales[this.lang];
+    const clipboard = new ClipboardJS(findDOMNode(this.btnCopy) as Element, {
+      text: () => {
+        return (this.codeEle.querySelector('.language-js') as HTMLElement).innerText;
+      },
+    });
+    clipboard.on('success', (e) => {
+      e.clearSelection();
+      Message.success(t.copied);
+    });
+  }
+
+  gotoCodepen = () => {
+    const codeEle: HTMLElement = (findDOMNode(this) as HTMLElement).querySelector('.language-js');
+    const code = codeEle.innerText;
+    // codepen
+    const postCode = code
+      .replace(/import ([.\s\S]*?) from '([.\s\S]*?)'/g, 'const $1 = window.$2')
+      .replace(/@arco-design\/web-react/g, 'arco')
+      .replace('arco/icon', 'arcoicon')
+      .replace(/react-dom/, 'ReactDOM')
+      .replace(/react/, 'React');
+    this.post(postCode);
+  };
+
+  getData = (code) => {
+    return {
+      title: 'Cool Pen',
+      html: HTML,
+      js: code,
+      css: this.props.cssCode || '',
+      js_pre_processor: 'typescript',
+      css_external: CSS_EXTERNAL.join(';'),
+      js_external: JS_EXTERNAL.join(';'),
+      editors: '001',
+    };
+  };
+
+  post = (code, codesandbox?: { url?: string; parameters; name?: string }) => {
+    const form = document.createElement('form');
+    form.action = (codesandbox && codesandbox.url) || 'https://codepen.io/pen/define';
+    form.target = '_blank';
+    form.method = 'POST';
+    form.style.display = 'none';
+    const field = document.createElement('input');
+    field.name = (codesandbox && codesandbox.name) || 'data';
+    field.type = 'hidden';
+    field.setAttribute(
+      'value',
+      (codesandbox && codesandbox.parameters) ||
+        JSON.stringify(this.getData(code)).replace(/"/g, '&quot;').replace(/'/g, '&apos;')
+    );
+    form.appendChild(field);
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  };
+
+  toggleCodeType = (v) => {
+    this.setState({
+      activeTab: v,
+    });
+  };
+
+  toggleCode = (e) => {
+    // 修正点击展开按钮时，页面向上滚动而不是向下滚动的问题
+    if (!this.state.showAll) {
+      e.target.blur();
+    }
+    this.setState({
+      showAll: !this.state.showAll,
+    });
+  };
+
+  gotoCodeSandBox = () => {
+    const codeEle: HTMLElement = (findDOMNode(this) as HTMLElement).querySelector('.language-js');
+    const codePrefix = `import "@arco-design/web-react/dist/css/arco.css";
+${this.props.cssCode ? `import './index.css';\n` : ''}
+import React from 'react';
+import ReactDOM from 'react-dom';`;
+
+    // ReactDOM.render(<Demo/ >, CONTAINER);
+    // =>
+    // ReactDOM.render(<Demo/ >, document.querySelector("#root"));
+    const code = `${codePrefix}\n${codeEle.innerText.replace(
+      /CONTAINER(,?\s*\n*\))/,
+      (_, $1) => `document.querySelector("#root")${$1}`
+    )}`;
+
+    const sandBoxConfig = {
+      files: {
+        'package.json': {
+          isBinary: false,
+          content: JSON.stringify({
+            dependencies: {
+              react: '17',
+              'react-dom': '17',
+              '@arco-design/web-react': 'latest',
+            },
+          }),
+        },
+        'index.js': {
+          isBinary: false,
+          content: code,
+        },
+        'index.html': {
+          isBinary: false,
+          content: html,
+        },
+      },
+    };
+
+    if (this.props.cssCode) {
+      sandBoxConfig.files['index.css'] = {
+        isBinary: false,
+        content: this.props.cssCode,
+      };
+    }
+
+    this.post(undefined, {
+      url: 'https://codesandbox.io/api/v1/sandboxes/define',
+      parameters: getParameters(sandBoxConfig),
+      name: 'parameters',
+    });
+  };
+
+  renderOperations = () => {
+    const { showAll } = this.state;
+    const t = locales[this.lang];
+
+    return (
+      <div className="arco-code-operations">
+        <Tooltip content={showAll ? t.collapse : t.expand}>
+          <Button
+            size="small"
+            shape="circle"
+            onClick={this.toggleCode}
+            type="secondary"
+            className={showAll ? 'ac-btn-expanded' : ''}
+          >
+            <IconCode />
+          </Button>
+        </Tooltip>
+        <Tooltip content={t.copy}>
+          <Button size="small" shape="circle" ref={(ref) => (this.btnCopy = ref)} type="secondary">
+            <IconCopy />
+          </Button>
+        </Tooltip>
+        {CODEPEN_ENABLE ? (
+          <Tooltip content={t.codePen}>
+            <Button size="small" shape="circle" onClick={this.gotoCodepen} type="secondary">
+              <IconCodepen />
+            </Button>
+          </Tooltip>
+        ) : null}
+        <Tooltip content={t.codeSandbox}>
+          <Button size="small" shape="circle" onClick={this.gotoCodeSandBox} type="secondary">
+            <IconCodeSandbox />
+          </Button>
+        </Tooltip>
+      </div>
+    );
+  };
+
+  render() {
+    const props = this.props;
+    const { showAll, activeTab } = this.state;
+    return (
+      <div className="arco-code-wrapper">
+        {this.renderOperations()}
+        <div className={`content-code-design ${showAll ? 'show-all' : ''}`}>
+          {SHOW_TSCODE && props.tsx && (
+            <Tabs activeTab={activeTab} onChange={this.toggleCodeType}>
+              <Tabs.TabPane key="jsx" title="JavaScript" />
+              <Tabs.TabPane key="tsx" title="TypeScript" />
+            </Tabs>
+          )}
+          <div
+            className="code"
+            style={{ display: activeTab === 'tsx' ? 'none' : '' }}
+            ref={(ref) => (this.codeEle = ref)}
+          >
+            {props.children}
+          </div>
+          {SHOW_TSCODE && activeTab === 'tsx' && props.tsx && (
+            <div className="code">{props.tsx}</div>
+          )}
+        </div>
+      </div>
+    );
+  }
+}
+
+type CellCodeType = typeof CellCode & { Css: any; Short: any };
+
+(CellCode as CellCodeType).Css = Css;
+(CellCode as CellCodeType).Short = Short;
+
+export default CellCode as CellCodeType;

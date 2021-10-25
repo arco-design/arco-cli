@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`simple markdown 1`] = `
+"import React, { useState } from \\"react\\";
+export default function (props) {
+  const [isUsage, setIsUsage] = useState(false);
+  const [showChangelog, setShowChangelog] = useState(false);
+  const lang = localStorage.getItem(\\"arco-lang\\") || \\"zh-CN\\";
+  return (
+    <span style={props.style} className=\\"markdown-body\\">
+      <h1 id=\\"title\\">Title</h1>
+      <p>Description.</p>
+    </span>
+  );
+}
+"
+`;

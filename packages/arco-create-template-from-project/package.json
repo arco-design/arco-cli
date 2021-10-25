@@ -1,0 +1,20 @@
+{
+  "name": "@arco-design/arco-create-template-from-project",
+  "version": "1.1.0",
+  "description": "Module of Arco CLI to generate material template from a exist project",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@arco-design/arco-dev-utils": "^2.2.0",
+    "inquirer": "^7.3.3"
+  },
+  "license": "MIT"
+}

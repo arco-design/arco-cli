@@ -1,0 +1,23 @@
+{
+  "name": "@arco-design/arco-cli-init",
+  "version": "1.15.0",
+  "description": "A module of Arco CLI to init a project",
+  "main": "lib/init.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-design/arco-cli-config": "^1.10.0",
+    "@arco-design/arco-create-project-from-template": "^1.9.0",
+    "@arco-design/arco-dev-utils": "^2.2.0",
+    "fs-extra": "^9.0.1",
+    "inquirer": "^7.2.0"
+  },
+  "files": [
+    "lib"
+  ],
+  "license": "MIT"
+}

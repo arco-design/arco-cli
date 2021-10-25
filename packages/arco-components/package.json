@@ -1,0 +1,35 @@
+{
+  "name": "@arco-design/arco-components",
+  "version": "1.13.0",
+  "description": "Arco components.",
+  "module": "./es/index.js",
+  "types": "./es/index.d.ts",
+  "scripts": {
+    "prepublish": "npm run build",
+    "dev": "arco-scripts dev:component",
+    "build": "arco-scripts build:component:es && arco-scripts build:component:css",
+    "build:css": "arco-scripts build:component:css"
+  },
+  "peerDependencies": {
+    "@arco-design/web-react": ">=2.7.0",
+    "react": ">=16",
+    "react-dom": ">=16"
+  },
+  "dependencies": {
+    "clipboard": "^2.0.4",
+    "codesandbox": "^2.2.3"
+  },
+  "devDependencies": {
+    "@arco-design/arco-scripts": "^1.25.0",
+    "@arco-design/web-react": "^2.7.0",
+    "@types/react": "^16.7.20",
+    "@types/react-dom": "^16.0.11",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "files": [
+    "es",
+    "dist"
+  ],
+  "license": "MIT"
+}
