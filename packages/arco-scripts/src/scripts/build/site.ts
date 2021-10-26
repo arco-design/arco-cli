@@ -7,7 +7,7 @@ import { dev as configDev, prod as configProd } from '../../config/webpack/site'
 import webpackWithPromise from '../utils/webpackWithPromise';
 
 export const dev = (https, ip, port) => {
-  ip = ip || '0.0.0.0';
+  ip = ip || '127.0.0.1';
   port = port || 8080;
 
   const config = configDev;
