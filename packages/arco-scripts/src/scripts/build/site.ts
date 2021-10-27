@@ -11,9 +11,10 @@ export const dev = (https, ip, port) => {
   port = port || 8080;
 
   const config = configDev;
-  const url = `${https ? 'https' : 'http'}://${ip}:${port}`;
+  const host = ip === '0.0.0.0' ? 'localhost' : ip;
+  const url = `${https ? 'https' : 'http'}://${host}:${port}`;
   const compiler = webpack(config);
-  const server = new WebpackDevServer(compiler, { ...config.devServer, host: ip, port });
+  const server = new WebpackDevServer(compiler, { ...config.devServer, host, port });
 
   server.listen(port, ip, () => {
     print.success('[arco-scripts]', `Starting server on ${url}`);
