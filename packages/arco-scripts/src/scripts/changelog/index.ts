@@ -43,7 +43,7 @@ const getRecords = (mr: any) => {
 
   const records: Array<Record<string, any>> = [];
 
-  const typeRule = new RegExp('## Types of changes.+?\\[x] (.+?)\\n', 's');
+  const typeRule = new RegExp('## Types of changes.+?\\[[xX]] (.+?)\\n', 's');
 
   const typeString = (content.match(typeRule)?.[1] ?? '').trim();
 
