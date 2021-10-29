@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { getGlobalInfo, print, writeGlobalInfo } from '@arco-design/arco-dev-utils';
 import inquirer from 'inquirer';
-import { login } from '@arco-design/arco-cli-auth';
 import locale from './locale';
 
 export function checkEnv() {
@@ -25,10 +24,7 @@ export function printEnv() {
 export async function switchEnv() {
   const {
     data: { result: hostInfo },
-  } = await axios.get('https://arco.design/material/api/getHostInfo', {
-    // TODO remove it
-    headers: { 'x-arco-dev': '1' },
-  });
+  } = await axios.get('https://arco.design/material/api/getHostInfo');
   const { env } = await inquirer.prompt({
     type: 'list',
     name: 'env',
@@ -45,8 +41,6 @@ export async function switchEnv() {
     print.success(
       env === 'private' ? locale.TIP_SWITCH_SUCCESS_TO_PRIVATE : locale.TIP_SWITCH_SUCCESS_TO_PUBLIC
     );
-    print.info(locale.TIP_NEED_LOGIN_AGAIN);
-    login();
   } else {
     print.error('[arco env]', 'failed to get host info.');
   }

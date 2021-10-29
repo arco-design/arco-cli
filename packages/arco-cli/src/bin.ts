@@ -105,7 +105,8 @@ function registerCommand() {
   program
     .command('sync')
     .description(locale.CMD_DES_SYNC)
-    .option('-s, --screenshot [screenshotPath]', locale.TIP_SYNC_SCREENSHOT)
+    // TODO rewrite this command
+    // .option('-s, --screenshot [screenshotPath]', locale.TIP_SYNC_SCREENSHOT)
     .option('--from-current-package', locale.TIP_SYNC_FROM_CURRENT_PACKAGE)
     .option('--fetch', locale.TIP_SYNC_FETCH)
     .action(async ({ screenshot, fromCurrentPackage, fetch }) => {
@@ -176,11 +177,17 @@ function registerCommand() {
 }
 
 printLogo();
+registerCommand();
 
 if (process.argv[2] !== 'env' && checkEnv() === false) {
-  print.warn(locale.TIP_SET_ENV_FIRST);
-  process.exit(0);
+  switchEnv()
+    .then(() => {
+      program.parse(process.argv);
+    })
+    .catch((err) => {
+      print.error(err);
+      process.exit(0);
+    });
+} else {
+  program.parse(process.argv);
 }
-
-registerCommand();
-program.parse(process.argv);

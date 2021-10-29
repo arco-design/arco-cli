@@ -32,10 +32,9 @@ export default {
   TIP_TEMPLATE_CREATE: '基于已有项目创建物料模板',
   TIP_SHOW_HELP: '如需查看某个子命令，可以使用子命令帮助，如：arco sync -h',
 
-  TIP_SET_ENV_FIRST: '请先运行 arco env --switch 设置环境',
   TIP_SELECT_ENV: '请选择使用的 Arco 物料平台版本',
-  TIP_ENV_PUBLIC: '公共版本',
-  TIP_ENV_PRIVATE: '内网版本（仅限内部员工使用，需使用 SSO 登录）',
+  TIP_ENV_PUBLIC: '公共版本（使用 GitHub 账户授权登录）',
+  TIP_ENV_PRIVATE: '内网版本（使用 ByteDance SSO 验证登录，仅限内部员工使用）',
   TIP_SWITCH_SUCCESS_TO_PUBLIC: '已成功切换至公共环境',
   TIP_SWITCH_SUCCESS_TO_PRIVATE: '已成功切换至内网环境',
   TIP_ADD_GROUP_MEMBER: '输入需要添加的用户的用户名',
@@ -44,8 +43,7 @@ export default {
   TIP_ADD_GROUP_MEMBER_FAIL: '添加成员失败：',
   TIP_REMOVE_GROUP_MEMBER_SUCCESS: '移除成员成功：',
   TIP_REMOVE_GROUP_MEMBER_FAIL: '移除成员失败：',
-  TIP_NEED_LOGIN_AGAIN: '切换环境需要重新登录...',
-  TIP_NO_ENV_SET: '当前环境未选择，请运行 arco env --switch 设置环境',
+  TIP_NO_ENV_SET: '当前环境未选择，请运行 arco env -s 设置环境',
 
   LABEL_GROUP_OWNER: '管理员',
   LABEL_GROUP_MASTER: '协作者',
