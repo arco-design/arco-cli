@@ -1,7 +1,7 @@
 {
-  "name": "@arco-design/arco-site-components",
+  "name": "@arco-design/arco-doc-site-components",
   "version": "1.0.0",
-  "description": "Arco components.",
+  "description": "Components for Arco doc site only",
   "module": "es/index.js",
   "types": "./es/index.d.ts",
   "scripts": {

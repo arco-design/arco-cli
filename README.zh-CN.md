@@ -8,4 +8,4 @@ A command-line interface tool for creating, developing and managing Arco materia
 
 `npm run init` 以安装依赖。
 
-`lerna run dev` 进入开发者模式。
+`lerna run dev` 进入 dev 模式。
