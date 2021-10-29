@@ -1,6 +1,6 @@
 {
   "name": "@arco-design/arco-scripts",
-  "version": "1.25.1",
+  "version": "1.25.2",
   "description": "Arco scripts.",
   "main": "lib/bin.js",
   "bin": {
