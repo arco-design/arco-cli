@@ -10,7 +10,7 @@ const getType = (text) => {
   if (/bugfix|问题/i.test(text)) {
     return 'bugfix';
   }
-  if (/优化|optimization/i.test(text)) {
+  if (/优化|optimization|performance/i.test(text)) {
     return 'optimization';
   }
   if (/typescript|类型/i.test(text)) {
