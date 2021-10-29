@@ -61,9 +61,9 @@ typings/
 # next.js build output
 .next
 
-packages/arco-components/dist
-packages/arco-components/es
-packages/arco-components/lib
+isolate/arco-site-components/dist
+isolate/arco-site-components/es
+isolate/arco-site-components/lib
 
 .idea
 

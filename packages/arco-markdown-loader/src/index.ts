@@ -107,7 +107,7 @@ function loaderForArcoComponentDoc(
   }
 
   const commonImports = babelParse(`
-    import { CodeBlockWrapper, CellCode, CellDemo, CellDescription, Browser, Changelog } from "@arco-design/arco-components";
+    import { CodeBlockWrapper, CellCode, CellDemo, CellDescription, Browser, Changelog } from "@arco-design/arco-site-components";
     import { Radio as NavRadio, Button as ChangelogBtn, Drawer as ChangelogDrawer } from "@arco-design/web-react";
     const changelog = ${JSON.stringify(changelog)};
   `).program.body;
