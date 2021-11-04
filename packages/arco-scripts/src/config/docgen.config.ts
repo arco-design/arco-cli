@@ -30,7 +30,7 @@ let config: DocgenConfigType = {
   entry: `${DIR_NAME_COMPONENT_LIBRARY}/*`,
   output: '',
   outputFileName: FILENAME_README,
-  demoGlob: `${DIR_NAME_DEMO}/*.jsx`,
+  demoGlob: `${DIR_NAME_DEMO}/*.{jsx,tsx}`,
   tsParseTool: ['react-docgen-typescript', {}],
   languages: ['zh-CN'],
 };

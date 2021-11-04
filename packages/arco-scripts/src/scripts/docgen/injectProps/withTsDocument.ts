@@ -33,7 +33,7 @@ export default function withTsDocument({
     });
 
     if (markdownSchema) {
-      propsTables = Object.entries(markdownSchema).map(([, ms]) => ms);
+      propsTables = propsTables.concat(Object.entries(markdownSchema).map(([, ms]) => ms));
     }
   });
 

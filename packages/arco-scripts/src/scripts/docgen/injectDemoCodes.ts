@@ -106,6 +106,10 @@ export default function injectDemoCodes({
     return markdownBody.replace(placeholder, `${commentStr}${demoStr}`);
   }
 
-  const demos = demoEntries.map((path) => `\n~~~jsx\n${fs.readFileSync(path, 'utf8')}\n~~~\n`);
+  const demos = demoEntries.map((path) => {
+    const fileExt = path.split('.').pop();
+    const fileContent = fs.readFileSync(path, 'utf8');
+    return `\n~~~${fileExt}\n${fileContent}\n~~~\n`;
+  });
   return markdownBody.replace(placeholder, demos.join(''));
 }
