@@ -299,10 +299,10 @@ export default function compileDemo(context, options, lang) {
       });
       const { code } = transformFromAstSync(ast, null, babelConfig);
       const buildRequire = template(`
-        function NAME() {
+        const NAME = React.memo(() => {
           AST
           return __export;
-        }
+        })
       `);
 
       const finalAst = buildRequire({
