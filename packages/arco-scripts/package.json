@@ -1,6 +1,6 @@
 {
   "name": "@arco-design/arco-scripts",
-  "version": "1.25.4",
+  "version": "1.25.5",
   "description": "Arco scripts.",
   "main": "lib/bin.js",
   "bin": {
@@ -19,7 +19,7 @@
   "dependencies": {
     "@arco-design/arco-babel-config": "^1.2.0",
     "@arco-design/arco-dev-utils": "^2.2.0",
-    "@arco-design/arco-markdown-loader": "^1.15.0",
+    "@arco-design/arco-markdown-loader": "^1.15.3",
     "@svgr/webpack": "^4.2.0",
     "axios": "^0.21.1",
     "babel-jest": "^26.0.1",

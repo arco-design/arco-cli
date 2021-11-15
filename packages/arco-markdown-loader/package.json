@@ -1,6 +1,6 @@
 {
   "name": "@arco-design/arco-markdown-loader",
-  "version": "1.15.2",
+  "version": "1.15.3",
   "description": "Webpack loader, Markdown to react demo document, for generate react component document.",
   "main": "./lib/index.js",
   "scripts": {
