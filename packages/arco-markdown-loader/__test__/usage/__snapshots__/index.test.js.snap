@@ -9,14 +9,14 @@ import {
   CellDescription,
   Browser,
   Changelog,
-} from \\"@arco-design/arco-components\\";
+} from \\"@arco-design/arco-doc-site-components\\";
 import {
   Radio as NavRadio,
   Button as ChangelogBtn,
   Drawer as ChangelogDrawer,
 } from \\"@arco-design/web-react\\";
 const changelog = [];
-function Demo0() {
+const Demo0 = React.memo(() => {
   import { Button } from \\"@arco-design/web-react\\";
 
   const __export = (
@@ -49,8 +49,8 @@ function Demo0() {
     </CodeBlockWrapper>
   );
   return __export;
-}
-function Demo1() {
+});
+const Demo1 = React.memo(() => {
   import { Button } from \\"@arco-design/web-react\\";
 
   const __export = (
@@ -83,7 +83,7 @@ function Demo1() {
     </CodeBlockWrapper>
   );
   return __export;
-}
+});
 
 class Component extends React.Component {
   render() {
@@ -210,14 +210,14 @@ import {
   CellDescription,
   Browser,
   Changelog,
-} from \\"@arco-design/arco-components\\";
+} from \\"@arco-design/arco-doc-site-components\\";
 import {
   Radio as NavRadio,
   Button as ChangelogBtn,
   Drawer as ChangelogDrawer,
 } from \\"@arco-design/web-react\\";
 const changelog = [];
-function Demo0() {
+const Demo0 = React.memo(() => {
   import { Button } from \\"@arco-design/web-react\\";
 
   const __export = (
@@ -250,8 +250,8 @@ function Demo0() {
     </CodeBlockWrapper>
   );
   return __export;
-}
-function Demo1() {
+});
+const Demo1 = React.memo(() => {
   import { Button } from \\"@arco-design/web-react\\";
 
   const __export = (
@@ -284,7 +284,7 @@ function Demo1() {
     </CodeBlockWrapper>
   );
   return __export;
-}
+});
 
 class Component extends React.Component {
   render() {
