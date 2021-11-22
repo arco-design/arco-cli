@@ -63,6 +63,7 @@ let config = {
   },
   output: {
     path: `${CWD}/${DIR_NAME_UMD}`,
+    publicPath: `https://unpkg.com/${packageName}@latest/${DIR_NAME_UMD}/`,
     filename: '[name].min.js',
     library: '[name]',
     libraryTarget: 'umd',
