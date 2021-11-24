@@ -61,12 +61,7 @@ export default function generateEntryFiles() {
       .map((p) => {
         const { demo, doc, style } = buildConfig.globs.component;
         return {
-          componentName: path
-            .basename(p)
-            .replace(
-              /-(\w)/g,
-              (_, $1) => `${$1.toUpperCase()}_${Math.random().toFixed(3).slice(-3)}`
-            ),
+          componentName: path.basename(p).replace(/-(\w)/g, (_, $1) => $1.toUpperCase()),
           pathDemo: demo && path.resolve(p, demo),
           pathDoc: doc && path.resolve(p, doc),
           pathStyle: style && path.resolve(p, style),

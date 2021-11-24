@@ -2,15 +2,17 @@ import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
 import { RawSource } from 'webpack-sources';
+import { ModuleUMDInfo } from '@arco-design/arco-material-preview-utils/es/interface';
 
 import parseComment from './parseComment';
 import parseRawComment, { Comment } from './parseRawComment';
 import parseDependencies from './parseDependencies';
 import parseModuleExport, { ModuleExportMap } from './parseModuleExport';
+import tryGetUMDInfo from '../utils/tryGetUMDInfo';
 
 type ModuleInfo = {
   name: string;
-  info: { [key: string]: string };
+  info: Record<string, string> & { umd: ModuleUMDInfo };
   isDoc?: boolean;
   children?: Array<any>;
 };
@@ -140,6 +142,10 @@ export default class ArcoSiteModuleInfoPlugin {
               const commentList = demoCommentMap[moduleFilePath];
               const componentInfo = commentList ? commentList[0] : {};
               const demoInfoList = commentList ? commentList.slice(-demoList.length) : [];
+
+              // Try to get umd info of component
+              componentInfo.umd = tryGetUMDInfo(moduleFilePath);
+
               return {
                 name,
                 info: componentInfo,
