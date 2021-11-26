@@ -1,8 +1,9 @@
 {
   "name": "@arco-design/arco-doc-site",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Arco Doc Site Helper",
   "main": "lib/index.js",
+  "types": "lib/interface.d.ts",
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc",

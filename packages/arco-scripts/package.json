@@ -1,8 +1,9 @@
 {
   "name": "@arco-design/arco-scripts",
-  "version": "1.25.6",
+  "version": "1.25.7",
   "description": "Arco scripts.",
   "main": "lib/bin.js",
+  "types": "lib/interface.d.ts",
   "bin": {
     "arco-scripts": "lib/bin.js"
   },
