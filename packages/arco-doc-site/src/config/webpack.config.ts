@@ -1,6 +1,9 @@
 // Custom webpack config
 import path from 'path';
+import merge from 'webpack-merge';
+import { Configuration } from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ProgressPlugin from 'progress-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
@@ -14,18 +17,51 @@ import removeMarkdownDemoPart from '../utils/removeMarkdownDemoPart';
 import { getPathEntryByLanguage } from '../utils/generateEntryFiles';
 
 const LIB_MODULE_NAME = 'arcoSite';
+const REGEXP_CSS = /\.css$/;
+const REGEXP_LESS = /\.less$/;
 const REGEXP_LESS_MODULE = /\.module\.less$/;
 
 const { build: buildConfig, site: siteConfig } = getMainConfig();
 
-function getUseForLess(isCssModule = false) {
+function getEntryConfig(production: boolean) {
+  const entry: Record<string, string> = {};
+
+  if (!production) {
+    entry.index = path.resolve(__dirname, '../../static/index.tsx');
+  }
+
+  siteConfig.languages.forEach((language) => {
+    entry[language] = getPathEntryByLanguage(language);
+  });
+
+  return entry;
+}
+
+function getModuleRuleForCss(production: boolean) {
   return [
     {
-      loader: MiniCssExtractPlugin.loader,
+      loader: production ? MiniCssExtractPlugin.loader : 'style-loader',
     },
     {
       loader: 'css-loader',
-      options: isCssModule
+    },
+  ];
+}
+
+function getModuleRuleForLess({
+  cssModule,
+  production,
+}: {
+  cssModule?: boolean;
+  production?: boolean;
+}) {
+  return [
+    {
+      loader: production ? MiniCssExtractPlugin.loader : 'style-loader',
+    },
+    {
+      loader: 'css-loader',
+      options: cssModule
         ? {
             modules: {
               localIdentName: '[local]-[hash:10]',
@@ -44,21 +80,7 @@ function getUseForLess(isCssModule = false) {
   ];
 }
 
-let config = {
-  mode: 'production',
-  entry: (() => {
-    const entry = {};
-    siteConfig.languages.forEach((language) => {
-      entry[language] = getPathEntryByLanguage(language);
-    });
-    return entry;
-  })(),
-  output: {
-    path: path.resolve('dist'),
-    filename: `${LIB_MODULE_NAME}.[name].js`,
-    library: LIB_MODULE_NAME,
-    libraryTarget: 'umd',
-  },
+const BASE_CONFIG = {
   module: {
     rules: [
       {
@@ -68,26 +90,6 @@ let config = {
           {
             loader: 'babel-loader',
             options: babelConfig,
-          },
-        ],
-      },
-      {
-        test: /\.less$/,
-        exclude: REGEXP_LESS_MODULE,
-        use: getUseForLess(),
-      },
-      {
-        test: REGEXP_LESS_MODULE,
-        use: getUseForLess(true),
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
           },
         ],
       },
@@ -122,9 +124,6 @@ let config = {
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: `${LIB_MODULE_NAME}.css`,
-    }),
     new ArcoSiteModuleInfoPlugin({
       globs: {
         doc: buildConfig.globs.doc,
@@ -144,31 +143,106 @@ let config = {
       path.resolve(__dirname, '../../../'),
     ],
   },
-  externals: [
+};
+
+const config = {
+  dev: merge([
+    BASE_CONFIG,
     {
-      react: {
-        root: 'React',
-        commonjs2: 'react',
-        commonjs: 'react',
-        amd: 'react',
+      mode: 'development',
+      entry: getEntryConfig(false),
+      output: {
+        publicPath: '/',
+        filename: '[name].js',
       },
-      'react-dom': {
-        root: 'ReactDOM',
-        commonjs2: 'react-dom',
-        commonjs: 'react-dom',
-        amd: 'react-dom',
+      module: {
+        rules: [
+          {
+            test: REGEXP_CSS,
+            use: getModuleRuleForCss(false),
+          },
+          {
+            test: REGEXP_LESS,
+            exclude: REGEXP_LESS_MODULE,
+            use: getModuleRuleForLess({ production: false, cssModule: false }),
+          },
+          {
+            test: REGEXP_LESS_MODULE,
+            use: getModuleRuleForLess({ production: false, cssModule: true }),
+          },
+        ],
+      },
+      plugins: [
+        new HtmlWebpackPlugin({
+          filename: 'index.html',
+          template: path.resolve(__dirname, '../../static/index.html'),
+          chunks: ['index'],
+        }),
+      ],
+    },
+  ]),
+  prod: merge([
+    BASE_CONFIG,
+    {
+      mode: 'production',
+      entry: getEntryConfig(true),
+      output: {
+        path: path.resolve('dist'),
+        filename: `${LIB_MODULE_NAME}.[name].js`,
+        library: LIB_MODULE_NAME,
+        libraryTarget: 'umd',
+      },
+      module: {
+        rules: [
+          {
+            test: REGEXP_CSS,
+            use: getModuleRuleForCss(true),
+          },
+          {
+            test: REGEXP_LESS,
+            exclude: REGEXP_LESS_MODULE,
+            use: getModuleRuleForLess({ production: true, cssModule: false }),
+          },
+          {
+            test: REGEXP_LESS_MODULE,
+            use: getModuleRuleForLess({ production: true, cssModule: true }),
+          },
+        ],
+      },
+      plugins: [
+        new MiniCssExtractPlugin({
+          filename: `${LIB_MODULE_NAME}.css`,
+        }),
+      ],
+      externals: [
+        {
+          react: {
+            root: 'React',
+            commonjs2: 'react',
+            commonjs: 'react',
+            amd: 'react',
+          },
+          'react-dom': {
+            root: 'ReactDOM',
+            commonjs2: 'react-dom',
+            commonjs: 'react-dom',
+            amd: 'react-dom',
+          },
+        },
+        webpackExternalForArco,
+      ],
+      optimization: {
+        minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
       },
     },
-    webpackExternalForArco,
-  ],
-  optimization: {
-    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
-  },
+  ]),
 };
 
 const processor = getConfigProcessor('webpack');
 if (processor) {
-  config = processor(config) || config;
+  config.dev = processor(config.dev, 'dev') || config.dev;
+  config.prod = processor(config.prod, 'prod') || config.prod;
 }
 
-export default config;
+export const dev = config.dev as Configuration;
+export const prod = config.prod as Configuration;

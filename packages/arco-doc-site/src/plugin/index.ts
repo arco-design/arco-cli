@@ -73,11 +73,9 @@ export default class ArcoSiteModuleInfoPlugin {
   getModuleInfoMap({
     chunkInfoList,
     moduleExportMap,
-    isProduction,
   }: {
     moduleExportMap: ModuleExportMap;
     chunkInfoList: Array<ChunkInfo>;
-    isProduction: boolean;
   }): {
     /**
      * Module info like { zh-CN: { name: 'Button', info: {}, children: [] } }
@@ -152,8 +150,8 @@ export default class ArcoSiteModuleInfoPlugin {
                 children: demoList.map(({ name, rawCode }, index) => {
                   return {
                     name,
+                    rawCode,
                     info: demoInfoList[index] || {},
-                    rawCode: isProduction ? rawCode : rawCode.replace(/\n/g, '\\n'),
                   };
                 }),
               };
@@ -172,28 +170,38 @@ export default class ArcoSiteModuleInfoPlugin {
       doc: globs.doc ? glob.sync(globs.doc).map((item) => path.resolve(item)) : [],
       demo: globs.demo ? glob.sync(globs.demo).map((item) => path.resolve(item)) : [],
     };
-    const isProduction = compiler.options.mode === 'production';
 
     let moduleExportMap: ModuleExportMap = {};
-    let chunkInfoList: ChunkInfo[] = [];
     let hasInjectedModuleInfo = false;
+    const chunkInfoList: ChunkInfo[] = [];
 
     const getNewSource = (source: string, moduleInfo: ModuleInfo): string => {
       const moduleInfoString = JSON.stringify(moduleInfo).replace(/^"(.*)"$/s, (_, $1) => $1);
-      return source.replace(
-        /ARCO_SITE_MODULE_INFO/g,
-        isProduction ? moduleInfoString : moduleInfoString.replace(/"/g, '\\"')
-      );
+      return source.replace(/ARCO_SITE_MODULE_INFO/g, moduleInfoString);
     };
 
     compiler.hooks.compilation.tap('ArcoSiteModuleInfoPlugin', (compilation) => {
       compilation.hooks.optimizeModules.tap('ArcoSiteModuleInfoPlugin', () => {
         const chunkList = [...compilation.chunks];
 
-        chunkInfoList = chunkList.map(({ name, entryModule }) => ({
-          name,
-          entry: entryModule.resource,
-        }));
+        chunkList.forEach((chunk) => {
+          if (compilation.chunkGraph !== undefined) {
+            for (const module of compilation.chunkGraph.getChunkEntryModulesIterable(chunk)) {
+              if (module.resource.indexOf('/node_modules/') === -1) {
+                chunkInfoList.push({
+                  name: chunk.name,
+                  entry: module.resource,
+                });
+              }
+            }
+          } else {
+            const { name, entryModule } = chunk;
+            chunkInfoList.push({
+              name,
+              entry: entryModule.resource,
+            });
+          }
+        });
 
         // Parse the export module info of entry file and demo file
         moduleExportMap = this.parseModuleExport({
@@ -202,7 +210,7 @@ export default class ArcoSiteModuleInfoPlugin {
             source: true,
             providedExports: true,
           }).modules,
-          filePathList: paths.demo.concat(chunkList.map(({ entryModule }) => entryModule.resource)),
+          filePathList: paths.demo.concat(chunkInfoList.map(({ entry }) => entry)),
           needRawCode: true,
         });
       });
@@ -213,7 +221,6 @@ export default class ArcoSiteModuleInfoPlugin {
           const moduleInfoMap = this.getModuleInfoMap({
             moduleExportMap,
             chunkInfoList,
-            isProduction,
           });
 
           for (const filename in assets) {
@@ -227,7 +234,8 @@ export default class ArcoSiteModuleInfoPlugin {
               if (moduleInfoMap[chunkName]) {
                 compilation.updateAsset(
                   filename,
-                  new RawSource(getNewSource(assets[filename].source(), moduleInfoMap[chunkName]))
+                  // TODO dev 时的 moduleInfoMap key 值
+                  new RawSource(getNewSource(assets[filename].source(), moduleInfoMap['zh-CN']))
                 );
               }
             }
@@ -254,7 +262,6 @@ export default class ArcoSiteModuleInfoPlugin {
 
       const moduleInfoMap = this.getModuleInfoMap({
         chunkInfoList,
-        isProduction,
         moduleExportMap,
       });
 
