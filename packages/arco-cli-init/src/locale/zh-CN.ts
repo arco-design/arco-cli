@@ -26,5 +26,7 @@ export default {
   WARN_PATH_EXIST: '路径已经存在，确认要覆盖它吗？',
 
   ERROR_NO_PROJECT_NAME: '请指定项目名称',
+  ERROR_NO_PACKAGE_NAME: '请输入 NPM 包名',
+  ERROR_NO_TITLE: '请输入物料标题',
   ERROR_GIT_DIRTY: '请提交你的 Git 修改后继续操作',
 };

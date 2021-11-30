@@ -63,6 +63,10 @@ const MATERIAL_TYPE_MAP = {
     name: locale.LABEL_COMPONENT,
     template: '@arco-design/arco-template-vue-component',
   },
+  'vue-library': {
+    name: locale.LABEL_LIBRARY,
+    template: '@arco-design/arco-template-vue-library',
+  },
   'vue-monorepo': {
     name: locale.LABEL_MONOREPO,
     template: '@arco-design/arco-template-vue-monorepo',
@@ -85,7 +89,7 @@ const TYPES_FOR_REACT = [
   'arco-design-pro',
 ];
 
-const TYPES_FOR_VUE = ['vue-component', 'vue-monorepo'];
+const TYPES_FOR_VUE = ['vue-component', 'vue-library', 'vue-monorepo'];
 
 // Templates for Monorepo
 const VALID_TYPES_IN_MONOREPO = [
@@ -94,6 +98,7 @@ const VALID_TYPES_IN_MONOREPO = [
   'react-page',
   'react-library',
   'vue-component',
+  'vue-library',
 ];
 
 const CATEGORIES_COMPONENT = [
@@ -292,24 +297,19 @@ async function inquiryMaterialMeta(meta: { [key: string]: any }): Promise<{
   version: string;
   category?: string[];
 }> {
-  let pkgNamePrefix = 'rc';
   let categories = [];
 
   switch (meta.type) {
     case 'vue-component':
-      pkgNamePrefix = 'vc';
       categories = CATEGORIES_COMPONENT;
       break;
     case 'react-component':
-      pkgNamePrefix = 'rc';
       categories = CATEGORIES_COMPONENT;
       break;
     case 'react-block':
-      pkgNamePrefix = 'rb';
       categories = CATEGORIES_PAGE;
       break;
     case 'react-page':
-      pkgNamePrefix = 'rp';
       break;
     default:
       break;
@@ -320,13 +320,19 @@ async function inquiryMaterialMeta(meta: { [key: string]: any }): Promise<{
       type: 'input',
       name: 'name',
       message: locale.TIP_INPUT_PACKAGE_NAME,
-      default: meta.name || `@arco-design/${pkgNamePrefix}-xxx`,
+      default: meta.name,
+      validate: (input) => {
+        return input.trim() ? true : locale.ERROR_NO_PACKAGE_NAME;
+      },
     },
     {
       type: 'input',
       name: 'title',
       message: locale.TIP_INPUT_TITLE,
       default: meta.title || '',
+      validate: (input) => {
+        return input.trim() ? true : locale.ERROR_NO_TITLE;
+      },
     },
     {
       type: 'input',

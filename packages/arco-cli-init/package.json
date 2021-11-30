@@ -1,6 +1,6 @@
 {
   "name": "@arco-design/arco-cli-init",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "description": "A module of Arco CLI to init a project",
   "main": "lib/init.js",
   "scripts": {
