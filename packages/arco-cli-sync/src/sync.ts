@@ -35,12 +35,6 @@ const doScreenshot = async (path: string, packageInfo: { [key: string]: any }) =
   }
 };
 
-const updatePackageVersionInMeta = (packageInfo: Record<string, string>, version: string) => {
-  const distTags = Object.keys(packageInfo['dist-tags']);
-  // Avoid updating version like latest/beta
-  return distTags.indexOf(version) > -1 ? version : packageInfo.version;
-};
-
 const updateLocalMeta = (localMeta, originMeta) => {
   Object.keys(localMeta).forEach((key) => {
     localMeta[key] = originMeta[key];
@@ -145,8 +139,6 @@ export default async function ({
         package: {
           ...localMeta.package,
           peerDependencies: Object.keys(peerDependencies),
-          // Update the NPM package version in meta, if it is latest, avoid updating
-          version: updatePackageVersionInMeta(packageInfo, localMeta.package.version),
         },
       };
 
