@@ -22,7 +22,7 @@
     "@arco-design/arco-dev-utils": "^2.2.0",
     "@arco-design/arco-markdown-loader": "^1.15.3",
     "@svgr/webpack": "^4.2.0",
-    "axios": "^0.21.1",
+    "axios": "~0",
     "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
     "chalk": "^4.0.0",

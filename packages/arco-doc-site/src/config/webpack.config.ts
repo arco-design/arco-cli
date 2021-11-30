@@ -3,7 +3,6 @@ import path from 'path';
 import merge from 'webpack-merge';
 import { Configuration } from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ProgressPlugin from 'progress-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
@@ -14,21 +13,18 @@ import babelConfig from './babel.config';
 import getMainConfig from '../utils/getMainConfig';
 import getConfigProcessor from '../utils/getConfigProcessor';
 import removeMarkdownDemoPart from '../utils/removeMarkdownDemoPart';
-import { getPathEntryByLanguage } from '../utils/generateEntryFiles';
+import { getPathEntryByLanguage, LIBRARY_MODULE_NAME } from '../utils/generateEntryFiles';
 
-const LIB_MODULE_NAME = 'arcoSite';
 const REGEXP_CSS = /\.css$/;
 const REGEXP_LESS = /\.less$/;
 const REGEXP_LESS_MODULE = /\.module\.less$/;
 
+const DEV_DIRECTORY_NAME = 'dist-dev';
+
 const { build: buildConfig, site: siteConfig } = getMainConfig();
 
-function getEntryConfig(production: boolean) {
+function getEntryConfig() {
   const entry: Record<string, string> = {};
-
-  if (!production) {
-    entry.index = path.resolve(__dirname, '../../static/index.tsx');
-  }
 
   siteConfig.languages.forEach((language) => {
     entry[language] = getPathEntryByLanguage(language);
@@ -81,6 +77,14 @@ function getModuleRuleForLess({
 }
 
 const BASE_CONFIG = {
+  output: {
+    path: path.resolve('dist'),
+    filename: `${LIBRARY_MODULE_NAME}.[name].js`,
+    library: {
+      name: LIBRARY_MODULE_NAME,
+      type: 'umd',
+    },
+  },
   module: {
     rules: [
       {
@@ -143,6 +147,23 @@ const BASE_CONFIG = {
       path.resolve(__dirname, '../../../'),
     ],
   },
+  externals: [
+    {
+      react: {
+        root: 'React',
+        commonjs2: 'react',
+        commonjs: 'react',
+        amd: 'react',
+      },
+      'react-dom': {
+        root: 'ReactDOM',
+        commonjs2: 'react-dom',
+        commonjs: 'react-dom',
+        amd: 'react-dom',
+      },
+    },
+    webpackExternalForArco,
+  ],
 };
 
 const config = {
@@ -150,10 +171,8 @@ const config = {
     BASE_CONFIG,
     {
       mode: 'development',
-      entry: getEntryConfig(false),
       output: {
         publicPath: '/',
-        filename: '[name].js',
       },
       module: {
         rules: [
@@ -172,26 +191,22 @@ const config = {
           },
         ],
       },
-      plugins: [
-        new HtmlWebpackPlugin({
-          filename: 'index.html',
-          template: path.resolve(__dirname, '../../static/index.html'),
-          chunks: ['index'],
-        }),
-      ],
+      plugins: [],
+      devServer: {
+        open: true,
+        historyApiFallback: true,
+        port: 9000,
+        static: {
+          directory: path.resolve(DEV_DIRECTORY_NAME),
+        },
+      },
     },
   ]),
   prod: merge([
     BASE_CONFIG,
     {
       mode: 'production',
-      entry: getEntryConfig(true),
-      output: {
-        path: path.resolve('dist'),
-        filename: `${LIB_MODULE_NAME}.[name].js`,
-        library: LIB_MODULE_NAME,
-        libraryTarget: 'umd',
-      },
+      entry: getEntryConfig(),
       module: {
         rules: [
           {
@@ -211,25 +226,8 @@ const config = {
       },
       plugins: [
         new MiniCssExtractPlugin({
-          filename: `${LIB_MODULE_NAME}.css`,
+          filename: `${LIBRARY_MODULE_NAME}.css`,
         }),
-      ],
-      externals: [
-        {
-          react: {
-            root: 'React',
-            commonjs2: 'react',
-            commonjs: 'react',
-            amd: 'react',
-          },
-          'react-dom': {
-            root: 'ReactDOM',
-            commonjs2: 'react-dom',
-            commonjs: 'react-dom',
-            amd: 'react-dom',
-          },
-        },
-        webpackExternalForArco,
       ],
       optimization: {
         minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],

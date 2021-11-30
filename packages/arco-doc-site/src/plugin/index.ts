@@ -9,6 +9,8 @@ import parseRawComment, { Comment } from './parseRawComment';
 import parseDependencies from './parseDependencies';
 import parseModuleExport, { ModuleExportMap } from './parseModuleExport';
 import tryGetUMDInfo from '../utils/tryGetUMDInfo';
+import { PLACEHOLDER_ARCO_SITE_MODULE_INFO } from '../constant';
+import encodeInfo from '../utils/encodeInfo';
 
 type ModuleInfo = {
   name: string;
@@ -176,8 +178,10 @@ export default class ArcoSiteModuleInfoPlugin {
     const chunkInfoList: ChunkInfo[] = [];
 
     const getNewSource = (source: string, moduleInfo: ModuleInfo): string => {
-      const moduleInfoString = JSON.stringify(moduleInfo).replace(/^"(.*)"$/s, (_, $1) => $1);
-      return source.replace(/ARCO_SITE_MODULE_INFO/g, moduleInfoString);
+      return source.replace(
+        new RegExp(PLACEHOLDER_ARCO_SITE_MODULE_INFO, 'g'),
+        encodeInfo(moduleInfo)
+      );
     };
 
     compiler.hooks.compilation.tap('ArcoSiteModuleInfoPlugin', (compilation) => {
@@ -234,8 +238,7 @@ export default class ArcoSiteModuleInfoPlugin {
               if (moduleInfoMap[chunkName]) {
                 compilation.updateAsset(
                   filename,
-                  // TODO dev 时的 moduleInfoMap key 值
-                  new RawSource(getNewSource(assets[filename].source(), moduleInfoMap['zh-CN']))
+                  new RawSource(getNewSource(assets[filename].source(), moduleInfoMap[chunkName]))
                 );
               }
             }
