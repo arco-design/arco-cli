@@ -1,5 +1,7 @@
 import { ExternalSourceInfo } from '@arco-design/arco-material-preview-utils';
 
+export { Configuration as WebpackConfig } from 'webpack';
+
 export interface MainConfig {
   /**
    * Build config for site

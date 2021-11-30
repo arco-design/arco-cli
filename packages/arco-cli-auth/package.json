@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@arco-design/arco-dev-utils": "^2.2.0",
-    "axios": "^0.19.2",
+    "axios": "~0",
     "connect": "^3.7.0",
     "fs-extra": "^9.0.1",
     "nanoid": "^3.1.10",
