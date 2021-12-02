@@ -7,43 +7,43 @@ export type DocgenConfig = {
   /**
    * Filename of template
    * @zh 模板文件名
-   * @defaultValue TEMPLATE.md
+   * @default TEMPLATE.md
    */
   template: string;
   /**
    * Glob of entry directory path fo generate document
    * @zh 需生成文档目录的 Glob 匹配符
-   * @defaultValue components/*
+   * @default components/*
    */
   entry: string;
   /**
    * Directory path for output file
    * @zh 生成文档的目录路径
-   * @defaultValue ''
+   * @default ''
    */
   output: string;
   /**
    * Filename of output file
    * @zh 生成文档的文件名
-   * @defaultValue README.md
+   * @default README.md
    */
   outputFileName: string;
   /**
    * Glob of component demos
    * @zh 组件 Demo 的 Glob 匹配符
-   * @defaultValue demo/*.{jsx,tsx}
+   * @default demo/*.{jsx,tsx}
    */
   demoGlob: string;
   /**
    * Tools to parse typescript
    * @zh 用于解析 TypeScript 的工具
-   * @defaultValue ['react-docgen-typescript', {}]
+   * @default ['react-docgen-typescript', {}]
    */
   tsParseTool: [APIParseTools, Record<string, any> | Array<any>];
   /**
    * Target language
    * @zh 生成文档的目标语言
-   * @defaultValue 'zh-CN'
+   * @default 'zh-CN'
    */
   languages: Array<'zh-CN' | 'en-US'>;
 };

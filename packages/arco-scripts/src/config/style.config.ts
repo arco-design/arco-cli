@@ -31,13 +31,13 @@ export interface StyleConfig {
     /**
      * Glob pattern for style entry file
      * @zh 样式入口文件的 glob 匹配符
-     * @defaultValue ['src/**\/index.less', 'components/*\/index.less']
+     * @default ['src/**\/index.less', 'components/*\/index.less']
      */
     entry: string[];
     /**
      * Glob pattern for files to be watched
      * @zh 需要监听变化的文件的 glob 匹配符
-     * @defaultValue ['{src,components}/**\/*.{png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2}']
+     * @default ['{src,components}/**\/*.{png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2}']
      */
     watch: string[];
     /**
@@ -54,13 +54,13 @@ export interface StyleConfig {
       /**
        * Path of ESM directory
        * @zh ESM 产物的文件夹路径
-       * @defaultValue es
+       * @default es
        */
       es: string;
       /**
        * Path of CommonJS directory
        * @zh CommonJS 产物的文件夹路径
-       * @defaultValue lib
+       * @default lib
        */
       cjs: string;
       /**
@@ -71,19 +71,19 @@ export interface StyleConfig {
         /**
          * Path of UMD directory
          * @zh UND 产物的文件夹路径
-         * @defaultValue dist/css
+         * @default dist/css
          */
         path: string;
         /**
          * CSS filename of UMD dist
          * @zh UMD 产物中的 CSS 文件名
-         * @defaultValue index.css
+         * @default index.css
          */
         cssFileName: string;
         /**
          * Raw-style filename of UMD dist
          * @zh UMD 产物中的原始样式文件的文件名
-         * @defaultValue index.less
+         * @default index.less
          */
         rawFileName: string;
       };
@@ -91,7 +91,7 @@ export interface StyleConfig {
     /**
      * Compiler to compile raw-style files
      * @zh 处理原始样式文件的编译器
-     * @defaultValue less
+     * @default less
      */
     compiler: any;
     /**
@@ -108,13 +108,13 @@ export interface StyleConfig {
     /**
      * Glob pattern for asset files
      * @zh 静态资源文件的 Glob 匹配符
-     * @defaultValue ['{src,components}/**\/*.{png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2}']
+     * @default ['{src,components}/**\/*.{png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2}']
      */
     entry: string[];
     /**
      * Output path for asset files
      * @zh 静态资源文件的输出路径
-     * @defaultValue dist/asset
+     * @default dist/asset
      */
     output: string;
   };
@@ -126,32 +126,32 @@ export interface StyleConfig {
     /**
      * Glob pattern for style entry file
      * @zh 样式 JS 入口文件的 Glob 匹配符
-     * @defaultValue ['src/style/index.ts', 'components/*\/style/index.ts']
+     * @default ['src/style/index.ts', 'components/*\/style/index.ts']
      */
     entry: string[];
     /**
      * Whether to automatically inject Arco UI library style dependency into style entry file
      * @zh 是否自动注入所依赖的 Arco 组件样式
      * @e.g @import '~@arco-design/web-react/es/Button/style';
-     * @defaultValue true
+     * @default true
      */
     autoInjectArcoDep: boolean;
     /**
      * Extension for raw-style file. e.g. less
      * @zh 未编译样式文件的扩展名。例如：less
-     * @defaultValue less
+     * @default less
      */
     styleSheetExtension: string;
     /**
      * Filename of entry for raw-style
      * @zh 未编译文件的 JS 入口
-     * @defaultValue index.js
+     * @default index.js
      */
     rawEntryFileName: string;
     /**
      * Filename of entry for css
      * @zh 文件的 JS 入口
-     * @defaultValue css.js
+     * @default css.js
      */
     cssEntryFileName: string;
   };
