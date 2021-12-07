@@ -38,45 +38,57 @@ type FrameworkType = 'react' | 'vue';
 const { PACKAGE_NAME_ARCO_WEB_REACT_V2, PACKAGE_NAME_ARCO_WEB_VUE_V2 } = CONSTANT;
 
 // Available templates
-const MATERIAL_TYPE_MAP = {
-  'react-component': {
-    name: locale.LABEL_COMPONENT,
-    template: '@arco-design/arco-template-react-component',
+// Temporarily change value of template via process.env.TEMPLATE
+const MATERIAL_TYPE_MAP = new Proxy(
+  {
+    'react-component': {
+      name: locale.LABEL_COMPONENT,
+      template: '@arco-design/arco-template-react-component',
+    },
+    'react-block': {
+      name: locale.LABEL_BLOCK,
+      template: '@arco-design/arco-template-react-block',
+    },
+    'react-page': {
+      name: locale.LABEL_PAGE,
+      template: '@arco-design/arco-template-react-page',
+    },
+    'react-library': {
+      name: locale.LABEL_LIBRARY,
+      template: '@arco-design/arco-template-react-library',
+    },
+    'react-monorepo': {
+      name: locale.LABEL_MONOREPO,
+      template: '@arco-design/arco-template-react-monorepo',
+    },
+    'vue-component': {
+      name: locale.LABEL_COMPONENT,
+      template: '@arco-design/arco-template-vue-component',
+    },
+    'vue-library': {
+      name: locale.LABEL_LIBRARY,
+      template: '@arco-design/arco-template-vue-library',
+    },
+    'vue-monorepo': {
+      name: locale.LABEL_MONOREPO,
+      template: '@arco-design/arco-template-vue-monorepo',
+    },
+    'arco-design-pro-react': {
+      name: locale.LABEL_ARCO_PRO,
+      template: 'arco-design-pro',
+    },
+    'arco-design-pro-vue': {
+      name: locale.LABEL_ARCO_PRO,
+      template: 'arco-design-pro-vue',
+    },
   },
-  'react-block': {
-    name: locale.LABEL_BLOCK,
-    template: '@arco-design/arco-template-react-block',
-  },
-  'react-page': {
-    name: locale.LABEL_PAGE,
-    template: '@arco-design/arco-template-react-page',
-  },
-  'react-library': {
-    name: locale.LABEL_LIBRARY,
-    template: '@arco-design/arco-template-react-library',
-  },
-  'react-monorepo': {
-    name: locale.LABEL_MONOREPO,
-    template: '@arco-design/arco-template-react-monorepo',
-  },
-  'vue-component': {
-    name: locale.LABEL_COMPONENT,
-    template: '@arco-design/arco-template-vue-component',
-  },
-  'vue-library': {
-    name: locale.LABEL_LIBRARY,
-    template: '@arco-design/arco-template-vue-library',
-  },
-  'vue-monorepo': {
-    name: locale.LABEL_MONOREPO,
-    template: '@arco-design/arco-template-vue-monorepo',
-  },
-  'arco-design-pro': {
-    name: locale.LABEL_ARCO_PRO,
-    template: '@arco-design/arco-template-arco-design-pro',
-    templateSimple: '@arco-design/arco-template-arco-design-pro-simple',
-  },
-};
+  {
+    get: (obj, propName: string) => {
+      const property = obj[propName];
+      return process.env.TEMPLATE ? { ...property, template: process.env.TEMPLATE } : property;
+    },
+  }
+);
 
 const TYPES_MATERIAL = ['react-component', 'react-block', 'react-page'];
 
@@ -86,10 +98,10 @@ const TYPES_FOR_REACT = [
   'react-page',
   'react-library',
   'react-monorepo',
-  'arco-design-pro',
+  'arco-design-pro-react',
 ];
 
-const TYPES_FOR_VUE = ['vue-component', 'vue-library', 'vue-monorepo'];
+const TYPES_FOR_VUE = ['vue-component', 'vue-library', 'vue-monorepo', 'arco-design-pro-vue'];
 
 // Templates for Monorepo
 const VALID_TYPES_IN_MONOREPO = [
@@ -207,8 +219,9 @@ export default async function ({
     });
 
     switch (materialType) {
-      case 'arco-design-pro':
-        return getArcoDesignProConfig();
+      case 'arco-design-pro-vue':
+      case 'arco-design-pro-react':
+        return getArcoDesignProConfig(framework);
 
       case 'react-monorepo':
         return {
@@ -393,36 +406,55 @@ async function inquiryFramework(isForMonorepo?: boolean): Promise<FrameworkType>
 /**
  * Get the template to create Arco Pro
  */
-async function getArcoDesignProConfig(): Promise<Partial<CreateProjectOptions>> {
-  // Config for Arco Pro
+async function getArcoDesignProConfig(
+  framework: FrameworkType
+): Promise<Partial<CreateProjectOptions>> {
+  // Avoid creating arco.config.js before git commit
+  const beforeGitCommit = () => null;
+
+  if (framework === 'vue') {
+    return {
+      template: MATERIAL_TYPE_MAP['arco-design-pro-vue'].template,
+      arcoPackageName: PACKAGE_NAME_ARCO_WEB_VUE_V2,
+      beforeGitCommit,
+      // TODO List for Vue Pro
+      customInitFunctionParams: {
+        framework: 'vite',
+      },
+    };
+  }
+
   const question = [
     {
       type: 'list',
-      name: 'type',
+      name: 'framework',
       message: locale.TIP_SELECT_ARCO_PRO_TYPE,
       choices: [
         {
-          name: locale.DES_ARCO_PRO_COMPLETE,
-          value: 'complete',
+          name: 'Next (https://nextjs.org/)',
+          value: 'next',
         },
         {
-          name: locale.DES_ARCO_PRO_SIMPLE,
-          value: 'simple',
+          name: 'Vite (https://vitejs.dev/)',
+          value: 'vite',
+        },
+        {
+          name: 'Creat React App (https://create-react-app.dev)',
+          value: 'cra',
         },
       ],
-      default: 'complete',
     },
   ];
 
   const answer = await inquirer.prompt(question);
-  const template =
-    answer.type === 'complete'
-      ? MATERIAL_TYPE_MAP['arco-design-pro'].template
-      : MATERIAL_TYPE_MAP['arco-design-pro'].templateSimple;
 
   return {
-    template,
+    template: MATERIAL_TYPE_MAP['arco-design-pro-react'].template,
     arcoPackageName: PACKAGE_NAME_ARCO_WEB_REACT_V2,
+    beforeGitCommit,
+    customInitFunctionParams: {
+      framework: answer.framework,
+    },
   };
 }
 
@@ -496,7 +528,7 @@ async function getPureProjectConfig(): Promise<Partial<CreateProjectOptions>> {
     {
       type: 'input',
       name: 'name',
-      message: locale.TIP_INPUT_PACKNAGE_NAME_FOR_PURE_PROJECT,
+      message: locale.TIP_INPUT_PACKAGE_NAME_FOR_PURE_PROJECT,
     },
   ]);
 

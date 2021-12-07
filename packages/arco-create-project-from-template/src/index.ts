@@ -2,14 +2,12 @@ import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import ora from 'ora';
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 import {
   print,
   crossSpawn,
   materialTemplate,
   isInGitRepository,
-  getLernaConfig,
-  getGlobalInfo,
 } from '@arco-design/arco-dev-utils';
 
 import locale from './locale';
@@ -29,21 +27,29 @@ export interface CreateProjectOptions {
   arcoPackageName?: string;
   /** Callback before git commit */
   beforeGitCommit?: () => void;
+  /** Extra parameters passed to custom project init function */
+  customInitFunctionParams?: Record<string, any>;
 }
 
 const TEMPLATE_DIR = 'template';
 const TEMPLATE_DIR_FOR_MONOREPO = 'template-for-monorepo';
 
+const CUSTOM_INIT_DIR = '.arco-cli';
+
 function addGitIgnore() {
-  const gitignoreExists = fs.existsSync('.gitignore');
-  if (gitignoreExists) {
-    const data = fs.readFileSync('gitignore');
-    fs.appendFileSync('.gitignore', data);
-    fs.unlinkSync('gitignore');
-  } else {
-    try {
-      fs.moveSync('gitignore', '.gitignore');
-    } catch (e) {}
+  const sourceFilename = 'gitignore';
+  const targetFilename = '.gitignore';
+
+  if (fs.existsSync(sourceFilename)) {
+    if (fs.existsSync(targetFilename)) {
+      const data = fs.readFileSync(sourceFilename);
+      fs.appendFileSync(targetFilename, data);
+      fs.unlinkSync(sourceFilename);
+    } else {
+      try {
+        fs.moveSync(sourceFilename, targetFilename);
+      } catch (e) {}
+    }
   }
 }
 
@@ -93,22 +99,59 @@ function getPackageInfo(installPackage: string) {
   return { name: installPackage };
 }
 
-function handleDependencies(dependencies: string | string[]) {
-  if (dependencies && !(dependencies instanceof Array)) {
-    dependencies = [dependencies];
-  }
-
+function handleDependencies(dependencies: string | string[], allowYarn = false) {
   return new Promise((resolve, reject) => {
-    const command = 'npm';
-    const hostNPM = getGlobalInfo().host.npm;
-    const args = ['install', '--registry', hostNPM, '--loglevel', 'error'].concat(
-      dependencies ? ['--save', '--save-exact', ...dependencies] : []
-    );
+    let command = 'npm';
+    let args = ['install'].concat(dependencies || []);
+
+    if (allowYarn) {
+      try {
+        const { stdout } = spawnSync('yarn', ['-v']);
+        if (stdout && stdout.toString().match(/^\d+\.\d+/)) {
+          command = 'yarn';
+          args = dependencies ? ['add'].concat(dependencies) : [];
+        }
+      } catch (e) {}
+    }
 
     crossSpawn(command, args, { stdio: 'ignore' }).on('close', (code) => {
       code === 0 ? resolve(null) : reject(`Command Error: ${command} ${args.join(' ')}`);
     });
   });
+}
+
+async function copyTemplateContent({
+  root,
+  templatePath,
+  isForMonorepo,
+  customInitFunctionParams,
+}: {
+  root: string;
+  templatePath: string;
+  isForMonorepo: boolean;
+  customInitFunctionParams?: CreateProjectOptions['customInitFunctionParams'];
+}) {
+  process.chdir(templatePath);
+
+  const pathCustomProjectInitFunc = path.resolve(`${CUSTOM_INIT_DIR}/init.js`);
+
+  if (fs.existsSync(TEMPLATE_DIR) || fs.existsSync(TEMPLATE_DIR_FOR_MONOREPO)) {
+    fs.copySync(
+      isForMonorepo && TEMPLATE_DIR_FOR_MONOREPO ? TEMPLATE_DIR_FOR_MONOREPO : TEMPLATE_DIR,
+      root,
+      {
+        overwrite: true,
+      }
+    );
+  } else if (fs.existsSync(pathCustomProjectInitFunc)) {
+    const init = require(pathCustomProjectInitFunc);
+    await init({
+      ...customInitFunctionParams,
+      projectPath: root,
+    });
+  }
+
+  process.chdir(root);
 }
 
 export default async function ({
@@ -119,6 +162,7 @@ export default async function ({
   isForMonorepo = false,
   arcoPackageName,
   beforeGitCommit,
+  customInitFunctionParams,
 }: CreateProjectOptions) {
   const spinner = ora();
   const originalDirectory = process.cwd();
@@ -150,13 +194,13 @@ export default async function ({
 
   // Copy content of template
   try {
-    const templatePath = path.resolve(
-      `node_modules/${templateInfo.name}/${
-        isForMonorepo ? TEMPLATE_DIR_FOR_MONOREPO : TEMPLATE_DIR
-      }`
-    );
     spinner.start(locale.TIP_TEMPLATE_COPY_ING);
-    fs.copySync(templatePath, root, { overwrite: true });
+    await copyTemplateContent({
+      root,
+      isForMonorepo,
+      customInitFunctionParams,
+      templatePath: path.resolve(`node_modules/${templateInfo.name}`),
+    });
     spinner.succeed(locale.TIP_TEMPLATE_COPY_DONE);
   } catch (err) {
     spinner.fail(locale.TIP_TEMPLATE_COPY_FAILED);
@@ -185,6 +229,11 @@ export default async function ({
   try {
     afterInit = require(path.resolve(`node_modules/${templateInfo.name}/hook/after-init.js`));
   } catch (e) {}
+  try {
+    afterInit = require(path.resolve(
+      `node_modules/${templateInfo.name}/${CUSTOM_INIT_DIR}/after-init.js`
+    ));
+  } catch (e) {}
 
   // Init Git
   addGitIgnore();
@@ -193,16 +242,7 @@ export default async function ({
   // Install dependencies
   try {
     spinner.start(locale.TIP_DEPENDENCIES_INSTALL_ING);
-    const lernaConfig = getLernaConfig();
-    if (lernaConfig && lernaConfig.useWorkspaces && lernaConfig.npmClient === 'yarn') {
-      await new Promise((resolve, reject) => {
-        crossSpawn('yarn', ['install'], { stdio: 'ignore' }).on('close', (code) => {
-          code === 0 ? resolve(null) : reject(`Command Error: yarn install`);
-        });
-      });
-    } else {
-      await handleDependencies(null);
-    }
+    await handleDependencies(null, true);
     spinner.succeed(locale.TIP_DEPENDENCIES_INSTALL_DONE);
   } catch (err) {
     spinner.fail(locale.TIP_DEPENDENCIES_INSTALL_FAILED);
