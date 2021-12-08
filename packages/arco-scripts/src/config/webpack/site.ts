@@ -35,6 +35,14 @@ function getUse(cssModule, isProduction) {
       options,
     },
     {
+      loader: 'postcss-loader',
+      options: {
+        postcssOptions: {
+          plugins: ['autoprefixer'],
+        },
+      },
+    },
+    {
       loader: 'less-loader',
       options: {
         javascriptEnabled: true,

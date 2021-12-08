@@ -63,7 +63,7 @@
     "nunjucks": "^3.2.3",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "parse-es-import": "^0.3.1",
-    "postcss-loader": "^2.1.5",
+    "postcss-loader": "4.3.0",
     "progress-bar-webpack-plugin": "^2.1.0",
     "react-docgen-typescript": "^2.1.0",
     "style-loader": "^1.2.1",

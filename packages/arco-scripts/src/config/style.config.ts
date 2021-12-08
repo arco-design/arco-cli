@@ -17,7 +17,7 @@ import getConfigProcessor from '../scripts/utils/getConfigProcessor';
 import compatiblePropertyNameChange from '../scripts/utils/compatiblePropertyNameChange';
 
 const npmImport = new NpmImportPlugin({ prefix: '~' });
-const autoprefix = new LessAutoprefix({ browsers: ['last 2 versions'] });
+const autoprefix = new LessAutoprefix();
 
 const FILE_ASSET_EXT = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'ttf', 'eot', 'woff', 'woff2'];
 const FILE_WATCHED_EXT = FILE_ASSET_EXT.concat(['less']);
