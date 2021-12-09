@@ -16,6 +16,7 @@ import subCommands from './subCommands';
 import { printLogo, fetchLatestVersion } from './utils';
 import { listAllGroups, queryGroup, addGroupMember, deleteGroupMember } from './group';
 import { checkEnv, switchEnv, printEnv } from './env';
+import teaLog from './teaLog';
 
 const VALID_SUBCOMMANDS = [
   'init',
@@ -178,6 +179,9 @@ function registerCommand() {
 
 printLogo();
 registerCommand();
+teaLog({
+  args: process.argv.slice(2).join(' '),
+});
 
 if (process.argv[2] !== 'env' && checkEnv() === false) {
   switchEnv()
