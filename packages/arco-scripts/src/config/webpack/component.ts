@@ -91,6 +91,7 @@ let config = {
       },
       {
         test: /\.css$/,
+        sideEffects: true,
         use: [
           {
             loader: 'style-loader',
