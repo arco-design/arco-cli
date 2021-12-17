@@ -140,7 +140,7 @@ let config = {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   resolveLoader: {
-    modules: ['node_modules', 'node_modules/@arco-design/arco-scripts/node_modules'],
+    modules: ['node_modules/@arco-design/arco-scripts/node_modules', 'node_modules'],
   },
   plugins: [
     new ProgressBarPlugin({

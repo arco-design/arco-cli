@@ -143,8 +143,7 @@ async function withBabel({ type, outDir, watch }: CompileOptions) {
         }, 1000);
 
         watcher.on('all', (event, fullPath) => {
-          const relPath = fullPath.replace(srcPath, '');
-          print.info(`[${event}] ${path.join(srcPath, relPath).replace(`${CWD}/`, '')}`);
+          print.info(`[${event}] ${path.join(fullPath).replace(`${CWD}/`, '')}`);
           if (fs.existsSync(fullPath) && fs.statSync(fullPath).isFile()) {
             if (!files.includes(fullPath)) {
               files.push(fullPath);
