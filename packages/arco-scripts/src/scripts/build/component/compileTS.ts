@@ -93,9 +93,13 @@ async function withBabel({ type, outDir, watch }: CompileOptions) {
       })
       .pipe(watch ? gulpPlumber() : through.obj())
       .pipe(
-        gulpIf(({ path }) => {
-          return /\.tsx?$/.test(path);
-        }, gulpTS(tsconfig.compilerOptions))
+        gulpIf(
+          ({ path }) => {
+            return /\.tsx?$/.test(path);
+          },
+          // Delete outDir to avoid static resource resolve errors during the babel compilation of next step
+          gulpTS({ ...tsconfig.compilerOptions, outDir: undefined })
+        )
       )
       .pipe(
         gulpIf(
