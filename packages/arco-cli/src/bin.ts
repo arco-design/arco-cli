@@ -16,6 +16,7 @@ import subCommands from './subCommands';
 import { printLogo, fetchLatestVersion } from './utils';
 import { listAllGroups, queryGroup, addGroupMember, deleteGroupMember } from './group';
 import { checkEnv, switchEnv, printEnv } from './env';
+import { switchLocale, printLocale } from './locales';
 import teaLog from './teaLog';
 
 const VALID_SUBCOMMANDS = [
@@ -31,6 +32,7 @@ const VALID_SUBCOMMANDS = [
   'preview',
   'template',
   'env',
+  'locale',
 ];
 
 function registerCommand() {
@@ -70,6 +72,18 @@ function registerCommand() {
         switchEnv();
       } else {
         printEnv();
+      }
+    });
+
+  program
+    .command('locale')
+    .description(locale.CMD_DES_LOCALE)
+    .option('-s, --switch', locale.TIP_LOCALE_SWITCH)
+    .action(({ switch: sw }) => {
+      if (sw) {
+        switchLocale();
+      } else {
+        printLocale();
       }
     });
 

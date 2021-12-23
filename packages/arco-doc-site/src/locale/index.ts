@@ -1,3 +1,5 @@
-import zh from './zh-CN';
+import { getLocale } from '@arco-design/arco-dev-utils';
+import zhCN from './zh-CN';
+import enUS from './en-US';
 
-export default zh;
+export default getLocale() === 'zh-CN' ? zhCN : enUS;

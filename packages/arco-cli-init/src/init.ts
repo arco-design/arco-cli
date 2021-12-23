@@ -496,7 +496,7 @@ async function getPureProjectConfig(): Promise<Partial<CreateProjectOptions>> {
     {
       type: 'input',
       name: 'name',
-      message: locale.TIP_INPUT_PACKNAGE_NAME_FOR_PURE_PROJECT,
+      message: locale.TIP_INPUT_PACKAGE_NAME_FOR_PURE_PROJECT,
     },
   ]);
 

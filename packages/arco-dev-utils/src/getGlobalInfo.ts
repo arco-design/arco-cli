@@ -16,6 +16,7 @@ export interface CliGlobalInfo {
     arco: string;
   };
   env?: 'private' | 'public';
+  locale?: 'zh-CN' | 'en-US' | 'system';
 }
 
 export default function getGlobalInfo(): CliGlobalInfo {

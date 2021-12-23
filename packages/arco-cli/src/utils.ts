@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import { print, getNpmPackageInfo, getGlobalInfo } from '@arco-design/arco-dev-utils';
+import locale from './locale';
 
 const ARCO_CLI_PACKAGE_NAME = '@arco-design/arco-cli';
 
@@ -16,7 +17,7 @@ export function fetchLatestVersion() {
 export function printLogo() {
   const { version } = require('../package.json');
   const globalInfo = getGlobalInfo();
-  const envInfo = globalInfo?.env === 'private' ? '内部版 ' : '      ';
+  const envInfo = globalInfo?.env === 'private' ? `${locale.LABEL_BANNER_ENV_PRIVATE} ` : '      ';
   print(
     chalk.hex('#165dff').bold(
       `
