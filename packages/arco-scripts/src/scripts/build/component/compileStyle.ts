@@ -180,7 +180,8 @@ export function watch() {
 export function build() {
   return new Promise<void>((resolve) => {
     gulp.series(
-      gulp.parallel(copyAsset, copyFileWatched, compileLess, handleStyleJSEntry),
+      gulp.parallel(copyAsset, copyFileWatched),
+      gulp.parallel(compileLess, handleStyleJSEntry),
       gulp.parallel(distLess, distCss.bind(null, false)),
       gulp.parallel(() => resolve(null))
     )(null);

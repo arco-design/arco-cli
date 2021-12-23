@@ -20,7 +20,7 @@ const npmImport = new NpmImportPlugin({ prefix: '~' });
 const autoprefix = new LessAutoprefix();
 
 const FILE_ASSET_EXT = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'ttf', 'eot', 'woff', 'woff2'];
-const FILE_WATCHED_EXT = FILE_ASSET_EXT.concat(['less']);
+const FILE_WATCHED_EXT = FILE_ASSET_EXT.concat(['less', 'css']);
 
 export interface StyleConfig {
   /**
