@@ -23,4 +23,6 @@ export default function getGlobalInfo(): CliGlobalInfo {
   if (fs.existsSync(PATH_CLI_GLOBAL_INFO)) {
     return fs.readJsonSync(PATH_CLI_GLOBAL_INFO);
   }
+
+  return {};
 }
