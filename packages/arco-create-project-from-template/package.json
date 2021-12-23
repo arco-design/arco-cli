@@ -1,6 +1,6 @@
 {
   "name": "@arco-design/arco-create-project-from-template",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Module of Arco CLI to create project from template",
   "main": "lib/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@arco-design/arco-dev-utils": "^2.2.0",
+    "@arco-design/arco-dev-utils": "^2.3.0",
     "fs-extra": "^9.0.1",
     "ora": "^5.3.0"
   },

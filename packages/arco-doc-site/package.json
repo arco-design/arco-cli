@@ -1,6 +1,6 @@
 {
   "name": "@arco-design/arco-doc-site",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Arco Doc Site Helper",
   "main": "lib/index.js",
   "types": "lib/interface.d.ts",
@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@arco-design/arco-babel-config": "^1.2.0",
-    "@arco-design/arco-dev-utils": "^2.2.0",
+    "@arco-design/arco-dev-utils": "^2.3.0",
     "@arco-design/arco-markdown-loader": "^1.15.0",
     "@arco-design/arco-material-preview-utils": "^1.0.3",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
