@@ -151,7 +151,11 @@ ${exportExpressions}
 
 // Only used by team site development mode
 if (window.arcoMaterialTeamSite && window.arcoMaterialTeamSite.renderPage) {
-  window.arcoMaterialTeamSite.renderPage(${LIBRARY_MODULE_NAME});
+  const siteDevOptions = ${JSON.stringify(buildConfig.devOptions || {}, null, 2).replace(
+    /^"(.*)"$/s,
+    (_, $1) => $1
+  )};
+  window.arcoMaterialTeamSite.renderPage(${LIBRARY_MODULE_NAME}, siteDevOptions);
 }
 `);
 

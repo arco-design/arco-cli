@@ -70,6 +70,18 @@ export interface MainConfig {
      * @zh 是否将组件的样式一同打包
      */
     withMaterialStyle?: boolean;
+    /**
+     * Options for development mode
+     * @zh 站点 Dev 模式时的配置
+     */
+    devOptions?: {
+      /**
+       * Whether to auto import Arco library style
+       * @zh 是否自动注入 Arco 组件库的样式
+       * @default true
+       */
+      withArcoStyle?: boolean;
+    };
   };
   /**
    * Runtime config for site
