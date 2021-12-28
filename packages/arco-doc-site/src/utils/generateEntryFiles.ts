@@ -1,15 +1,78 @@
 import fs from 'fs-extra';
 import path from 'path';
 import glob from 'glob';
+import globParent from 'glob-parent';
 import { print } from '@arco-design/arco-dev-utils';
 import getMainConfig from './getMainConfig';
+import { DocumentInfo } from '../interface';
 import { PLACEHOLDER_ARCO_SITE_MODULE_INFO } from '../constant';
+import getTitleOfMarkdown from './getTitleOfMarkdown';
 
 export const LIBRARY_MODULE_NAME = 'arcoSite';
 const VARIABLE_PREFIX = LIBRARY_MODULE_NAME;
 
 const { build: buildConfig, site: siteConfig } = getMainConfig();
 const entryFileDir = path.resolve('__temp__');
+
+function transformObjectToExpression(obj: Object | Array<any>): string {
+  return JSON.stringify(obj || {}, null, 2).replace(/^"(.*)"$/s, (_, $1) => $1);
+}
+
+function generateDocTree(options: {
+  entry: string;
+  baseDir: string;
+  filter?: (filePath: string) => boolean;
+  onFile?: (filePath: string, info: DocumentInfo) => void;
+}) {
+  const { entry, baseDir, filter, onFile } = options;
+  const result: Array<DocumentInfo> = [];
+  const files = fs.readdirSync(entry);
+
+  for (const file of files) {
+    const filePath = path.resolve(entry, file);
+    const filePathToBaseDir = `/${path.relative(baseDir, filePath)}`;
+    const stats = fs.lstatSync(filePath);
+    const isFile = stats.isFile();
+    const isDirectory = stats.isDirectory();
+
+    if (isFile) {
+      if (!filter || filter(filePath)) {
+        const info = {
+          name: getTitleOfMarkdown(filePath),
+          path: filePathToBaseDir,
+        };
+        result.push(info);
+        onFile(filePath, info);
+      }
+    }
+
+    if (isDirectory) {
+      result.push({
+        name: file,
+        path: filePathToBaseDir,
+        children: generateDocTree({
+          ...options,
+          entry: filePath,
+        }),
+      });
+    }
+  }
+
+  const relativePath = path.relative(baseDir, entry);
+  const sortRule = siteConfig?.menu?.sortRule && siteConfig?.menu?.sortRule[relativePath];
+  if (Array.isArray(sortRule)) {
+    return result.sort(({ name: nameA }, { name: nameB }) => {
+      const indexA = sortRule.indexOf(nameA);
+      const indexB = sortRule.indexOf(nameB);
+      if (indexA > -1 && indexB > -1) {
+        return indexA > indexB ? 1 : -1;
+      }
+      return indexB > -1 ? 1 : -1;
+    });
+  }
+
+  return result;
+}
 
 export function getPathEntryByLanguage(language: string) {
   return path.resolve(entryFileDir, `index.js`.replace(/.js$/, `.${language}.js`));
@@ -60,8 +123,44 @@ const ${LIBRARY_MODULE_NAME} = {};
 
     exportModuleInfoList.push({
       name: `${VARIABLE_PREFIX}Config`,
-      statement: JSON.stringify(siteConfig, null, 2).replace(/^"(.*)"$/s, (_, $1) => $1),
+      statement: transformObjectToExpression(siteConfig),
     });
+
+    if (buildConfig.globs?.doc) {
+      // Glob info about pure document
+      const globDocBasePath = globParent(buildConfig.globs.doc);
+      const globDocMagicPath = buildConfig.globs.doc.replace(`${globDocBasePath}/`, '');
+      const docEntryPath = path.resolve(globDocBasePath, language);
+      const validDocPathList = glob.sync(path.resolve(docEntryPath, globDocMagicPath));
+
+      const documentInfo = generateDocTree({
+        entry: docEntryPath,
+        baseDir: docEntryPath,
+        filter: (filePath) => validDocPathList.indexOf(filePath) > -1,
+        onFile: (filePath, info) => {
+          const componentName = `Doc${validDocPathList.indexOf(filePath)}`;
+          const statement = `_${componentName}`;
+
+          // import document
+          fileContent.push(`\n// Import document from ${filePath}`);
+          fileContent.push(`import * as ${statement} from '${getRequirePath(filePath)}';\n`);
+
+          // export document
+          exportModuleInfoList.push({
+            name: componentName,
+            statement,
+          });
+
+          // write component name of document to docInfo
+          info.moduleName = componentName;
+        },
+      });
+
+      exportModuleInfoList.push({
+        name: `${VARIABLE_PREFIX}DocumentInfo`,
+        statement: transformObjectToExpression(documentInfo),
+      });
+    }
 
     // Import hook
     const hookNameList: string[] = [];
@@ -78,24 +177,6 @@ const ${LIBRARY_MODULE_NAME} = {};
         statement: `{ ${hookNameList.join(', ')} }`,
       });
     }
-
-    // Import pure markdown
-    glob.sync(buildConfig.globs.doc).forEach((p, index) => {
-      if (p.indexOf(language) > -1 && fs.existsSync(p)) {
-        const componentName = `Doc${index}`;
-        const statement = `_${componentName}`;
-        fileContent.push(
-          `
-// Import document from ${p}
-import * as ${statement} from '${getRequirePath(p)}';
-`
-        );
-        exportModuleInfoList.push({
-          name: componentName,
-          statement,
-        });
-      }
-    });
 
     // Import component demos
     glob
@@ -151,10 +232,7 @@ ${exportExpressions}
 
 // Only used by team site development mode
 if (window.arcoMaterialTeamSite && window.arcoMaterialTeamSite.renderPage) {
-  const siteDevOptions = ${JSON.stringify(buildConfig.devOptions || {}, null, 2).replace(
-    /^"(.*)"$/s,
-    (_, $1) => $1
-  )};
+  const siteDevOptions = ${transformObjectToExpression(buildConfig.devOptions)};
   window.arcoMaterialTeamSite.renderPage(${LIBRARY_MODULE_NAME}, siteDevOptions);
 }
 `);

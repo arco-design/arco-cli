@@ -40,6 +40,7 @@
     "doctrine": "^3.0.0",
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
+    "glob-parent": "^6.0.2",
     "html-webpack-plugin": "^5.5.0",
     "less": "^4.1.1",
     "less-loader": "^10.0.1",

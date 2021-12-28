@@ -11,12 +11,17 @@ import parseModuleExport, { ModuleExportMap } from './parseModuleExport';
 import tryGetUMDInfo from '../utils/tryGetUMDInfo';
 import { PLACEHOLDER_ARCO_SITE_MODULE_INFO } from '../constant';
 import encodeInfo from '../utils/encodeInfo';
+import getTitleOfMarkdown from '../utils/getTitleOfMarkdown';
 
-type ModuleInfo = {
+export type ModuleInfo = {
   name: string;
   info: Record<string, string> & { umd: ModuleUMDInfo };
   isDoc?: boolean;
-  children?: Array<any>;
+  children?: Array<{
+    name: string;
+    info: Record<string, string>;
+    rawCode?: string;
+  }>;
 };
 
 type ChunkInfo = {
@@ -117,20 +122,10 @@ export default class ArcoSiteModuleInfoPlugin {
       moduleInfoMap[chunkName] = moduleExportMap[entry]
         .map(({ name, moduleFilePath }) => {
           if (this.paths.doc.indexOf(moduleFilePath) > -1) {
-            const docContent = fs.readFileSync(moduleFilePath, 'utf-8');
-            let infoName = path.basename(moduleFilePath).replace(/\..+$/, '');
-
-            // try to get name from markdown content
-            let _match = docContent.match(/`{5}\n(.+)`{5}\n/s);
-            if (_match && _match[1]) {
-              _match = _match[1].match(/#\s(.+)\n/);
-              infoName = (_match && _match[1]) || infoName;
-            }
-
             return {
               name,
               info: {
-                name: infoName,
+                name: getTitleOfMarkdown(moduleFilePath),
               },
               isDoc: true,
             };

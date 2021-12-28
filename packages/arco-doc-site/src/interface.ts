@@ -1,4 +1,5 @@
 import { ExternalSourceInfo } from '@arco-design/arco-material-preview-utils';
+import { ModuleInfo } from './plugin';
 
 export { Configuration as WebpackConfig } from 'webpack';
 
@@ -120,5 +121,51 @@ export interface MainConfig {
        */
       defaultExternalList?: ExternalSourceInfo[];
     };
+    /**
+     * Config menu items
+     * @zh 配置菜单栏
+     */
+    menu?: {
+      /**
+       * The maximum allowed sub-menu level, the excess levels will be displayed in groups
+       * @zh 允许的最大菜单层级，超出的层级将以分组的形式展示
+       * @default 1
+       */
+      maxSubMenuLevel?: number;
+      /**
+       * Sort rule of menu items. The higher the menu item, the higher the priority
+       * @zh 菜单排序规则，越靠前的菜单项优先级越高
+       * @e.g { guide: ['document2', 'document1'] }
+       */
+      sortRule?: Record<string, String[]>;
+    };
   };
 }
+
+/**
+ * Info of help documents
+ */
+export type DocumentInfo = {
+  name: string;
+  path: string;
+  moduleName?: string;
+  children?: DocumentInfo[];
+};
+
+/**
+ * Type of arcoSite module
+ */
+export type ArcoSite = Record<string, any> & {
+  /**
+   * Info of components and documents
+   */
+  arcoSiteModuleInfo: ModuleInfo[];
+  /**
+   * Config of team site
+   */
+  arcoSiteConfig: MainConfig['site'];
+  /**
+   * Info of help document
+   */
+  arcoSiteDocumentInfo?: DocumentInfo[];
+};
