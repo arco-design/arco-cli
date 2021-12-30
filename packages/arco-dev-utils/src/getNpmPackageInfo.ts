@@ -13,7 +13,15 @@ export default (packageName = '') => {
   }
 
   const hostNPM = getGlobalInfo().host.npm;
-  const { stdout } = spawnSync('npm', ['view', packageName, '--registry', hostNPM, '--json']);
+  const isWin32 = process.platform === 'win32';
+  const npmCommander = isWin32 ? 'npm.cmd' : 'npm';
+  const { stdout } = spawnSync(npmCommander, [
+    'view',
+    packageName,
+    '--registry',
+    hostNPM,
+    '--json',
+  ]);
 
   let info;
   try {
