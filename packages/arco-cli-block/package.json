@@ -1,6 +1,6 @@
 {
   "name": "@arco-design/arco-cli-block",
-  "version": "1.13.1",
+  "version": "1.13.2",
   "description": "Block module of Arco CLI",
   "main": "lib/bin.js",
   "scripts": {
