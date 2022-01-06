@@ -439,7 +439,7 @@ async function getArcoDesignProConfig(
           value: 'vite',
         },
         {
-          name: 'Creat React App (https://create-react-app.dev)',
+          name: 'Create React App (https://create-react-app.dev)',
           value: 'cra',
         },
       ],

@@ -251,9 +251,6 @@ export default async function ({
 
   typeof beforeGitCommit === 'function' && beforeGitCommit();
 
-  // First Git commit
-  tryGitCommit(`arco-cli: ${isForMonorepo ? 'add package' : 'initialize'} ${packageJson.name}`);
-
   // Execute after-init.js defined in template
   try {
     if (afterInit) {
@@ -294,4 +291,9 @@ export default async function ({
     print.error(['arco-init'], locale.ERROR_PROJECT_INIT_FAILED);
     print.error(error);
   }
+
+  // First Git commit
+  tryGitCommit(
+    `arco-cli: ${isForMonorepo ? 'add package' : 'initialize'} ${packageJson.name || 'project'}`
+  );
 }
