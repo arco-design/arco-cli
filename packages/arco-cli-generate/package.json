@@ -1,6 +1,6 @@
 {
   "name": "@arco-design/arco-cli-generate",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "description": "Module of Arco CLI to generate material meta",
   "main": "lib/generate.js",
   "scripts": {
@@ -10,9 +10,9 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@arco-design/arco-cli-auth": "^1.9.0",
-    "@arco-design/arco-cli-config": "^1.11.0",
-    "@arco-design/arco-dev-utils": "^2.3.0",
+    "@arco-design/arco-cli-auth": "^1.9.1",
+    "@arco-design/arco-cli-config": "^1.11.1",
+    "@arco-design/arco-dev-utils": "^2.3.2",
     "fs-extra": "^9.0.1"
   },
   "files": [
