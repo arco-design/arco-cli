@@ -35,6 +35,11 @@ interface ContextConfig {
 
 async function handleFsCopy(source: string, target: string) {
   const cpCommand = `cp -rf '${source}/.' '${target}'`;
+  const isTargetPathExists = fs.existsSync(target);
+
+  if(!isTargetPathExists){
+    await mkdirp(target);
+  }
   await cmd.execQuick(cpCommand);
 }
 
