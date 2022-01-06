@@ -99,12 +99,17 @@ export interface MainConfig {
      * Lark group id for on call
      * @zh 飞书 onCall 群的 ID
      */
-    larkGroupID: string;
+    larkGroupID?: string;
+    /**
+     * Theme package name of Arco Design Lab
+     * @zh 关联使用的 Arco 主题商店主题包名
+     */
+    arcoDesignLabTheme?: string;
     /**
      * Whether switching themes is allowed
      * @zh 是否允许切换主题
      */
-    allowThemeToggle: boolean;
+    allowThemeToggle?: boolean;
     /**
      * Config of material demos
      * @zh 页面 Demo 的配置
