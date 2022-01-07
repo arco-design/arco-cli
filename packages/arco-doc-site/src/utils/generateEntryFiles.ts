@@ -11,11 +11,18 @@ import getTitleOfMarkdown from './getTitleOfMarkdown';
 export const LIBRARY_MODULE_NAME = 'arcoSite';
 const VARIABLE_PREFIX = LIBRARY_MODULE_NAME;
 
+const FUNCTION_LABEL = '#FUNC#';
+
 const { build: buildConfig, site: siteConfig } = getMainConfig();
 const entryFileDir = path.resolve('__temp__');
 
 function transformObjectToExpression(obj: Object | Array<any>): string {
-  return JSON.stringify(obj || {}, null, 2).replace(/^"(.*)"$/s, (_, $1) => $1);
+  return (
+    JSON.stringify(obj || {}, null, 2)
+      .replace(/^"(.*)"$/s, (_, $1) => $1)
+      // Convert "#FUNC#() => true;#FUNC#" to () => true;
+      .replace(new RegExp(`"?${FUNCTION_LABEL}"?`, 'g'), '')
+  );
 }
 
 function generateDocTree(options: {
@@ -232,7 +239,12 @@ ${exportExpressions}
 
 // Only used by team site development mode
 if (window.arcoMaterialTeamSite && window.arcoMaterialTeamSite.renderPage) {
-  const siteDevOptions = ${transformObjectToExpression(buildConfig.devOptions)};
+  const siteDevOptions = ${transformObjectToExpression({
+    ...buildConfig.devOptions,
+    withArcoStyle: siteConfig.arcoDesignLabTheme
+      ? `${FUNCTION_LABEL}() => import('${siteConfig.arcoDesignLabTheme}/css/arco.css'),${FUNCTION_LABEL}`
+      : buildConfig.devOptions?.withArcoStyle,
+  })};
   window.arcoMaterialTeamSite.renderPage(${LIBRARY_MODULE_NAME}, siteDevOptions);
 }
 `);

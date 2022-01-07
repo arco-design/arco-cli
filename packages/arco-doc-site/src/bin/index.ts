@@ -21,8 +21,10 @@ process.on('unhandledRejection', (err) => {
 });
 
 const VALID_SUBCOMMANDS = ['build', 'dev'];
-const URL_HTML_TEMPLATE =
-  'https://lf-cdn-tos.bytescm.com/obj/static/arco-design/material/platform-dev/team.development.html';
+const URL_HTML_TEMPLATE = `http://${
+  process.env.HTML_TEMPLATE_DOMAIN ||
+  'lf-cdn-tos.bytescm.com/obj/static/arco-design/material/platform-dev'
+}/team.development.html`;
 
 program
   .name('arco-doc-site')
