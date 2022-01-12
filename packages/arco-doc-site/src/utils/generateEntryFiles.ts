@@ -242,7 +242,7 @@ if (window.arcoMaterialTeamSite && window.arcoMaterialTeamSite.renderPage) {
   const siteDevOptions = ${transformObjectToExpression({
     ...buildConfig.devOptions,
     withArcoStyle: siteConfig.arcoDesignLabTheme
-      ? `${FUNCTION_LABEL}() => import('${siteConfig.arcoDesignLabTheme}/css/arco.css'),${FUNCTION_LABEL}`
+      ? `${FUNCTION_LABEL}() => import('${siteConfig.arcoDesignLabTheme}/css/arco.css')${FUNCTION_LABEL}`
       : buildConfig.devOptions?.withArcoStyle,
   })};
   window.arcoMaterialTeamSite.renderPage(${LIBRARY_MODULE_NAME}, siteDevOptions);
