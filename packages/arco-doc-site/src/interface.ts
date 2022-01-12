@@ -101,6 +101,11 @@ export interface MainConfig {
      */
     larkGroupID?: string;
     /**
+     * Icon package name of Arco Icon Box
+     * @zh 关联使用的 Arco 图标平台图标库
+     */
+    arcoIconBox?: string;
+    /**
      * Theme package name of Arco Design Lab
      * @zh 关联使用的 Arco 主题商店主题包名
      */

@@ -6,6 +6,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import ProgressPlugin from 'progress-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import ArcoWebpackPlugin from '@arco-design/webpack-plugin';
 import { webpackExternalForArco } from '@arco-design/arco-dev-utils';
 
 import ArcoSiteModuleInfoPlugin from '../plugin';
@@ -76,99 +77,124 @@ function getModuleRuleForLess({
   ];
 }
 
-const BASE_CONFIG = {
-  output: {
-    path: path.resolve('dist'),
-    filename: `${LIBRARY_MODULE_NAME}.[name].js`,
-    library: {
-      name: LIBRARY_MODULE_NAME,
-      type: 'umd',
-    },
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx|ts|tsx)$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: babelConfig,
-          },
-        ],
+/**
+ * Generate webpack config needed by both production and development mode.
+ * Config extension function will be executed twice, ensuring that BaseConfig is a different reference object.
+ */
+function generateBaseConfig() {
+  return {
+    output: {
+      path: path.resolve('dist'),
+      filename: `${LIBRARY_MODULE_NAME}.[name].js`,
+      library: {
+        name: LIBRARY_MODULE_NAME,
+        type: 'umd',
       },
-      {
-        test: /\.md$/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: babelConfig,
-          },
-          {
-            loader: '@arco-design/arco-markdown-loader',
-            options: {
-              demoDir: 'demo',
-              preprocess: removeMarkdownDemoPart,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx|ts|tsx)$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: babelConfig,
             },
-          },
-        ],
-      },
-      {
-        test: /\.svg$/,
-        use: ['@svgr/webpack'],
-      },
-      {
-        test: /\.(png|jpg|gif|ttf|eot|woff|woff2)$/,
-        type: 'asset/resource',
-      },
-      {
-        test: /\.txt$/,
-        type: 'asset/source',
-      },
-    ],
-  },
-  plugins: [
-    new ArcoSiteModuleInfoPlugin({
-      globs: {
-        doc: buildConfig.globs.doc,
-        demo: path.resolve(buildConfig.globs.component.base, buildConfig.globs.component.demo),
-      },
-    }),
-    new ProgressPlugin(true),
-  ],
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
-    alias: {},
-  },
-  resolveLoader: {
-    modules: [
-      'node_modules',
-      path.resolve(__dirname, '../../node_modules'),
-      path.resolve(__dirname, '../../../'),
-    ],
-  },
-  externals: [
-    {
-      react: {
-        root: 'React',
-        commonjs2: 'react',
-        commonjs: 'react',
-        amd: 'react',
-      },
-      'react-dom': {
-        root: 'ReactDOM',
-        commonjs2: 'react-dom',
-        commonjs: 'react-dom',
-        amd: 'react-dom',
-      },
+          ],
+        },
+        {
+          test: /\.md$/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: babelConfig,
+            },
+            {
+              loader: '@arco-design/arco-markdown-loader',
+              options: {
+                demoDir: 'demo',
+                preprocess: removeMarkdownDemoPart,
+              },
+            },
+          ],
+        },
+        {
+          test: /\.svg$/,
+          use: ['@svgr/webpack'],
+        },
+        {
+          test: /\.(png|jpg|gif|ttf|eot|woff|woff2)$/,
+          type: 'asset/resource',
+        },
+        {
+          test: /\.txt$/,
+          type: 'asset/source',
+        },
+      ],
     },
-    webpackExternalForArco,
-  ],
-};
+    plugins: [
+      new ArcoSiteModuleInfoPlugin({
+        globs: {
+          doc: buildConfig.globs.doc,
+          demo: path.resolve(buildConfig.globs.component.base, buildConfig.globs.component.demo),
+        },
+      }),
+      new ProgressPlugin(true),
+    ],
+    resolve: {
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+      alias: {},
+    },
+    resolveLoader: {
+      modules: [
+        'node_modules',
+        path.resolve(__dirname, '../../node_modules'),
+        path.resolve(__dirname, '../../../'),
+      ],
+    },
+    externals: [
+      {
+        react: {
+          root: 'React',
+          commonjs2: 'react',
+          commonjs: 'react',
+          amd: 'react',
+        },
+        'react-dom': {
+          root: 'ReactDOM',
+          commonjs2: 'react-dom',
+          commonjs: 'react-dom',
+          amd: 'react-dom',
+        },
+      },
+      webpackExternalForArco,
+    ],
+  };
+}
+
+/**
+ * Generate webpack config based on user's site config
+ */
+function generateCustomConfig() {
+  const plugins = [];
+
+  if (siteConfig.arcoIconBox) {
+    plugins.push(
+      new ArcoWebpackPlugin({
+        iconBox: siteConfig.arcoIconBox,
+      })
+    );
+  }
+
+  return {
+    plugins,
+  };
+}
 
 const config = {
   dev: merge([
-    BASE_CONFIG,
+    generateBaseConfig(),
     {
       mode: 'development',
       output: {
@@ -201,9 +227,10 @@ const config = {
         },
       },
     },
+    generateCustomConfig(),
   ]),
   prod: merge([
-    BASE_CONFIG,
+    generateBaseConfig(),
     {
       mode: 'production',
       entry: getEntryConfig(),
@@ -233,6 +260,7 @@ const config = {
         minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
       },
     },
+    generateCustomConfig(),
   ]),
 };
 

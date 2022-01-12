@@ -21,6 +21,7 @@
     "@arco-design/arco-dev-utils": "^2.3.2",
     "@arco-design/arco-markdown-loader": "^1.15.0",
     "@arco-design/arco-material-preview-utils": "^1.0.3",
+    "@arco-design/webpack-plugin": "^1.7.0",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
     "@babel/plugin-proposal-export-default-from": "^7.14.5",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
