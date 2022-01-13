@@ -1,9 +1,10 @@
 import path from 'path';
 import open from 'open';
 import fs from 'fs-extra';
-import { print, fileServer } from '@arco-design/arco-dev-utils';
+import { print, fileServer, getGlobalInfo } from '@arco-design/arco-dev-utils';
 
 export default function preview({ port = 9003, path: previewPath = '', teamSite = false }) {
+  const hostArco = getGlobalInfo().host.arco;
   const query = `localPreviewUrl=http://localhost:${port}${previewPath}`;
   const openBrowser = (url) => {
     open(url);
@@ -12,7 +13,7 @@ export default function preview({ port = 9003, path: previewPath = '', teamSite 
 
   if (teamSite) {
     fileServer(port);
-    openBrowser(`https://arco.design/material/team/SitePreview?${query}`);
+    openBrowser(`${hostArco}/material/team/SitePreview?${query}`);
   } else {
     let packageJson;
     try {
@@ -26,6 +27,6 @@ export default function preview({ port = 9003, path: previewPath = '', teamSite 
       process.exit(1);
     }
     fileServer(port);
-    openBrowser(`https://arco.design/material/detail?name=${packageJson.name}&${query}`);
+    openBrowser(`${hostArco}/material/detail?name=${packageJson.name}&${query}`);
   }
 }

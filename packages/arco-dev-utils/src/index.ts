@@ -7,7 +7,7 @@ import getLernaConfig from './getLernaConfig';
 import getNpmPackageInfo from './getNpmPackageInfo';
 import getRealRequirePath from './getRealRequirePath';
 import getGlobalInfo from './getGlobalInfo';
-import getLocale from "./getLocale";
+import getLocale from './getLocale';
 import writeGlobalInfo from './writeGlobalInfo';
 import isGitStatusClean from './isGitStatusClean';
 import isInGitRepository from './isInGitRepository';
