@@ -108,6 +108,7 @@ export default async ({
         package: {
           ...meta.package,
           name: packageName,
+          peerDependencies: Object.keys(packageJson.peerDependencies || {}),
         },
       },
       { spaces: 2 }

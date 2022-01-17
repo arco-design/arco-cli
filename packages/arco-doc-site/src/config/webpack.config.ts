@@ -14,7 +14,11 @@ import babelConfig from './babel.config';
 import getMainConfig from '../utils/getMainConfig';
 import getConfigProcessor from '../utils/getConfigProcessor';
 import removeMarkdownDemoPart from '../utils/removeMarkdownDemoPart';
-import { getPathEntryByLanguage, LIBRARY_MODULE_NAME } from '../utils/generateEntryFiles';
+import {
+  ENTRY_DIR_NAME,
+  getPathEntryByLanguage,
+  LIBRARY_MODULE_NAME,
+} from '../utils/generateEntryFiles';
 
 const REGEXP_CSS = /\.css$/;
 const REGEXP_LESS = /\.less$/;
@@ -183,6 +187,7 @@ function generateCustomConfig() {
     plugins.push(
       new ArcoWebpackPlugin({
         iconBox: siteConfig.arcoIconBox,
+        include: [ENTRY_DIR_NAME],
       })
     );
   }

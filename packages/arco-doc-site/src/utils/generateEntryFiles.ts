@@ -8,13 +8,14 @@ import { DocumentInfo } from '../interface';
 import { PLACEHOLDER_ARCO_SITE_MODULE_INFO } from '../constant';
 import getTitleOfMarkdown from './getTitleOfMarkdown';
 
+export const ENTRY_DIR_NAME = '__temp__';
 export const LIBRARY_MODULE_NAME = 'arcoSite';
 const VARIABLE_PREFIX = LIBRARY_MODULE_NAME;
 
 const FUNCTION_LABEL = '#FUNC#';
 
 const { build: buildConfig, site: siteConfig } = getMainConfig();
-const entryFileDir = path.resolve('__temp__');
+const entryFileDir = path.resolve(ENTRY_DIR_NAME);
 
 function transformObjectToExpression(obj: Object | Array<any>): string {
   return (
