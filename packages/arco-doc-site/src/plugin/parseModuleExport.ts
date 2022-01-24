@@ -51,21 +51,34 @@ export default function parseModuleExport({
 
     for (const { type, moduleName, value } of exports) {
       switch (type) {
-        case 'ExportSpecifier':
-          const [pathImport] = glob.sync(
-            path.resolve(dirPathCurrent, `${value}?(.jsx|.js|.ts|.tsx)`)
-          );
+        case 'ExportSpecifier': {
+          let pathImport = path.resolve(dirPathCurrent, value);
+          if (fs.existsSync(pathImport) && fs.lstatSync(pathImport).isDirectory()) {
+            pathImport = `${pathImport}/index`;
+          }
+          pathImport = glob.sync(`${pathImport}?(.jsx|.js|.ts|.tsx)`).pop();
+
           if (pathImport) {
+            let rawCode = '';
+            if (needRawCode) {
+              try {
+                rawCode = fs.readFileSync(pathImport, 'utf8');
+              } catch (e) {
+                rawCode = 'Failed to get demo code.';
+              }
+            }
+
             moduleInfoList.push({
               name: moduleName,
-              rawCode: needRawCode ? fs.readFileSync(pathImport, 'utf8') : '',
+              rawCode,
               moduleFilePath: pathImport,
             });
           }
           break;
+        }
 
         case 'FunctionDeclaration':
-        case 'VariableDeclaration':
+        case 'VariableDeclaration': {
           // Coupled with the content of the file, the content that needs to be parsed is as follows
           // import * as _DOC from 'xxx.md';
           // export const DOC = _DOC;
@@ -92,6 +105,7 @@ export default function parseModuleExport({
             moduleFilePath,
           });
           break;
+        }
 
         default:
           break;
