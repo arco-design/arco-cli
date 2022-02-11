@@ -444,39 +444,25 @@ async function getArcoDesignProConfig(
         },
       ],
     },
+    {
+      type: 'list',
+      name: 'type',
+      message: locale.TIP_SELECT_PRO_REACT_TEMPLATE,
+      choices: [
+        {
+          name: locale.PRO_REACT_TEMPLATE_SIMPLE,
+          value: 'simple',
+        },
+        {
+          name: locale.PRO_REACT_TEMPLATE_COMPLETE,
+          value: 'full',
+        },
+      ],
+      when: () => framework === 'react',
+    },
   ];
 
-  /**
-   * Get the simple or complete template to create Arco React Pro
-   */
-  async function judgeIsSimple(framework: FrameworkType): Promise<boolean> {
-    if (framework !== 'react') {
-      return false;
-    }
-
-    const { type } = await inquirer.prompt([
-      {
-        type: 'list',
-        name: 'type',
-        message: locale.TIP_SELECT_PRO_REACT_TEMPLATE,
-        choices: [
-          {
-            name: locale.PRO_REACT_TEMPLATE_SIMPLE,
-            value: 'simple',
-          },
-          {
-            name: locale.PRO_REACT_TEMPLATE_COMPLETE,
-            value: 'complete',
-          },
-        ],
-      },
-    ]);
-
-    return type === 'simple';
-  }
-
   const answer = await inquirer.prompt(question);
-  const isSimple = await judgeIsSimple(framework);
 
   return {
     template: MATERIAL_TYPE_MAP['arco-design-pro-react'].template,
@@ -484,7 +470,7 @@ async function getArcoDesignProConfig(
     beforeGitCommit,
     customInitFunctionParams: {
       framework: answer.framework,
-      simple: isSimple,
+      simple: answer.type === 'simple',
     },
   };
 }
