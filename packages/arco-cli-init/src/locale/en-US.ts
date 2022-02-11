@@ -19,6 +19,10 @@ export default {
   TIP_SELECT_ARCO_PRO_TYPE: 'Please select the Arco Pro version you need',
   TIP_INPUT_TEMPLATE_NAME_FOR_PURE_PROJECT: 'Please enter the NPM package name of template',
   TIP_INPUT_PACKAGE_NAME_FOR_PURE_PROJECT: 'Please enter the NPM package name of this project',
+  TIP_SELECT_PRO_REACT_TEMPLATE:
+    'Please choose the React Pro template, do you want all the full pages or the base template?',
+  PRO_REACT_TEMPLATE_SIMPLE: 'Simple version (contains only one basic page)',
+  PRO_REACT_TEMPLATE_COMPLETE: 'Full version (includes all pages)',
 
   DES_ARCO_PRO_COMPLETE: 'Full version (include all pages)',
   DES_ARCO_PRO_SIMPLE: 'Minimal version (only include a sample page)',

@@ -448,14 +448,48 @@ async function getArcoDesignProConfig(
 
   const answer = await inquirer.prompt(question);
 
+  const isSimple = await judgeIsSimple(framework);
+
   return {
     template: MATERIAL_TYPE_MAP['arco-design-pro-react'].template,
     arcoPackageName: PACKAGE_NAME_ARCO_WEB_REACT_V2,
     beforeGitCommit,
     customInitFunctionParams: {
       framework: answer.framework,
+      simple: isSimple,
     },
   };
+}
+/**
+ * Get the simple or complete template to create Arco React Pro
+ */
+
+async function judgeIsSimple(framework: FrameworkType) {
+  if (framework !== 'react') {
+    return 'complete';
+  }
+
+  const question = [
+    {
+      type: 'list',
+      name: 'template',
+      message: locale.TIP_SELECT_PRO_REACT_TEMPLATE,
+      choices: [
+        {
+          name: locale.PRO_REACT_TEMPLATE_SIMPLE,
+          value: 'simple',
+        },
+        {
+          name: locale.PRO_REACT_TEMPLATE_COMPLETE,
+          value: 'complete',
+        },
+      ],
+    },
+  ];
+
+  const answer = await inquirer.prompt(question);
+
+  return answer.template === 'simple';
 }
 
 /**
