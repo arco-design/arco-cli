@@ -446,8 +446,36 @@ async function getArcoDesignProConfig(
     },
   ];
 
-  const answer = await inquirer.prompt(question);
+  /**
+   * Get the simple or complete template to create Arco React Pro
+   */
+  async function judgeIsSimple(framework: FrameworkType): Promise<boolean> {
+    if (framework !== 'react') {
+      return false;
+    }
 
+    const { type } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'type',
+        message: locale.TIP_SELECT_PRO_REACT_TEMPLATE,
+        choices: [
+          {
+            name: locale.PRO_REACT_TEMPLATE_SIMPLE,
+            value: 'simple',
+          },
+          {
+            name: locale.PRO_REACT_TEMPLATE_COMPLETE,
+            value: 'complete',
+          },
+        ],
+      },
+    ]);
+
+    return type === 'simple';
+  }
+
+  const answer = await inquirer.prompt(question);
   const isSimple = await judgeIsSimple(framework);
 
   return {
@@ -459,37 +487,6 @@ async function getArcoDesignProConfig(
       simple: isSimple,
     },
   };
-}
-/**
- * Get the simple or complete template to create Arco React Pro
- */
-
-async function judgeIsSimple(framework: FrameworkType) {
-  if (framework !== 'react') {
-    return 'complete';
-  }
-
-  const question = [
-    {
-      type: 'list',
-      name: 'template',
-      message: locale.TIP_SELECT_PRO_REACT_TEMPLATE,
-      choices: [
-        {
-          name: locale.PRO_REACT_TEMPLATE_SIMPLE,
-          value: 'simple',
-        },
-        {
-          name: locale.PRO_REACT_TEMPLATE_COMPLETE,
-          value: 'complete',
-        },
-      ],
-    },
-  ];
-
-  const answer = await inquirer.prompt(question);
-
-  return answer.template === 'simple';
 }
 
 /**

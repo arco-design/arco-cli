@@ -24,9 +24,6 @@ export default {
   PRO_REACT_TEMPLATE_SIMPLE: 'Simple version (contains only one basic page)',
   PRO_REACT_TEMPLATE_COMPLETE: 'Full version (includes all pages)',
 
-  DES_ARCO_PRO_COMPLETE: 'Full version (include all pages)',
-  DES_ARCO_PRO_SIMPLE: 'Minimal version (only include a sample page)',
-
   WARN_PATH_EXIST: 'The given path already exists, are you sure to overwrite it?',
 
   ERROR_NO_PROJECT_NAME: 'Please enter the project name',
