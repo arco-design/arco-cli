@@ -19,6 +19,9 @@ export default {
   TIP_SELECT_ARCO_PRO_TYPE: '请选择你想要使用的开发框架',
   TIP_INPUT_TEMPLATE_NAME_FOR_PURE_PROJECT: '请输入所需使用的项目模板的 NPM 包名',
   TIP_INPUT_PACKAGE_NAME_FOR_PURE_PROJECT: '请输入此项目的 NPM 包名',
+  TIP_SELECT_PRO_REACT_TEMPLATE: '请选择 React Pro 模版，你需要所有完整页面还是基础模版？',
+  PRO_REACT_TEMPLATE_SIMPLE: '简单版（只包含一个基础页面）',
+  PRO_REACT_TEMPLATE_COMPLETE: '完整版（包含所有页面）',
 
   WARN_PATH_EXIST: '路径已经存在，确认要覆盖它吗？',
 
