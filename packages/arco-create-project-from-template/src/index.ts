@@ -23,8 +23,6 @@ export interface CreateProjectOptions {
   packageJson?: { [key: string]: any };
   /** Whether is for Lerna project */
   isForMonorepo?: boolean;
-  /** Name of Arco UI library */
-  arcoPackageName?: string;
   /** Callback before git commit */
   beforeGitCommit?: () => void;
   /** Extra parameters passed to custom project init function */
@@ -160,7 +158,6 @@ export default async function ({
   projectName = '',
   packageJson = {},
   isForMonorepo = false,
-  arcoPackageName,
   beforeGitCommit,
   customInitFunctionParams,
 }: CreateProjectOptions) {
@@ -214,8 +211,6 @@ export default async function ({
     await materialTemplate.transformToProject({
       root,
       packageJson,
-      arcoPackageName,
-      isForMonorepo,
     });
     spinner.succeed(locale.TIP_TEMPLATE_ADAPT_DONE);
   } catch (err) {

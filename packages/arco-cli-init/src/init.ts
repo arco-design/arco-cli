@@ -8,7 +8,6 @@ import {
   print,
   confirm,
   isGitStatusClean,
-  CONSTANT,
   getGitRootPath,
   getGlobalInfo,
 } from '@arco-design/arco-dev-utils';
@@ -35,7 +34,8 @@ interface ProjectInitOptions {
 
 type FrameworkType = 'react' | 'vue';
 
-const { PACKAGE_NAME_ARCO_WEB_REACT_V2, PACKAGE_NAME_ARCO_WEB_VUE_V2 } = CONSTANT;
+const PACKAGE_NAME_TEMPLATE_CORE = '@arco-materials/template-core';
+const PACKAGE_NAME_TEMPLATE_MONOREPO = '@arco-materials/template-monorepo';
 
 // Available templates
 // Temporarily change value of template via process.env.TEMPLATE
@@ -43,35 +43,35 @@ const MATERIAL_TYPE_MAP = new Proxy(
   {
     'react-component': {
       name: locale.LABEL_COMPONENT,
-      template: '@arco-design/arco-template-react-component',
+      template: PACKAGE_NAME_TEMPLATE_CORE,
     },
     'react-block': {
       name: locale.LABEL_BLOCK,
-      template: '@arco-design/arco-template-react-block',
+      template: PACKAGE_NAME_TEMPLATE_CORE,
     },
     'react-page': {
       name: locale.LABEL_PAGE,
-      template: '@arco-design/arco-template-react-page',
+      template: PACKAGE_NAME_TEMPLATE_CORE,
     },
     'react-library': {
       name: locale.LABEL_LIBRARY,
-      template: '@arco-design/arco-template-react-library',
+      template: PACKAGE_NAME_TEMPLATE_CORE,
     },
     'react-monorepo': {
       name: locale.LABEL_MONOREPO,
-      template: '@arco-design/arco-template-react-monorepo',
+      template: PACKAGE_NAME_TEMPLATE_MONOREPO,
     },
     'vue-component': {
       name: locale.LABEL_COMPONENT,
-      template: '@arco-design/arco-template-vue-component',
+      template: PACKAGE_NAME_TEMPLATE_CORE,
     },
     'vue-library': {
       name: locale.LABEL_LIBRARY,
-      template: '@arco-design/arco-template-vue-library',
+      template: PACKAGE_NAME_TEMPLATE_CORE,
     },
     'vue-monorepo': {
       name: locale.LABEL_MONOREPO,
-      template: '@arco-design/arco-template-vue-monorepo',
+      template: PACKAGE_NAME_TEMPLATE_MONOREPO,
     },
     'arco-design-pro-react': {
       name: locale.LABEL_ARCO_PRO,
@@ -207,6 +207,7 @@ export default async function ({
         type: materialType,
         template,
         metaFileName,
+        isForMonorepo,
         meta: metaInTemplate,
       });
     }
@@ -238,7 +239,7 @@ export default async function ({
           type: materialType,
           template,
           metaFileName,
-          framework,
+          isForMonorepo,
         });
     }
   };
@@ -415,7 +416,6 @@ async function getArcoDesignProConfig(
   if (framework === 'vue') {
     return {
       template: MATERIAL_TYPE_MAP['arco-design-pro-vue'].template,
-      arcoPackageName: PACKAGE_NAME_ARCO_WEB_VUE_V2,
       beforeGitCommit,
       // TODO List for Vue Pro
       customInitFunctionParams: {
@@ -466,7 +466,6 @@ async function getArcoDesignProConfig(
 
   return {
     template: MATERIAL_TYPE_MAP['arco-design-pro-react'].template,
-    arcoPackageName: PACKAGE_NAME_ARCO_WEB_REACT_V2,
     beforeGitCommit,
     customInitFunctionParams: {
       framework: answer.framework,
@@ -483,7 +482,7 @@ async function getComponentConfig({
   template = MATERIAL_TYPE_MAP[type].template,
   metaFileName,
   meta,
-  framework,
+  isForMonorepo,
 }: {
   /** Material type */
   type: string;
@@ -493,23 +492,11 @@ async function getComponentConfig({
   metaFileName: string;
   /** Meta info for material */
   meta?: { [key: string]: any };
-  /** Frontend framework type */
-  framework?: FrameworkType;
+  /* Whether to add Package in the Lerna project */
+  isForMonorepo?: boolean;
 }): Promise<Partial<CreateProjectOptions>> {
   meta = meta || {};
   meta.type = type;
-
-  let arcoPackageName = '';
-  switch (framework) {
-    case 'react':
-      arcoPackageName = PACKAGE_NAME_ARCO_WEB_REACT_V2;
-      break;
-    case 'vue':
-      arcoPackageName = PACKAGE_NAME_ARCO_WEB_VUE_V2;
-      break;
-    default:
-      break;
-  }
 
   const answer = await inquiryMaterialMeta(meta);
   const packageInfo = {
@@ -525,8 +512,12 @@ async function getComponentConfig({
 
   return {
     template,
-    arcoPackageName,
     packageJson: packageInfo,
+    customInitFunctionParams: {
+      type,
+      isForMonorepo,
+      packageName: packageInfo.name,
+    },
   };
 }
 
