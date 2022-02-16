@@ -8,7 +8,7 @@ import gulpTS from 'gulp-typescript';
 import gulpPlumber from 'gulp-plumber';
 import debounce from 'lodash.debounce';
 import tsc from 'node-typescript-compiler';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 import { transform as babelTransform } from '@babel/core';
 
 import tscConfig from '../../../config/tsc.config';

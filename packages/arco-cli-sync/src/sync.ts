@@ -1,15 +1,15 @@
 import fs from 'fs-extra';
 import { nanoid } from 'nanoid';
-import generateMeta from '@arco-design/arco-cli-generate';
-import { getConfig } from '@arco-design/arco-cli-config';
-import { checkLogin, request } from '@arco-design/arco-cli-auth';
+import generateMeta from 'arco-cli-generate';
+import { getConfig } from 'arco-cli-config';
+import { checkLogin, request } from 'arco-cli-auth';
 import {
   print,
   MessageQueue,
   materialMeta,
   getNpmPackageInfo,
   getGlobalInfo,
-} from '@arco-design/arco-dev-utils';
+} from 'arco-cli-dev-utils';
 
 import genScreenshot from './screenshot';
 import locale from './locale';

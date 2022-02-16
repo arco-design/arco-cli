@@ -1,0 +1,21 @@
+{
+  "name": "arco-cli-create-project",
+  "version": "1.0.0",
+  "description": "Module of Arco CLI to create project from template",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "arco-cli-dev-utils": "^1.0.0",
+    "fs-extra": "^9.0.1",
+    "ora": "^5.3.0"
+  },
+  "files": [
+    "lib"
+  ],
+  "license": "MIT"
+}

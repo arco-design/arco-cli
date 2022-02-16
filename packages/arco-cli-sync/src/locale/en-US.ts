@@ -1,5 +1,5 @@
 export default {
-  TIP_CMD_EXEC_RESULT: 'The sync result of material metadata:',
+  TIP_CMD_EXEC_RESULT: 'The sync result of material metadata: ',
   TIP_META_GENERATE_ING: 'Try to automatically generate material metadata',
   TIP_META_GENERATE_DONE: 'Generate material metadata successfully',
   TIP_META_FETCH_SUCCESS: 'Update local material metadata successfully',

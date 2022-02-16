@@ -2,13 +2,13 @@
 
 import chalk from 'chalk';
 import program from 'commander';
-import init from '@arco-design/arco-cli-init';
-import sync from '@arco-design/arco-cli-sync';
-import publish from '@arco-design/arco-cli-publish';
-import generate from '@arco-design/arco-cli-generate';
-import createTemplateFromProject from '@arco-design/arco-create-template-from-project';
-import { print } from '@arco-design/arco-dev-utils';
-import { login, logout, whoami, checkLogin } from '@arco-design/arco-cli-auth';
+import init from 'arco-cli-init';
+import sync from 'arco-cli-sync';
+import publish from 'arco-cli-publish';
+import generate from 'arco-cli-generate';
+import createTemplateFromProject from 'arco-cli-create-template';
+import { print } from 'arco-cli-dev-utils';
+import { login, logout, whoami, checkLogin } from 'arco-cli-auth';
 
 import locale from './locale';
 import preview from './preview';

@@ -11,7 +11,7 @@ import through from 'through2';
 import rename from 'gulp-rename';
 import replace from 'gulp-replace';
 import mergeStream from 'merge-stream';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 
 import styleConfig from '../../../config/style.config';
 import parsePackageImports from '../../utils/parsePackageImports';

@@ -1,6 +1,6 @@
 import path from 'path';
 import { generateMarkdown } from 'ts-document';
-import { getRealRequirePath, print } from '@arco-design/arco-dev-utils';
+import { getRealRequirePath, print } from 'arco-cli-dev-utils';
 import { InjectPropsParams } from './index';
 import config from '../../../config/docgen.config';
 

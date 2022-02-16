@@ -6,7 +6,7 @@ Create material projects based on ArcoDesign.
 
 ```
 // global install
-npm install @arco-design/arco-cli -g
+npm install arco-cli -g
 
 // init a material project
 arco init hello-arco

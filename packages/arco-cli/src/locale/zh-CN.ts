@@ -14,7 +14,7 @@ export default {
   CMD_DES_TEMPLATE: '物料模板相关',
   CMD_DES_BLOCK: '区块物料相关命令',
 
-  TIP_VERSION_UPDATE: '通过 npm i @arco-design/arco-cli@latest -g 更新到最新版本',
+  TIP_VERSION_UPDATE: '通过 npm i arco-cli@latest -g 更新到最新版本',
   TIP_VERSION_ALREADY_LATEST: '当前已是最新版本',
   TIP_INIT_FROM_TEMPLATE: '从指定模板初始化物料项目',
   TIP_INIT_FOR_MONOREPO: '为 Lerna Monorepo 项目添加 Package',

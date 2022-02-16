@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 import { CWD } from '../../constant';
 
 export default function getConfigProcessor<T = Function>(

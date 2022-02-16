@@ -1,6 +1,6 @@
 {
-  "name": "@arco-design/arco-cli-config",
-  "version": "1.11.1",
+  "name": "arco-cli-config",
+  "version": "1.0.0",
   "description": "Global config module of Arco CLI",
   "main": "lib/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@arco-design/arco-dev-utils": "^2.3.2",
+    "arco-cli-dev-utils": "^1.0.0",
     "fs-extra": "^9.0.1",
     "glob": "^7.1.6"
   },

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { print, getGlobalInfo } from '@arco-design/arco-dev-utils';
+import { print, getGlobalInfo } from 'arco-cli-dev-utils';
 
 const ARCO_TOKEN = 'x-arco-token';
 

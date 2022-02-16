@@ -1,5 +1,5 @@
 export default {
-  LABEL_GENERATE_RESULT: 'Result of material metadata generation:',
+  LABEL_GENERATE_RESULT: 'Result of material metadata generation: ',
   TIP_GENERATE_SUCCESS: 'Material metadata was successfully generated.',
   WARN_META_FILE_EXIST:
     'The material metadata file already exists. If you need to regenerate it, please delete arcoMeta.json and try again.',

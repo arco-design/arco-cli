@@ -1,7 +1,7 @@
 import path from 'path';
 import open from 'open';
 import fs from 'fs-extra';
-import { print, fileServer, getGlobalInfo } from '@arco-design/arco-dev-utils';
+import { print, fileServer, getGlobalInfo } from 'arco-cli-dev-utils';
 
 export default function preview({ port = 9003, path: previewPath = '', teamSite = false }) {
   const hostArco = getGlobalInfo().host.arco;

@@ -1,4 +1,4 @@
-import { print, getGlobalInfo } from '@arco-design/arco-dev-utils';
+import { print, getGlobalInfo } from 'arco-cli-dev-utils';
 
 import login from './login';
 import request from './request';

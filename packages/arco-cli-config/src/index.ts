@@ -1,7 +1,7 @@
 import path from 'path';
 import glob from 'glob';
 import fs from 'fs-extra';
-import { getGitRootPath } from '@arco-design/arco-dev-utils';
+import { getGitRootPath } from 'arco-cli-dev-utils';
 
 const defaultConfig = require('../template/config');
 

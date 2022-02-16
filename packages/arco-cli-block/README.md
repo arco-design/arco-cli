@@ -1,1 +1,1 @@
-# Block module for @arco-design/arco-cli
+# Block module for arco-cli

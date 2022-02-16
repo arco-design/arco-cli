@@ -1,1 +1,1 @@
-# Config module for @arco-design/arco-cli
+# Config module for arco-cli

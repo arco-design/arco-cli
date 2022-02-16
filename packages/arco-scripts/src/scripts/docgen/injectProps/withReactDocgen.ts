@@ -1,5 +1,5 @@
 import { ComponentDoc, withDefaultConfig } from 'react-docgen-typescript';
-import { getRealRequirePath, print } from '@arco-design/arco-dev-utils';
+import { getRealRequirePath, print } from 'arco-cli-dev-utils';
 import { InjectPropsParams } from './index';
 
 const PROP_TABLE_HEADER = '|参数名|描述|类型|默认值|\n|---|:---:|:---:|---:|';

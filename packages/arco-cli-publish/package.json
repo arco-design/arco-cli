@@ -1,6 +1,6 @@
 {
-  "name": "@arco-design/arco-cli-publish",
-  "version": "1.9.1",
+  "name": "arco-cli-publish",
+  "version": "1.0.0",
   "description": "Module of Arco CLI to publish NPM package",
   "main": "lib/publish.js",
   "scripts": {
@@ -10,9 +10,9 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@arco-design/arco-cli-auth": "^1.9.1",
-    "@arco-design/arco-cli-config": "^1.11.1",
-    "@arco-design/arco-dev-utils": "^2.3.2",
+    "arco-cli-auth": "^1.0.0",
+    "arco-cli-config": "^1.0.0",
+    "arco-cli-dev-utils": "^1.0.0",
     "fs-extra": "^9.0.1",
     "inquirer": "^7.2.0",
     "relix": "^1.2.0",

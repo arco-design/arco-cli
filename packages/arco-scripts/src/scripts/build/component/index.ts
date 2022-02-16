@@ -1,7 +1,7 @@
 import gulp from 'gulp';
 import fs from 'fs-extra';
 import replace from 'gulp-replace';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 
 import compileTS from './compileTS';
 import { build as buildStyle, watch as watchStyle } from './compileStyle';

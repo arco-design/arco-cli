@@ -1,5 +1,5 @@
 {
-  "name": "@arco-design/arco-doc-site-components",
+  "name": "arco-doc-site-components",
   "version": "1.0.0",
   "description": "Components for Arco doc site only",
   "module": "es/index.js",
@@ -20,10 +20,10 @@
     "codesandbox": "^2.2.3"
   },
   "devDependencies": {
-    "@arco-design/arco-scripts": "^1.25.0",
     "@arco-design/web-react": "^2.7.0",
     "@types/react": "^16.7.20",
     "@types/react-dom": "^16.0.11",
+    "arco-scripts": "^1.25.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },

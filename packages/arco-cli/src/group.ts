@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import { print } from '@arco-design/arco-dev-utils';
-import { request } from '@arco-design/arco-cli-auth';
+import { print } from 'arco-cli-dev-utils';
+import { request } from 'arco-cli-auth';
 
 import locale from './locale';
 

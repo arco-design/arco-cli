@@ -2,7 +2,7 @@ import path from 'path';
 import mkdirp from 'mkdirp';
 import compressing from 'compressing';
 import fs from 'fs-extra';
-import { cmd } from '@arco-design/arco-dev-utils';
+import { cmd } from 'arco-cli-dev-utils';
 
 import {
   getPackageScopeAndName,

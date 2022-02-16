@@ -2,10 +2,20 @@
 # yarn lockfile v1
 
 
-"@arco-design/arco-material-preview-utils@^1.0.3":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@arco-design/arco-material-preview-utils/-/arco-material-preview-utils-1.1.0.tgz#183465e8bf47ea921dd82ee3ac15e1d4ae70373b"
-  integrity sha512-gdrtNpMK9dQhhgA3lcEYGQixaq7N3TTi3czcGr6ocfwyZA3ONNX73JKNLGkBfGcvfoh9pih8GkZPfIynovjC8Q==
+"@arco-design/webpack-plugin@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@arco-design/webpack-plugin/-/webpack-plugin-1.7.0.tgz#6e5a65169a4a179a50bff752bc003197823f4463"
+  integrity sha512-dRDXaNK9pzjTfxo6jQe2oZs9PLJIF6kovT5HJCM843XgdClSyvVvlZo+xtzK84Y+VRL+YE4zUt3Jb+3AEp5gqA==
+  dependencies:
+    babel-plugin-import "^1.0.0"
+    chalk "^4.1.0"
+    lodash "^4.17.20"
+    micromatch "^4.0.2"
+
+"@arco-materials/material-preview-utils@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@arco-materials/material-preview-utils/-/material-preview-utils-1.0.0.tgz#3945289ac50763825db297724d9085c9ea7f2681"
+  integrity sha512-Iz0L3v8aVxA8CYJl8D5SXQb/6/E0Zd5FvTDf2fbFLWI60O12q2ARua/p65ka3iX3go0hQSScZgG6AvAWnPxEFQ==
   dependencies:
     "@loadable/component" "^5.15.0"
     axios "^0.24.0"
@@ -16,16 +26,6 @@
     parse-es-import "^0.3.1"
     scriptjs "^2.5.9"
     typescript "^4.4.4"
-
-"@arco-design/webpack-plugin@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@arco-design/webpack-plugin/-/webpack-plugin-1.7.0.tgz#6e5a65169a4a179a50bff752bc003197823f4463"
-  integrity sha512-dRDXaNK9pzjTfxo6jQe2oZs9PLJIF6kovT5HJCM843XgdClSyvVvlZo+xtzK84Y+VRL+YE4zUt3Jb+3AEp5gqA==
-  dependencies:
-    babel-plugin-import "^1.0.0"
-    chalk "^4.1.0"
-    lodash "^4.17.20"
-    micromatch "^4.0.2"
 
 "@babel/code-frame@7.12.11":
   version "7.12.11"

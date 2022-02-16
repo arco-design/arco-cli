@@ -1,6 +1,6 @@
 import axios from 'axios';
 import os from 'os';
-import { getGlobalInfo } from '@arco-design/arco-dev-utils';
+import { getGlobalInfo } from 'arco-cli-dev-utils';
 
 interface LogParameters {
   user: {

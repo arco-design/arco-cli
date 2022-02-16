@@ -1,5 +1,5 @@
 import webpack from 'webpack';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 
 export default (config, callback?) => {
   return new Promise<void>((resolve, reject) => {

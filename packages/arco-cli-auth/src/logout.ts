@@ -1,4 +1,4 @@
-import { print, getGlobalInfo, writeGlobalInfo } from '@arco-design/arco-dev-utils';
+import { print, getGlobalInfo, writeGlobalInfo } from 'arco-cli-dev-utils';
 import locale from './locale';
 
 export default async function logout() {

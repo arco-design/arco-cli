@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getGlobalInfo, print, writeGlobalInfo } from '@arco-design/arco-dev-utils';
+import { getGlobalInfo, print, writeGlobalInfo } from 'arco-cli-dev-utils';
 import inquirer from 'inquirer';
 import locale from './locale';
 

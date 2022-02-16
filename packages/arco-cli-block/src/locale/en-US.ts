@@ -8,7 +8,7 @@ export default {
   TIP_UNZIP_DONE: 'Material unzip completed',
   TIP_COPY_SOURCE_ING: 'Copying source code to target directory...',
   TIP_COPY_SOURCE_DONE: 'Source code copy completed',
-  TIP_INSTALL_DEP_ING: 'Installing new dependencies:',
+  TIP_INSTALL_DEP_ING: 'Installing new dependencies: ',
   TIP_INSTALL_DEP_DONE: 'New dependency installation completed',
   TIP_INSERT_BLOCK_ING: 'Inserting block material',
   TIP_INSERT_BLOCK_DONE: 'Block material insert completed',

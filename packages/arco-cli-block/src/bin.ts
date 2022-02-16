@@ -5,8 +5,8 @@ import axios from 'axios';
 import fs from 'fs-extra';
 import program from 'commander';
 import { customAlphabet } from 'nanoid';
-import { getConfig } from '@arco-design/arco-cli-config';
-import { print, getGitRootPath, getGlobalInfo } from '@arco-design/arco-dev-utils';
+import { getConfig } from 'arco-cli-config';
+import { print, getGitRootPath, getGlobalInfo } from 'arco-cli-dev-utils';
 import { arcoPageInsert, arcoBlockInsert } from './main';
 import locale from './locale';
 

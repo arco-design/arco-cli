@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import webpack from 'webpack';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
-import { webpackExternalForArco } from '@arco-design/arco-dev-utils';
+import { webpackExternalForArco } from 'arco-cli-dev-utils';
 
 import { CWD, DIR_NAME_ICON, DIR_NAME_UMD } from '../../constant';
 import getConfigProcessor from '../../scripts/utils/getConfigProcessor';

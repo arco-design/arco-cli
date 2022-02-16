@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import program from 'commander';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 import showConfig from './config/showConfig';
 import component from './scripts/build/component';
 import docgen from './scripts/docgen';

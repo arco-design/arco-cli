@@ -1,4 +1,4 @@
-import babelConfig from '@arco-design/arco-babel-config';
+import babelConfig from 'arco-scripts-babel-config';
 import getConfigProcessor from '../scripts/utils/getConfigProcessor';
 
 let config = babelConfig;

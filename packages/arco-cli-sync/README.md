@@ -1,1 +1,1 @@
-# Meta sync module for @arco-design/arco-cli
+# Meta sync module for arco-cli

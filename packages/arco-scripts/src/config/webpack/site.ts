@@ -83,7 +83,7 @@ const baseConfig = {
             // },
           },
           {
-            loader: '@arco-design/arco-markdown-loader',
+            loader: 'arco-markdown-loader',
             options: {
               demoDir: 'demo',
               babelConfig,

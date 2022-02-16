@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import webpack from 'webpack';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
-import { webpackExternalForArco } from '@arco-design/arco-dev-utils';
+import { webpackExternalForArco } from 'arco-cli-dev-utils';
 
 import tscConfig from '../tsc.config';
 import babelConfig from '../babel.config';
@@ -140,7 +140,7 @@ let config = {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   resolveLoader: {
-    modules: ['node_modules/@arco-design/arco-scripts/node_modules', 'node_modules'],
+    modules: ['node_modules/arco-scripts/node_modules', 'node_modules'],
   },
   plugins: [
     new ProgressBarPlugin({

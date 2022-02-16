@@ -8,7 +8,7 @@ import rename from 'gulp-rename';
 import replace from 'gulp-replace';
 import cleanCSS from 'gulp-clean-css';
 import mergeStream from 'merge-stream';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 
 import handleStyleJSEntry from './handleStyleJSEntry';
 import styleConfig from '../../../config/style.config';

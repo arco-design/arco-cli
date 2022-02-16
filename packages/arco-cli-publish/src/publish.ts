@@ -3,8 +3,8 @@ import relix from 'relix';
 import semver from 'semver';
 import inquirer from 'inquirer';
 import { exec } from 'child_process';
-import { getConfig } from '@arco-design/arco-cli-config';
-import { print, crossSpawn, getGitRootPath } from '@arco-design/arco-dev-utils';
+import { getConfig } from 'arco-cli-config';
+import { print, crossSpawn, getGitRootPath } from 'arco-cli-dev-utils';
 
 import locale from './locale';
 

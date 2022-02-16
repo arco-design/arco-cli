@@ -1,6 +1,6 @@
 {
-  "name": "@arco-design/arco-cli-init",
-  "version": "1.19.0",
+  "name": "arco-cli-init",
+  "version": "1.0.1",
   "description": "A module of Arco CLI to init a project",
   "main": "lib/init.js",
   "scripts": {
@@ -10,9 +10,9 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@arco-design/arco-cli-config": "^1.11.1",
-    "@arco-design/arco-create-project-from-template": "^1.11.1",
-    "@arco-design/arco-dev-utils": "^2.3.2",
+    "arco-cli-config": "^1.0.0",
+    "arco-cli-create-project": "^1.0.0",
+    "arco-cli-dev-utils": "^1.0.0",
     "fs-extra": "^9.0.1",
     "inquirer": "^7.2.0"
   },

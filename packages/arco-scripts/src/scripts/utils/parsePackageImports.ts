@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import parseImport from 'parse-es-import';
-import { getRealRequirePath } from '@arco-design/arco-dev-utils';
+import { getRealRequirePath } from 'arco-cli-dev-utils';
 
 /**
  * Resolve all dependencies of an ES module for a package

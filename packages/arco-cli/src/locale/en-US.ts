@@ -14,7 +14,7 @@ export default {
   CMD_DES_TEMPLATE: 'Commands related to material project template',
   CMD_DES_BLOCK: 'Commands related to block material',
 
-  TIP_VERSION_UPDATE: 'Upgrade to the latest version via [npm i @arco-design/arco-cli@latest -g]',
+  TIP_VERSION_UPDATE: 'Upgrade to the latest version via [npm i arco-cli@latest -g]',
   TIP_VERSION_ALREADY_LATEST: 'Already the latest version',
   TIP_INIT_FROM_TEMPLATE: 'Initialize material project from a specified template',
   TIP_INIT_FOR_MONOREPO: 'Add an package to Lerna Monorepo project',
@@ -49,10 +49,10 @@ export default {
   TIP_SWITCH_SUCCESS_TO_PRIVATE: 'Switched to the private environment',
   TIP_ADD_GROUP_MEMBER: 'Enter username of the member you want to add',
   TIP_REMOVE_GROUP_MEMBER: 'Enter username of the member you want to remove',
-  TIP_ADD_GROUP_MEMBER_SUCCESS: 'Add group member successfully:',
-  TIP_ADD_GROUP_MEMBER_FAIL: 'Failed to add this user to group members:',
-  TIP_REMOVE_GROUP_MEMBER_SUCCESS: 'Remove group member successfully:',
-  TIP_REMOVE_GROUP_MEMBER_FAIL: 'Failed to remove this user from group members:',
+  TIP_ADD_GROUP_MEMBER_SUCCESS: 'Add group member successfully: ',
+  TIP_ADD_GROUP_MEMBER_FAIL: 'Failed to add this user to group members: ',
+  TIP_REMOVE_GROUP_MEMBER_SUCCESS: 'Remove group member successfully: ',
+  TIP_REMOVE_GROUP_MEMBER_FAIL: 'Failed to remove this user from group members: ',
   TIP_NO_ENV_SET: 'CLI environment is not selected, please run [arco env -s] to set it',
 
   LABEL_GROUP_OWNER: 'Owner',
@@ -62,8 +62,8 @@ export default {
   LABEL_ENV_PRIVATE: 'Private',
   LABEL_BANNER_ENV_PRIVATE: 'Private',
 
-  PREFIX_CURRENT_VERSION: 'Current version:',
-  PREFIX_LATEST_VERSION: 'Latest version:',
-  PREFIX_CURRENT_ENV: 'Current environment:',
-  PREFIX_CURRENT_LOCALE: 'Current language preference:',
+  PREFIX_CURRENT_VERSION: 'Current version: ',
+  PREFIX_LATEST_VERSION: 'Latest version: ',
+  PREFIX_CURRENT_ENV: 'Current environment: ',
+  PREFIX_CURRENT_LOCALE: 'Current language preference: ',
 };

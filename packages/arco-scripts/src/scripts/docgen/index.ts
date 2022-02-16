@@ -3,7 +3,7 @@ import glob from 'glob';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import frontMatter from 'front-matter';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 import injectProps from './injectProps';
 import injectDemoCodes from './injectDemoCodes';
 import { CWD } from '../../constant';

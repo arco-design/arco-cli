@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 import { dev as configDev, prod as configProd } from '../../config/webpack/site';
 
 import webpackWithPromise from '../utils/webpackWithPromise';

@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
-import { cmd } from '@arco-design/arco-dev-utils';
+import { cmd } from 'arco-cli-dev-utils';
 
 import { NpmPackageManipulator } from './downloader';
 import {

@@ -7,7 +7,7 @@ And if you specify demo folder, it will generate demo effect and code preview.
 ## Install
 
 ```bash
-npm i @arco-design/arco-markdown-loader -D
+npm i arco-markdown-loader -D
 ```
 
 ## Usage
@@ -40,7 +40,7 @@ module: {
           }
         },
         {
-          loader: '@arco-design/arco-markdown-loader',
+          loader: 'arco-markdown-loader',
           options: {
             demoDir: 'demo',
             templateDir: 'src/templates',
@@ -78,7 +78,7 @@ then:
       options: babelConfig,
     },
     {
-      loader: '@arco-design/arco-markdown-loader',
+      loader: 'arco-markdown-loader',
       options: {
         babelConfig,
       },

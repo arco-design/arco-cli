@@ -1,4 +1,4 @@
-import { getLocale } from '@arco-design/arco-dev-utils';
+import { getLocale } from 'arco-cli-dev-utils';
 import zhCN from './zh-CN';
 import enUS from './en-US';
 

@@ -1,5 +1,5 @@
 import path from 'path';
-import { print } from '@arco-design/arco-dev-utils';
+import { print } from 'arco-cli-dev-utils';
 
 type ConfigType =
   | 'babel'

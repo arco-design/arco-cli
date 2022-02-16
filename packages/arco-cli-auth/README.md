@@ -1,1 +1,1 @@
-# User module for @arco-design/arco-cli
+# User module for arco-cli

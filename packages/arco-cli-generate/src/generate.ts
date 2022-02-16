@@ -1,8 +1,8 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { getConfig } from '@arco-design/arco-cli-config';
-import { checkLogin } from '@arco-design/arco-cli-auth';
-import { MessageQueue, materialMeta, getGlobalInfo } from '@arco-design/arco-dev-utils';
+import { getConfig } from 'arco-cli-config';
+import { checkLogin } from 'arco-cli-auth';
+import { MessageQueue, materialMeta, getGlobalInfo } from 'arco-cli-dev-utils';
 import locale from './locale';
 
 const { isMetaExist, getMetaPath } = materialMeta;

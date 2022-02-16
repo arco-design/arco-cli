@@ -6,7 +6,7 @@ import { exec } from 'child_process';
 import { ESLint } from 'eslint';
 import * as prettier from 'prettier';
 import ora, { Color } from 'ora';
-import { getGlobalInfo } from '@arco-design/arco-dev-utils';
+import { getGlobalInfo } from 'arco-cli-dev-utils';
 
 type DependenceInfoMap = {
   [propName: string]: string;

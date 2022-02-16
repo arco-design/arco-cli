@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import doctrine from 'doctrine';
 import parseEsImport from 'parse-es-import';
-import { getRealRequirePath } from '@arco-design/arco-dev-utils';
+import { getRealRequirePath } from 'arco-cli-dev-utils';
 
 type DemoInfo = {
   content: string;

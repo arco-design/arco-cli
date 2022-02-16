@@ -1,8 +1,8 @@
 import chalk from 'chalk';
-import { print, getNpmPackageInfo, getGlobalInfo } from '@arco-design/arco-dev-utils';
+import { print, getNpmPackageInfo, getGlobalInfo } from 'arco-cli-dev-utils';
 import locale from './locale';
 
-const ARCO_CLI_PACKAGE_NAME = '@arco-design/arco-cli';
+const ARCO_CLI_PACKAGE_NAME = 'arco-cli';
 
 export function fetchLatestVersion() {
   try {

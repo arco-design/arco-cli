@@ -3,17 +3,15 @@ import fs from 'fs-extra';
 import chalk from 'chalk';
 import axios from 'axios';
 import inquirer from 'inquirer';
-import { initConfig } from '@arco-design/arco-cli-config';
+import { initConfig } from 'arco-cli-config';
 import {
   print,
   confirm,
   isGitStatusClean,
   getGitRootPath,
   getGlobalInfo,
-} from '@arco-design/arco-dev-utils';
-import createProjectFromTemplate, {
-  CreateProjectOptions,
-} from '@arco-design/arco-create-project-from-template';
+} from 'arco-cli-dev-utils';
+import createProjectFromTemplate, { CreateProjectOptions } from 'arco-cli-create-project';
 
 import locale from './locale';
 
@@ -225,13 +223,12 @@ export default async function ({
         return getArcoDesignProConfig(framework);
 
       case 'react-monorepo':
-        return {
-          template: MATERIAL_TYPE_MAP['react-monorepo'].template,
-        };
-
       case 'vue-monorepo':
         return {
-          template: MATERIAL_TYPE_MAP['vue-monorepo'].template,
+          template: PACKAGE_NAME_TEMPLATE_MONOREPO,
+          customInitFunctionParams: {
+            type: materialType,
+          },
         };
 
       default:
@@ -531,7 +528,7 @@ async function getPureProjectConfig(): Promise<Partial<CreateProjectOptions>> {
       name: 'template',
       message: locale.TIP_INPUT_TEMPLATE_NAME_FOR_PURE_PROJECT,
       // Template for Arco material team site
-      default: '@arco-design/arco-template-team-site',
+      default: '@arco-materials/template-team-site',
     },
     {
       type: 'input',

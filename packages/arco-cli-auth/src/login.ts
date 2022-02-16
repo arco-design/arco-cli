@@ -4,7 +4,7 @@ import open from 'open';
 import fs from 'fs-extra';
 import connect from 'connect';
 import { nanoid } from 'nanoid';
-import { print, writeGlobalInfo } from '@arco-design/arco-dev-utils';
+import { print, writeGlobalInfo } from 'arco-cli-dev-utils';
 
 import locale from './locale';
 import request from './request';
