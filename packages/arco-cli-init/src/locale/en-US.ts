@@ -21,8 +21,12 @@ export default {
   TIP_INPUT_PACKAGE_NAME_FOR_PURE_PROJECT: 'Please enter the NPM package name of this project',
   TIP_SELECT_PRO_REACT_TEMPLATE:
     'Please choose the React Pro template, do you want all the full pages or the base template?',
+  TIP_SELECT_PRO_VUE_TEMPLATE:
+    'Please choose the Vue Pro template, do you want all the full pages or the base template?',
   PRO_REACT_TEMPLATE_SIMPLE: 'Simple version (contains only one basic page)',
   PRO_REACT_TEMPLATE_COMPLETE: 'Full version (includes all pages)',
+  PRO_VUE_TEMPLATE_SIMPLE: 'Simple version (contains only one basic page)',
+  PRO_VUE_TEMPLATE_COMPLETE: 'Full version (includes all pages)',
 
   WARN_PATH_EXIST: 'The given path already exists, are you sure to overwrite it?',
 

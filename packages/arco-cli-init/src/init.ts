@@ -411,12 +411,31 @@ async function getArcoDesignProConfig(
   const beforeGitCommit = () => null;
 
   if (framework === 'vue') {
+    const vueProQuestion = [
+      {
+        type: 'list',
+        name: 'type',
+        message: locale.TIP_SELECT_PRO_VUE_TEMPLATE,
+        choices: [
+          {
+            name: locale.PRO_VUE_TEMPLATE_SIMPLE,
+            value: 'simple',
+          },
+          {
+            name: locale.PRO_VUE_TEMPLATE_COMPLETE,
+            value: 'full',
+          },
+        ],
+      },
+    ];
+    const answer = await inquirer.prompt(vueProQuestion);
     return {
       template: MATERIAL_TYPE_MAP['arco-design-pro-vue'].template,
       beforeGitCommit,
       // TODO List for Vue Pro
       customInitFunctionParams: {
         framework: 'vite',
+        simple: answer.type === 'simple',
       },
     };
   }
