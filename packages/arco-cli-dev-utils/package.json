@@ -17,7 +17,8 @@
     "gulp-if": "^3.0.0",
     "gulp-replace": "^1.0.0",
     "inquirer": "^7.3.3",
-    "os-locale": "^5.0.0"
+    "os-locale": "^5.0.0",
+    "semver": "^7.3.5"
   },
   "files": [
     "lib",

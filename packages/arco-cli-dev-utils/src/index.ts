@@ -11,6 +11,8 @@ import getLocale from './getLocale';
 import writeGlobalInfo from './writeGlobalInfo';
 import isGitStatusClean from './isGitStatusClean';
 import isInGitRepository from './isInGitRepository';
+import { getBaseConfig } from './baseConfig';
+import getAnswerFromUser from './getAnswerFromUser';
 import * as materialMeta from './materialMeta';
 import * as materialTemplate from './materialTemplate';
 import MessageQueue from './MessageQueue';
@@ -30,6 +32,8 @@ export {
   getRealRequirePath,
   getGlobalInfo,
   getLocale,
+  getBaseConfig,
+  getAnswerFromUser,
   writeGlobalInfo,
   isGitStatusClean,
   isInGitRepository,

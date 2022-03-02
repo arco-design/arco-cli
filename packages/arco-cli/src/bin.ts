@@ -19,6 +19,10 @@ import { checkEnv, switchEnv, printEnv } from './env';
 import { switchLocale, printLocale } from './locales';
 import teaLog from './teaLog';
 
+const { version: ARCO_CLI_VERSION } = require('../package.json');
+
+(global as any).ARCO_CLI_VERSION = ARCO_CLI_VERSION;
+
 const VALID_SUBCOMMANDS = [
   'init',
   'generate',
@@ -48,13 +52,12 @@ function registerCommand() {
     });
 
   program.option('-v, --version', locale.CMD_DES_VERSION, async () => {
-    const { version } = require('../package.json');
-    print(chalk.green(locale.PREFIX_CURRENT_VERSION), version);
+    print(chalk.green(locale.PREFIX_CURRENT_VERSION), ARCO_CLI_VERSION);
 
     const latestVersion = await fetchLatestVersion();
     if (latestVersion) {
       print();
-      if (latestVersion !== version) {
+      if (latestVersion !== ARCO_CLI_VERSION) {
         print.warn(`${locale.PREFIX_LATEST_VERSION}${latestVersion}`);
         print.warn(locale.TIP_VERSION_UPDATE);
       } else {
