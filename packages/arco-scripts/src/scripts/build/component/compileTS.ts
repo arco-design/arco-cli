@@ -98,7 +98,7 @@ async function withBabel({ type, outDir, watch }: CompileOptions) {
             return /\.tsx?$/.test(path);
           },
           // Delete outDir to avoid static resource resolve errors during the babel compilation of next step
-          gulpTS({ ...tsconfig.compilerOptions, outDir: undefined })
+          gulpTS({ ...tsconfig.compilerOptions, declaration: type === 'es', outDir: undefined })
         )
       )
       .pipe(
