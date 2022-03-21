@@ -3,7 +3,13 @@ import fs from 'fs-extra';
 import chalk from 'chalk';
 import ora from 'ora';
 import { execSync, spawnSync } from 'child_process';
-import { print, crossSpawn, materialTemplate, isInGitRepository } from 'arco-cli-dev-utils';
+import {
+  print,
+  crossSpawn,
+  materialTemplate,
+  isInGitRepository,
+  CONSTANT,
+} from 'arco-cli-dev-utils';
 
 import locale from './locale';
 
@@ -28,6 +34,13 @@ const TEMPLATE_DIR = 'template';
 const TEMPLATE_DIR_FOR_MONOREPO = 'template-for-monorepo';
 
 const CUSTOM_INIT_DIR = '.arco-cli';
+
+// Path of directory to download template from npm, will be removed after project created
+const PATH_TEMPLATE_DOWNLOAD = path.resolve(
+  CONSTANT.PATH_HOME_DIR,
+  '.arco_template_cache',
+  `${+Date.now()}`
+);
 
 function addGitIgnore() {
   const sourceFilename = 'gitignore';
@@ -113,38 +126,83 @@ function handleDependencies(dependencies: string | string[], allowYarn = false) 
   });
 }
 
+function exitProcess(err) {
+  console.error(err);
+  fs.removeSync(PATH_TEMPLATE_DOWNLOAD);
+  process.exit(1);
+}
+
 async function copyTemplateContent({
   root,
-  templatePath,
+  spinner,
+  template,
   isForMonorepo,
   customInitFunctionParams,
 }: {
   root: string;
-  templatePath: string;
+  template: string;
   isForMonorepo: boolean;
+  spinner: ora.Ora;
   customInitFunctionParams?: CreateProjectOptions['customInitFunctionParams'];
-}) {
-  process.chdir(templatePath);
+}): Promise<(params: { root: string; projectName: string; isForMonorepo: boolean }) => void> {
+  const prevCwd = process.cwd();
 
-  const pathCustomProjectInitFunc = path.resolve(`${CUSTOM_INIT_DIR}/init.js`);
+  fs.ensureDirSync(PATH_TEMPLATE_DOWNLOAD);
+  process.chdir(PATH_TEMPLATE_DOWNLOAD);
 
-  if (fs.existsSync(TEMPLATE_DIR) || fs.existsSync(TEMPLATE_DIR_FOR_MONOREPO)) {
-    fs.copySync(
-      isForMonorepo && TEMPLATE_DIR_FOR_MONOREPO ? TEMPLATE_DIR_FOR_MONOREPO : TEMPLATE_DIR,
-      root,
-      {
-        overwrite: true,
-      }
-    );
-  } else if (fs.existsSync(pathCustomProjectInitFunc)) {
-    const init = require(pathCustomProjectInitFunc);
-    await init({
-      ...customInitFunctionParams,
-      projectPath: root,
-    });
+  // Download template
+  try {
+    spinner.start(locale.TIP_TEMPLATE_DOWNLOAD_ING);
+    // Init a empty package.json
+    fs.writeJsonSync('./package.json', {});
+    await handleDependencies(template);
+    spinner.succeed(locale.TIP_TEMPLATE_DOWNLOAD_DONE);
+  } catch (err) {
+    spinner.fail(locale.TIP_TEMPLATE_DOWNLOAD_FAILED);
+    exitProcess(err);
   }
 
-  process.chdir(root);
+  const pathTemplatePackage = path.resolve(`node_modules/${getPackageInfo(template).name}`);
+  process.chdir(pathTemplatePackage);
+
+  // Copy content of template
+  try {
+    spinner.start(locale.TIP_TEMPLATE_COPY_ING);
+
+    const pathCustomProjectInitFunc = path.resolve(`${CUSTOM_INIT_DIR}/init.js`);
+    if (fs.existsSync(TEMPLATE_DIR) || fs.existsSync(TEMPLATE_DIR_FOR_MONOREPO)) {
+      fs.copySync(
+        isForMonorepo && TEMPLATE_DIR_FOR_MONOREPO ? TEMPLATE_DIR_FOR_MONOREPO : TEMPLATE_DIR,
+        root,
+        {
+          overwrite: true,
+        }
+      );
+    } else if (fs.existsSync(pathCustomProjectInitFunc)) {
+      const init = require(pathCustomProjectInitFunc);
+      await init({
+        ...customInitFunctionParams,
+        projectPath: root,
+      });
+    }
+
+    spinner.succeed(locale.TIP_TEMPLATE_COPY_DONE);
+  } catch (err) {
+    spinner.fail(locale.TIP_TEMPLATE_COPY_FAILED);
+    exitProcess(err);
+  }
+
+  let afterInit;
+  try {
+    afterInit = require(path.resolve(`${pathTemplatePackage}/hook/after-init.js`));
+  } catch (e) {}
+  try {
+    afterInit = require(path.resolve(`${pathTemplatePackage}/${CUSTOM_INIT_DIR}/after-init.js`));
+  } catch (e) {}
+
+  process.chdir(prevCwd);
+
+  return afterInit;
 }
 
 export default async function ({
@@ -167,38 +225,13 @@ export default async function ({
   fs.emptyDirSync(root);
   process.chdir(root);
 
-  // Init a empty package.json
-  fs.writeJsonSync('./package.json', {});
-
-  // Download template
-  const templateInfo = getPackageInfo(template);
-  try {
-    spinner.start(locale.TIP_TEMPLATE_DOWNLOAD_ING);
-    await handleDependencies(template);
-    // Remove the package-lock.json left by template download
-    fs.removeSync('./package-lock.json');
-    spinner.succeed(locale.TIP_TEMPLATE_DOWNLOAD_DONE);
-  } catch (err) {
-    spinner.fail(locale.TIP_TEMPLATE_DOWNLOAD_FAILED);
-    print.error(err);
-    process.exit(1);
-  }
-
-  // Copy content of template
-  try {
-    spinner.start(locale.TIP_TEMPLATE_COPY_ING);
-    await copyTemplateContent({
-      root,
-      isForMonorepo,
-      customInitFunctionParams,
-      templatePath: path.resolve(`node_modules/${templateInfo.name}`),
-    });
-    spinner.succeed(locale.TIP_TEMPLATE_COPY_DONE);
-  } catch (err) {
-    spinner.fail(locale.TIP_TEMPLATE_COPY_FAILED);
-    print.error(err);
-    process.exit(1);
-  }
+  const afterInit = await copyTemplateContent({
+    root,
+    spinner,
+    template,
+    isForMonorepo,
+    customInitFunctionParams,
+  });
 
   // Preprocess template content, replace constants, process package names, etc.
   try {
@@ -210,20 +243,8 @@ export default async function ({
     spinner.succeed(locale.TIP_TEMPLATE_ADAPT_DONE);
   } catch (err) {
     spinner.fail(locale.TIP_TEMPLATE_ADAPT_FAILED);
-    print.error(err);
-    process.exit(1);
+    exitProcess(err);
   }
-
-  // Get the after-init hook task in advance, otherwise the template's module file will be removed after node_modules installed
-  let afterInit;
-  try {
-    afterInit = require(path.resolve(`node_modules/${templateInfo.name}/hook/after-init.js`));
-  } catch (e) {}
-  try {
-    afterInit = require(path.resolve(
-      `node_modules/${templateInfo.name}/${CUSTOM_INIT_DIR}/after-init.js`
-    ));
-  } catch (e) {}
 
   // Init Git
   addGitIgnore();
@@ -286,4 +307,7 @@ export default async function ({
   tryGitCommit(
     `arco-cli: ${isForMonorepo ? 'add package' : 'initialize'} ${packageJson.name || 'project'}`
   );
+
+  // Clear template download directory
+  fs.removeSync(PATH_TEMPLATE_DOWNLOAD);
 }

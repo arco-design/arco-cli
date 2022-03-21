@@ -12,7 +12,7 @@
   "dependencies": {
     "arco-cli-config": "^1.0.0",
     "arco-cli-create-project": "^1.0.0",
-    "arco-cli-dev-utils": "^1.0.0",
+    "arco-cli-dev-utils": "^1.1.0",
     "fs-extra": "^9.0.1",
     "inquirer": "^7.2.0"
   },

@@ -213,6 +213,10 @@ export default async function ({
     }
   }
 
+  if (template) {
+    createProjectOptions.template = template;
+  }
+
   return createProjectFromTemplate({
     root,
     projectName,
