@@ -1,6 +1,6 @@
 {
   "name": "arco-cli-create-project",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Module of Arco CLI to create project from template",
   "main": "lib/index.js",
   "scripts": {
