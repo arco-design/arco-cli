@@ -16,7 +16,7 @@ export interface InjectPropsParams {
 }
 
 export default function injectProps(options: InjectPropsParams) {
-  const [tool] = config.tsParseTool;
+  const [tool, toolOptions] = config.tsParseTool;
   const { markdownBody, placeholder } = options;
 
   if (markdownBody.indexOf(placeholder) === -1) {
@@ -24,7 +24,7 @@ export default function injectProps(options: InjectPropsParams) {
   }
 
   if (tool === 'ts-document') {
-    return withTsDocument(options);
+    return withTsDocument(options, toolOptions);
   }
 
   return withReactDocgen(options);

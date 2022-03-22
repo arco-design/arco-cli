@@ -87,21 +87,18 @@ export default function withReactDocgen({
 
   parseFiles.forEach((file, index) => {
     const [entryFilePath] = getRealRequirePath(file, currentDir);
-
-    if (!entryFilePath) {
-      print.error(['arco-scripts'], `Invalid entry path [${file}] for docgen`);
-      return;
+    if (entryFilePath) {
+      const [param] = parse(entryFilePath);
+      if (param) {
+        mainComponent = mainComponent || param.displayName;
+        propsTables.push(generateTable(param, mainComponent, index, attributes, file));
+      }
     }
-
-    const [param] = parse(entryFilePath);
-    if (!param) {
-      print.warn(['arco-scripts'], `No property parse in [${entryFilePath}]`);
-      return;
-    }
-
-    mainComponent = mainComponent || param.displayName;
-    propsTables.push(generateTable(param, mainComponent, index, attributes, file));
   });
+
+  if (!propsTables.length) {
+    print.warn(['arco-scripts'], `No API document was parsed in ${currentDir}`);
+  }
 
   return markdownBody.replace(placeholder, propsTables.length ? propsTables.join('\n\n') : '');
 }

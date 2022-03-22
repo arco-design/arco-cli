@@ -16306,10 +16306,10 @@ trough@^1.0.0:
   resolved "https://registry.yarnpkg.com/trough/-/trough-1.0.5.tgz#b8b639cefad7d0bb2abd37d433ff8293efa5f406"
   integrity sha512-rvuRbTarPXmMb79SmzEp8aqXNKcK+y0XaB298IXueQ8I2PsrATcPBCSPyK/dDNa2iWOhKlfNnOjdAOTBU/nkFA==
 
-ts-document@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/ts-document/-/ts-document-0.2.1.tgz#3200bbf2e1f89098f57fc404048b98921fc08c73"
-  integrity sha512-2vGCcx8MxSPHzt6fAo5lUIqmNQyKbiUzFyAdNbnNQlEEYAB5rwbGhI0TNnAo+B7U1kYa3iKkiBhyAwKIssVbXw==
+ts-document@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/ts-document/-/ts-document-0.3.0.tgz#2a34480ef755ef92fa40435ea0641f315f99aa31"
+  integrity sha512-Jysh9JCODspM1pmu8I5nMEXm20SczPrCFqHUeaILADdye6gy5LLmtedgPHeBVziy8XXSboFfWOuYktBKQNm1Og==
   dependencies:
     ts-morph "^11.0.0"
 
