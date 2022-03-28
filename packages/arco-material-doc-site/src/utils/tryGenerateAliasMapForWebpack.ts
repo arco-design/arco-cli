@@ -19,7 +19,7 @@ export default function tryGenerateAliasMapForWebpack() {
       const pathSrc = path.resolve(_path, 'src');
       if (fs.existsSync(pathPackageJson) && fs.existsSync(pathSrc)) {
         const { name: packageName } = fs.readJsonSync(pathPackageJson);
-        result[packageName] = pathSrc;
+        result[`${packageName}$`] = pathSrc;
       }
     });
   }
