@@ -166,7 +166,7 @@ function injectArcoDepStyle(componentEsDirPattern: string) {
         base: componentEsDirPattern,
       })
       .pipe(
-        through.obj(async (file, _, cb) => {
+        through.obj(async (file: { path: string; contents: Buffer }, _, cb) => {
           try {
             await Promise.all([
               transformStyleEntryContent({

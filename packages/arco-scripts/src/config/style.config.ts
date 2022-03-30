@@ -22,6 +22,24 @@ const autoprefix = new LessAutoprefix();
 const FILE_ASSET_EXT = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'ttf', 'eot', 'woff', 'woff2'];
 const FILE_WATCHED_EXT = FILE_ASSET_EXT.concat(['less', 'css']);
 
+type AdditionalDataOption = {
+  /**
+   * Content added
+   * @zh 新增的数据
+   */
+  data: string;
+  /**
+   * Whether to insert content at the end
+   * @zh 是否在文件末尾插入内容，默认为文件首插入
+   */
+  append?: boolean;
+  /**
+   * Whether to use `data` to overwrite the original file content
+   * @zh 是否使用 `data` 覆盖原文件内容
+   */
+  overwrite?: boolean;
+};
+
 export interface StyleConfig {
   /**
    * Config for building CSS
@@ -99,6 +117,16 @@ export interface StyleConfig {
      * @zh 样式编译器的配置选项
      */
     compilerOptions: Record<string, any>;
+    /**
+     * Prepends/Appends Less code to the actual entry file.
+     * @zh 在 Less 文件编译前修改其内容（不修改源码）
+     */
+    additionalData?:
+      | AdditionalDataOption
+      | ((file: {
+          path: string;
+          contents: string;
+        }) => AdditionalDataOption | Promise<AdditionalDataOption>);
   };
   /**
    * Config of asset

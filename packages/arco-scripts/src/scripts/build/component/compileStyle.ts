@@ -10,6 +10,7 @@ import cleanCSS from 'gulp-clean-css';
 import mergeStream from 'merge-stream';
 import { print } from 'arco-cli-dev-utils';
 
+import through from 'through2';
 import handleStyleJSEntry from './handleStyleJSEntry';
 import styleConfig from '../../../config/style.config';
 import { BUILD_ENV_MODE } from '../../../constant';
@@ -97,6 +98,37 @@ function compileLess() {
   if (destDirs.length) {
     let stream = gulp
       .src(cssConfig.entry, { allowEmpty: true })
+      .pipe(
+        gulpIf(
+          !!cssConfig.additionalData,
+          through.obj(async (file: { path: string; contents: Buffer }, _, cb) => {
+            try {
+              const originalContents = file.contents.toString();
+              const { data, append, overwrite } =
+                typeof cssConfig.additionalData === 'function'
+                  ? await cssConfig.additionalData({
+                      path: file.path,
+                      contents: originalContents,
+                    })
+                  : cssConfig.additionalData;
+              file.contents = Buffer.from(
+                overwrite
+                  ? data
+                  : append
+                  ? `${originalContents}\n${data}`
+                  : `${data}\n${originalContents}`
+              );
+            } catch (error) {
+              print.error(
+                '[arco-scripts]',
+                `Failed to append/prepend additional data to ${file.path}`
+              );
+            }
+
+            cb(null, file);
+          })
+        )
+      )
       .pipe(cssConfig.compiler(cssConfig.compilerOptions))
       .pipe(cleanCSS());
 

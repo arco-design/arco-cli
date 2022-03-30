@@ -106,7 +106,7 @@ async function withBabel({ type, outDir, watch }: CompileOptions) {
           ({ path }) => {
             return !path.endsWith('.d.ts') && /\.(t|j)sx?$/.test(path);
           },
-          through.obj((file, _, cb) => {
+          through.obj((file: { path: string; contents: Buffer }, _, cb) => {
             try {
               file.contents = Buffer.from(transform(file));
               // .jsx -> .js
