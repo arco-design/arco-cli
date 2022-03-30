@@ -26,16 +26,12 @@ interface EmitInfo {
 const typeMap: Record<string, string> = {
   'New feature': 'feature',
   'Bug fix': 'bugfix',
-  'Documentation change': 'unused',
-  'Coding style change': 'unused',
-  Refactoring: 'unused',
+  Refactoring: 'refactor',
   'Component style change': 'style',
-  'Performance improvement': 'optimization',
-  'Test cases': 'unused',
-  'Continuous integration': 'unused',
+  Enhancement: 'enhancement',
+  'Performance improvement': 'enhancement',
   'Typescript definition change': 'typescript',
   'Breaking change': 'attention',
-  Other: 'unused',
 };
 
 const getRecords = (mr: any) => {
@@ -43,59 +39,59 @@ const getRecords = (mr: any) => {
 
   const records: Array<Record<string, any>> = [];
 
-  const typeRule = new RegExp('## Types of changes.+?\\[[xX]] (.+?)\\n', 's');
+  const typeRule = new RegExp('##\\s+Types of changes.+?\\[[xX]]\\s+(.+?)\\n', 's');
 
   const typeString = (content.match(typeRule)?.[1] ?? '').trim();
 
-  const type = typeMap[typeString];
+  const type = typeString && typeMap[typeString];
 
-  if (type && type !== 'unused') {
-    const rule = new RegExp(
+  const rule = new RegExp(
+    // Table title
+    '##\\s+Changelog\\n\\n' +
       // Table title
-      '## Changelog\\n\\n' +
-        // Table title
-        '\\|(.+)\\|\\n' +
-        // Alignment info
-        '\\|(?:[-: ]+[-| :]*)\\|\\n' +
-        // Table content
-        '((?:\\|.*\\|(?:\\n|$))*)'
-    );
+      '\\s*\\|(.+)\\|\\s*\\n' +
+      // Alignment info
+      '\\s*\\|(?:[-: ]+[-| :]*)\\|\\s*\\n' +
+      // Table content
+      '((?:\\s*\\|.*\\|\\s*(?:\\n|$))*)'
+  );
 
-    const matchResult = content.match(rule);
-    if (matchResult) {
-      const titles = matchResult[1].split('|').map((item: string) => item.toLowerCase().trim());
-      const lines = matchResult[2].split('\n').filter((value: string) => Boolean(value.trim()));
-      for (const line of lines) {
-        const items = line
-          .split('|')
-          .slice(1)
-          .map((value: string) => value.trim());
-        const data = titles.reduce(
-          (data: Record<string, any>, title: string, index: number) => {
-            switch (title) {
-              case 'type':
-                data[title] = items[index].toLowerCase();
-                break;
-              case 'related issues': {
-                const match = (items[index] ?? '').match(/#\d+/g);
-                if (match) {
-                  data.issue = match.map((item: string) => item.slice(1));
-                }
-                break;
+  const matchResult = content.match(rule);
+  if (matchResult) {
+    const titles = matchResult[1].split('|').map((item: string) => item.toLowerCase().trim());
+    const lines = matchResult[2].split('\n').filter((value: string) => Boolean(value.trim()));
+    for (const line of lines) {
+      const items = line
+        .split('|')
+        .slice(1)
+        .map((value: string) => value.trim());
+      const data = titles.reduce(
+        (data: Record<string, any>, title: string, index: number) => {
+          switch (title) {
+            case 'type':
+              if (items[index] && typeMap[items[index]]) {
+                data[title] = typeMap[items[index]];
               }
-              default:
-                data[title] = items[index];
+              break;
+            case 'related issues': {
+              const match = (items[index] ?? '').match(/#\d+/g);
+              if (match) {
+                data.issue = match.map((item: string) => item.slice(1));
+              }
+              break;
             }
-            return data;
-          },
-          {
-            mrId: mr.number,
-            mrURL: mr.html_url,
-            type,
-          } as Record<string, any>
-        );
-        records.push(data);
-      }
+            default:
+              data[title] = items[index];
+          }
+          return data;
+        },
+        {
+          mrId: mr.number,
+          mrURL: mr.html_url,
+          type,
+        } as Record<string, any>
+      );
+      records.push(data);
     }
   }
 
@@ -214,19 +210,19 @@ const appendChangelog = (emit: EmitInfo) => {
   const content = nunjucksEnv.render(template, data);
   try {
     fs.accessSync(filename);
+    const origin = fs.readFileSync(filename, 'utf8');
+    let originContent = origin;
+    let hasFm = false;
+    if (origin.match(/^---\nchangelog:\s*true\n---\n\n/)) {
+      hasFm = true;
+      originContent = origin.replace(/^---\nchangelog:\s*true\n---\n\n/, '');
+    }
+    const result = (hasFm ? '---\nchangelog: true\n---\n\n' : '') + content + originContent;
+
+    fs.writeFileSync(filename, result);
   } catch {
     fs.writeFileSync(filename, content);
   }
-  const origin = fs.readFileSync(filename, 'utf8');
-  let originContent = origin;
-  let hasFm = false;
-  if (origin.match(/^---\nchangelog:\s*true\n---\n\n/)) {
-    hasFm = true;
-    originContent = origin.replace(/^---\nchangelog:\s*true\n---\n\n/, '');
-  }
-  const result = (hasFm ? '---\nchangelog: true\n---\n\n' : '') + content + originContent;
-
-  fs.writeFileSync(filename, result);
 };
 
 const getLastVersion = (content: string) => {
