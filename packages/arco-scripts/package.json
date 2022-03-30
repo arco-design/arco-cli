@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "tsc -w",
     "build": "tsc && cp -rf src/scripts/changelog/template/ lib/scripts/changelog/template",
+    "test": "jest",
     "clean": "rm -rf lib",
     "prepublishOnly": "npm run build"
   },

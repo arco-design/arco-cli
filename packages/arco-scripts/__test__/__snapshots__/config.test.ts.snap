@@ -1,0 +1,924 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Read user config Babel config 1`] = `
+Object {
+  "filename": "",
+  "plugins": Array [
+    "@babel/plugin-proposal-export-default-from",
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-transform-react-jsx-source",
+  ],
+  "presets": Array [
+    "@babel/preset-env",
+    "@babel/preset-typescript",
+    "@babel/preset-react",
+  ],
+}
+`;
+
+exports[`Read user config Docgen config 1`] = `
+Object {
+  "demoGlob": "demo/*.{jsx,tsx}",
+  "entry": "components/*",
+  "languages": Array [
+    "zh-CN",
+  ],
+  "output": "",
+  "outputFileName": "README.md",
+  "template": "TEMPLATE.md",
+  "tsParseTool": Array [
+    "react-docgen-typescript",
+    Object {},
+  ],
+}
+`;
+
+exports[`Read user config Jest config 1`] = `
+Object {
+  "client": Object {
+    "clearMocks": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": Array [
+      "src/**/*.{ts,tsx}",
+      "components/**/*.{ts,tsx}",
+      "!**/style/*",
+    ],
+    "coverageDirectory": "./.coverage/",
+    "coveragePathIgnorePatterns": Array [
+      "/node_modules/",
+      "/lib/",
+      "/es/",
+      "/dist/",
+      "/icon/",
+    ],
+    "coverageReporters": Array [
+      "json",
+      "json-summary",
+      "lcov",
+      "text",
+      "clover",
+      "text-summary",
+    ],
+    "moduleFileExtensions": Array [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx",
+      "node",
+      "mjs",
+      "md",
+    ],
+    "rootDir": "/Users/helium/workspace/arco-cli/packages/arco-scripts",
+    "setupFiles": Array [
+      "./tests/setup.js",
+    ],
+    "snapshotSerializers": Array [
+      "/Users/helium/workspace/arco-cli/node_modules/enzyme-to-json/serializer.js",
+    ],
+    "testEnvironment": "jsdom",
+    "testPathIgnorePatterns": Array [
+      "/node_modules/",
+    ],
+    "testRegex": ".*\\\\.test\\\\.(j|t)sx?$",
+    "transform": Object {
+      ".*\\\\.(css|less|scss)$": "/Users/helium/workspace/arco-cli/packages/arco-scripts/src/config/jest/styleTransform.js",
+      ".*\\\\.md$": "/Users/helium/workspace/arco-cli/packages/arco-scripts/src/config/jest/mdTransform.js",
+      "^.+\\\\.jsx?$": "/Users/helium/workspace/arco-cli/packages/arco-scripts/src/config/jest/babelTransform.js",
+      "^.+\\\\.tsx?$": "/Users/helium/workspace/arco-cli/packages/arco-scripts/node_modules/ts-jest/dist/index.js",
+    },
+    "transformIgnorePatterns": Array [
+      "node_modules/[^/]+?/(?!(es|node_modules)/)",
+    ],
+  },
+  "node": Object {
+    "moduleFileExtensions": Array [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx",
+      "node",
+      "mjs",
+      "md",
+    ],
+    "rootDir": "/Users/helium/workspace/arco-cli/packages/arco-scripts",
+    "setupFiles": Array [
+      "./tests/setup.js",
+    ],
+    "snapshotSerializers": Array [
+      "/Users/helium/workspace/arco-cli/node_modules/enzyme-to-json/serializer.js",
+    ],
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": Array [
+      "/node_modules/",
+    ],
+    "testRegex": "demo\\\\.test\\\\.(j|t)sx?$",
+    "transform": Object {
+      ".*\\\\.(css|less|scss)$": "/Users/helium/workspace/arco-cli/packages/arco-scripts/src/config/jest/styleTransform.js",
+      ".*\\\\.md$": "/Users/helium/workspace/arco-cli/packages/arco-scripts/src/config/jest/mdTransform.js",
+      "^.+\\\\.jsx?$": "/Users/helium/workspace/arco-cli/packages/arco-scripts/src/config/jest/babelTransform.js",
+      "^.+\\\\.tsx?$": "/Users/helium/workspace/arco-cli/packages/arco-scripts/node_modules/ts-jest/dist/index.js",
+    },
+    "transformIgnorePatterns": Array [
+      "node_modules/[^/]+?/(?!(es|node_modules)/)",
+    ],
+  },
+}
+`;
+
+exports[`Read user config Style config 1`] = `
+Object {
+  "asset": Object {
+    "entry": Array [
+      "src/**/*.{png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2}",
+      "components/**/*.{png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2}",
+    ],
+    "output": "dist/asset",
+  },
+  "css": Object {
+    "compiler": [Function],
+    "compilerOptions": Object {
+      "javascriptEnabled": true,
+      "paths": Array [
+        "node_modules",
+      ],
+      "plugins": Array [
+        Object {
+          "options": Object {
+            "prefix": "~",
+          },
+        },
+        Object {
+          "options": undefined,
+        },
+      ],
+      "relativeUrls": true,
+    },
+    "entry": Array [
+      "src/**/index.less",
+      "components/**/index.less",
+    ],
+    "output": Object {
+      "cjs": "lib",
+      "dist": Object {
+        "cssFileName": "index.css",
+        "path": "dist/css",
+        "rawFileName": "index.less",
+      },
+      "es": "es",
+    },
+    "watch": Array [
+      "src/**/*.{png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2,less,css}",
+      "components/**/*.{png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2,less,css}",
+    ],
+    "watchBase": Object {},
+  },
+  "jsEntry": Object {
+    "autoInjectArcoDep": true,
+    "cssEntryFileName": "",
+    "entry": Array [
+      "src/style/index.ts",
+      "components/*/style/index.ts",
+    ],
+    "rawEntryFileName": "",
+    "styleSheetExtension": "less",
+  },
+}
+`;
+
+exports[`Read user config Webpack config 1`] = `
+Object {
+  "entry": Object {
+    "arco": "/Users/helium/workspace/arco-cli/packages/arco-scripts/components/index.tsx",
+  },
+  "externals": Array [
+    Object {
+      "react": Object {
+        "amd": "react",
+        "commonjs": "react",
+        "commonjs2": "react",
+        "root": "React",
+      },
+      "react-dom": Object {
+        "amd": "react-dom",
+        "commonjs": "react-dom",
+        "commonjs2": "react-dom",
+        "root": "ReactDOM",
+      },
+    },
+    [Function],
+  ],
+  "mode": "production",
+  "module": Object {
+    "rules": Array [
+      Object {
+        "exclude": /node_modules/,
+        "test": /\\\\\\.tsx\\?\\$/,
+        "use": Array [
+          Object {
+            "loader": "babel-loader",
+            "options": Object {
+              "filename": "",
+              "plugins": Array [
+                "@babel/plugin-proposal-export-default-from",
+                "@babel/plugin-transform-runtime",
+                "@babel/plugin-syntax-dynamic-import",
+                "@babel/plugin-proposal-class-properties",
+                "@babel/plugin-transform-react-jsx-source",
+              ],
+              "presets": Array [
+                "@babel/preset-env",
+                "@babel/preset-typescript",
+                "@babel/preset-react",
+              ],
+            },
+          },
+          Object {
+            "loader": "ts-loader",
+            "options": Object {
+              "compilerOptions": Object {},
+            },
+          },
+        ],
+      },
+      Object {
+        "exclude": /\\\\\\.module\\\\\\.less\\$/,
+        "test": /\\\\\\.less\\$/,
+        "use": Array [
+          Object {
+            "loader": "style-loader",
+          },
+          Object {
+            "loader": "css-loader",
+            "options": Object {},
+          },
+          Object {
+            "loader": "less-loader",
+            "options": Object {
+              "javascriptEnabled": true,
+            },
+          },
+        ],
+      },
+      Object {
+        "sideEffects": true,
+        "test": /\\\\\\.css\\$/,
+        "use": Array [
+          Object {
+            "loader": "style-loader",
+          },
+          Object {
+            "loader": "css-loader",
+          },
+        ],
+      },
+      Object {
+        "loader": "file-loader",
+        "options": Object {
+          "esModule": false,
+        },
+        "test": /\\\\\\.\\(png\\|jpg\\|gif\\|ttf\\|eot\\|woff\\|woff2\\)\\$/,
+      },
+      Object {
+        "test": /\\\\\\.svg\\$/,
+        "use": Array [
+          "@svgr/webpack",
+        ],
+      },
+      Object {
+        "test": /\\\\\\.module\\\\\\.less\\$/,
+        "use": Array [
+          Object {
+            "loader": "style-loader",
+          },
+          Object {
+            "loader": "css-loader",
+            "options": Object {
+              "modules": Object {
+                "localIdentName": "[local]-[hash:10]",
+              },
+            },
+          },
+          Object {
+            "loader": "less-loader",
+            "options": Object {
+              "javascriptEnabled": true,
+            },
+          },
+        ],
+      },
+    ],
+  },
+  "output": Object {
+    "filename": "[name].min.js",
+    "library": "[name]",
+    "libraryTarget": "umd",
+    "path": "/Users/helium/workspace/arco-cli/packages/arco-scripts/dist",
+    "publicPath": "https://unpkg.com/arco-scripts@latest/dist/",
+  },
+  "plugins": Array [
+    [Function],
+    BannerPlugin {
+      "banner": [Function],
+      "options": Object {
+        "banner": "arco-scripts v1.25.17
+
+Copyright 2019-present, Bytedance, Inc.
+All rights reserved.
+",
+      },
+    },
+  ],
+  "resolve": Object {
+    "extensions": Array [
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx",
+    ],
+    "modules": Array [
+      "node_modules",
+    ],
+  },
+  "resolveLoader": Object {
+    "modules": Array [
+      "node_modules/arco-scripts/node_modules",
+      "node_modules",
+    ],
+  },
+}
+`;
+
+exports[`Read user config Webpack config 2`] = `
+Object {
+  "dev": Object {
+    "context": "/Users/helium/workspace/arco-cli/packages/arco-scripts/site",
+    "devServer": Object {
+      "compress": true,
+      "contentBase": "/Users/helium/workspace/arco-cli/packages/arco-scripts/src/config/webpack/dist",
+      "historyApiFallback": true,
+      "host": "0.0.0.0",
+      "inline": true,
+      "open": true,
+      "port": 8080,
+      "stats": Object {
+        "assets": true,
+        "chunkModules": false,
+        "chunkOrigins": false,
+        "chunks": false,
+        "moduleTrace": false,
+        "modules": false,
+        "reasons": false,
+        "source": false,
+      },
+    },
+    "devtool": "cheap-source-map",
+    "entry": "/Users/helium/workspace/arco-cli/packages/arco-scripts/site/src/pages/components/index.js",
+    "mode": "development",
+    "module": Object {
+      "rules": Array [
+        Object {
+          "exclude": /node_modules/,
+          "loader": "babel-loader",
+          "options": Object {
+            "filename": "",
+            "plugins": Array [
+              "@babel/plugin-proposal-export-default-from",
+              "@babel/plugin-transform-runtime",
+              "@babel/plugin-syntax-dynamic-import",
+              "@babel/plugin-proposal-class-properties",
+              "@babel/plugin-transform-react-jsx-source",
+            ],
+            "presets": Array [
+              "@babel/preset-env",
+              "@babel/preset-typescript",
+              "@babel/preset-react",
+            ],
+          },
+          "test": /\\\\\\.\\(js\\|jsx\\|ts\\|tsx\\)\\$/,
+        },
+        Object {
+          "test": /\\\\\\.md\\$/,
+          "use": Array [
+            Object {
+              "loader": "babel-loader",
+              "options": Object {
+                "filename": "",
+                "plugins": Array [
+                  "@babel/plugin-proposal-export-default-from",
+                  "@babel/plugin-transform-runtime",
+                  "@babel/plugin-syntax-dynamic-import",
+                  "@babel/plugin-proposal-class-properties",
+                  "@babel/plugin-transform-react-jsx-source",
+                ],
+                "presets": Array [
+                  "@babel/preset-env",
+                  "@babel/preset-typescript",
+                  "@babel/preset-react",
+                ],
+              },
+            },
+            Object {
+              "loader": "arco-markdown-loader",
+              "options": Object {
+                "babelConfig": Object {
+                  "filename": "",
+                  "plugins": Array [
+                    "@babel/plugin-proposal-export-default-from",
+                    "@babel/plugin-transform-runtime",
+                    "@babel/plugin-syntax-dynamic-import",
+                    "@babel/plugin-proposal-class-properties",
+                    "@babel/plugin-transform-react-jsx-source",
+                  ],
+                  "presets": Array [
+                    "@babel/preset-env",
+                    "@babel/preset-typescript",
+                    "@babel/preset-react",
+                  ],
+                },
+                "demoDir": "demo",
+              },
+            },
+          ],
+        },
+        Object {
+          "test": /\\\\\\.svg\\$/,
+          "use": Array [
+            "@svgr/webpack",
+          ],
+        },
+        Object {
+          "loader": "file-loader",
+          "options": Object {
+            "esModule": false,
+          },
+          "test": /\\\\\\.\\(png\\|jpg\\|gif\\)\\$/,
+        },
+        Object {
+          "loader": "file-loader",
+          "options": Object {
+            "esModule": false,
+            "name": "fonts/[name].[ext]",
+          },
+          "test": /\\\\\\.\\(ttf\\|eot\\|woff\\|woff2\\)\\$/,
+        },
+        Object {
+          "exclude": /\\\\\\.module\\\\\\.less\\$/,
+          "test": /\\\\\\.less\\$/,
+          "use": Array [
+            Object {
+              "loader": "style-loader",
+            },
+            Object {
+              "loader": "css-loader",
+              "options": Object {},
+            },
+            Object {
+              "loader": "postcss-loader",
+              "options": Object {
+                "postcssOptions": Object {
+                  "plugins": Array [
+                    "autoprefixer",
+                  ],
+                },
+              },
+            },
+            Object {
+              "loader": "less-loader",
+              "options": Object {
+                "javascriptEnabled": true,
+              },
+            },
+          ],
+        },
+        Object {
+          "test": /\\\\\\.css\\$/,
+          "use": Array [
+            Object {
+              "loader": "style-loader",
+            },
+            Object {
+              "loader": "css-loader",
+            },
+          ],
+        },
+        Object {
+          "test": /\\\\\\.module\\\\\\.less\\$/,
+          "use": Array [
+            Object {
+              "loader": "style-loader",
+            },
+            Object {
+              "loader": "css-loader",
+              "options": Object {
+                "modules": Object {
+                  "localIdentName": "[local]-[hash:10]",
+                },
+              },
+            },
+            Object {
+              "loader": "postcss-loader",
+              "options": Object {
+                "postcssOptions": Object {
+                  "plugins": Array [
+                    "autoprefixer",
+                  ],
+                },
+              },
+            },
+            Object {
+              "loader": "less-loader",
+              "options": Object {
+                "javascriptEnabled": true,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    "output": Object {
+      "filename": "[name].min.js",
+      "path": "/Users/helium/workspace/arco-cli/packages/arco-scripts/site/dist",
+      "publicPath": "/",
+    },
+    "plugins": Array [
+      HtmlWebpackPlugin {
+        "options": Object {
+          "cache": true,
+          "chunks": "all",
+          "chunksSortMode": "auto",
+          "compile": true,
+          "excludeChunks": Array [],
+          "favicon": false,
+          "filename": "index.html",
+          "hash": false,
+          "inject": true,
+          "meta": Object {},
+          "minify": false,
+          "showErrors": true,
+          "template": "/Users/helium/workspace/arco-cli/packages/arco-scripts/site/public/index.html",
+          "templateParameters": [Function],
+          "title": "Webpack App",
+          "xhtml": false,
+        },
+      },
+      [Function],
+      Object {
+        "apply": [Function],
+      },
+    ],
+    "resolve": Object {
+      "alias": Object {},
+      "extensions": Array [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx",
+        ".json",
+      ],
+      "modules": Array [
+        "/Users/helium/workspace/arco-cli/packages/arco-scripts/site/node_modules",
+        "node_modules",
+      ],
+    },
+  },
+  "prod": Object {
+    "context": "/Users/helium/workspace/arco-cli/packages/arco-scripts/site",
+    "entry": "/Users/helium/workspace/arco-cli/packages/arco-scripts/site/src/pages/components/index.js",
+    "mode": "production",
+    "module": Object {
+      "rules": Array [
+        Object {
+          "exclude": /node_modules/,
+          "loader": "babel-loader",
+          "options": Object {
+            "filename": "",
+            "plugins": Array [
+              "@babel/plugin-proposal-export-default-from",
+              "@babel/plugin-transform-runtime",
+              "@babel/plugin-syntax-dynamic-import",
+              "@babel/plugin-proposal-class-properties",
+              "@babel/plugin-transform-react-jsx-source",
+            ],
+            "presets": Array [
+              "@babel/preset-env",
+              "@babel/preset-typescript",
+              "@babel/preset-react",
+            ],
+          },
+          "test": /\\\\\\.\\(js\\|jsx\\|ts\\|tsx\\)\\$/,
+        },
+        Object {
+          "test": /\\\\\\.md\\$/,
+          "use": Array [
+            Object {
+              "loader": "babel-loader",
+              "options": Object {
+                "filename": "",
+                "plugins": Array [
+                  "@babel/plugin-proposal-export-default-from",
+                  "@babel/plugin-transform-runtime",
+                  "@babel/plugin-syntax-dynamic-import",
+                  "@babel/plugin-proposal-class-properties",
+                  "@babel/plugin-transform-react-jsx-source",
+                ],
+                "presets": Array [
+                  "@babel/preset-env",
+                  "@babel/preset-typescript",
+                  "@babel/preset-react",
+                ],
+              },
+            },
+            Object {
+              "loader": "arco-markdown-loader",
+              "options": Object {
+                "babelConfig": Object {
+                  "filename": "",
+                  "plugins": Array [
+                    "@babel/plugin-proposal-export-default-from",
+                    "@babel/plugin-transform-runtime",
+                    "@babel/plugin-syntax-dynamic-import",
+                    "@babel/plugin-proposal-class-properties",
+                    "@babel/plugin-transform-react-jsx-source",
+                  ],
+                  "presets": Array [
+                    "@babel/preset-env",
+                    "@babel/preset-typescript",
+                    "@babel/preset-react",
+                  ],
+                },
+                "demoDir": "demo",
+              },
+            },
+          ],
+        },
+        Object {
+          "test": /\\\\\\.svg\\$/,
+          "use": Array [
+            "@svgr/webpack",
+          ],
+        },
+        Object {
+          "loader": "file-loader",
+          "options": Object {
+            "esModule": false,
+          },
+          "test": /\\\\\\.\\(png\\|jpg\\|gif\\)\\$/,
+        },
+        Object {
+          "loader": "file-loader",
+          "options": Object {
+            "esModule": false,
+            "name": "fonts/[name].[ext]",
+          },
+          "test": /\\\\\\.\\(ttf\\|eot\\|woff\\|woff2\\)\\$/,
+        },
+        Object {
+          "exclude": /\\\\\\.module\\\\\\.less\\$/,
+          "test": /\\\\\\.less\\$/,
+          "use": Array [
+            Object {
+              "loader": "/Users/helium/workspace/arco-cli/node_modules/mini-css-extract-plugin/dist/loader.js",
+            },
+            Object {
+              "loader": "css-loader",
+              "options": Object {},
+            },
+            Object {
+              "loader": "postcss-loader",
+              "options": Object {
+                "postcssOptions": Object {
+                  "plugins": Array [
+                    "autoprefixer",
+                  ],
+                },
+              },
+            },
+            Object {
+              "loader": "less-loader",
+              "options": Object {
+                "javascriptEnabled": true,
+              },
+            },
+          ],
+        },
+        Object {
+          "test": /\\\\\\.css\\$/,
+          "use": Array [
+            Object {
+              "loader": "/Users/helium/workspace/arco-cli/node_modules/mini-css-extract-plugin/dist/loader.js",
+            },
+            Object {
+              "loader": "css-loader",
+            },
+          ],
+        },
+        Object {
+          "test": /\\\\\\.module\\\\\\.less\\$/,
+          "use": Array [
+            Object {
+              "loader": "/Users/helium/workspace/arco-cli/node_modules/mini-css-extract-plugin/dist/loader.js",
+            },
+            Object {
+              "loader": "css-loader",
+              "options": Object {
+                "modules": Object {
+                  "localIdentName": "[local]-[hash:10]",
+                },
+              },
+            },
+            Object {
+              "loader": "postcss-loader",
+              "options": Object {
+                "postcssOptions": Object {
+                  "plugins": Array [
+                    "autoprefixer",
+                  ],
+                },
+              },
+            },
+            Object {
+              "loader": "less-loader",
+              "options": Object {
+                "javascriptEnabled": true,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    "optimization": Object {
+      "minimizer": Array [
+        TerserPlugin {
+          "options": Object {
+            "cache": true,
+            "cacheKeys": [Function],
+            "chunkFilter": [Function],
+            "exclude": undefined,
+            "extractComments": true,
+            "include": undefined,
+            "minify": undefined,
+            "parallel": true,
+            "sourceMap": undefined,
+            "terserOptions": Object {},
+            "test": /\\\\\\.m\\?js\\(\\\\\\?\\.\\*\\)\\?\\$/i,
+            "warningsFilter": [Function],
+          },
+        },
+        OptimizeCssAssetsWebpackPlugin {
+          "deleteAssetsMap": Object {},
+          "options": Object {
+            "assetNameRegExp": /\\\\\\.css\\(\\\\\\?\\.\\*\\)\\?\\$/i,
+            "assetProcessors": Array [
+              Object {
+                "phase": "compilation.optimize-chunk-assets",
+                "processor": [Function],
+                "regExp": /\\\\\\.css\\(\\\\\\?\\.\\*\\)\\?\\$/i,
+              },
+            ],
+            "canPrint": undefined,
+            "cssProcessor": [Function],
+            "cssProcessorOptions": Object {},
+            "cssProcessorPluginOptions": Object {},
+          },
+          "phaseAssetProcessors": Object {
+            "compilation.optimize-assets": Array [],
+            "compilation.optimize-chunk-assets": Array [
+              Object {
+                "phase": "compilation.optimize-chunk-assets",
+                "processor": [Function],
+                "regExp": /\\\\\\.css\\(\\\\\\?\\.\\*\\)\\?\\$/i,
+              },
+            ],
+            "emit": Array [],
+          },
+          "pluginDescriptor": Object {
+            "name": "OptimizeCssAssetsWebpackPlugin",
+          },
+        },
+      ],
+    },
+    "output": Object {
+      "filename": "[contenthash:6].[name].min.js",
+      "path": "/Users/helium/workspace/arco-cli/packages/arco-scripts/site/dist",
+      "publicPath": "/",
+    },
+    "plugins": Array [
+      HtmlWebpackPlugin {
+        "options": Object {
+          "cache": true,
+          "chunks": "all",
+          "chunksSortMode": "auto",
+          "compile": true,
+          "excludeChunks": Array [],
+          "favicon": false,
+          "filename": "index.html",
+          "hash": false,
+          "inject": true,
+          "meta": Object {},
+          "minify": false,
+          "showErrors": true,
+          "template": "/Users/helium/workspace/arco-cli/packages/arco-scripts/site/public/index.html",
+          "templateParameters": [Function],
+          "title": "Webpack App",
+          "xhtml": false,
+        },
+      },
+      [Function],
+      DefinePlugin {
+        "definitions": Object {
+          "process.env": Object {
+            "NODE_ENV": "\\"production\\"",
+          },
+        },
+      },
+      MiniCssExtractPlugin {
+        "options": Object {
+          "chunkFilename": "[contenthash:6].[name].min.css",
+          "filename": "[contenthash:6].[name].min.css",
+        },
+      },
+    ],
+    "resolve": Object {
+      "alias": Object {},
+      "extensions": Array [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx",
+        ".json",
+      ],
+      "modules": Array [
+        "/Users/helium/workspace/arco-cli/packages/arco-scripts/site/node_modules",
+        "node_modules",
+      ],
+    },
+  },
+}
+`;
+
+exports[`Read user config Webpack config 3`] = `
+Object {
+  "entry": "/Users/helium/workspace/arco-cli/packages/arco-scripts/icon/index.js",
+  "externals": Array [
+    Object {
+      "react": Object {
+        "amd": "react",
+        "commonjs": "react",
+        "commonjs2": "react",
+        "root": "React",
+      },
+      "react-dom": Object {
+        "amd": "react-dom",
+        "commonjs": "react-dom",
+        "commonjs2": "react-dom",
+        "root": "ReactDOM",
+      },
+    },
+    [Function],
+  ],
+  "mode": "production",
+  "module": Object {
+    "rules": Array [
+      Object {
+        "exclude": /node_modules/,
+        "loader": "babel-loader",
+        "test": /\\\\\\.tsx\\?\\$/,
+      },
+    ],
+  },
+  "output": Object {
+    "filename": "arco-icon.min.js",
+    "library": "arcoicon",
+    "libraryTarget": "umd",
+    "path": "/Users/helium/workspace/arco-cli/packages/arco-scripts/dist",
+  },
+  "plugins": Array [
+    [Function],
+    BannerPlugin {
+      "banner": [Function],
+      "options": Object {
+        "banner": "arco-scripts v1.25.17
+
+Copyright 2019-present, Bytedance, Inc.
+All rights reserved.
+",
+      },
+    },
+  ],
+  "resolve": Object {
+    "extensions": Array [
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx",
+    ],
+    "modules": Array [
+      "node_modules",
+    ],
+  },
+}
+`;

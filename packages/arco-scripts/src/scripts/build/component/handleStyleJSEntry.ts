@@ -160,8 +160,15 @@ async function transformStyleEntryContent({
 
 function injectArcoDepStyle(componentEsDirPattern: string) {
   return new Promise<void>((resolve) => {
+    const esEntry = path.resolve(componentEsDirPattern, 'index.js');
+
+    if (!fs.existsSync(esEntry)) {
+      resolve(null);
+      return;
+    }
+
     vfs
-      .src(path.resolve(componentEsDirPattern, 'index.js'), {
+      .src(esEntry, {
         allowEmpty: true,
         base: componentEsDirPattern,
       })
