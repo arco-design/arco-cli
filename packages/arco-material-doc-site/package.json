@@ -1,6 +1,6 @@
 {
   "name": "arco-material-doc-site",
-  "version": "1.9.4",
+  "version": "1.9.5",
   "description": "Arco Doc Site Helper",
   "main": "lib/index.js",
   "types": "lib/interface.d.ts",
@@ -29,7 +29,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@svgr/webpack": "^5.5.0",
     "arco-cli-dev-utils": "^1.0.0",
-    "arco-markdown-loader": "^1.0.0",
+    "arco-markdown-loader": "^1.0.1",
     "arco-scripts-babel-config": "^1.0.0",
     "axios": "~0",
     "babel-loader": "^8.2.2",
