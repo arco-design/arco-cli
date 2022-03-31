@@ -13,7 +13,6 @@
     "preRelease": "lerna run clean && lerna run build"
   },
   "devDependencies": {
-    "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^9.0.11",
     "@types/gulp": "^4.0.8",
     "@types/gulp-if": "^0.0.33",

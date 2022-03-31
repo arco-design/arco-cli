@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
-import { cmd } from 'arco-cli-dev-utils';
+import { execQuick } from 'arco-cli-dev-utils';
 
 import { NpmPackageManipulator } from './downloader';
 import {
@@ -40,7 +40,7 @@ async function handleFsCopy(source: string, target: string) {
   if (!isTargetPathExists) {
     await mkdirp(target);
   }
-  await cmd.execQuick(cpCommand);
+  await execQuick(cpCommand);
 }
 
 async function handleArcoProFsWrite(config: {
@@ -64,7 +64,7 @@ async function handleArcoProFsWrite(config: {
   }
 
   const cpCommand = `cp -rf '${codePath}/.' '${pagePath}'`;
-  await cmd.execQuick(cpCommand);
+  await execQuick(cpCommand);
 
   return pagePath;
 }

@@ -1,10 +1,6 @@
-import { execSync } from 'child_process';
+import execQuick from './execQuick';
 
-export default () => {
-  try {
-    execSync('git rev-parse --is-inside-work-tree', { stdio: 'ignore' });
-    return true;
-  } catch (e) {
-    return false;
-  }
+export default async () => {
+  const { code, stdout } = await execQuick('git rev-parse --is-inside-work-tree');
+  return code === 0 && /^true/i.test(stdout);
 };

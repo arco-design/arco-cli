@@ -1,8 +1,8 @@
-import { spawnSync } from 'child_process';
+import execQuick from './execQuick';
 
-export default () => {
+export default async () => {
   try {
-    const { stdout } = spawnSync('git', ['status', '--short']);
+    const { stdout } = await execQuick('git status --short');
     return stdout.toString() === '';
   } catch (e) {
     return true;

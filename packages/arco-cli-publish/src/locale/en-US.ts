@@ -5,6 +5,7 @@ export default {
     'Specify the remote and branch (e.g. upstream/my-branch), press Enter without specifying it',
   TIP_PUBLISH_SUCCESS: 'Publish to NPM successfully!',
 
+  ERROR_EXECUTED_FAILED: 'Command executed failed.',
   ERROR_NO_GIT_INIT: 'No Git repository was detected.',
   ERROR_NO_GIT_ORIGIN:
     'You cannot publish code before specifying git remote. Please add git remote manually.',

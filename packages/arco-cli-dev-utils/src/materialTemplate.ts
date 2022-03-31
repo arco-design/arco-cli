@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
-import spawn from 'cross-spawn';
 import gulp from 'gulp';
 import replace from 'gulp-replace';
+import execQuick from './execQuick';
 import { PACKAGE_NAME_ARCO_WEB_REACT_V2, PACKAGE_NAME_ARCO_WEB_VUE_V2 } from './constant';
 
 interface TransformToProjectOptions {
@@ -107,11 +107,10 @@ export const transformToTemplate = async ({ root }: TransformToTemplateOptions) 
 
   // Remove all files ignored by Git
   if (fs.existsSync('.git')) {
-    await new Promise((resolve, reject) => {
-      spawn('git', ['clean', '-Xdf'], { stdio: 'ignore' }).on('close', (code) => {
-        code === 0 ? resolve(null) : reject(`Command Error: git clean -Xdf`);
-      });
-    });
+    const { code, stderr } = await execQuick('git clean -Xdf');
+    if (code !== 0) {
+      throw new Error(`Command executed failed: git clean -Xdf\n${stderr}`);
+    }
   }
 
   // Remove package-lock、yarn.lock、.git

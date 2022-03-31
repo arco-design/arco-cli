@@ -76,7 +76,7 @@ export default async function () {
   try {
     spinner.start(locale.TIP_TEMPLATE_COPY_ING);
     fs.emptyDirSync(templateFilePath);
-    fs.copySync(projectPath, templateFilePath);
+    await fs.copy(projectPath, templateFilePath);
     spinner.succeed(locale.TIP_TEMPLATE_COPY_DONE);
   } catch (err) {
     spinner.fail(locale.TIP_TEMPLATE_COPY_FAILED);

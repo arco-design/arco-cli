@@ -2,7 +2,7 @@ import path from 'path';
 import mkdirp from 'mkdirp';
 import compressing from 'compressing';
 import fs from 'fs-extra';
-import { cmd } from 'arco-cli-dev-utils';
+import { execQuick } from 'arco-cli-dev-utils';
 
 import {
   getPackageScopeAndName,
@@ -137,7 +137,7 @@ export class NpmPackageManipulator {
   }
 
   public async clean() {
-    await cmd.execQuick(`rm -rf ${this._tempDirectoryPath}`);
+    await execQuick(`rm -rf ${this._tempDirectoryPath}`);
     this.cleanMap();
   }
 

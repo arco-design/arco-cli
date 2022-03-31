@@ -2,13 +2,12 @@ import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import ora from 'ora';
-import { execSync, spawnSync } from 'child_process';
 import {
   print,
-  crossSpawn,
   materialTemplate,
   isInGitRepository,
   CONSTANT,
+  execQuick,
 } from 'arco-cli-dev-utils';
 
 import locale from './locale';
@@ -59,30 +58,18 @@ function addGitIgnore() {
   }
 }
 
-function tryGitInit() {
-  try {
-    execSync('git init', { stdio: 'ignore' });
-    return true;
-  } catch (error) {
-    print.warn(locale.ERROR_GIT_INIT_FAILED, error);
-    return false;
-  }
-}
+async function tryGitCommit(commitMessage: string) {
+  const { code: codeAdd, stderr: errAdd } = await execQuick('git add -A');
+  const { code: codeCommit, stderr: errCommit } = await execQuick(
+    `git commit -m "${commitMessage}" --no-verify`
+  );
 
-function tryGitCommit(commitMessage: string) {
-  try {
-    execSync('git add -A', { stdio: 'ignore' });
-    execSync(`git commit -m "${commitMessage}" --no-verify`, {
-      stdio: 'ignore',
-    });
-    return true;
-  } catch (e) {
-    print.warn('Git commit not created', e);
+  if (codeAdd !== 0 || codeCommit !== 0) {
+    print.warn('Git commit not created', errAdd || errCommit);
     print.warn('Removing .git directory...');
     try {
       fs.removeSync('./.git');
     } catch (_) {}
-    return false;
   }
 }
 
@@ -105,25 +92,26 @@ function getPackageInfo(installPackage: string) {
   return { name: installPackage };
 }
 
-function handleDependencies(dependencies: string | string[], allowYarn = false) {
-  return new Promise((resolve, reject) => {
-    let command = 'npm';
-    let args = ['install'].concat(dependencies || []);
+async function handleDependencies(dependencies: string | string[], allowYarn = false) {
+  let command = 'npm';
+  let args = ['install'].concat(dependencies || []);
 
-    if (allowYarn) {
-      try {
-        const { stdout } = spawnSync('yarn', ['-v']);
-        if (stdout && stdout.toString().match(/^\d+\.\d+/)) {
-          command = 'yarn';
-          args = dependencies ? ['add'].concat(dependencies) : [];
-        }
-      } catch (e) {}
-    }
+  if (allowYarn) {
+    try {
+      const { stdout } = await execQuick('yarn -v');
+      if (stdout.match(/^\d+\.\d+/)) {
+        command = 'yarn';
+        args = dependencies ? ['add'].concat(dependencies) : [];
+      }
+    } catch (e) {}
+  }
 
-    crossSpawn(command, args, { stdio: 'ignore' }).on('close', (code) => {
-      code === 0 ? resolve(null) : reject(`Command Error: ${command} ${args.join(' ')}`);
-    });
-  });
+  const commandExec = `${command} ${args.join(' ')}`;
+  const { code, stderr } = await execQuick(commandExec);
+
+  if (code !== 0) {
+    throw new Error(`Command 「${commandExec}」 executed failed:\n${stderr}`);
+  }
 }
 
 function exitProcess(err) {
@@ -171,7 +159,7 @@ async function copyTemplateContent({
 
     const pathCustomProjectInitFunc = path.resolve(`${CUSTOM_INIT_DIR}/init.js`);
     if (fs.existsSync(TEMPLATE_DIR) || fs.existsSync(TEMPLATE_DIR_FOR_MONOREPO)) {
-      fs.copySync(
+      await fs.copy(
         isForMonorepo && TEMPLATE_DIR_FOR_MONOREPO ? TEMPLATE_DIR_FOR_MONOREPO : TEMPLATE_DIR,
         root,
         {
@@ -216,7 +204,6 @@ export default async function ({
 }: CreateProjectOptions) {
   const spinner = ora();
   const originalDirectory = process.cwd();
-  const needInitGit = !isInGitRepository();
   if (template.match(/^file:/)) {
     template = `file:${path.resolve(originalDirectory, template.match(/^file:(.*)?$/)[1])}`;
   }
@@ -248,7 +235,10 @@ export default async function ({
 
   // Init Git
   addGitIgnore();
-  needInitGit && tryGitInit();
+  if (!(await isInGitRepository())) {
+    const { stderr, code } = await execQuick('git init');
+    code !== 0 && print.warn(locale.ERROR_GIT_INIT_FAILED, stderr);
+  }
 
   // Install dependencies
   try {
@@ -272,17 +262,13 @@ export default async function ({
       });
     } else {
       // Try to build project
-      try {
-        spinner.start(locale.TIP_PROJECT_BUILD_ING);
-        await new Promise((resolve, reject) => {
-          crossSpawn('npm', ['run', 'build'], { stdio: 'ignore' }).on('close', (code) => {
-            code === 0 ? resolve(null) : reject('Command Error: npm run build');
-          });
-        });
+      spinner.start(locale.TIP_PROJECT_BUILD_ING);
+      const { code, stderr } = await execQuick('npm run build');
+      if (code === 0) {
         spinner.succeed(locale.TIP_PROJECT_BUILD_DONE);
-      } catch (err) {
-        spinner.fail(locale.TIP_PROJECT_BUILD_FAILED);
-        print.error(err);
+      } else {
+        spinner.warn(locale.TIP_PROJECT_BUILD_FAILED);
+        print.warn(`Command executed failed: npm run build\n${stderr}`);
       }
 
       // Print help info
@@ -304,7 +290,7 @@ export default async function ({
   }
 
   // First Git commit
-  tryGitCommit(
+  await tryGitCommit(
     `arco-cli: ${isForMonorepo ? 'add package' : 'initialize'} ${packageJson.name || 'project'}`
   );
 

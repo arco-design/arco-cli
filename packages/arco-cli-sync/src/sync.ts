@@ -80,16 +80,16 @@ export default async function ({
     process.chdir(root);
 
     // Ensure that the material has been released to NPM
-    const packageInfo = getNpmPackageInfo();
-    if (packageInfo.error) {
-      const errorPrefix =
-        packageInfo.error.code === 'E404'
-          ? locale.ERROR_NEED_PUBLISH_TO_NPM
-          : locale.ERROR_GET_PACKAGE_INFO_FAILED;
-      messageQueue.push('error', [
-        root,
-        `${errorPrefix}\nDetails: ${JSON.stringify(packageInfo.error, null, 2)}`,
-      ]);
+    let packageInfo: Record<string, any> = null;
+
+    try {
+      packageInfo = await getNpmPackageInfo();
+    } catch (e) {
+      const errMsg = e.toString();
+      const errorPrefix = /code E404|404 Not Found/gi.test(errMsg)
+        ? locale.ERROR_NEED_PUBLISH_TO_NPM
+        : locale.ERROR_GET_PACKAGE_INFO_FAILED;
+      messageQueue.push('error', [root, `${errorPrefix}\n${errMsg}`]);
       return;
     }
 

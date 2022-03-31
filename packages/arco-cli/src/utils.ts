@@ -4,9 +4,9 @@ import locale from './locale';
 
 const ARCO_CLI_PACKAGE_NAME = 'arco-cli';
 
-export function fetchLatestVersion() {
+export async function fetchLatestVersion() {
   try {
-    const info = getNpmPackageInfo(ARCO_CLI_PACKAGE_NAME);
+    const info = await getNpmPackageInfo(ARCO_CLI_PACKAGE_NAME);
     const { latest: lastVersion } = info['dist-tags'];
     return lastVersion;
   } catch (e) {}

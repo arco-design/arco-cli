@@ -2,29 +2,24 @@ import fs from 'fs-extra';
 import relix from 'relix';
 import semver from 'semver';
 import inquirer from 'inquirer';
-import { exec } from 'child_process';
 import { getConfig } from 'arco-cli-config';
-import { print, crossSpawn, getGitRootPath } from 'arco-cli-dev-utils';
+import { print, getGitRootPath, execQuick } from 'arco-cli-dev-utils';
 
 import locale from './locale';
 
 async function checkGitRemote() {
-  return new Promise((resolve) => {
-    if (getGitRootPath()) {
-      exec('git remote -v', (err, stdout) => {
-        if (!err && stdout && stdout.match('(push)')) {
-          print();
-          resolve(null);
-        } else {
-          print.error(['arco publish', locale.ERROR_NO_GIT_ORIGIN]);
-          process.exit();
-        }
-      });
+  if (getGitRootPath()) {
+    const { code, stdout } = await execQuick('git remove -v');
+    if (code === 0 && stdout.match('(push)')) {
+      print();
     } else {
-      print.error(['arco publish'], locale.ERROR_NO_GIT_INIT);
+      print.error(['arco publish', locale.ERROR_NO_GIT_ORIGIN]);
       process.exit();
     }
-  });
+  } else {
+    print.error(['arco publish'], locale.ERROR_NO_GIT_INIT);
+    process.exit();
+  }
 }
 
 interface PublishOptions {
@@ -35,15 +30,12 @@ export default async function ({ configFileName }: PublishOptions = {}) {
   const { alias, packages } = getConfig(configFileName);
 
   if (alias && alias.publish) {
-    return new Promise((resolve, reject) => {
-      const publishArray = alias.publish.split(' ');
-      crossSpawn(publishArray[0], publishArray.slice(1), { stdio: 'inherit' }).on(
-        'close',
-        (code) => {
-          code ? reject(code) : resolve(code);
-        }
-      );
-    });
+    const { code, stderr } = await execQuick(alias.publish, { silent: false, time: true });
+    if (code !== 0) {
+      print.error(['[arco publish]', locale.ERROR_EXECUTED_FAILED]);
+      console.error(stderr);
+      process.exit(code);
+    }
   }
 
   if (Array.isArray(packages) && packages.length > 1) {

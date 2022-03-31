@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "chalk": "^4.0.0",
-    "cross-spawn": "^7.0.3",
     "fs-extra": "^9.0.1",
     "gulp": "^4.0.2",
     "gulp-if": "^3.0.0",
