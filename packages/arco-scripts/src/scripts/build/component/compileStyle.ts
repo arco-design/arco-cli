@@ -32,17 +32,49 @@ const notifyLessCompileResult = (stream) => {
     });
 };
 
+const handleAdditionalData = async (file: { path: string; contents: Buffer }, _, cb) => {
+  try {
+    const originalContents = file.contents.toString();
+    const { data, append, overwrite } =
+      typeof cssConfig.additionalData === 'function'
+        ? await cssConfig.additionalData({
+            path: file.path,
+            contents: originalContents,
+          })
+        : cssConfig.additionalData;
+    file.contents = Buffer.from(
+      overwrite ? data : append ? `${originalContents}\n${data}` : `${data}\n${originalContents}`
+    );
+  } catch (error) {
+    print.error('[arco-scripts]', `Failed to append/prepend additional data to ${file.path}`);
+  }
+
+  cb(null, file);
+};
+
 // Copy the files that need to be monitored to the es/lib directory
 function copyFileWatched() {
   const patternArray = cssConfig.watch;
   const destDirs = [cssConfig.output.es, cssConfig.output.cjs].filter((path) => !!path);
 
   if (destDirs.length) {
+    // Path of style build entries
+    const rawStyleEntries: string[] = [];
+    cssConfig.entry.forEach((pattern) => {
+      glob.sync(pattern).forEach((relativePath) => {
+        rawStyleEntries.push(path.resolve(relativePath));
+      });
+    });
+
     return new Promise((resolve, reject) => {
       let stream: NodeJS.ReadWriteStream = mergeStream(
         patternArray.map((pattern) =>
           gulp.src(pattern, { allowEmpty: true, base: cssConfig.watchBase[pattern] })
         )
+      ).pipe(
+        gulpIf(({ path: filePath }) => {
+          return cssConfig.additionalData && rawStyleEntries.indexOf(filePath) > -1;
+        }, through.obj(handleAdditionalData))
       );
 
       destDirs.forEach((dir) => {
@@ -98,37 +130,7 @@ function compileLess() {
   if (destDirs.length) {
     let stream = gulp
       .src(cssConfig.entry, { allowEmpty: true })
-      .pipe(
-        gulpIf(
-          !!cssConfig.additionalData,
-          through.obj(async (file: { path: string; contents: Buffer }, _, cb) => {
-            try {
-              const originalContents = file.contents.toString();
-              const { data, append, overwrite } =
-                typeof cssConfig.additionalData === 'function'
-                  ? await cssConfig.additionalData({
-                      path: file.path,
-                      contents: originalContents,
-                    })
-                  : cssConfig.additionalData;
-              file.contents = Buffer.from(
-                overwrite
-                  ? data
-                  : append
-                  ? `${originalContents}\n${data}`
-                  : `${data}\n${originalContents}`
-              );
-            } catch (error) {
-              print.error(
-                '[arco-scripts]',
-                `Failed to append/prepend additional data to ${file.path}`
-              );
-            }
-
-            cb(null, file);
-          })
-        )
-      )
+      .pipe(gulpIf(!!cssConfig.additionalData, through.obj(handleAdditionalData)))
       .pipe(cssConfig.compiler(cssConfig.compilerOptions))
       .pipe(cleanCSS());
 

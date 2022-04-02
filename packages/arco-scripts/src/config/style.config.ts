@@ -55,7 +55,7 @@ export interface StyleConfig {
     /**
      * Glob pattern for files to be watched
      * @zh 需要监听变化的文件的 glob 匹配符
-     * @default ['{src,components}/**\/*.{png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2}']
+     * @default ['{src,components}/**\/*.{less,css,png,jpg,jpeg,gif,svg,ttf,eot,woff,woff2}']
      */
     watch: string[];
     /**
