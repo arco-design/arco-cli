@@ -1,3 +1,4 @@
+import axios from 'axios';
 import fs from 'fs-extra';
 import path from 'path';
 import glob from 'glob';
@@ -14,7 +15,7 @@ const VARIABLE_PREFIX = LIBRARY_MODULE_NAME;
 
 const FUNCTION_LABEL = '#FUNC#';
 
-const { build: buildConfig, site: siteConfig } = getMainConfig();
+const { build: buildConfig, site: siteConfig, group: groupInfo } = getMainConfig();
 const entryFileDir = path.resolve(ENTRY_DIR_NAME);
 
 function transformObjectToExpression(obj: Object | Array<any>): string {
@@ -82,15 +83,45 @@ function generateDocTree(options: {
   return result;
 }
 
+async function extendSiteConfigFromRemoteGroupSetting() {
+  // Try to get arcoDesignLabTheme from remote group settings
+  if (groupInfo?.id && !siteConfig.arcoDesignLabTheme) {
+    try {
+      const {
+        data: { result: hostInfo },
+      } = await axios.get('https://arco.design/material/api/getHostInfo');
+      const {
+        data: {
+          result: [{ theme, name: groupName }],
+        },
+      } = await axios.post(
+        `${hostInfo[groupInfo.private ? 'private' : 'public'].arco}/material/api/group/`,
+        {
+          id: groupInfo.id,
+        }
+      );
+      if (theme) {
+        print.info(
+          '[arco-doc-site]',
+          `Find theme setting for group 「${groupName}」, will use theme 「${theme}」.`
+        );
+        siteConfig.arcoDesignLabTheme = theme;
+      }
+    } catch (e) {}
+  }
+}
+
 export function getPathEntryByLanguage(language: string) {
   return path.resolve(entryFileDir, `index.js`.replace(/.js$/, `.${language}.js`));
 }
 
-export default function generateEntryFiles() {
+export default async function generateEntryFiles() {
   if (!buildConfig || !buildConfig.globs || !buildConfig.globs.component) {
     print.error('[arco-doc-site]', `Failed to get glob info of component, check your config file.`);
     process.exit(0);
   }
+
+  await extendSiteConfigFromRemoteGroupSetting();
 
   const getRequirePath = (absolutePath) => {
     return path.relative(entryFileDir, absolutePath).replace(/^[^.]/, (str) => `./${str}`);

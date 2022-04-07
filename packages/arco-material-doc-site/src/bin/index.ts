@@ -40,8 +40,8 @@ program
 program
   .command('build')
   .description('build site for production')
-  .action(() => {
-    generateEntryFiles();
+  .action(async () => {
+    await generateEntryFiles();
     webpack(webpackConfigProd, webpackCallback);
   });
 
@@ -52,7 +52,7 @@ program
   .action(async ({ language }: { language: string }) => {
     // Re-generate entry files
     // TODO watch file add/remove
-    generateEntryFiles();
+    await generateEntryFiles();
 
     if (!language) {
       const {

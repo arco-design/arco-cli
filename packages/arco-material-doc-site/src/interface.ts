@@ -59,11 +59,6 @@ export interface MainConfig {
          * @zh 在所有 Demo 渲染之前执行的回调函数
          */
         beforeAll?: string;
-        /**
-         * Callback function executed before each demo is rendered
-         * @zh 在每个 Demo 渲染之前执行的回调函数
-         */
-        beforeEach?: string;
       };
     };
     /**
@@ -111,8 +106,8 @@ export interface MainConfig {
      */
     arcoDesignLabTheme?: string;
     /**
-     * Whether switching themes is allowed
-     * @zh 是否允许切换主题
+     * Whether switching dark mode is allowed
+     * @zh 是否允许切换亮色/暗色主题
      */
     allowThemeToggle?: boolean;
     /**
@@ -149,6 +144,22 @@ export interface MainConfig {
        */
       sortRule?: Record<string, String[]>;
     };
+  };
+  /**
+   * Group info to get remote settings
+   * @zh 提供团队信息以获取远程团队设置
+   */
+  group?: {
+    /**
+     * Group ID
+     * @zh 团队 ID
+     */
+    id: number;
+    /**
+     * Whether is private version
+     * @zh 是否是内部版本
+     */
+    private?: boolean;
   };
 }
 
