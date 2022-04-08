@@ -101,7 +101,7 @@ async function extendSiteConfigFromRemoteGroupSetting() {
         }
       );
       if (theme) {
-        print.info(
+        print.success(
           '[arco-doc-site]',
           `Find theme setting for group 「${groupName}」, will use theme 「${theme}」.`
         );
