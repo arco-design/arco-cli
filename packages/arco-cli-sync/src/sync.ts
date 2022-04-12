@@ -94,7 +94,7 @@ export default async function ({
     }
 
     // Ensure that arcoMeta.json has been generated
-    const { name: packageName, peerDependencies } = packageInfo;
+    const { name: packageName, peerDependencies = {} } = packageInfo;
     const metaPath = getMetaPath({ metaFileName });
     if (!fs.existsSync(metaPath)) {
       print.info(packageName, locale.TIP_META_GENERATE_ING);

@@ -13,7 +13,7 @@ async function checkGitRemote() {
     if (code === 0 && stdout.match('(push)')) {
       print();
     } else {
-      print.error(['arco publish', locale.ERROR_NO_GIT_ORIGIN]);
+      print.error(['arco publish'], locale.ERROR_NO_GIT_ORIGIN);
       process.exit();
     }
   } else {

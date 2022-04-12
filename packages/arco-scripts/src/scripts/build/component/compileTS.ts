@@ -51,9 +51,17 @@ const getTSConfig = (
  */
 async function withBabel({ type, outDir, watch }: CompileOptions) {
   const tsconfig = getTSConfig();
-  // The base path of the matching directory patterns
-  const srcPath = tsconfig.include[0].split('*')[0].replace(/\/[^/]*$/, '');
   const targetPath = path.resolve(CWD, outDir);
+
+  // The base path of the matching directory patterns
+  let srcPath = '';
+  for (const pattern of tsconfig.include as string[]) {
+    // match 'src/**/*.ts` or 'src/**/*.{ts,tsx}' or 'src/**/*.t{s,sx}'
+    if (/\/\*{2}\/\*\.{?t{?s/.test(pattern)) {
+      srcPath = pattern.split('/**/')[0];
+      break;
+    }
+  }
 
   const transform = (file) => {
     // Avoid directly modifying the original presets array, it will cause errors when withBabel is called multiple times
@@ -125,7 +133,7 @@ async function withBabel({ type, outDir, watch }: CompileOptions) {
 
   return new Promise<void>((resolve) => {
     const patterns = [
-      path.resolve(srcPath, '**/*'),
+      ...tsconfig.include,
       `!${path.resolve(srcPath, '**/demo{,/**}')}`,
       `!${path.resolve(srcPath, '**/__test__{,/**}')}`,
       `!${path.resolve(srcPath, '**/*.md')}`,
