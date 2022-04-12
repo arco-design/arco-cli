@@ -23,7 +23,8 @@
     "jest": false,
     "$": false,
     "afterEach": false,
-    "beforeEach": false
+    "beforeEach": false,
+    "NodeJS": true
   },
   "rules": {
     "prettier/prettier": ["error", { "trailingComma": "es5", "printWidth": 100 }],

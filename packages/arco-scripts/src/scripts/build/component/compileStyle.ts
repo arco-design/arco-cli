@@ -15,7 +15,7 @@ import handleStyleJSEntry from './handleStyleJSEntry';
 import styleConfig from '../../../config/style.config';
 import { BUILD_ENV_MODE } from '../../../constant';
 
-const { css: cssConfig, asset: assetConfig } = styleConfig;
+const { css: cssConfig, asset: assetConfig, hook = {} } = styleConfig;
 
 // Output less compilation errors, and avoid the program from exiting due to errors
 const notifyLessCompileResult = (stream) => {
@@ -128,10 +128,13 @@ function compileLess() {
   const destDirs = [cssConfig.output.es, cssConfig.output.cjs].filter((path) => path);
 
   if (destDirs.length) {
+    const { beforeCompile, afterCompile } = hook;
     let stream = gulp
       .src(cssConfig.entry, { allowEmpty: true })
       .pipe(gulpIf(!!cssConfig.additionalData, through.obj(handleAdditionalData)))
+      .pipe(gulpIf(typeof beforeCompile === 'function', beforeCompile()))
       .pipe(cssConfig.compiler(cssConfig.compilerOptions))
+      .pipe(gulpIf(typeof afterCompile === 'function', afterCompile()))
       .pipe(cleanCSS());
 
     destDirs.forEach((dir) => {
@@ -149,12 +152,15 @@ function compileLess() {
 
 // Compile the packaged less into css
 function distCss(isDev: boolean) {
+  const { beforeCompile, afterCompile } = hook;
   const { path: distPath, rawFileName, cssFileName } = cssConfig.output.dist;
   const needCleanCss = !isDev && (!BUILD_ENV_MODE || BUILD_ENV_MODE === 'production');
 
   const stream = gulp
     .src(`${distPath}/${rawFileName}`, { allowEmpty: true })
-    .pipe(cssConfig.compiler(cssConfig.compilerOptions));
+    .pipe(gulpIf(typeof beforeCompile === 'function', beforeCompile()))
+    .pipe(cssConfig.compiler(cssConfig.compilerOptions))
+    .pipe(gulpIf(typeof afterCompile === 'function', afterCompile()));
 
   // Errors should be thrown, otherwise it will cause the program to exit
   if (isDev) {

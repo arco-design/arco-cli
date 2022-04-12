@@ -183,6 +183,22 @@ export interface StyleConfig {
      */
     cssEntryFileName: string;
   };
+  /**
+   * Hook executed during style compilation
+   * @zh 在样式构建过程中执行的钩子
+   */
+  hook?: {
+    /**
+     * Hook before raw style file compiled, can receive gulp-plugin directly
+     * @zh 原始样式文件编译前的钩子，可直接传入 gulp plugin
+     */
+    beforeCompile?: (...args: any[]) => NodeJS.ReadWriteStream;
+    /**
+     * Hook after raw style file compiled, can receive gulp-plugin directly
+     * @zh 原始样式文件编译后的钩子，可直接传入 gulp plugin
+     */
+    afterCompile?: (...args: any[]) => NodeJS.ReadWriteStream;
+  };
 }
 
 let config: StyleConfig = {
@@ -224,6 +240,7 @@ let config: StyleConfig = {
     rawEntryFileName: '',
     cssEntryFileName: '',
   },
+  hook: {},
 };
 
 // Compatible 'config.less' field changed to 'config.css'
@@ -234,7 +251,7 @@ if (processor) {
   config = processor(config) || config;
 }
 
-// 通过 Node Env 传递而来的参数具有最高优先级
+// Options passed through Node Env have the highest priority
 if (BUILD_ENV_DIST_FILENAME_CSS) {
   config.css.output.dist.cssFileName = BUILD_ENV_DIST_FILENAME_CSS;
 }

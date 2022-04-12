@@ -17195,10 +17195,10 @@ trough@^1.0.0:
   resolved "https://registry.yarnpkg.com/trough/-/trough-1.0.5.tgz#b8b639cefad7d0bb2abd37d433ff8293efa5f406"
   integrity sha512-rvuRbTarPXmMb79SmzEp8aqXNKcK+y0XaB298IXueQ8I2PsrATcPBCSPyK/dDNa2iWOhKlfNnOjdAOTBU/nkFA==
 
-ts-document@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/ts-document/-/ts-document-0.3.0.tgz#2a34480ef755ef92fa40435ea0641f315f99aa31"
-  integrity sha512-Jysh9JCODspM1pmu8I5nMEXm20SczPrCFqHUeaILADdye6gy5LLmtedgPHeBVziy8XXSboFfWOuYktBKQNm1Og==
+ts-document@~0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/ts-document/-/ts-document-0.4.0.tgz#bac7386605db34ceaf81a202f49982b408c66a21"
+  integrity sha512-Ceg4I3w3VVEdr7oVMLuOhdtU6YfrfivJ6vREXpVU+7VGW6u/TLjufTZ6OYiLzgpp0ZQZcsJ4TL4LcgnN5OgTew==
   dependencies:
     ts-morph "^11.0.0"
 
