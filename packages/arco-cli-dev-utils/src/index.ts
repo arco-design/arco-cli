@@ -43,3 +43,5 @@ export {
   webpackExternalForArco,
   CONSTANT,
 };
+
+export * from './interface';

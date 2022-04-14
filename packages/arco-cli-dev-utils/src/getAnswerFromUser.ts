@@ -6,7 +6,7 @@ import {
   Filter,
   Answer,
   FilterPropertyRule,
-  Question,
+  CliQuestion,
   Message,
   getBaseConfig,
 } from './baseConfig';
@@ -60,7 +60,7 @@ function isValid(filter: Filter, filterParams: Record<keyof Filter, Answer>): bo
  * Ask user a question by inquirer
  */
 async function askQuestion(
-  { type, message, validate, choices, default: _default }: Question,
+  { type, message, validate, choices, default: _default }: CliQuestion,
   currentInfo: Record<string, Answer>
 ): Promise<Answer> {
   type ParamsForInquirer = {
@@ -132,7 +132,7 @@ function walkQuestionNodes({
 }: {
   questions: QNode[];
   callback: (params: {
-    question: Question;
+    question: CliQuestion;
     key: string;
     filter: Filter;
     record: Record<string, Answer>;

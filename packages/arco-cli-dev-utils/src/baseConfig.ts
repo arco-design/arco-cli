@@ -18,7 +18,7 @@ export type Filter = {
 
 export type Message = string | Record<Locale, string>;
 
-export type Question = {
+export type CliQuestion = {
   type: 'list' | 'input' | 'checkbox';
   message: Message;
   default?: Answer;
@@ -36,10 +36,12 @@ export type Question = {
 export type QNode = {
   _key: string;
   _filter?: Filter;
-  _question: Question | QNode[];
+  _question: CliQuestion | QNode[];
 };
 
-const DEFAULT_CONFIG: { question: Record<string, QNode[]>; global: Record<string, any> } = {
+export type CliBaseConfig = { question: Record<string, QNode[]>; global: Record<string, any> };
+
+const DEFAULT_CONFIG: CliBaseConfig = {
   question: {
     init: [
       {
