@@ -1,6 +1,6 @@
 {
   "name": "arco-cli-auth",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Auth module of Arco CLI",
   "main": "lib/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "arco-cli-dev-utils": "^1.0.0",
+    "arco-cli-dev-utils": "^1.1.1",
     "axios": "~0",
     "connect": "^3.7.0",
     "fs-extra": "^9.0.1",

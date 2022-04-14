@@ -1,6 +1,6 @@
 {
   "name": "arco-cli-sync",
-  "version": "1.12.2",
+  "version": "1.12.3",
   "description": "Module of Arco CLI to sync material meta",
   "main": "lib/sync.js",
   "scripts": {
@@ -10,10 +10,10 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "arco-cli-auth": "^1.0.0",
-    "arco-cli-config": "^1.0.0",
-    "arco-cli-generate": "^1.0.0",
-    "arco-cli-dev-utils": "^1.0.0",
+    "arco-cli-auth": "^1.0.1",
+    "arco-cli-config": "^1.0.1",
+    "arco-cli-dev-utils": "^1.1.1",
+    "arco-cli-generate": "^1.0.1",
     "fs-extra": "^9.0.1",
     "nanoid": "^3.1.10",
     "resolve-global": "^1.0.0"

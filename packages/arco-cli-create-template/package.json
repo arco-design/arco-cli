@@ -1,6 +1,6 @@
 {
   "name": "arco-cli-create-template",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Module of Arco CLI to generate material template from a exist project",
   "main": "lib/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "lib"
   ],
   "dependencies": {
-    "arco-cli-dev-utils": "^1.0.0",
+    "arco-cli-dev-utils": "^1.1.1",
     "inquirer": "^7.3.3"
   },
   "license": "MIT"
