@@ -146,6 +146,7 @@ function loaderForArcoComponentDoc(
         _path.insertAfter([nextSpan]);
 
         const ButtonJSX = `<ChangelogBtn
+            aria-label="Changelog"
             size="large"
             className="changelog-btn"
             onClick={() => setShowChangelog(true)}

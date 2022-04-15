@@ -9,15 +9,16 @@
   dependencies:
     color "^3.1.3"
 
-"@arco-design/web-react@^2.7.0":
-  version "2.23.4"
-  resolved "https://registry.yarnpkg.com/@arco-design/web-react/-/web-react-2.23.4.tgz#019497758d3f15f6cd9b3aff7ecbbdfceec3d913"
-  integrity sha512-Z8mau5vBvW2B8rSTdM8k0hbVHSE+r58JJGPxO6p2LQmWORWMsA15c+eMIu4IThTfDeOuNGwI+1N7Zua/dh7+wg==
+"@arco-design/web-react@^2.31.3":
+  version "2.31.3"
+  resolved "https://registry.npmjs.org/@arco-design/web-react/-/web-react-2.31.3.tgz#9d7efc7efcd67edd85a118ca5751a5f218af0e26"
+  integrity sha512-QhMWszFprfwDqcCzXsKxC+oC6eDGFCTp4UnkPmxI1z0SP2GmgiaH684EjscgCWTToOqScnslWgT0aPBPiIspwA==
   dependencies:
     "@arco-design/color" "^0.4.0"
     "@babel/runtime" "^7.5.5"
     b-tween "^0.3.3"
-    b-validate "^1.2.5"
+    b-validate "^1.3.4"
+    compute-scroll-into-view "^1.0.17"
     dayjs "^1.10.5"
     lodash "^4.17.21"
     number-precision "^1.3.1"
@@ -2320,10 +2321,10 @@ b-tween@^0.3.3:
   resolved "https://registry.yarnpkg.com/b-tween/-/b-tween-0.3.3.tgz#7a93ed199c98cd41a33ba4c711a0fa7e86db3fa2"
   integrity sha512-oEHegcRpA7fAuc9KC4nktucuZn2aS8htymCPcP3qkEGPqiBH+GfqtqoG2l7LxHngg6O0HFM7hOeOYExl1Oz4ZA==
 
-b-validate@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/b-validate/-/b-validate-1.2.5.tgz#9f521958df4a9607fc117b88a08fcebb53177850"
-  integrity sha512-1O7CPZcLbU+gP84qpmJ+mtHfaJf7p9um8uQnZU4UJXZF60tW50z+FUx8VdFZmZXGhJvjT0v7dMyW4HD9/hX4WA==
+b-validate@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.npmjs.org/b-validate/-/b-validate-1.3.4.tgz#b51791be9176743463261c65bb89b4af84061f32"
+  integrity sha512-7Bj+KFUcxk6c+qc3HiCR20qMOlHJmb7NSrVAS1amryVUT+7GTNqCp2Qk4XZP8XD3MBfZSqon/XlxNhHnxyB8ng==
   dependencies:
     lodash.isequal "^4.5.0"
 
@@ -3478,6 +3479,11 @@ compute-scroll-into-view@1.0.11:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/compute-scroll-into-view/-/compute-scroll-into-view-1.0.11.tgz#7ff0a57f9aeda6314132d8994cce7aeca794fecf"
   integrity sha512-uUnglJowSe0IPmWOdDtrlHXof5CTIJitfJEyITHBW6zDVOGu9Pjk5puaLM73SLcwak0L4hEjO7Td88/a6P5i7A==
+
+compute-scroll-into-view@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.npmjs.org/compute-scroll-into-view/-/compute-scroll-into-view-1.0.17.tgz#6a88f18acd9d42e9cf4baa6bec7e0522607ab7ab"
+  integrity sha512-j4dx+Fb0URmzbwwMUrhqWM2BEWHdFGx+qZ9qqASHRPqvTYdqvWnHg0H1hIbcyLnvgnoNAVMlwkepyqM3DaIFUg==
 
 concat-map@0.0.1:
   version "0.0.1"

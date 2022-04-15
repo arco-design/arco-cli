@@ -20,7 +20,7 @@
     "codesandbox": "^2.2.3"
   },
   "devDependencies": {
-    "@arco-design/web-react": "^2.7.0",
+    "@arco-design/web-react": "^2.31.3",
     "@types/react": "^16.7.20",
     "@types/react-dom": "^16.0.11",
     "arco-scripts": "^1.25.0",

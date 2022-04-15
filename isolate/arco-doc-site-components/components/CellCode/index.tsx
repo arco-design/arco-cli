@@ -210,25 +210,44 @@ import ReactDOM from 'react-dom';`;
             shape="circle"
             onClick={this.toggleCode}
             type="secondary"
+            aria-label={t.collapse}
             className={showAll ? 'ac-btn-expanded' : ''}
           >
             <IconCode />
           </Button>
         </Tooltip>
         <Tooltip content={t.copy}>
-          <Button size="small" shape="circle" ref={(ref) => (this.btnCopy = ref)} type="secondary">
+          <Button
+            size="small"
+            shape="circle"
+            ref={(ref) => (this.btnCopy = ref)}
+            type="secondary"
+            aria-label={t.copy}
+          >
             <IconCopy />
           </Button>
         </Tooltip>
         {CODEPEN_ENABLE ? (
           <Tooltip content={t.codePen}>
-            <Button size="small" shape="circle" onClick={this.gotoCodepen} type="secondary">
+            <Button
+              size="small"
+              shape="circle"
+              onClick={this.gotoCodepen}
+              type="secondary"
+              aria-label={t.codePen}
+            >
               <IconCodepen />
             </Button>
           </Tooltip>
         ) : null}
         <Tooltip content={t.codeSandbox}>
-          <Button size="small" shape="circle" onClick={this.gotoCodeSandBox} type="secondary">
+          <Button
+            size="small"
+            shape="circle"
+            onClick={this.gotoCodeSandBox}
+            type="secondary"
+            aria-label={t.codeSandbox}
+          >
             <IconCodeSandbox />
           </Button>
         </Tooltip>
