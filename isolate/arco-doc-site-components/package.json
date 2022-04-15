@@ -1,6 +1,6 @@
 {
   "name": "arco-doc-site-components",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Components for Arco doc site only",
   "module": "es/index.js",
   "types": "./es/index.d.ts",
