@@ -66,7 +66,13 @@ export default function CellDescription(props) {
       <div className="ac-description-children">{props.children}</div>
       {isFirst && (
         <Tooltip position="left" content={expand ? t.collapse : t.expand}>
-          <div className="ac-description-expand-icon" onClick={onHandleExpand}>
+          <div
+            className="ac-description-expand-icon"
+            onClick={onHandleExpand}
+            role="button"
+            tabIndex={0}
+            aria-label={expand ? t.collapse : t.expand}
+          >
             {expand ? <IconCodeFill /> : <IconCode />}
           </div>
         </Tooltip>
