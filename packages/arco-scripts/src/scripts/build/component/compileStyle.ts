@@ -131,11 +131,12 @@ function compileLess() {
     const { beforeCompile, afterCompile } = hook;
     let stream = gulp
       .src(cssConfig.entry, { allowEmpty: true })
-      .pipe(gulpIf(!!cssConfig.additionalData, through.obj(handleAdditionalData)))
-      .pipe(gulpIf(typeof beforeCompile === 'function', beforeCompile()))
-      .pipe(cssConfig.compiler(cssConfig.compilerOptions))
-      .pipe(gulpIf(typeof afterCompile === 'function', afterCompile()))
-      .pipe(cleanCSS());
+      .pipe(gulpIf(!!cssConfig.additionalData, through.obj(handleAdditionalData)));
+
+    if (typeof beforeCompile === 'function') stream = stream.pipe(beforeCompile());
+    stream = stream.pipe(cssConfig.compiler(cssConfig.compilerOptions));
+    if (typeof afterCompile === 'function') stream = stream.pipe(afterCompile());
+    stream = stream.pipe(cleanCSS());
 
     destDirs.forEach((dir) => {
       stream = stream.pipe(gulp.dest(dir));
@@ -156,11 +157,11 @@ function distCss(isDev: boolean) {
   const { path: distPath, rawFileName, cssFileName } = cssConfig.output.dist;
   const needCleanCss = !isDev && (!BUILD_ENV_MODE || BUILD_ENV_MODE === 'production');
 
-  const stream = gulp
-    .src(`${distPath}/${rawFileName}`, { allowEmpty: true })
-    .pipe(gulpIf(typeof beforeCompile === 'function', beforeCompile()))
-    .pipe(cssConfig.compiler(cssConfig.compilerOptions))
-    .pipe(gulpIf(typeof afterCompile === 'function', afterCompile()));
+  let stream = gulp.src(`${distPath}/${rawFileName}`, { allowEmpty: true });
+
+  if (typeof beforeCompile === 'function') stream = stream.pipe(beforeCompile());
+  stream = stream.pipe(cssConfig.compiler(cssConfig.compilerOptions));
+  if (typeof afterCompile === 'function') stream = stream.pipe(afterCompile());
 
   // Errors should be thrown, otherwise it will cause the program to exit
   if (isDev) {
