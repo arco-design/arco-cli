@@ -20,7 +20,7 @@
     "arco-cli-auth": "^1.0.1",
     "arco-cli-block": "^1.0.1",
     "arco-cli-create-template": "^1.0.1",
-    "arco-cli-dev-utils": "^1.1.1",
+    "arco-cli-dev-utils": "^1.2.0",
     "arco-cli-generate": "^1.0.1",
     "arco-cli-init": "^1.2.1",
     "arco-cli-publish": "^1.0.1",

@@ -1,8 +1,9 @@
 import axios from 'axios';
+import getGlobalInfo from './getGlobalInfo';
 
 export type Locale = 'zh-CN' | 'en-US';
 
-export type Answer = string | number | boolean;
+export type Answer = string | number | boolean | string[];
 
 export type FilterPropertyRule = {
   type: 'include' | 'exclude';
@@ -26,11 +27,14 @@ export type CliQuestion = {
     label: Message;
     value: Answer;
     _filter?: Filter;
+    _labelAsValue?: boolean;
   }>;
   validate?: {
     rule: 'required';
     message: Message;
   };
+  // Only used for list/checkbox, user can input value by self
+  allowCreate?: boolean;
 };
 
 export type QNode = {
@@ -112,6 +116,19 @@ const DEFAULT_CONFIG: CliBaseConfig = {
                 'en-US': 'Library',
               },
               value: 'library',
+            },
+            {
+              _filter: {
+                framework: {
+                  type: 'include',
+                  value: ['react'],
+                },
+              },
+              label: {
+                'zh-CN': '工具库',
+                'en-US': 'Utils',
+              },
+              value: 'utils',
             },
             {
               _filter: {
@@ -276,6 +293,7 @@ const DEFAULT_CONFIG: CliBaseConfig = {
           {
             _key: 'category',
             _question: {
+              allowCreate: true,
               type: 'checkbox',
               message: {
                 'zh-CN': '请选择物料的关键词（可多选）',
@@ -283,52 +301,7 @@ const DEFAULT_CONFIG: CliBaseConfig = {
               },
               choices: [
                 {
-                  _filter: {
-                    type: {
-                      type: 'include',
-                      value: ['block', 'page'],
-                    },
-                  },
-                  label: {
-                    'zh-CN': '基础模板',
-                    'en-US': 'Base Template',
-                  },
-                  value: '基础模板',
-                },
-                {
-                  _filter: {
-                    type: {
-                      type: 'include',
-                      value: ['block', 'page'],
-                    },
-                  },
-                  label: {
-                    'zh-CN': '官网模板',
-                    'en-US': 'Site Template',
-                  },
-                  value: '官网模板',
-                },
-                {
-                  _filter: {
-                    type: {
-                      type: 'include',
-                      value: ['block', 'page'],
-                    },
-                  },
-                  label: {
-                    'zh-CN': '注册登陆',
-                    'en-US': 'Register & Login',
-                  },
-                  value: '注册登陆',
-                },
-                {
-                  label: {
-                    'zh-CN': '可视化',
-                    'en-US': 'Data visualization',
-                  },
-                  value: '可视化',
-                },
-                {
+                  _labelAsValue: true,
                   label: {
                     'zh-CN': '数据展示',
                     'en-US': 'Data Display',
@@ -336,6 +309,7 @@ const DEFAULT_CONFIG: CliBaseConfig = {
                   value: '数据展示',
                 },
                 {
+                  _labelAsValue: true,
                   label: {
                     'zh-CN': '信息展示',
                     'en-US': 'Info Display',
@@ -343,6 +317,7 @@ const DEFAULT_CONFIG: CliBaseConfig = {
                   value: '信息展示',
                 },
                 {
+                  _labelAsValue: true,
                   label: {
                     'zh-CN': '表格',
                     'en-US': 'Table',
@@ -350,6 +325,7 @@ const DEFAULT_CONFIG: CliBaseConfig = {
                   value: '表格',
                 },
                 {
+                  _labelAsValue: true,
                   label: {
                     'zh-CN': '表单',
                     'en-US': 'Form',
@@ -357,6 +333,7 @@ const DEFAULT_CONFIG: CliBaseConfig = {
                   value: '表单',
                 },
                 {
+                  _labelAsValue: true,
                   label: {
                     'zh-CN': '筛选',
                     'en-US': 'Filter',
@@ -364,6 +341,7 @@ const DEFAULT_CONFIG: CliBaseConfig = {
                   value: '筛选',
                 },
                 {
+                  _labelAsValue: true,
                   label: {
                     'zh-CN': '弹出框',
                     'en-US': 'Modal',
@@ -371,18 +349,12 @@ const DEFAULT_CONFIG: CliBaseConfig = {
                   value: '弹出框',
                 },
                 {
+                  _labelAsValue: true,
                   label: {
                     'zh-CN': '编辑器',
                     'en-US': 'Editor',
                   },
                   value: '编辑器',
-                },
-                {
-                  label: {
-                    'zh-CN': '其他',
-                    'en-US': 'Others',
-                  },
-                  value: '其他',
                 },
               ],
             },
@@ -396,10 +368,11 @@ const DEFAULT_CONFIG: CliBaseConfig = {
 
 export async function getBaseConfig() {
   if (process.env.BASE_CONFIG !== 'local') {
+    const { group, host } = getGlobalInfo();
     try {
       const {
         data: { result: config },
-      } = await axios.get('https://arco.design/material/api/cliConfig');
+      } = await axios.get(`${host.arco}/material/api/cliConfig${group ? `?group=${group}` : ''}`);
       return config;
     } catch (e) {}
   }

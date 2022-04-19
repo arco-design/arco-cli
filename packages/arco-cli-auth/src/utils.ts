@@ -26,9 +26,7 @@ export const checkLogin = async (autoLogin = true) => {
   const _isLogin = await isLogin();
   if (!_isLogin) {
     if (autoLogin) {
-      await login({
-        exitAfterLogin: false,
-      });
+      await login();
     } else {
       print.error(locale.TIP_LOGIN_FIRST);
       print.info('$ arco login');

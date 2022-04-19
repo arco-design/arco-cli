@@ -10,7 +10,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "arco-cli-dev-utils": "^1.1.1",
+    "arco-cli-dev-utils": "^1.2.0",
     "axios": "~0",
     "connect": "^3.7.0",
     "fs-extra": "^9.0.1",

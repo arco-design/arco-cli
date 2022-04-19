@@ -1,5 +1,7 @@
 import semver from 'semver';
 import inquirer from 'inquirer';
+
+import locale from './locale';
 import getLocale from './getLocale';
 import {
   QNode,
@@ -60,7 +62,7 @@ function isValid(filter: Filter, filterParams: Record<keyof Filter, Answer>): bo
  * Ask user a question by inquirer
  */
 async function askQuestion(
-  { type, message, validate, choices, default: _default }: CliQuestion,
+  { type, message, validate, choices, default: _default, allowCreate }: CliQuestion,
   currentInfo: Record<string, Answer>
 ): Promise<Answer> {
   type ParamsForInquirer = {
@@ -70,16 +72,21 @@ async function askQuestion(
     message: string;
     validate?: (input: string) => boolean | string;
     choices?: Array<{ name: string; value: Answer }>;
+    loop?: boolean;
+    pageSize?: number;
   };
 
   // Get message string by locale
   const transformMessage = (msg: Message): string => (typeof msg === 'object' ? msg[LOCALE] : msg);
 
+  const choiceValueOfCustomInput = '__custom_input';
   const paramsForInquirer: ParamsForInquirer = {
     name: 'result',
     type,
     default: _default,
     message: transformMessage(message),
+    loop: false,
+    pageSize: 10,
   };
 
   if (type === 'input') {
@@ -99,27 +106,55 @@ async function askQuestion(
 
     // Filter valid choices
     if (Array.isArray(choices)) {
-      for (const { _filter, label, value } of choices) {
+      for (const { _filter, _labelAsValue, label, value } of choices) {
         if (isValid(_filter, currentInfo)) {
+          const name = transformMessage(label);
           _choices.push({
-            value,
-            name: transformMessage(label),
+            name,
+            value: _labelAsValue ? name : value,
           });
         }
       }
     }
 
+    if (allowCreate) {
+      _choices.push({
+        name: locale.LABEL_CHOICE_CUSTOM_INPUT,
+        value: choiceValueOfCustomInput,
+      });
+    }
+
     // Ask the user only if there is more than one choice
-    if (_choices.length > 1) {
-      paramsForInquirer.choices = _choices;
-    } else if (_choices.length === 1) {
-      return _choices[0].value;
-    } else {
+    if (_choices.length === 0) {
       return null;
     }
+    if (_choices.length === 1 && _choices[0].value !== choiceValueOfCustomInput) {
+      return _choices[0].value;
+    }
+
+    paramsForInquirer.choices = _choices;
   }
 
   const { result } = await inquirer.prompt(paramsForInquirer);
+
+  if (
+    (type === 'list' && result === choiceValueOfCustomInput) ||
+    (type === 'checkbox' && result.indexOf(choiceValueOfCustomInput) > -1)
+  ) {
+    const { input } = await inquirer.prompt({
+      type: 'input',
+      name: 'input',
+      message: locale.TIP_CUSTOM_INPUT,
+    });
+    const customInputValue = input
+      .split(/[,，]/)
+      .map((item) => item.trim())
+      .filter((item) => item);
+
+    return type === 'checkbox'
+      ? result.filter((item) => item !== choiceValueOfCustomInput).concat(customInputValue)
+      : customInputValue[0];
+  }
 
   return result;
 }

@@ -37,7 +37,13 @@ export async function switchEnv() {
 
   if (hostInfo[env]) {
     // Switch env and clear user info
-    writeGlobalInfo({ host: hostInfo[env], env, 'x-arco-token': null, userInfo: null });
+    writeGlobalInfo({
+      env,
+      host: hostInfo[env],
+      'x-arco-token': null,
+      userInfo: null,
+      group: null,
+    });
     print.success(
       env === 'private' ? locale.TIP_SWITCH_SUCCESS_TO_PRIVATE : locale.TIP_SWITCH_SUCCESS_TO_PUBLIC
     );

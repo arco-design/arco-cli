@@ -12,7 +12,7 @@
   "dependencies": {
     "arco-cli-auth": "^1.0.1",
     "arco-cli-config": "^1.0.1",
-    "arco-cli-dev-utils": "^1.1.1",
+    "arco-cli-dev-utils": "^1.2.0",
     "fs-extra": "^9.0.1"
   },
   "files": [

@@ -51,10 +51,12 @@ export default async ({
   silent,
 }: GenerateOptions = {}) => {
   await checkLogin();
+  const { userInfo, group: globalLinkedGroupId } = getGlobalInfo();
   const arcoCliConfig = getConfig(configFileName);
 
   const meta = {
     ...BASE_META,
+    ...(globalLinkedGroupId ? { group: globalLinkedGroupId } : {}),
     ...arcoCliConfig.initialMeta,
     ...initialMeta,
   };
@@ -79,12 +81,7 @@ export default async ({
       return false;
     }
 
-    // Check 'arcoMeta' in package.json
     const packageName = packageJson.name;
-    if (!packageJson[metaFileName]) {
-      messageQueue.push('error', [packageName, locale.ERROR_NO_ARCO_META_IN_PACKAGE_JSON]);
-      return false;
-    }
 
     // Check if the meta file already exists
     if (isMetaExist()) {
@@ -92,7 +89,12 @@ export default async ({
       return true;
     }
 
-    const { userInfo } = getGlobalInfo();
+    // Check 'arcoMeta' in package.json
+    if (!packageJson[metaFileName]) {
+      messageQueue.push('error', [packageName, locale.ERROR_NO_ARCO_META_IN_PACKAGE_JSON]);
+      return false;
+    }
+
     const metaPath = getMetaPath({ metaFileName });
     const metaInPackageJson = packageJson[metaFileName];
     fs.writeJsonSync(

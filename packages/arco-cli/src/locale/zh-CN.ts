@@ -31,6 +31,7 @@ export default {
   TIP_GROUP_QUERY_WITH_ID: '查询指定分组下的人员列表',
   TIP_GROUP_ADD_MEMBER: '添加团队成员（需团队管理员权限）',
   TIP_GROUP_REMOVE_MEMBER: '移除团队成员（需团队管理员权限）',
+  TIP_GROUP_LINK: '关联至指定团队',
   TIP_TEMPLATE_CREATE: '基于已有项目创建物料模板',
   TIP_SHOW_HELP: '如需查看某个子命令，可以使用子命令帮助，如：arco sync -h',
 
@@ -50,6 +51,14 @@ export default {
   TIP_REMOVE_GROUP_MEMBER_SUCCESS: '移除成员成功：',
   TIP_REMOVE_GROUP_MEMBER_FAIL: '移除成员失败：',
   TIP_NO_ENV_SET: '当前环境未选择，请运行 arco env -s 设置环境',
+  TIP_NO_GROUP_JOINED: '暂无已加入的团队，无法进行团队关联设置',
+  TIP_NOT_MEMBER_OF_GROUP: '你不是此团队的成员，请联系团队管理员添加你为团队成员之后再次操作',
+  TIP_LINK_THE_ONLY_GROUP_JOINED: '是否关联团队 「$groupName」？',
+  TIP_LINK_GROUP_SUCCESS:
+    '已成功关联团队「$groupName」，之后你可以通过 [arco group --link 0] 取消关联',
+  TIP_UNLINK_GROUP_SUCCESS: '已成功取消团队关联',
+  TIP_LINK_GROUP_AFTER_LOGIN:
+    '是否关联已加入的团队 「$groupName」？\n（关联后你所发布的物料将优先发布至该团队，也可以暂时跳过此步骤，之后使用 [arco group --link yourGroupId] 手动关联）',
 
   LABEL_GROUP_OWNER: '管理员',
   LABEL_GROUP_MASTER: '协作者',
@@ -62,4 +71,5 @@ export default {
   PREFIX_LATEST_VERSION: '最新版本：',
   PREFIX_CURRENT_ENV: '当前环境：',
   PREFIX_CURRENT_LOCALE: '当前语言偏好：',
+  PREFIX_LINK_GROUPS_JOINED: '关联一个已加入的团队：',
 };

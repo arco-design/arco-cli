@@ -14,7 +14,14 @@ import locale from './locale';
 import preview from './preview';
 import subCommands from './subCommands';
 import { printLogo, fetchLatestVersion } from './utils';
-import { listAllGroups, queryGroup, addGroupMember, deleteGroupMember } from './group';
+import {
+  listAllGroups,
+  queryGroup,
+  addGroupMember,
+  deleteGroupMember,
+  linkGroup,
+  tryAutoLinkGroup,
+} from './group';
 import { checkEnv, switchEnv, printEnv } from './env';
 import { switchLocale, printLocale } from './locales';
 import teaLog from './teaLog';
@@ -142,7 +149,13 @@ function registerCommand() {
       preview({ port, path, teamSite });
     });
 
-  program.command('login').description(locale.CMD_DES_LOGIN).action(login);
+  program
+    .command('login')
+    .description(locale.CMD_DES_LOGIN)
+    .action(async () => {
+      await login();
+      await tryAutoLinkGroup();
+    });
 
   program.command('logout').description(locale.CMD_DES_LOGOUT).action(logout);
 
@@ -154,14 +167,17 @@ function registerCommand() {
     .option('--id <groupId>', locale.TIP_GROUP_QUERY_WITH_ID)
     .option('--add <groupId>', locale.TIP_GROUP_ADD_MEMBER)
     .option('--delete <groupId>', locale.TIP_GROUP_REMOVE_MEMBER)
-    .action(async ({ id, add, delete: del }) => {
+    .option('--link [groupId]', locale.TIP_GROUP_LINK)
+    .action(async ({ id: idQuery, add: idAdd, delete: idDelete, link: idLink }) => {
       await checkLogin();
-      if (id) {
-        await queryGroup(id);
-      } else if (add) {
-        await addGroupMember(add);
-      } else if (del) {
-        await deleteGroupMember(del);
+      if (idQuery) {
+        await queryGroup(idQuery);
+      } else if (idAdd) {
+        await addGroupMember(idAdd);
+      } else if (idDelete) {
+        await deleteGroupMember(idDelete);
+      } else if (idLink) {
+        await linkGroup(typeof idLink === 'string' ? +idLink : null);
       } else {
         await listAllGroups();
       }

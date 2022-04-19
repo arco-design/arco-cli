@@ -20,14 +20,9 @@ const loginSuccessPage = fs.readFileSync(path.resolve(__dirname, '../template/su
 interface LoginOptions {
   /** HTML of login success page */
   successHTMLString?: string;
-  /** Whether to exit the progress after logging in */
-  exitAfterLogin?: boolean;
 }
 
-export default async ({
-  successHTMLString = loginSuccessPage.toString(),
-  exitAfterLogin = true,
-}: LoginOptions = {}) => {
+export default async ({ successHTMLString = loginSuccessPage.toString() }: LoginOptions = {}) => {
   if (isWaiting) {
     isWaiting = true;
     return;
@@ -83,8 +78,4 @@ export default async ({
   }
 
   isWaiting = false;
-
-  if (exitAfterLogin) {
-    process.exit();
-  }
 };

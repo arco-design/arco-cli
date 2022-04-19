@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import { PATH_CLI_GLOBAL_INFO } from './constant';
 
 export interface CliGlobalInfo {
+  // Information related account
   'x-arco-token'?: string;
   userInfo?: {
     accountType: 'github' | 'sso';
@@ -10,6 +11,8 @@ export interface CliGlobalInfo {
     email: string;
     avatarUrl: string;
   };
+  group?: number;
+  // Information not related to the account
   host?: {
     npm: string;
     unpkg: string;

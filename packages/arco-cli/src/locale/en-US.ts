@@ -34,6 +34,7 @@ export default {
   TIP_GROUP_QUERY_WITH_ID: 'Query the list of members in the specified group',
   TIP_GROUP_ADD_MEMBER: 'Add group members (group owner permissions needed)',
   TIP_GROUP_REMOVE_MEMBER: 'Remove group members (group owner permissions needed)',
+  TIP_GROUP_LINK: 'Link to a specific group',
   TIP_TEMPLATE_CREATE: 'Create a material template based on an existing project',
   TIP_SHOW_HELP:
     'If you need to view a subcommand, you can use -h with it, such as: [arco sync -h]',
@@ -54,6 +55,15 @@ export default {
   TIP_REMOVE_GROUP_MEMBER_SUCCESS: 'Remove group member successfully: ',
   TIP_REMOVE_GROUP_MEMBER_FAIL: 'Failed to remove this user from group members: ',
   TIP_NO_ENV_SET: 'CLI environment is not selected, please run [arco env -s] to set it',
+  TIP_NO_GROUP_JOINED: 'There is no group you have joined.',
+  TIP_NOT_MEMBER_OF_GROUP:
+    'You are not a member of this group, please contact the group owner to add you as a member and then operate again',
+  TIP_LINK_THE_ONLY_GROUP_JOINED: 'Whether to link to group 「$groupName」?',
+  TIP_LINK_GROUP_SUCCESS:
+    'Successfully linked to 「$groupName」, you can unlink it via [arco group --link 0]',
+  TIP_UNLINK_GROUP_SUCCESS: 'Successfully unlinked',
+  TIP_LINK_GROUP_AFTER_LOGIN:
+    'Link to the joined group 「$groupName」?\n(The materials will be released to the linked group first, you can also skip this step temporarily and use [arco group --link yourGroupId] to manually link)',
 
   LABEL_GROUP_OWNER: 'Owner',
   LABEL_GROUP_MASTER: 'Master',
@@ -66,4 +76,5 @@ export default {
   PREFIX_LATEST_VERSION: 'Latest version: ',
   PREFIX_CURRENT_ENV: 'Current environment: ',
   PREFIX_CURRENT_LOCALE: 'Current language preference: ',
+  PREFIX_LINK_GROUPS_JOINED: 'Link to a joined group:',
 };
