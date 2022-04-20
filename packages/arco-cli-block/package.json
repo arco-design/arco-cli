@@ -1,6 +1,6 @@
 {
   "name": "arco-cli-block",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Block module of Arco CLI",
   "main": "lib/bin.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "@babel/generator": "^7.15.4",
     "@babel/parser": "^7.12.11",
     "@babel/types": "^7.12.12",
-    "arco-cli-config": "^1.0.1",
+    "arco-cli-config": "^1.0.2",
     "arco-cli-dev-utils": "^1.1.1",
     "axios": "~0",
     "camelcase": "^6.2.0",

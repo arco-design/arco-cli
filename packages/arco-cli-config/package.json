@@ -1,6 +1,6 @@
 {
   "name": "arco-cli-config",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Global config module of Arco CLI",
   "main": "lib/index.js",
   "scripts": {
