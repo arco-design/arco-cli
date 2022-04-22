@@ -6,22 +6,28 @@ import { ModuleUMDInfo } from '@arco-materials/material-preview-utils/es/interfa
 
 import parseComment from './parseComment';
 import parseRawComment, { Comment } from './parseRawComment';
-import parseDependencies from './parseDependencies';
 import parseModuleExport, { ModuleExportMap } from './parseModuleExport';
 import tryGetUMDInfo from '../utils/tryGetUMDInfo';
 import { PLACEHOLDER_ARCO_SITE_MODULE_INFO } from '../constant';
 import encodeInfo from '../utils/encodeInfo';
 import getTitleOfMarkdown from '../utils/getTitleOfMarkdown';
+import { GlobConfigForBuild, MainConfig } from '../interface';
 
 export type ModuleInfo = {
   name: string;
-  info: Record<string, string> & { umd: ModuleUMDInfo };
+  info: Record<string, string> & { umd?: ModuleUMDInfo };
   isDoc?: boolean;
   children?: Array<{
     name: string;
     info: Record<string, string>;
     rawCode?: string;
   }>;
+};
+
+export type ModuleInfoOfEntry = {
+  key: string;
+  doc: ModuleInfo[];
+  component: ModuleInfo[];
 };
 
 type ChunkInfo = {
@@ -31,64 +37,60 @@ type ChunkInfo = {
 };
 
 export default class ArcoSiteModuleInfoPlugin {
-  private readonly options: {
-    globs?: {
-      doc?: string;
-      demo?: string;
-    };
-  };
-
   private paths: {
     doc: string[];
     demo: string[];
   };
 
-  constructor(options) {
+  constructor(options: { globs?: MainConfig['build']['globs'] }) {
     options = options || {};
-    const { globs } = options;
 
-    this.options = options;
+    const { globs } = options;
+    let docPathList = [];
+    let demoPathList = [];
+
+    const extendPathList = ({ doc, component }: GlobConfigForBuild) => {
+      docPathList = docPathList.concat(glob.sync(path.resolve(doc)));
+      demoPathList = demoPathList.concat(glob.sync(path.resolve(component.base, component.demo)));
+    };
+
+    if (globs) {
+      if (Array.isArray(globs)) {
+        globs.forEach((item) => extendPathList(item));
+      } else if (typeof globs === 'object' && !globs.component && !globs.doc) {
+        Object.entries(globs as Record<string, GlobConfigForBuild>).forEach(([_, item]) =>
+          extendPathList(item)
+        );
+      } else {
+        extendPathList(globs as GlobConfigForBuild);
+      }
+    }
+
     this.paths = {
-      doc: globs.doc ? glob.sync(globs.doc).map((item) => path.resolve(item)) : [],
-      demo: globs.demo ? glob.sync(globs.demo).map((item) => path.resolve(item)) : [],
+      doc: docPathList,
+      demo: demoPathList,
     };
   }
 
-  parseModuleExport({ context, filePathList, statsModules, needRawCode = false }) {
-    const fileDependencyMap = {};
-    const { modules } = parseDependencies(statsModules);
-
-    // Filter unnecessary dependency information, and convert the path to an absolute path
-    Object.entries(modules).forEach(([modulePath, dependencies]) => {
-      modulePath = path.resolve(context, modulePath);
-      if (filePathList.indexOf(modulePath) > -1) {
-        fileDependencyMap[modulePath] = dependencies
-          .map((filePath) => path.resolve(context, filePath))
-          .filter((filePath) => filePath.indexOf('node_modules') === -1);
-      }
-    });
-
-    return parseModuleExport({
-      context,
-      statsModules,
-      needRawCode,
-      validPaths: filePathList,
-      fileDependencyMap,
-    });
-  }
-
+  /**
+   * Get module info like
+   * {
+   *   zh-CN: [
+   *     {
+   *       key: 'submodule_1',
+   *       components: [ { name: 'Button', info: {}, children: [] } ],
+   *       documents: [ { name: 'Doc_1', info: {}, isDoc: true } ]
+   *     }
+   *   ]
+   * }
+   */
   getModuleInfoMap({
     chunkInfoList,
-    moduleExportMap,
+    submoduleMap,
   }: {
-    moduleExportMap: ModuleExportMap;
+    submoduleMap: ModuleExportMap;
     chunkInfoList: Array<ChunkInfo>;
-  }): {
-    /**
-     * Module info like { zh-CN: { name: 'Button', info: {}, children: [] } }
-     */
-    [key: string]: ModuleInfo;
-  } {
+  }): Record<string, ModuleInfoOfEntry[]> {
     // Parse raw comment
     const rawDemoCommentMap: { [key: string]: Array<Comment> } = {};
     this.paths.demo.forEach((demoPath) => {
@@ -98,7 +100,7 @@ export default class ArcoSiteModuleInfoPlugin {
     const moduleInfoMap = {};
 
     for (const { name: chunkName, entry } of chunkInfoList) {
-      if (!moduleExportMap[entry]) {
+      if (!submoduleMap[entry]) {
         continue;
       }
 
@@ -118,61 +120,87 @@ export default class ArcoSiteModuleInfoPlugin {
         });
       });
 
+      const moduleInfo = [];
+
       // Inject comment for module info
-      moduleInfoMap[chunkName] = moduleExportMap[entry]
-        .map(({ name, moduleFilePath }) => {
-          if (this.paths.doc.indexOf(moduleFilePath) > -1) {
-            return {
-              name,
-              info: {
-                name: getTitleOfMarkdown(moduleFilePath),
-              },
-              isDoc: true,
-            };
-          }
+      submoduleMap[entry].forEach(({ name, dependencies }) => {
+        const documentSubmodules =
+          submoduleMap[dependencies.find(({ key }) => key === 'doc')?.path];
+        const componentSubmodules =
+          submoduleMap[dependencies.find(({ key }) => key === 'component')?.path];
 
-          if (this.paths.demo.indexOf(moduleFilePath) > -1) {
-            const demoList = moduleExportMap[moduleFilePath];
-            if (demoList) {
-              const commentList = demoCommentMap[moduleFilePath];
-              const componentInfo = commentList ? commentList[0] : {};
-              const demoInfoList = commentList ? commentList.slice(-demoList.length) : [];
+        if (!documentSubmodules && !componentSubmodules) {
+          return;
+        }
 
-              // Try to get umd info of component
-              componentInfo.umd = tryGetUMDInfo(moduleFilePath);
+        const submoduleInfo: ModuleInfoOfEntry = {
+          key: name,
+          doc: [],
+          component: [],
+        };
 
-              return {
+        if (documentSubmodules) {
+          documentSubmodules.forEach(({ name, dependencies }) => {
+            const documentPath = dependencies.find(
+              ({ path }) => this.paths.doc.indexOf(path) > -1
+            )?.path;
+            if (documentPath) {
+              submoduleInfo.doc.push({
                 name,
-                info: componentInfo,
-                children: demoList.map(({ name, rawCode }, index) => {
+                isDoc: true,
+                info: {
+                  name: getTitleOfMarkdown(dependencies[0].path),
+                },
+              });
+            }
+          });
+        }
+
+        if (componentSubmodules) {
+          componentSubmodules.forEach(({ name, dependencies }) => {
+            const demoEntryPath = dependencies.find(
+              ({ path }) => this.paths.demo.indexOf(path) > -1
+            )?.path;
+            const demoSubmodules = submoduleMap[demoEntryPath];
+            const commentList = demoCommentMap[demoEntryPath];
+
+            if (demoSubmodules) {
+              const componentComment = commentList?.[0] || {};
+              const demoCommentList = commentList ? commentList.slice(-demoSubmodules.length) : [];
+
+              submoduleInfo.component.push({
+                name,
+                info: {
+                  ...componentComment,
+                  umd: tryGetUMDInfo(demoEntryPath),
+                },
+                children: demoSubmodules.map(({ name, dependencies }, index) => {
                   return {
                     name,
-                    rawCode,
-                    info: demoInfoList[index] || {},
+                    rawCode: dependencies[0]?.rawCode || '',
+                    info: demoCommentList[index] || {},
                   };
                 }),
-              };
+              });
             }
-          }
-        })
-        .filter((info) => info);
+          });
+        }
+
+        moduleInfo.push(submoduleInfo);
+      });
+
+      moduleInfoMap[chunkName] = moduleInfo;
     }
 
     return moduleInfoMap;
   }
 
   apply(compiler) {
-    const { globs } = this.options;
-    const paths = {
-      doc: globs.doc ? glob.sync(globs.doc).map((item) => path.resolve(item)) : [],
-      demo: globs.demo ? glob.sync(globs.demo).map((item) => path.resolve(item)) : [],
-    };
-
-    let moduleExportMap: ModuleExportMap = {};
+    let submoduleMap: ModuleExportMap = {};
     let hasInjectedModuleInfo = false;
     const chunkInfoList: ChunkInfo[] = [];
 
-    const getNewSource = (source: string, moduleInfo: ModuleInfo): string => {
+    const getNewSource = (source: string, moduleInfo: Record<string, any>): string => {
       return source.replace(
         new RegExp(PLACEHOLDER_ARCO_SITE_MODULE_INFO, 'g'),
         encodeInfo(moduleInfo)
@@ -202,15 +230,16 @@ export default class ArcoSiteModuleInfoPlugin {
           }
         });
 
-        // Parse the export module info of entry file and demo file
-        moduleExportMap = this.parseModuleExport({
+        // Parse the export module info of demo files
+        submoduleMap = parseModuleExport({
           context: compiler.context,
+          validPaths: this.paths.demo.concat(
+            glob.sync(path.resolve(path.dirname(chunkInfoList[0].entry), '**/*'))
+          ),
           statsModules: compilation.getStats().toJson({
             source: true,
             providedExports: true,
           }).modules,
-          filePathList: paths.demo.concat(chunkInfoList.map(({ entry }) => entry)),
-          needRawCode: true,
         });
       });
 
@@ -218,7 +247,7 @@ export default class ArcoSiteModuleInfoPlugin {
       if (compilation.hooks.processAssets) {
         compilation.hooks.processAssets.tap('ArcoSiteModuleInfoPlugin', (assets) => {
           const moduleInfoMap = this.getModuleInfoMap({
-            moduleExportMap,
+            submoduleMap,
             chunkInfoList,
           });
 
@@ -260,7 +289,7 @@ export default class ArcoSiteModuleInfoPlugin {
 
       const moduleInfoMap = this.getModuleInfoMap({
         chunkInfoList,
-        moduleExportMap,
+        submoduleMap,
       });
 
       chunkInfoList.forEach(({ name: chunkName, files }) => {

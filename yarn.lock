@@ -13637,6 +13637,14 @@ parse-es-import@^0.3.1:
     acorn "^8.4.1"
     acorn-jsx "^5.3.1"
 
+parse-es-import@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/parse-es-import/-/parse-es-import-0.5.0.tgz#c27b8f303462bd06d1377eb109ae766c8b414f7e"
+  integrity sha512-Vb7+lH0g28Qvp3Q8lwtsTXT4at8gq4mglh/Mz6C/igpYmriLs7ntTj3GJ1VGgj2rIMVVnJOWL2iM/frgaQDbEw==
+  dependencies:
+    acorn "^8.4.1"
+    acorn-jsx "^5.3.1"
+
 parse-filepath@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/parse-filepath/-/parse-filepath-1.0.2.tgz#a632127f53aaf3d15876f5872f3ffac763d6c891"

@@ -1,7 +1,56 @@
 import { ExternalSourceInfo } from '@arco-materials/material-preview-utils';
-import { ModuleInfo } from './plugin';
+import { ModuleInfo as _ModuleInfo, ModuleInfoOfEntry as _ModuleInfoOfEntry } from './plugin';
 
 export { Configuration as WebpackConfig } from 'webpack';
+
+export type GlobConfigForBuild = {
+  /**
+   * Glob pattern of pure document
+   * @zh 纯文档的 Glob 匹配符
+   */
+  doc: string;
+  /**
+   * Glob patterns of component
+   * @zh 组件相关的 Glob 匹配规则
+   */
+  component: {
+    /**
+     * Glob pattern to math the path of component
+     * @zh 组件目录的 Glob 匹配符
+     * @e.g ../components/*
+     */
+    base: string;
+    /**
+     * Glob pattern of component demos
+     * @zh 组件 Demo 的 Glob 匹配符
+     * @e.g demo/index.js
+     */
+    demo: string;
+    /**
+     * Glob pattern of component document
+     * @zh 组件文档的 Glob 匹配符
+     * @e.g README.md
+     */
+    doc?: string;
+    /**
+     * Path of component style
+     * @zh 组件样式路径
+     * @e.g style/index.less
+     */
+    style?: string;
+  };
+  /**
+   * Hooks to execute when demos are rendered
+   * @zh Demo 渲染时执行的钩子函数
+   */
+  hook?: {
+    /**
+     * Callback function executed before all demos are rendered
+     * @zh 在所有 Demo 渲染之前执行的回调函数
+     */
+    beforeAll?: string;
+  };
+};
 
 export interface MainConfig {
   /**
@@ -13,54 +62,7 @@ export interface MainConfig {
      * Rules to match the path of document and demos
      * @zh 配置文档和 Demo 的路径
      */
-    globs: {
-      /**
-       * Glob pattern of pure document
-       * @zh 纯文档的 Glob 匹配符
-       */
-      doc: string;
-      /**
-       * Glob patterns of component
-       * @zh 组件相关的 Glob 匹配规则
-       */
-      component: {
-        /**
-         * Glob pattern to math the path of component
-         * @zh 组件目录的 Glob 匹配符
-         * @e.g ../components/*
-         */
-        base: string;
-        /**
-         * Glob pattern of component demos
-         * @zh 组件 Demo 的 Glob 匹配符
-         * @e.g demo/index.js
-         */
-        demo: string;
-        /**
-         * Glob pattern of component document
-         * @zh 组件文档的 Glob 匹配符
-         * @e.g README.md
-         */
-        doc?: string;
-        /**
-         * Path of component style
-         * @zh 组件样式路径
-         * @e.g style/index.less
-         */
-        style?: string;
-      };
-      /**
-       * Hooks to execute when demos are rendered
-       * @zh Demo 渲染时执行的钩子函数
-       */
-      hook?: {
-        /**
-         * Callback function executed before all demos are rendered
-         * @zh 在所有 Demo 渲染之前执行的回调函数
-         */
-        beforeAll?: string;
-      };
-    };
+    globs: GlobConfigForBuild | GlobConfigForBuild[] | Record<string, GlobConfigForBuild>;
     /**
      * Whether to import material style file
      * @zh 是否将组件的样式一同打包
@@ -174,19 +176,51 @@ export type DocumentInfo = {
 };
 
 /**
+ * Info of component/document modules
+ */
+export type ModuleInfo = _ModuleInfo;
+
+/**
+ * Info of entry file
+ */
+export type ModuleInfoOfEntry = _ModuleInfoOfEntry;
+
+/**
  * Type of arcoSite module
  */
-export type ArcoSite = Record<string, any> & {
-  /**
-   * Info of components and documents
-   */
-  arcoSiteModuleInfo: ModuleInfo[];
+export type ArcoSiteSimple = Record<string, any> & {
   /**
    * Config of team site
    */
   arcoSiteConfig: MainConfig['site'];
   /**
+   * Info of components and documents
+   */
+  arcoSiteModuleInfo: ModuleInfo[];
+  /**
    * Info of help document
    */
   arcoSiteDocumentInfo?: DocumentInfo[];
+};
+
+/**
+ * Type of arcoSite module
+ */
+export type ArcoSite = Record<string, any> & {
+  /**
+   * Config of team site
+   */
+  arcoSiteConfig: MainConfig['site'];
+  /**
+   * Info of components and documents
+   */
+  arcoSiteModuleInfo: ModuleInfoOfEntry[];
+  /**
+   * Info of help document
+   */
+  arcoSiteDocumentInfo?: Record<string, DocumentInfo[]>;
+  /**
+   * Package version of arco-material-doc-site
+   */
+  arcoSiteToolVersion: string;
 };

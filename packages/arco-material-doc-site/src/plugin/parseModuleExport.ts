@@ -6,10 +6,14 @@ import parseEsImport from 'parse-es-import';
 type ModuleExportInfo = {
   /** Module name */
   name;
-  /** Path of module's source file */
-  moduleFilePath: string;
   /** Source code of module */
-  rawCode: string;
+  value: string;
+  /** Imported modules it depends on */
+  dependencies: Array<{
+    key?: string;
+    path: string;
+    rawCode: string;
+  }>;
 };
 
 export type ModuleExportMap = {
@@ -23,22 +27,14 @@ export default function parseModuleExport({
   statsModules,
   context,
   validPaths,
-  fileDependencyMap,
-  needRawCode,
 }: {
   statsModules: Array<{ [key: string]: any }>;
   context: string;
   validPaths: string[];
-  fileDependencyMap: { [key: string]: string[] };
-  needRawCode: boolean;
 }): ModuleExportMap {
   const result: ModuleExportMap = {};
 
-  if (!Object.keys(fileDependencyMap).length) {
-    return result;
-  }
-
-  for (const { name, source } of statsModules) {
+  for (const { name } of statsModules) {
     const pathCurrent = path.resolve(context, name);
     const dirPathCurrent = path.dirname(pathCurrent);
 
@@ -47,9 +43,21 @@ export default function parseModuleExport({
     }
 
     const moduleInfoList: ModuleExportInfo[] = [];
-    const { imports, exports } = parseEsImport(source);
+    const { imports, exports } = parseEsImport(fs.readFileSync(pathCurrent, 'utf8'));
 
-    for (const { type, moduleName, value } of exports) {
+    const moduleImported: Array<{ name: string; path: string }> = imports.map(
+      ({ starImport, defaultImport, moduleName: importModuleName }) => {
+        const [pathImport] = glob.sync(
+          path.resolve(dirPathCurrent, `${importModuleName}?(.jsx|.js|.ts|.tsx)`)
+        );
+        return {
+          name: starImport || defaultImport,
+          path: pathImport,
+        };
+      }
+    );
+
+    for (const { type, moduleName, value, identifierList, identifierTree } of exports) {
       switch (type) {
         case 'ExportSpecifier': {
           let pathImport = path.resolve(dirPathCurrent, value);
@@ -60,18 +68,21 @@ export default function parseModuleExport({
 
           if (pathImport) {
             let rawCode = '';
-            if (needRawCode) {
-              try {
-                rawCode = fs.readFileSync(pathImport, 'utf8');
-              } catch (e) {
-                rawCode = 'Failed to get demo code.';
-              }
+            try {
+              rawCode = fs.readFileSync(pathImport, 'utf8');
+            } catch (e) {
+              rawCode = 'Failed to get demo code.';
             }
 
             moduleInfoList.push({
               name: moduleName,
-              rawCode,
-              moduleFilePath: pathImport,
+              value,
+              dependencies: [
+                {
+                  path: pathImport,
+                  rawCode,
+                },
+              ],
             });
           }
           break;
@@ -80,29 +91,36 @@ export default function parseModuleExport({
         case 'FunctionDeclaration':
         case 'VariableDeclaration': {
           // Coupled with the content of the file, the content that needs to be parsed is as follows
-          // import * as _DOC from 'xxx.md';
-          // export const DOC = _DOC;
-          let moduleFilePath = '';
-          let rawCode = needRawCode ? value : '';
-          for (const { starImport, defaultImport, moduleName: importModuleName } of imports) {
-            if (
-              moduleName === starImport.replace(/^_/, '') ||
-              moduleName === defaultImport.replace(/^_/, '')
-            ) {
-              const [pathImport] = glob.sync(
-                path.resolve(dirPathCurrent, `${importModuleName}?(.jsx|.js|.ts|.tsx)`)
-              );
-              if (pathImport) {
-                moduleFilePath = pathImport;
-                rawCode = needRawCode ? fs.readFileSync(pathImport, 'utf8') : '';
+          // import * as _Component from '../../Component/demo/index.js';
+          // import * as _ComponentDoc from '../../Component/README.md';
+          // export const Component = { ..._Component, SITE_DOC: _ComponentDoc };
+          const dependencies: ModuleExportInfo['dependencies'] = [];
+
+          if (identifierList.length) {
+            identifierList.forEach((identifier) => {
+              const importFrom = moduleImported.find(({ name }) => name === identifier);
+              if (importFrom) {
+                let key = identifierList.length > 1 ? identifier : null;
+
+                Object.entries(identifierTree || {}).forEach(([_key, value]) => {
+                  if (value === identifier) {
+                    key = _key;
+                  }
+                });
+
+                dependencies.push({
+                  key,
+                  path: importFrom.path,
+                  rawCode: fs.readFileSync(importFrom.path, 'utf8'),
+                });
               }
-              break;
-            }
+            });
           }
+
           moduleInfoList.push({
             name: moduleName,
-            rawCode,
-            moduleFilePath,
+            value,
+            dependencies,
           });
           break;
         }

@@ -139,10 +139,7 @@ function generateBaseConfig() {
     },
     plugins: [
       new ArcoSiteModuleInfoPlugin({
-        globs: {
-          doc: buildConfig.globs.doc,
-          demo: path.resolve(buildConfig.globs.component.base, buildConfig.globs.component.demo),
-        },
+        globs: buildConfig.globs,
       }),
       new ProgressPlugin(true),
     ],
