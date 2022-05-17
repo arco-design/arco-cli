@@ -1,6 +1,6 @@
 {
   "name": "arco-cli",
-  "version": "1.27.0",
+  "version": "1.27.1",
   "description": "Init an Arco material project quickly",
   "keywords": [
     "arco",
@@ -23,7 +23,7 @@
     "arco-cli-dev-utils": "^1.2.0",
     "arco-cli-generate": "^1.0.2",
     "arco-cli-init": "^1.2.2",
-    "arco-cli-publish": "^1.0.2",
+    "arco-cli-publish": "^1.0.3",
     "arco-cli-sync": "^1.12.4",
     "axios": "~0",
     "chalk": "^4.0.0",

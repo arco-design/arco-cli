@@ -1,6 +1,6 @@
 {
   "name": "arco-cli-publish",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Module of Arco CLI to publish NPM package",
   "main": "lib/publish.js",
   "scripts": {
