@@ -9,7 +9,7 @@ import locale from './locale';
 
 async function checkGitRemote() {
   if (getGitRootPath()) {
-    const { code, stdout } = await execQuick('git remove -v');
+    const { code, stdout } = await execQuick('git remote -v');
     if (code === 0 && stdout.match('(push)')) {
       print();
     } else {
