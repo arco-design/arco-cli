@@ -209,7 +209,10 @@ function generateSubmodules(
             .map((p) => {
               const { demo, doc, style } = globConfig as GlobConfigForBuild['component'];
               return {
-                componentName: path.basename(p).replace(/-(\w)/g, (_, $1) => $1.toUpperCase()),
+                componentName: path
+                  .basename(p)
+                  .replace(/(?:-|^)(\w)/g, (_, $1) => $1.toUpperCase())
+                  .replace(/[^a-z1-9]/gi, ''),
                 pathDemo: demo && path.resolve(p, demo),
                 pathDoc: doc && path.resolve(p, doc),
                 pathStyle: style && path.resolve(p, style),
