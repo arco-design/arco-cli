@@ -51,7 +51,8 @@ export default function CellDescription(props) {
   function onHandleExpand() {
     const newExpand = !expand;
     const codeEle = document.querySelectorAll('.content-code-design');
-    codeEle.forEach((ele) => {
+    const codeTypeSwitchEle = document.querySelectorAll('.code-type-switch') || [];
+    [...Array.from(codeEle), ...Array.from(codeTypeSwitchEle)].forEach((ele) => {
       if (newExpand) {
         ele.classList.add('show-all');
       } else {

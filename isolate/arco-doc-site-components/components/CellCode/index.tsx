@@ -9,7 +9,6 @@ import Short from './short';
 
 // CodePen
 const CODEPEN_ENABLE = (window as any).CODEPEN_ENABLE;
-const SHOW_TSCODE = (window as any).SHOW_TSCODE;
 const HTML =
   (window as any).CODEPEN_HTML ||
   '<div id="root" style="padding: 20px;"></div>\n<script>\nconst CONTAINER = document.getElementById("root")\n</script>';
@@ -34,8 +33,11 @@ interface CellCodeProps {
 
 interface CellCodeState {
   showAll: boolean;
-  activeTab: 'jsx' | 'tsx';
+  codeType: 'jsx' | 'tsx';
 }
+
+const CODE_JSX = 'jsx';
+const CODE_TSX = 'tsx';
 
 const locales = {
   'zh-CN': {
@@ -67,7 +69,7 @@ class CellCode extends React.Component<PropsWithChildren<CellCodeProps>, CellCod
     super(props);
     this.state = {
       showAll: false,
-      activeTab: 'jsx',
+      codeType: props.tsx ? CODE_TSX : CODE_JSX,
     };
   }
 
@@ -130,9 +132,11 @@ class CellCode extends React.Component<PropsWithChildren<CellCodeProps>, CellCod
     document.body.removeChild(form);
   };
 
-  toggleCodeType = (v) => {
-    this.setState({
-      activeTab: v,
+  toggleCodeType = () => {
+    this.setState((prevState) => {
+      return {
+        codeType: prevState.codeType === CODE_TSX ? CODE_JSX : CODE_TSX,
+      };
     });
   };
 
@@ -173,7 +177,7 @@ import ReactDOM from 'react-dom';`;
             },
           }),
         },
-        'index.js': {
+        [`index.${this.state.codeType === CODE_TSX ? 'tsx' : 'js'}`]: {
           isBinary: false,
           content: code,
         },
@@ -199,11 +203,24 @@ import ReactDOM from 'react-dom';`;
   };
 
   renderOperations = () => {
-    const { showAll } = this.state;
+    const { showAll, codeType } = this.state;
     const t = locales[this.lang];
 
     return (
       <div className="arco-code-operations">
+        {this.props.tsx && (
+          <Tabs
+            size="small"
+            justify
+            type="capsule"
+            activeTab={codeType}
+            onChange={this.toggleCodeType}
+            className={`code-type-switch ${showAll ? 'show-all' : ''}`}
+          >
+            <Tabs.TabPane key={CODE_JSX} title="JS" />
+            <Tabs.TabPane key={CODE_TSX} title="TS" />
+          </Tabs>
+        )}
         <Tooltip content={showAll ? t.collapse : t.expand}>
           <Button
             size="small"
@@ -224,7 +241,7 @@ import ReactDOM from 'react-dom';`;
             type="secondary"
             aria-label={t.copy}
           >
-            <IconCopy />
+            <IconCopy className="copy-icon" />
           </Button>
         </Tooltip>
         {CODEPEN_ENABLE ? (
@@ -257,27 +274,14 @@ import ReactDOM from 'react-dom';`;
 
   render() {
     const props = this.props;
-    const { showAll, activeTab } = this.state;
+    const { showAll, codeType } = this.state;
     return (
       <div className="arco-code-wrapper">
         {this.renderOperations()}
         <div className={`content-code-design ${showAll ? 'show-all' : ''}`}>
-          {SHOW_TSCODE && props.tsx && (
-            <Tabs activeTab={activeTab} onChange={this.toggleCodeType}>
-              <Tabs.TabPane key="jsx" title="JavaScript" />
-              <Tabs.TabPane key="tsx" title="TypeScript" />
-            </Tabs>
-          )}
-          <div
-            className="code"
-            style={{ display: activeTab === 'tsx' ? 'none' : '' }}
-            ref={(ref) => (this.codeEle = ref)}
-          >
-            {props.children}
+          <div className="code" ref={(ref) => (this.codeEle = ref)}>
+            {codeType === CODE_TSX ? props.tsx : props.children}
           </div>
-          {SHOW_TSCODE && activeTab === 'tsx' && props.tsx && (
-            <div className="code">{props.tsx}</div>
-          )}
         </div>
       </div>
     );
