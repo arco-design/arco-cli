@@ -60,7 +60,7 @@
     "merge-stream": "^2.0.0",
     "mini-css-extract-plugin": "^0.4.0",
     "moment": "^2.29.1",
-    "node-typescript-compiler": "^2.1.1",
+    "node-typescript-compiler": "^3.0.0",
     "nunjucks": "^3.2.3",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "parse-es-import": "^0.3.1",

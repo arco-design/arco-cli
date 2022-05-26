@@ -314,6 +314,20 @@ function generateEntryByLanguage(
     }
   );
 
+  if (buildConfig.customModulePath && fs.existsSync(buildConfig.customModulePath)) {
+    const exportName = `${VARIABLE_PREFIX}CustomModule`;
+    fileContent.push(
+      `import * as _${exportName} from '${path.relative(
+        entryFileDir,
+        path.resolve(buildConfig.customModulePath)
+      )}';`
+    );
+    exportModuleInfoList.push({
+      name: exportName,
+      statement: `_${exportName}`,
+    });
+  }
+
   exportModuleInfoList.push({
     name: `${VARIABLE_PREFIX}ModuleInfo`,
     statement: 'decodeInfo(moduleInfoStr)',
@@ -323,6 +337,13 @@ function generateEntryByLanguage(
     name: `${VARIABLE_PREFIX}Config`,
     statement: transformObjectToExpression(siteConfig),
   });
+
+  if (groupInfo) {
+    exportModuleInfoList.push({
+      name: `${VARIABLE_PREFIX}GroupInfo`,
+      statement: transformObjectToExpression(groupInfo),
+    });
+  }
 
   exportModuleInfoList.push({
     name: `${VARIABLE_PREFIX}DocumentInfo`,
@@ -357,15 +378,15 @@ const ${LIBRARY_MODULE_NAME} = {};
 // Export submodules
 ${exportExpressions}
 
-// Only used by team site development mode
+// Only used by team site development/isolate mode
 if (window.arcoMaterialTeamSite && window.arcoMaterialTeamSite.renderPage) {
-  const siteDevOptions = ${transformObjectToExpression({
+  const options = ${transformObjectToExpression({
     ...buildConfig.devOptions,
     withArcoStyle: siteConfig.arcoDesignLabTheme
       ? `${FUNCTION_LABEL}() => import('${siteConfig.arcoDesignLabTheme}/css/arco.css')${FUNCTION_LABEL}`
       : buildConfig.devOptions?.withArcoStyle,
   })};
-  window.arcoMaterialTeamSite.renderPage(${LIBRARY_MODULE_NAME}, siteDevOptions);
+  window.arcoMaterialTeamSite.renderPage(${LIBRARY_MODULE_NAME}, options);
 }
 `);
 

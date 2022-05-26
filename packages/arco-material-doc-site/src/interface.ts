@@ -69,6 +69,11 @@ export interface MainConfig {
      */
     withMaterialStyle?: boolean;
     /**
+     * File path of custom site module
+     * @zh 自定义站点模块的文件路径
+     */
+    customModulePath?: string;
+    /**
      * Options for development mode
      * @zh 站点 Dev 模式时的配置
      */
@@ -219,6 +224,14 @@ export type ArcoSite = Record<string, any> & {
    * Info of help document
    */
   arcoSiteDocumentInfo?: Record<string, DocumentInfo[]>;
+  /**
+   * Custom site module
+   */
+  arcoSiteCustomModule?: Record<string, any>;
+  /**
+   * Group info
+   */
+  arcoSiteGroupInfo?: MainConfig['group'];
   /**
    * Package version of arco-material-doc-site
    */

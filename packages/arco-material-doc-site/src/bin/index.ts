@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import fs from 'fs-extra';
 import axios from 'axios';
 import program from 'commander';
 import { webpack } from 'webpack';
@@ -20,11 +21,14 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
+const HTML_ENTRY_NAME = 'index.html';
 const VALID_SUBCOMMANDS = ['build', 'dev'];
-const URL_HTML_TEMPLATE = `http://${
+const URL_HTML_TEMPLATE_PREFIX = `http://${
   process.env.HTML_TEMPLATE_DOMAIN ||
   'lf-cdn-tos.bytescm.com/obj/static/arco-design/material/platform-dev'
-}/team.development.html`;
+}/`;
+const URL_HTML_TEMPLATE_ISOLATE = `${URL_HTML_TEMPLATE_PREFIX}team.isolate.html`;
+const URL_HTML_TEMPLATE_DEVELOPMENT = `${URL_HTML_TEMPLATE_PREFIX}team.development.html`;
 
 program
   .name('arco-doc-site')
@@ -42,6 +46,33 @@ program
   .description('build site for production')
   .action(async () => {
     await generateEntryFiles();
+    if (webpackConfigProd?.output?.path) {
+      fs.removeSync(webpackConfigProd.output.path);
+    }
+
+    // Set isolate entry for webpack config
+    try {
+      const {
+        site: { languages },
+      } = getMainConfig();
+      const { data: htmlTemplate } = await axios.get(URL_HTML_TEMPLATE_ISOLATE);
+      webpackConfigProd.plugins.push(
+        new HtmlWebpackPlugin({
+          templateContent: htmlTemplate,
+          filename: HTML_ENTRY_NAME,
+          // TODO handle multiple languages
+          chunks: languages.slice(0, 1),
+        })
+      );
+    } catch (error) {
+      print.error(
+        '[arco-doc-site]',
+        `Failed to get HTML template from ${URL_HTML_TEMPLATE_ISOLATE}`
+      );
+      console.error(error);
+      return;
+    }
+
     webpack(webpackConfigProd, webpackCallback);
   });
 
@@ -63,19 +94,22 @@ program
 
     // Set dev entry for webpack config
     try {
-      const { data: htmlTemplate } = await axios.get(URL_HTML_TEMPLATE);
+      const { data: htmlTemplate } = await axios.get(URL_HTML_TEMPLATE_DEVELOPMENT);
       webpackConfigDev.entry = {
         [language]: getPathEntryByLanguage(language),
       };
       webpackConfigDev.plugins.push(
         new HtmlWebpackPlugin({
           templateContent: htmlTemplate,
-          filename: 'index.html',
+          filename: HTML_ENTRY_NAME,
           chunks: [language],
         })
       );
     } catch (error) {
-      print.error('[arco-doc-site]', `Failed to get HTML template from ${URL_HTML_TEMPLATE}`);
+      print.error(
+        '[arco-doc-site]',
+        `Failed to get HTML template from ${URL_HTML_TEMPLATE_DEVELOPMENT}`
+      );
       console.error(error);
       return;
     }
@@ -83,7 +117,7 @@ program
     const compiler = webpack(webpackConfigDev);
     const devSeverOptions = { ...(webpackConfigDev as any).devServer };
     const server = new WebpackDevServer(devSeverOptions, compiler);
-    server.start();
+    await server.start();
   });
 
 program.parse(process.argv);
