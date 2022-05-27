@@ -24,6 +24,14 @@
       padding-top: 12px;
       overflow: hidden;
 
+      .code-type-switch {
+        display: none;
+        &.show-all {
+          display: block;
+        }
+        margin-right: auto;
+      }
+
       .arco-btn {
         margin-left: 8px;
 
@@ -31,7 +39,7 @@
           pointer-events: none;
         }
 
-        &:nth-child(2) svg {
+        &.copy-icon svg {
           vertical-align: -3px;
         }
       }
