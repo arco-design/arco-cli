@@ -128,6 +128,17 @@ export interface MainConfig {
        */
       editable?: boolean;
       /**
+       * Default layout of demo/code zone
+       * @zh 默认的预览/代码区域布局
+       */
+      defaultLayout?: 'horizontal' | 'vertical';
+      /**
+       * Size of demo viewport (pixel/ratio)
+       * @zh 预览区域的默认尺寸（像素/比例）
+       * @e.g '200px' | 0.3
+       */
+      defaultViewportSize?: string | number;
+      /**
        * Default external info of code editor
        * @zh Demo 编辑器默认的 External 资源配置
        */
