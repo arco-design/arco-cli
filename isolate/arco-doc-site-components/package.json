@@ -1,11 +1,11 @@
 {
   "name": "arco-doc-site-components",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Components for Arco doc site only",
   "module": "es/index.js",
   "types": "./es/index.d.ts",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "dev": "arco-scripts dev:component",
     "build": "arco-scripts build:component:es && arco-scripts build:component:css",
     "build:css": "arco-scripts build:component:css"
