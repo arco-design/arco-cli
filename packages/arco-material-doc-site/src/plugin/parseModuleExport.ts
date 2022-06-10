@@ -45,8 +45,8 @@ export default function parseModuleExport({
     const moduleInfoList: ModuleExportInfo[] = [];
     const { imports, exports } = parseEsImport(fs.readFileSync(pathCurrent, 'utf8'));
 
-    const moduleImported: Array<{ name: string; path: string }> = imports.map(
-      ({ starImport, defaultImport, moduleName: importModuleName }) => {
+    const moduleImported: Array<{ name: string; path: string }> = imports
+      .map(({ starImport, defaultImport, moduleName: importModuleName }) => {
         const [pathImport] = glob.sync(
           path.resolve(dirPathCurrent, `${importModuleName}?(.jsx|.js|.ts|.tsx)`)
         );
@@ -54,8 +54,8 @@ export default function parseModuleExport({
           name: starImport || defaultImport,
           path: pathImport,
         };
-      }
-    );
+      })
+      .filter((module) => module.path);
 
     for (const { type, moduleName, value, identifierList, identifierTree } of exports) {
       switch (type) {
