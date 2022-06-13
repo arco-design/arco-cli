@@ -9,7 +9,7 @@ import {
   CellDescription,
   Browser,
   Changelog,
-} from \\"@arco-design/arco-doc-site-components\\";
+} from \\"arco-doc-site-components\\";
 import {
   Radio as NavRadio,
   Button as ChangelogBtn,
@@ -139,6 +139,7 @@ export default function (props) {
       <>
         <div className=\\"ac-toolbar\\">
           <ChangelogBtn
+            aria-label=\\"Changelog\\"
             size=\\"large\\"
             className=\\"changelog-btn\\"
             onClick={() => setShowChangelog(true)}

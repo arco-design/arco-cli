@@ -90,7 +90,10 @@ export default function (props) {
             <span className=\\"token script language-javascript\\">
               <span className=\\"token script-punctuation punctuation\\">=</span>
               <span className=\\"token punctuation\\">{\\"{\\"}</span>
-              <span className=\\"token punctuation\\">{\\"{\\"}</span> backgroundColor
+              <span className=\\"token punctuation\\">{\\"{\\"}</span>{\\" \\"}
+              <span className=\\"token literal-property property\\">
+                backgroundColor
+              </span>
               <span className=\\"token operator\\">:</span>{\\" \\"}
               <span className=\\"token string\\">'#3370ff'</span>{\\" \\"}
               <span className=\\"token punctuation\\">{\\"}\\"}</span>
@@ -124,7 +127,10 @@ export default function (props) {
             <span className=\\"token script language-javascript\\">
               <span className=\\"token script-punctuation punctuation\\">=</span>
               <span className=\\"token punctuation\\">{\\"{\\"}</span>
-              <span className=\\"token punctuation\\">{\\"{\\"}</span> backgroundColor
+              <span className=\\"token punctuation\\">{\\"{\\"}</span>{\\" \\"}
+              <span className=\\"token literal-property property\\">
+                backgroundColor
+              </span>
               <span className=\\"token operator\\">:</span>{\\" \\"}
               <span className=\\"token string\\">'#14a9f8'</span>{\\" \\"}
               <span className=\\"token punctuation\\">{\\"}\\"}</span>
@@ -150,7 +156,10 @@ export default function (props) {
             <span className=\\"token script language-javascript\\">
               <span className=\\"token script-punctuation punctuation\\">=</span>
               <span className=\\"token punctuation\\">{\\"{\\"}</span>
-              <span className=\\"token punctuation\\">{\\"{\\"}</span> backgroundColor
+              <span className=\\"token punctuation\\">{\\"{\\"}</span>{\\" \\"}
+              <span className=\\"token literal-property property\\">
+                backgroundColor
+              </span>
               <span className=\\"token operator\\">:</span>{\\" \\"}
               <span className=\\"token string\\">'#00d0b6'</span>{\\" \\"}
               <span className=\\"token punctuation\\">{\\"}\\"}</span>
