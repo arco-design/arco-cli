@@ -1,6 +1,6 @@
 {
   "name": "arco-material-doc-site",
-  "version": "1.12.2",
+  "version": "1.12.3",
   "description": "Arco Doc Site Helper",
   "main": "lib/index.js",
   "types": "lib/interface.d.ts",
