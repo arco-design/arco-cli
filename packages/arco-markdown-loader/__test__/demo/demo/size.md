@@ -8,5 +8,9 @@ Button sizes.
 ```js
 import { Button } from '@arco-design/web-react';
 
-ReactDOM.render(<Button size="mini" />, CONTAINER);
+const Demo = () => {
+  return <Button size="mini" />;
+};
+
+export default Demo;
 ```

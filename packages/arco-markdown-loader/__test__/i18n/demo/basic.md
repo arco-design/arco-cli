@@ -16,7 +16,11 @@ Basic Button usage.
 ```js
 import { Button } from '@arco-design/web-react';
 
-ReactDOM.render(<Button />, CONTAINER);
+const App = () => {
+  return <Button type="primary"> Primary </Button>;
+};
+
+export default App;
 ```
 
 ```css

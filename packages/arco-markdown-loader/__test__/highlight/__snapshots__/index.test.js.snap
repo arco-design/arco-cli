@@ -46,10 +46,15 @@ export default function (props) {
           <span className=\\"token punctuation\\">;</span>
           <br />
           <br />
-          <span className=\\"token maybe-class-name\\">ReactDOM</span>
-          <span className=\\"token punctuation\\">.</span>
-          <span className=\\"token method function property-access\\">render</span>
+          <span className=\\"token keyword\\">const</span>{\\" \\"}
+          <span className=\\"token function-variable function\\">
+            <span className=\\"token maybe-class-name\\">App</span>
+          </span>{\\" \\"}
+          <span className=\\"token operator\\">=</span>{\\" \\"}
           <span className=\\"token punctuation\\">(</span>
+          <span className=\\"token punctuation\\">)</span>{\\" \\"}
+          <span className=\\"token arrow operator\\">=></span>{\\" \\"}
+          <span className=\\"token punctuation\\">{\\"{\\"}</span>
           <br />{\\" \\"}
           <span className=\\"token tag\\">
             <span className=\\"token tag\\">
@@ -218,10 +223,15 @@ export default function (props) {
             </span>
             <span className=\\"token punctuation\\">></span>
           </span>
-          <span className=\\"token punctuation\\">,</span>
-          <br /> <span className=\\"token constant\\">CONTAINER</span>
+          <span className=\\"token punctuation\\">;</span>
           <br />
-          <span className=\\"token punctuation\\">)</span>
+          <span className=\\"token punctuation\\">{\\"}\\"}</span>
+          <span className=\\"token punctuation\\">;</span>
+          <br />
+          <br />
+          <span className=\\"token keyword module\\">export</span>{\\" \\"}
+          <span className=\\"token keyword module\\">default</span>{\\" \\"}
+          <span className=\\"token maybe-class-name\\">App</span>
           <span className=\\"token punctuation\\">;</span>
         </code>
       </pre>
