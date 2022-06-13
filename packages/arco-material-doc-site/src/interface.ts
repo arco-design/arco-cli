@@ -1,3 +1,4 @@
+import { History, Location } from 'history';
 import { ExternalSourceInfo } from '@arco-materials/material-preview-utils';
 import { ModuleInfo as _ModuleInfo, ModuleInfoOfEntry as _ModuleInfoOfEntry } from './plugin';
 
@@ -247,4 +248,51 @@ export type ArcoSite = Record<string, any> & {
    * Package version of arco-material-doc-site
    */
   arcoSiteToolVersion: string;
+};
+
+/**
+ * Type of route info
+ */
+export type ArcoSiteRouteType = {
+  key: string;
+  name: string;
+  path?: string;
+  children?: Array<ArcoSiteRouteType>;
+};
+
+/**
+ * Type of context for custom modules, visit it via React.useContext(window.arcoSiteGlobalContext)
+ */
+export type ArcoSiteGlobalContext = {
+  history: History;
+  location: Location;
+  /**
+   * Current language of site
+   */
+  language: string;
+  /**
+   * User info of current user
+   */
+  user: {
+    /**
+     * Nick name
+     */
+    name: string;
+    /**
+     * Username that can be used as ID
+     */
+    username: string;
+    /**
+     * Email address
+     */
+    email: string;
+    /**
+     * URL of user avatar
+     */
+    avatarUrl: string;
+  };
+  /**
+   * All route info including docs and components
+   */
+  routes: ArcoSiteRouteType[];
 };

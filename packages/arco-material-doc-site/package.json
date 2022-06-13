@@ -28,6 +28,7 @@
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.15.0",
     "@svgr/webpack": "^5.5.0",
+    "@types/history": "^4.7.11",
     "arco-cli-dev-utils": "^1.1.1",
     "arco-markdown-loader": "^1.0.3",
     "arco-scripts-babel-config": "^1.0.0",

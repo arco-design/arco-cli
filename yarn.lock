@@ -2987,6 +2987,11 @@
     "@types/vinyl-fs" "*"
     chokidar "^3.3.1"
 
+"@types/history@^4.7.11":
+  version "4.7.11"
+  resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.11.tgz#56588b17ae8f50c53983a524fc3cc47437969d64"
+  integrity sha512-qjDJRrmvBMiTx+jyLxvLfJU7UznFuokDv4f3WRuriHKERccVpFU+8XMQUAbDzoiJCsmexxRExQeMwwCdamSKDA==
+
 "@types/html-minifier-terser@^6.0.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@types/html-minifier-terser/-/html-minifier-terser-6.1.0.tgz#4fc33a00c1d0c16987b1a20cf92d20614c55ac35"
@@ -5988,7 +5993,7 @@ cross-spawn@^6.0.0, cross-spawn@^6.0.5:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
+cross-spawn@^7, cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
   integrity sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==
@@ -12901,11 +12906,12 @@ node-releases@^2.0.1:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.1.tgz#3d1d395f204f1f2f29a54358b9fb678765ad2fc5"
   integrity sha512-CqyzN6z7Q6aMeF/ktcMVTzhAHCEpf8SOarwpzpf8pNBY2k5/oM34UHldUwp8VKI7uxct2HxSRdJjBaZeESzcxA==
 
-node-typescript-compiler@^2.1.1:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/node-typescript-compiler/-/node-typescript-compiler-2.3.0.tgz#8e283ab114e2f901ca8e124460fe5b5e915e2914"
-  integrity sha512-MeyHx2cQtrJKFxxaPnrMs01fvJDMpuxEODOHVBw7/9LKVQMaiciZCW3gShdLuwuLuU/ZSgpqZrJKUbqQ5OKVFA==
+node-typescript-compiler@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/node-typescript-compiler/-/node-typescript-compiler-3.0.0.tgz#f6ed772eb3f1b890fb7896348d63ab5a2e8d6e7d"
+  integrity sha512-b3sE88wRNdVW2bNa51ASzh97sAf/P/p1ArTybW/rBWL7QBKv9y4amv5EodKXUe2sL9bDatNqZIkD66AlwksfjA==
   dependencies:
+    cross-spawn "^7"
     lodash "^4"
     path-exists "^4"
     tildify "^2"
