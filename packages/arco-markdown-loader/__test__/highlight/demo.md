@@ -8,7 +8,7 @@ import { IconUser } from '@arco-design/web-react/icon';
 
 const { Text } = Typography;
 
-ReactDOM.render(
+const App = () => {
   <Space size="large">
     <Avatar>A</Avatar>
     <Avatar style={{ backgroundColor: '#3370ff' }}>
@@ -19,7 +19,8 @@ ReactDOM.render(
     <Avatar>
       <img alt="avatar" src="xx.png" />
     </Avatar>
-  </Space>,
-  CONTAINER
-);
+  </Space>;
+};
+
+export default App;
 ```

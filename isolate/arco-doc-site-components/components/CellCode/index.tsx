@@ -95,7 +95,8 @@ class CellCode extends React.Component<PropsWithChildren<CellCodeProps>, CellCod
       .replace(/@arco-design\/web-react/g, 'arco')
       .replace('arco/icon', 'arcoicon')
       .replace(/react-dom/, 'ReactDOM')
-      .replace(/react/, 'React');
+      .replace(/react/, 'React')
+      .replace(/export default ([.\s\S]*?)(;|$)/, 'ReactDOM.render(<$1 />, CONTAINER)');
     this.post(postCode);
   };
 
@@ -152,18 +153,11 @@ class CellCode extends React.Component<PropsWithChildren<CellCodeProps>, CellCod
 
   gotoCodeSandBox = () => {
     const codeEle: HTMLElement = (findDOMNode(this) as HTMLElement).querySelector('.language-js');
-    const codePrefix = `import "@arco-design/web-react/dist/css/arco.css";
-${this.props.cssCode ? `import './index.css';\n` : ''}
-import React from 'react';
-import ReactDOM from 'react-dom';`;
+    const codePrefix = `import '@arco-design/web-react/dist/css/arco.css';
+${this.props.cssCode ? `import './index.css';\n` : ''}`;
 
-    // ReactDOM.render(<Demo/ >, CONTAINER);
-    // =>
-    // ReactDOM.render(<Demo/ >, document.querySelector("#root"));
-    const code = `${codePrefix}\n${codeEle.innerText.replace(
-      /CONTAINER(,?\s*\n*\))/,
-      (_, $1) => `document.querySelector("#root")${$1}`
-    )}`;
+    const code = `${codePrefix}\n${codeEle.innerText}`;
+    const scriptType = this.state.codeType === CODE_TSX ? 'tsx' : 'js';
 
     const sandBoxConfig = {
       files: {
@@ -177,9 +171,18 @@ import ReactDOM from 'react-dom';`;
             },
           }),
         },
-        [`index.${this.state.codeType === CODE_TSX ? 'tsx' : 'js'}`]: {
+        [`demo.${scriptType}`]: {
           isBinary: false,
           content: code,
+        },
+        [`index.${scriptType}`]: {
+          isBinary: false,
+          content: [
+            `import React from 'react'`,
+            `import ReactDOM from 'react-dom'`,
+            `import Demo from './demo'`,
+            `ReactDOM.render(<Demo />, document.getElementById('root'))`,
+          ].join('\n'),
         },
         'index.html': {
           isBinary: false,
@@ -194,9 +197,10 @@ import ReactDOM from 'react-dom';`;
         content: this.props.cssCode,
       };
     }
-
+    // to specific demo file
+    const query = `file=/demo.${scriptType}`;
     this.post(undefined, {
-      url: 'https://codesandbox.io/api/v1/sandboxes/define',
+      url: `https://codesandbox.io/api/v1/sandboxes/define?query=${encodeURIComponent(query)}`,
       parameters: getParameters(sandBoxConfig),
       name: 'parameters',
     });

@@ -17,7 +17,7 @@ import {
   templateElement,
   variableDeclarator,
   variableDeclaration,
-  JSXElement,
+  Identifier,
 } from '@babel/types';
 
 import getMeta from '../getMeta';
@@ -203,98 +203,85 @@ export default function compileDemo(context, options, lang) {
       const ast = babelParse(meta.jsCode);
 
       traverse(ast, {
-        CallExpression(_path) {
-          const callee = _path.node.callee as any;
-          if (
-            callee.object &&
-            callee.object.name === 'ReactDOM' &&
-            callee.property.name === 'render'
-          ) {
-            const returnElement = _path.node.arguments[0] as JSXElement;
-            const demoElement = meta.attributes.browser
-              ? jsxElement(
-                  jsxOpeningElement(jsxIdentifier('Browser'), []),
-                  jsxClosingElement(jsxIdentifier('Browser')),
-                  [returnElement]
-                )
-              : returnElement;
-            const demoCellElement = jsxElement(
-              jsxOpeningElement(jsxIdentifier('CellDemo'), []),
-              jsxClosingElement(jsxIdentifier('CellDemo')),
-              [demoElement]
+        ExportDefaultDeclaration(_path) {
+          const declaration = _path.node.declaration as Identifier;
+          const identifierName = declaration.name;
+          const returnElement = jsxElement(
+            jsxOpeningElement(jsxIdentifier(identifierName), []),
+            jsxClosingElement(jsxIdentifier(identifierName)),
+            []
+          );
+
+          const demoElement = meta.attributes.browser
+            ? jsxElement(
+                jsxOpeningElement(jsxIdentifier('Browser'), []),
+                jsxClosingElement(jsxIdentifier('Browser')),
+                [returnElement]
+              )
+            : returnElement;
+          const demoCellElement = jsxElement(
+            jsxOpeningElement(jsxIdentifier('CellDemo'), []),
+            jsxClosingElement(jsxIdentifier('CellDemo')),
+            [demoElement]
+          );
+          // 源代码块
+          const children = [codePreviewBlockAst];
+          // 处理 css 代码，展示 + 插入 style 标签到 dom
+          if (meta.cssCode) {
+            const subIdentifier = jsxMemberExpression(
+              jsxIdentifier('CellCode'),
+              jsxIdentifier('Css')
             );
-            // 源代码块
-            const children = [codePreviewBlockAst];
-            // 处理 css 代码，展示 + 插入 style 标签到 dom
-            if (meta.cssCode) {
-              const subIdentifier = jsxMemberExpression(
-                jsxIdentifier('CellCode'),
-                jsxIdentifier('Css')
+            const cssCodeCellElement = jsxElement(
+              jsxOpeningElement(subIdentifier, []),
+              jsxClosingElement(subIdentifier),
+              [cssCodePreviewBlockAst]
+            );
+            children.push(cssCodeCellElement);
+            // 如果是 css:silent，那么只展示而不插入 style 标签，避免出现多重 style 相互覆盖
+            if (!meta.cssSilent) {
+              const styleElement = jsxElement(
+                jsxOpeningElement(jsxIdentifier('style'), []),
+                jsxClosingElement(jsxIdentifier('style')),
+                [
+                  jsxExpressionContainer(
+                    templateLiteral(
+                      [templateElement({ raw: meta.cssCode, cooked: meta.cssCode })],
+                      []
+                    )
+                  ),
+                ]
               );
-              const cssCodeCellElement = jsxElement(
-                jsxOpeningElement(subIdentifier, []),
-                jsxClosingElement(subIdentifier),
-                [cssCodePreviewBlockAst]
-              );
-              children.push(cssCodeCellElement);
-              // 如果是 css:silent，那么只展示而不插入 style 标签，避免出现多重 style 相互覆盖
-              if (!meta.cssSilent) {
-                const styleElement = jsxElement(
-                  jsxOpeningElement(jsxIdentifier('style'), []),
-                  jsxClosingElement(jsxIdentifier('style')),
-                  [
-                    jsxExpressionContainer(
-                      templateLiteral(
-                        [templateElement({ raw: meta.cssCode, cooked: meta.cssCode })],
-                        []
-                      )
-                    ),
-                  ]
-                );
-                children.push(styleElement);
-              }
+              children.push(styleElement);
             }
-            // const shortCodePreviewAst = getShortAst(returnElement);
-            // if (shortCodePreviewAst) {
-            //   const subIdentifier = t.jsxMemberExpression(
-            //     t.jsxIdentifier('CellCode'),
-            //     t.jsxIdentifier('Short')
-            //   );
-            //   const shortCodeCellElement = t.jsxElement(
-            //     t.jsxOpeningElement(subIdentifier, []),
-            //     t.jsxClosingElement(subIdentifier),
-            //     [shortCodePreviewAst]
-            //   );
-            //   children.push(shortCodeCellElement);
-            // }
-            const codeCellElement = jsxElement(
-              jsxOpeningElement(jsxIdentifier('CellCode'), codeAttrs),
-              jsxClosingElement(jsxIdentifier('CellCode')),
-              children
-            );
-            // 展开全部代码按钮
-            const cellDescriptionProps = [];
-            if (index === 0) {
-              cellDescriptionProps.push(jsxAttribute(jsxIdentifier('isFirst')));
-            }
-            const descriptionCellElement = jsxElement(
-              jsxOpeningElement(jsxIdentifier('CellDescription'), cellDescriptionProps),
-              jsxClosingElement(jsxIdentifier('CellDescription')),
-              [descriptionAst]
-            );
-            const codeBlockElement = jsxElement(
-              jsxOpeningElement(jsxIdentifier('CodeBlockWrapper'), [
-                jsxAttribute(jsxIdentifier('id'), stringLiteral(title)),
-              ]),
-              jsxClosingElement(jsxIdentifier('CodeBlockWrapper')),
-              [descriptionCellElement, demoCellElement, codeCellElement]
-            );
-            const app = variableDeclaration('const', [
-              variableDeclarator(identifier('__export'), codeBlockElement),
-            ]);
-            _path.insertBefore(app);
-            _path.remove();
           }
+          const codeCellElement = jsxElement(
+            jsxOpeningElement(jsxIdentifier('CellCode'), codeAttrs),
+            jsxClosingElement(jsxIdentifier('CellCode')),
+            children
+          );
+          // 展开全部代码按钮
+          const cellDescriptionProps = [];
+          if (index === 0) {
+            cellDescriptionProps.push(jsxAttribute(jsxIdentifier('isFirst')));
+          }
+          const descriptionCellElement = jsxElement(
+            jsxOpeningElement(jsxIdentifier('CellDescription'), cellDescriptionProps),
+            jsxClosingElement(jsxIdentifier('CellDescription')),
+            [descriptionAst]
+          );
+          const codeBlockElement = jsxElement(
+            jsxOpeningElement(jsxIdentifier('CodeBlockWrapper'), [
+              jsxAttribute(jsxIdentifier('id'), stringLiteral(title)),
+            ]),
+            jsxClosingElement(jsxIdentifier('CodeBlockWrapper')),
+            [descriptionCellElement, demoCellElement, codeCellElement]
+          );
+          const app = variableDeclaration('const', [
+            variableDeclarator(identifier('__export'), codeBlockElement),
+          ]);
+          _path.insertAfter(app);
+          _path.remove();
         },
       });
       const { code } = transformFromAstSync(ast, null, babelConfig);
