@@ -1,6 +1,6 @@
 {
   "name": "arco-scripts",
-  "version": "1.27.4-beta.0",
+  "version": "1.27.4",
   "description": "Arco scripts.",
   "main": "lib/bin.js",
   "types": "lib/interface.d.ts",
