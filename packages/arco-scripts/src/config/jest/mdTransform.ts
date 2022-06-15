@@ -42,7 +42,7 @@ const codeRegex = /^(([ \t]*`{3,4})([^\n]*)([\s\S]+?)(^[ \t]*\2))/m;
 module.exports = {
   process(src) {
     const str = codeRegex.exec(src);
-    if (str !== null && (str[3] === 'js' || str[3] === 'javascript')) {
+    if (str !== null && (str[3] === 'js' || str[3] === 'javascript' || str[3] === 'tsx')) {
       return transform(str[4], babelConfig).code;
     }
   },
