@@ -201,7 +201,8 @@ function loaderForArcoComponentDoc(
       const functionName = _path.node.id && _path.node.id.name;
       if (usageAst && !functionName) {
         _path.insertBefore(usageAst);
-      } else {
+      }
+      if (ast) {
         _path.insertBefore(commonImports);
         _path.insertBefore(ast);
       }
