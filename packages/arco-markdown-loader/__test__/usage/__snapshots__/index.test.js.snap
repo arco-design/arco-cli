@@ -12,6 +12,49 @@ function Usage(props) {
   );
 }
 
+import {
+  CodeBlockWrapper,
+  CellCode,
+  CellDemo,
+  CellDescription,
+  Browser,
+  Changelog,
+} from \\"arco-doc-site-components\\";
+import {
+  Radio as NavRadio,
+  Button as ChangelogBtn,
+  Drawer as ChangelogDrawer,
+} from \\"@arco-design/web-react\\";
+const changelog = [];
+const Demo0 = React.memo(() => {
+  import { Button } from \\"@arco-design/web-react\\";
+  ReactDOM.render(<Button />, CONTAINER);
+  return __export;
+});
+const Demo1 = React.memo(() => {
+  import { Button } from \\"@arco-design/web-react\\";
+  ReactDOM.render(<Button size=\\"mini\\" />, CONTAINER);
+  return __export;
+});
+
+class Component extends React.Component {
+  render() {
+    return React.createElement(
+      \\"span\\",
+      {
+        className: \\"arco-components-wrapper\\",
+        style: this.props.style,
+      },
+      React.createElement(Demo0, {
+        key: 0,
+      }),
+      React.createElement(Demo1, {
+        key: 1,
+      })
+    );
+  }
+}
+
 export default function (props) {
   const [isUsage, setIsUsage] = useState(false);
   const [showChangelog, setShowChangelog] = useState(false);
@@ -112,6 +155,49 @@ function Usage(props) {
       <p>这是用法。</p>
     </div>
   );
+}
+
+import {
+  CodeBlockWrapper,
+  CellCode,
+  CellDemo,
+  CellDescription,
+  Browser,
+  Changelog,
+} from \\"arco-doc-site-components\\";
+import {
+  Radio as NavRadio,
+  Button as ChangelogBtn,
+  Drawer as ChangelogDrawer,
+} from \\"@arco-design/web-react\\";
+const changelog = [];
+const Demo0 = React.memo(() => {
+  import { Button } from \\"@arco-design/web-react\\";
+  ReactDOM.render(<Button />, CONTAINER);
+  return __export;
+});
+const Demo1 = React.memo(() => {
+  import { Button } from \\"@arco-design/web-react\\";
+  ReactDOM.render(<Button size=\\"mini\\" />, CONTAINER);
+  return __export;
+});
+
+class Component extends React.Component {
+  render() {
+    return React.createElement(
+      \\"span\\",
+      {
+        className: \\"arco-components-wrapper\\",
+        style: this.props.style,
+      },
+      React.createElement(Demo0, {
+        key: 0,
+      }),
+      React.createElement(Demo1, {
+        key: 1,
+      })
+    );
+  }
 }
 
 export default function (props) {
