@@ -43,7 +43,17 @@ module.exports = {
   process(src) {
     const str = codeRegex.exec(src);
     if (str !== null && (str[3] === 'js' || str[3] === 'javascript' || str[3] === 'tsx')) {
-      return transform(str[4], babelConfig).code;
+      let config = babelConfig;
+      if (str[3] === 'tsx') {
+        config = {
+          ...config,
+          plugins: [
+            ...config.plugins,
+            ['@babel/plugin-transform-typescript', { isTSX: true }] as any,
+          ],
+        };
+      }
+      return transform(str[4], config).code;
     }
   },
   getCacheKey(fileData, filename, configString, { instrument, rootDir }) {
