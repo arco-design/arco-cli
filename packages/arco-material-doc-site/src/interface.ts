@@ -292,6 +292,10 @@ export type ArcoSiteGlobalContext = {
     avatarUrl: string;
   };
   /**
+   * Info about npm package of current material
+   */
+  packageInfo?: Record<string, string>;
+  /**
    * All route info including docs and components
    */
   routes: ArcoSiteRouteType[];
