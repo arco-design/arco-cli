@@ -197,15 +197,15 @@ function registerCommand() {
 
   // SubCommands
   Object.entries(subCommands).forEach(([subCommand, { desc, executableFile }]) => {
-    program.command(subCommand, desc, { executableFile } as any);
+    program.command(subCommand, desc, { executableFile });
   });
 
   program.on('--help', function () {
     print.divider();
     print(locale.TIP_SHOW_HELP);
     print('Examples:');
-    print('  $ arco sync --screenshot');
-    print('  $ arco group --id 1');
+    print('  $ arco env -h');
+    print('  $ arco sync -h');
     print.divider();
   });
 }

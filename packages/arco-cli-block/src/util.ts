@@ -134,16 +134,20 @@ export function getDependenceNameAndVersion(
 /**
  * Get the way of dependency management
  */
-function getProjectPackageControlType(curPath: string): 'yarn' | 'npm' {
+function getProjectPackageControlType(curPath: string): 'yarn' | 'npm' | 'pnpm' {
   const breakCondition = '/';
   while (curPath !== breakCondition) {
     const packageLockPath = path.resolve(curPath, 'package-lock.json');
     const yarnLockPath = path.resolve(curPath, 'yarn.lock');
+    const pnpmLockPath = path.resolve(curPath, 'pnpm-lock.yaml');
     if (fs.existsSync(yarnLockPath)) {
       return 'yarn';
     }
     if (fs.existsSync(packageLockPath)) {
       return 'npm';
+    }
+    if (fs.existsSync(pnpmLockPath)) {
+      return 'pnpm';
     }
     curPath = path.resolve(curPath, '../');
   }
@@ -161,14 +165,21 @@ export async function installDependency(
   return new Promise((resolve) => {
     const type = getProjectPackageControlType(cwdPath);
     const registry = getGlobalInfo().host.npm;
+
+    // Should exec command in project root while using npm
     const ls = exec(
       type === 'yarn'
         ? `yarn add ${npmName} -S --registry=${registry}`
+        : type === 'pnpm'
+        ? `pnpm add ${npmName} -P --registry=${registry}`
         : `npm i ${npmName} -S --registry=${registry}`,
-      {
-        cwd: cwdPath,
-      }
+      type === 'npm'
+        ? {
+            cwd: cwdPath,
+          }
+        : {}
     );
+
     ls.stdout &&
       ls.stdout.on('data', function (data) {
         logFun(data.toString());

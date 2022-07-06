@@ -96,7 +96,9 @@ async function arcoBlockInsertInner(
 
     const exitCode = await installDependency(depStr, rootPath, logProgress);
     if (exitCode !== 0) {
-      throw new Error(`Failed to install npm dependency, please check yarn or npm environment.`);
+      throw new Error(
+        `Failed to install npm dependency [${depStr}], please check package manager or install them manually.`
+      );
     } else {
       logProgress(locale.TIP_INSTALL_DEP_DONE);
     }
