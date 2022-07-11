@@ -4,7 +4,6 @@ import merge from 'webpack-merge';
 import { Configuration } from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import ProgressPlugin from 'progress-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import ArcoWebpackPlugin from '@arco-design/webpack-plugin';
 import { webpackExternalForArco } from 'arco-cli-dev-utils';
@@ -38,10 +37,10 @@ function getEntryConfig() {
   return entry;
 }
 
-function getModuleRuleForCss(production: boolean) {
+function getModuleRuleForCss() {
   return [
     {
-      loader: production ? MiniCssExtractPlugin.loader : 'style-loader',
+      loader: 'style-loader',
     },
     {
       loader: 'css-loader',
@@ -49,16 +48,10 @@ function getModuleRuleForCss(production: boolean) {
   ];
 }
 
-function getModuleRuleForLess({
-  cssModule,
-  production,
-}: {
-  cssModule?: boolean;
-  production?: boolean;
-}) {
+function getModuleRuleForLess({ cssModule }: { cssModule?: boolean }) {
   return [
     {
-      loader: production ? MiniCssExtractPlugin.loader : 'style-loader',
+      loader: 'style-loader',
     },
     {
       loader: 'css-loader',
@@ -206,16 +199,16 @@ const config = {
         rules: [
           {
             test: REGEXP_CSS,
-            use: getModuleRuleForCss(false),
+            use: getModuleRuleForCss(),
           },
           {
             test: REGEXP_LESS,
             exclude: REGEXP_LESS_MODULE,
-            use: getModuleRuleForLess({ production: false, cssModule: false }),
+            use: getModuleRuleForLess({ cssModule: false }),
           },
           {
             test: REGEXP_LESS_MODULE,
-            use: getModuleRuleForLess({ production: false, cssModule: true }),
+            use: getModuleRuleForLess({ cssModule: true }),
           },
         ],
       },
@@ -240,24 +233,19 @@ const config = {
         rules: [
           {
             test: REGEXP_CSS,
-            use: getModuleRuleForCss(true),
+            use: getModuleRuleForCss(),
           },
           {
             test: REGEXP_LESS,
             exclude: REGEXP_LESS_MODULE,
-            use: getModuleRuleForLess({ production: true, cssModule: false }),
+            use: getModuleRuleForLess({ cssModule: false }),
           },
           {
             test: REGEXP_LESS_MODULE,
-            use: getModuleRuleForLess({ production: true, cssModule: true }),
+            use: getModuleRuleForLess({ cssModule: true }),
           },
         ],
       },
-      plugins: [
-        new MiniCssExtractPlugin({
-          filename: `${LIBRARY_MODULE_NAME}.css`,
-        }),
-      ],
       optimization: {
         minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
       },

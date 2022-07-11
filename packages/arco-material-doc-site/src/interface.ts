@@ -119,6 +119,11 @@ export interface MainConfig {
      */
     allowThemeToggle?: boolean;
     /**
+     * The base path for document page routing, defaults to '/'
+     * @zh 文档页面路由的基础路径，默认为 '/'
+     */
+    routerHistoryBasename?: string;
+    /**
      * Config of material demos
      * @zh 页面 Demo 的配置
      */
@@ -128,6 +133,11 @@ export interface MainConfig {
        * @zh Demo 是否允许编辑调试
        */
       editable?: boolean;
+      /**
+       * Whether to render demo in iframe. Edit mode will not be available when not rendering demo in iframe
+       * @zh 是否在 iframe 中渲染 Demo。当不在 iframe 中渲染 Demo 时，编辑模式将不可用
+       */
+      noSandbox?: boolean;
       /**
        * Default layout of demo/code zone
        * @zh 默认的预览/代码区域布局

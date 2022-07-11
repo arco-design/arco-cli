@@ -254,15 +254,15 @@ export default class ArcoSiteModuleInfoPlugin {
           for (const filename in assets) {
             if (assets.hasOwnProperty(filename) && filename.endsWith('.js')) {
               const chunkName = Object.keys(compiler.options.entry).find(
-                (chunkName) =>
-                  compiler.options.output.filename.replace('.[name].', `.${chunkName}.`) ===
-                  filename
+                (chunkName) => compiler.options.output.filename.indexOf(`.${chunkName}.`) > -1
               );
+              const targetModuleInfo =
+                moduleInfoMap[chunkName] || Object.entries(moduleInfoMap)[0]?.[1];
 
-              if (moduleInfoMap[chunkName]) {
+              if (targetModuleInfo) {
                 compilation.updateAsset(
                   filename,
-                  new RawSource(getNewSource(assets[filename].source(), moduleInfoMap[chunkName]))
+                  new RawSource(getNewSource(assets[filename].source(), targetModuleInfo))
                 );
               }
             }
