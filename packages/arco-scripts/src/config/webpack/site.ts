@@ -28,14 +28,14 @@ function getUse(cssModule, isProduction) {
     : {};
   return [
     {
-      loader: isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+      loader: isProduction ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
     },
     {
-      loader: 'css-loader',
+      loader: require.resolve('css-loader'),
       options,
     },
     {
-      loader: 'postcss-loader',
+      loader: require.resolve('postcss-loader'),
       options: {
         postcssOptions: {
           plugins: ['autoprefixer'],
@@ -43,7 +43,7 @@ function getUse(cssModule, isProduction) {
       },
     },
     {
-      loader: 'less-loader',
+      loader: require.resolve('less-loader'),
       options: {
         javascriptEnabled: true,
       },
@@ -62,9 +62,9 @@ const baseConfig = {
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: require.resolve('babel-loader'),
         options: babelConfig,
-        // loader: 'esbuild-loader',
+        // loader: require.resolve('esbuild-loader'),
         // options: {
         //   loader: 'tsx',
         //   target: 'es2015',
@@ -74,16 +74,16 @@ const baseConfig = {
         test: /\.md$/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: require.resolve('babel-loader'),
             options: babelConfig,
-            // loader: 'esbuild-loader',
+            // loader: require.resolve('esbuild-loader'),
             // options: {
             //   loader: 'jsx',
             //   target: 'es2015',
             // },
           },
           {
-            loader: 'arco-markdown-loader',
+            loader: require.resolve('arco-markdown-loader'),
             options: {
               demoDir: 'demo',
               babelConfig,
@@ -93,18 +93,18 @@ const baseConfig = {
       },
       {
         test: /\.svg$/,
-        use: ['@svgr/webpack'],
+        use: [require.resolve('@svgr/webpack')],
       },
       {
         test: /\.(png|jpg|gif)$/,
-        loader: 'file-loader',
+        loader: require.resolve('file-loader'),
         options: {
           esModule: false,
         },
       },
       {
         test: /\.(ttf|eot|woff|woff2)$/,
-        loader: 'file-loader',
+        loader: require.resolve('file-loader'),
         options: {
           name: 'fonts/[name].[ext]',
           esModule: false,
@@ -150,10 +150,10 @@ const config = {
           test: /\.css$/,
           use: [
             {
-              loader: 'style-loader',
+              loader: require.resolve('style-loader'),
             },
             {
-              loader: 'css-loader',
+              loader: require.resolve('css-loader'),
             },
           ],
         },
@@ -205,7 +205,7 @@ const config = {
               loader: MiniCssExtractPlugin.loader,
             },
             {
-              loader: 'css-loader',
+              loader: require.resolve('css-loader'),
             },
           ],
         },
