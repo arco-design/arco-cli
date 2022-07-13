@@ -30,14 +30,14 @@ function getUse(cssModule) {
     : {};
   return [
     {
-      loader: 'style-loader',
+      loader: require.resolve('style-loader'),
     },
     {
-      loader: 'css-loader',
+      loader: require.resolve('css-loader'),
       options,
     },
     {
-      loader: 'less-loader',
+      loader: require.resolve('less-loader'),
       options: {
         javascriptEnabled: true,
       },
@@ -75,11 +75,11 @@ let config = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: require.resolve('babel-loader'),
             options: babelConfig,
           },
           {
-            loader: 'ts-loader',
+            loader: require.resolve('ts-loader'),
             options: getTSLoaderOptions(),
           },
         ],
@@ -94,23 +94,23 @@ let config = {
         sideEffects: true,
         use: [
           {
-            loader: 'style-loader',
+            loader: require.resolve('style-loader'),
           },
           {
-            loader: 'css-loader',
+            loader: require.resolve('css-loader'),
           },
         ],
       },
       {
         test: /\.(png|jpg|gif|ttf|eot|woff|woff2)$/,
-        loader: 'file-loader',
+        loader: require.resolve('file-loader'),
         options: {
           esModule: false,
         },
       },
       {
         test: /\.svg$/,
-        use: ['@svgr/webpack'],
+        use: [require.resolve('@svgr/webpack')],
       },
       {
         test: lessModuleRegex,

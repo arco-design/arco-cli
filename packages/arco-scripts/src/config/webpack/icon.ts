@@ -22,7 +22,7 @@ let config = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'babel-loader',
+        loader: require.resolve('babel-loader'),
         exclude: /node_modules/,
       },
     ],

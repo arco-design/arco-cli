@@ -40,10 +40,10 @@ function getEntryConfig() {
 function getModuleRuleForCss() {
   return [
     {
-      loader: 'style-loader',
+      loader: require.resolve('style-loader'),
     },
     {
-      loader: 'css-loader',
+      loader: require.resolve('css-loader'),
     },
   ];
 }
@@ -51,10 +51,10 @@ function getModuleRuleForCss() {
 function getModuleRuleForLess({ cssModule }: { cssModule?: boolean }) {
   return [
     {
-      loader: 'style-loader',
+      loader: require.resolve('style-loader'),
     },
     {
-      loader: 'css-loader',
+      loader: require.resolve('css-loader'),
       options: cssModule
         ? {
             modules: {
@@ -64,7 +64,7 @@ function getModuleRuleForLess({ cssModule }: { cssModule?: boolean }) {
         : {},
     },
     {
-      loader: 'less-loader',
+      loader: require.resolve('less-loader'),
       options: {
         lessOptions: {
           javascriptEnabled: true,
@@ -95,7 +95,7 @@ function generateBaseConfig() {
           exclude: /node_modules/,
           use: [
             {
-              loader: 'babel-loader',
+              loader: require.resolve('babel-loader'),
               options: babelConfig,
             },
           ],
@@ -104,11 +104,11 @@ function generateBaseConfig() {
           test: /\.md$/,
           use: [
             {
-              loader: 'babel-loader',
+              loader: require.resolve('babel-loader'),
               options: babelConfig,
             },
             {
-              loader: 'arco-markdown-loader',
+              loader: require.resolve('arco-markdown-loader'),
               options: {
                 demoDir: 'demo',
                 preprocess: removeMarkdownDemoPart,
@@ -118,7 +118,7 @@ function generateBaseConfig() {
         },
         {
           test: /\.svg$/,
-          use: ['@svgr/webpack'],
+          use: [require.resolve('@svgr/webpack')],
         },
         {
           test: /\.(png|jpg|gif|ttf|eot|woff|woff2)$/,
