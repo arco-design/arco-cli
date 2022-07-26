@@ -15,4 +15,8 @@ function getMainConfig(): MainConfig {
   }
 }
 
+export function getMainConfigPath() {
+  return path.resolve(PATH_MAIN_CONFIG);
+}
+
 export default getMainConfig;

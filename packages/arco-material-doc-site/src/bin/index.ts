@@ -3,13 +3,14 @@
 import fs from 'fs-extra';
 import axios from 'axios';
 import program from 'commander';
+import chokidar from 'chokidar';
 import { webpack } from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import { print } from 'arco-cli-dev-utils';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 import locale from '../locale';
-import getMainConfig from '../utils/getMainConfig';
+import getMainConfig, { getMainConfigPath } from '../utils/getMainConfig';
 import webpackCallback from '../utils/webpackCallback';
 import generateEntryFiles, { getPathEntryByLanguage } from '../utils/generateEntryFiles';
 import { dev as webpackConfigDev, prod as webpackConfigProd } from '../config/webpack.config';
@@ -29,6 +30,37 @@ const URL_HTML_TEMPLATE_PREFIX = `http://${
 }/`;
 const URL_HTML_TEMPLATE_ISOLATE = `${URL_HTML_TEMPLATE_PREFIX}team.isolate.html`;
 const URL_HTML_TEMPLATE_DEVELOPMENT = `${URL_HTML_TEMPLATE_PREFIX}team.development.html`;
+
+// Watch file changes, re-generate entry files
+function hotUpdateEntries(globsToWatch: string[]) {
+  const mainConfigPath = getMainConfigPath();
+  const watcher = chokidar.watch(globsToWatch.concat(mainConfigPath), {
+    ignoreInitial: true,
+  });
+
+  watcher
+    .on('add', (filePath) => {
+      print.success(locale.TIP_REGENERATE_ENTRY_BY_GLOB);
+      print.info(`[+] ${filePath}`);
+      generateEntryFiles({ isDev: true });
+    })
+    .on('unlink', (filePath) => {
+      print.success(locale.TIP_REGENERATE_ENTRY_BY_GLOB);
+      print.info(`[-] ${filePath}`);
+      generateEntryFiles({ isDev: true });
+    })
+    .on('change', () => {
+      // TODO re-check why this not work
+      // if (filePath === mainConfigPath) {
+      //   print.success(locale.TIP_REGENERATE_ENTRY_BY_CONFIG);
+      //   generateEntryFiles();
+      // }
+    });
+
+  return async () => {
+    await watcher.close();
+  };
+}
 
 program
   .name('arco-doc-site')
@@ -81,9 +113,7 @@ program
   .description('dev mode')
   .option('-l, --language [language]', locale.TIP_DEV_OPTION_LANGUAGE)
   .action(async ({ language }: { language: string }) => {
-    // Re-generate entry files
-    // TODO watch file add/remove
-    await generateEntryFiles();
+    const globsToWatch = await generateEntryFiles();
 
     if (!language) {
       const {
@@ -118,6 +148,9 @@ program
     const devSeverOptions = { ...(webpackConfigDev as any).devServer };
     const server = new WebpackDevServer(devSeverOptions, compiler);
     await server.start();
+
+    // Watch file and re-generate entry files
+    hotUpdateEntries(globsToWatch);
   });
 
 program.parse(process.argv);

@@ -169,7 +169,7 @@ export interface MainConfig {
       /**
        * Sort rule of menu items. The higher the menu item, the higher the priority
        * @zh 菜单排序规则，越靠前的菜单项优先级越高
-       * @e.g { guide: ['document2', 'document1'] }
+       * @e.g { '/': ['guide', 'development'], guide: ['document2', 'document1'] }
        */
       sortRule?: Record<string, String[]>;
     };

@@ -1,3 +1,4 @@
+import path from 'path';
 import { GlobConfigForBuild, MainConfig } from '../interface';
 
 const BASE_SUBMODULE_DIR_NAME = 'submodule';
@@ -10,28 +11,44 @@ export type SubmodulePathInfo = Record<
 export default function getSubmodulePath(
   buildConfig: MainConfig['build'],
   languages: string[]
-): Record<string, SubmodulePathInfo> {
+): {
+  pathInfoMap: Record<string, SubmodulePathInfo>;
+  globsToWatch: string[];
+} {
   const globs = buildConfig.globs;
-  const result = {};
+  const pathInfoMap = {};
+  const globsToWatch = [];
 
   const extendSubmoduleInfo = (submoduleKey: string, glob: GlobConfigForBuild) => {
     const info = {};
     Object.entries(glob).forEach(([key, item]) => {
-      let path = null;
+      let entryFilePath = null;
 
       if (languages.length > 1 && key === 'doc') {
-        path = {};
-        languages.forEach((lang) => (path[lang] = `./${submoduleKey}/${key}.${lang}.js`));
+        entryFilePath = {};
+        languages.forEach((lang) => (entryFilePath[lang] = `./${submoduleKey}/${key}.${lang}.js`));
       } else {
-        path = `./${submoduleKey}/${key}.js`;
+        entryFilePath = `./${submoduleKey}/${key}.js`;
       }
 
       info[key] = {
         glob: item,
-        path,
+        path: entryFilePath,
       };
+
+      if (typeof item === 'string') {
+        globsToWatch.push(path.resolve(item));
+      } else if (Object.prototype.toString.call(item) === '[object Object]') {
+        Object.entries(item).forEach(([globKey, globStr]) => {
+          if (globKey !== 'base') {
+            const globBase = (item as { base: string }).base;
+            globsToWatch.push(globBase ? path.resolve(globBase, globStr) : globStr);
+          }
+        });
+      }
     });
-    result[submoduleKey] = info;
+
+    pathInfoMap[submoduleKey] = info;
   };
 
   if (Array.isArray(globs)) {
@@ -48,5 +65,8 @@ export default function getSubmodulePath(
     }
   }
 
-  return result;
+  return {
+    pathInfoMap,
+    globsToWatch,
+  };
 }

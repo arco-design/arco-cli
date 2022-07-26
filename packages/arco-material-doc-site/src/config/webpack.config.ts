@@ -220,6 +220,10 @@ const config = {
         static: {
           directory: path.resolve(DEV_DIRECTORY_NAME),
         },
+        client: {
+          logging: 'error',
+          overlay: false,
+        },
       },
     },
     generateCustomConfig(),

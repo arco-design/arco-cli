@@ -1,9 +1,10 @@
 import axios from 'axios';
 import fs from 'fs-extra';
 import path from 'path';
+import ora from 'ora';
 import glob from 'glob';
 import globParent from 'glob-parent';
-import { print } from 'arco-cli-dev-utils';
+import locale from '../locale';
 import getMainConfig from './getMainConfig';
 import { DocumentInfo, GlobConfigForBuild } from '../interface';
 import { PLACEHOLDER_ARCO_SITE_MODULE_INFO } from '../constant';
@@ -15,7 +16,7 @@ type ExportModuleInfo = {
   statement: string;
 };
 
-export const ENTRY_DIR_NAME = '__temp__';
+export const ENTRY_DIR_NAME = '.temp';
 export const LIBRARY_MODULE_NAME = 'arcoSite';
 const VARIABLE_PREFIX = LIBRARY_MODULE_NAME;
 
@@ -84,8 +85,8 @@ function generateDocTree(options: {
     }
   }
 
-  const relativePath = path.relative(baseDir, entry);
-  const sortRule = siteConfig?.menu?.sortRule && siteConfig?.menu?.sortRule[relativePath];
+  const relativePath = path.relative(baseDir, entry) || '/';
+  const sortRule = siteConfig?.menu?.sortRule?.[relativePath];
   if (Array.isArray(sortRule)) {
     return result.sort(({ name: nameA }, { name: nameB }) => {
       const indexA = sortRule.indexOf(nameA);
@@ -104,6 +105,9 @@ async function extendSiteConfigFromRemoteGroupSetting() {
   // Try to get arcoDesignLabTheme from remote group settings
   if (groupInfo?.id && !siteConfig.arcoDesignLabTheme) {
     try {
+      const spinner = ora();
+      spinner.start(locale.TIP_USE_THEME_FROM_REMOTE_GROUP_CONFIG_ING);
+
       const {
         data: { result: hostInfo },
       } = await axios.get('https://arco.design/material/api/getHostInfo');
@@ -117,12 +121,12 @@ async function extendSiteConfigFromRemoteGroupSetting() {
           id: groupInfo.id,
         }
       );
+
       if (theme) {
-        print.success(
-          '[arco-doc-site]',
-          `Find theme setting for group 「${groupName}」, will use theme 「${theme}」.`
-        );
+        spinner.succeed(locale.TIP_USE_THEME_FROM_REMOTE_GROUP_CONFIG_DONE(groupName, theme));
         siteConfig.arcoDesignLabTheme = theme;
+      } else {
+        spinner.succeed(locale.TIP_USE_THEME_FROM_REMOTE_GROUP_CONFIG_FAIL);
       }
     } catch (e) {}
   }
@@ -159,7 +163,10 @@ function generateSubmodules(
           // Glob info about pure document
           const globDocBasePath = globParent(globConfig as string);
           const globDocMagicPath = (globConfig as string).replace(`${globDocBasePath}/`, '');
-          const docEntryPath = path.resolve(globDocBasePath, language);
+          const docEntryPathWithLanguage = path.resolve(globDocBasePath, language);
+          const docEntryPath = fs.existsSync(docEntryPathWithLanguage)
+            ? docEntryPathWithLanguage
+            : globDocBasePath;
           const validDocPathList = glob.sync(path.resolve(docEntryPath, globDocMagicPath));
 
           documentInfo = generateDocTree({
@@ -276,7 +283,8 @@ function generateSubmodules(
 /**
  * Generate entry file for webpack build
  */
-function generateEntryByLanguage(
+function generateEntries(
+  submodulePathInfoMap: Record<string, SubmodulePathInfo>,
   documentTreeMap: Record<string, DocumentInfo[]>,
   language: string
 ) {
@@ -288,31 +296,29 @@ function generateEntryByLanguage(
     statement: string;
   }> = [];
 
-  Object.entries(getSubmodulePath(buildConfig, siteConfig.languages)).forEach(
-    ([key, submoduleInfo]) => {
-      const statement = {};
+  Object.entries(submodulePathInfoMap).forEach(([key, submoduleInfo]) => {
+    const statement = {};
 
-      Object.entries(submoduleInfo).forEach(([innerKey, { path: submoduleEntryRelativePath }]) => {
-        submoduleEntryRelativePath =
-          typeof submoduleEntryRelativePath === 'object'
-            ? submoduleEntryRelativePath[language]
-            : submoduleEntryRelativePath;
+    Object.entries(submoduleInfo).forEach(([innerKey, { path: submoduleEntryRelativePath }]) => {
+      submoduleEntryRelativePath =
+        typeof submoduleEntryRelativePath === 'object'
+          ? submoduleEntryRelativePath[language]
+          : submoduleEntryRelativePath;
 
-        if (fs.existsSync(path.resolve(entryFileDir, submoduleEntryRelativePath))) {
-          const importName = `${key}_${innerKey}`;
-          fileContent.push(`import * as ${importName} from '${submoduleEntryRelativePath}';`);
-          statement[innerKey] = importName;
-        }
-      });
+      if (fs.existsSync(path.resolve(entryFileDir, submoduleEntryRelativePath))) {
+        const importName = `${key}_${innerKey}`;
+        fileContent.push(`import * as ${importName} from '${submoduleEntryRelativePath}';`);
+        statement[innerKey] = importName;
+      }
+    });
 
-      exportModuleInfoList.push({
-        name: key,
-        statement: `{ ${Object.entries(statement)
-          .map(([k, v]) => `${k}: ${v}`)
-          .join(', ')} }`,
-      });
-    }
-  );
+    exportModuleInfoList.push({
+      name: key,
+      statement: `{ ${Object.entries(statement)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join(', ')} }`,
+    });
+  });
 
   if (buildConfig.customModulePath && fs.existsSync(buildConfig.customModulePath)) {
     const exportName = `${VARIABLE_PREFIX}CustomModule`;
@@ -393,18 +399,40 @@ if (window.arcoMaterialTeamSite && window.arcoMaterialTeamSite.renderPage) {
   fs.writeFileSync(getPathEntryByLanguage(language), fileContent.join('\n'));
 }
 
-export default async function generateEntryFiles() {
+export default async function generateEntryFiles({ isDev }: { isDev?: boolean } = {}) {
+  const spinner = ora();
   await extendSiteConfigFromRemoteGroupSetting();
 
-  fs.removeSync(entryFileDir);
+  if (!isDev) {
+    // Make git ignore temp entry files
+    const pathGitIgnore = path.resolve('.gitignore');
+    if (fs.existsSync(pathGitIgnore)) {
+      const gitIgnoreContent = fs.readFileSync(pathGitIgnore, 'utf8');
+      if (gitIgnoreContent.indexOf(ENTRY_DIR_NAME) === -1) {
+        fs.writeFileSync(pathGitIgnore, gitIgnoreContent.replace(/\n?$/, `\n${ENTRY_DIR_NAME}\n`));
+      }
+    }
+
+    // Clear entry files
+    fs.removeSync(entryFileDir);
+  }
+
+  spinner.start(locale.TIP_AUTO_GENERATE_ENTRY_FILE_ING);
   fs.ensureDirSync(entryFileDir);
 
+  // Generate entry files
+  const { pathInfoMap: submodulePathInfoMap, globsToWatch } = getSubmodulePath(
+    buildConfig,
+    siteConfig.languages
+  );
   siteConfig.languages.forEach((lang) => {
     const documentTreeMap = {};
-    Object.entries(getSubmodulePath(buildConfig, siteConfig.languages)).forEach(([key, item]) => {
-      documentTreeMap[key] = generateSubmodules(item, lang);
+    Object.entries(submodulePathInfoMap).forEach(([submoduleKey, submoduleInfo]) => {
+      documentTreeMap[submoduleKey] = generateSubmodules(submoduleInfo, lang);
     });
-
-    generateEntryByLanguage(documentTreeMap, lang);
+    generateEntries(submodulePathInfoMap, documentTreeMap, lang);
   });
+  spinner.succeed(locale.TIP_AUTO_GENERATE_ENTRY_FILE_DONE);
+
+  return [...new Set(globsToWatch)];
 }
