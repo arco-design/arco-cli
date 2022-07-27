@@ -1,7 +1,6 @@
 // Custom markdown loader
 import path from 'path';
 import fs from 'fs-extra';
-import fm from 'front-matter';
 import loaderUtils from 'loader-utils';
 import traverse from '@babel/traverse';
 import generate from '@babel/generator';
@@ -27,7 +26,7 @@ import compilerChangelog from './compiler/changelog';
 import { processReactAst } from './compiler/react';
 import { htmlToJsx, htmlToJsxWithHelmet, htmlToUsageJsx } from './jsx';
 import { getDataFromChangelog } from './utils/getDataFromChangelog';
-import parseHeaderFromMarkdown from './utils/parseHeaderFromMarkdown';
+import parseMarkdownAttributes from './utils/parseMarkdownAttributes';
 import { isObject } from './utils/is';
 
 export interface ArcoMarkdownLoaderOptions {
@@ -223,20 +222,19 @@ export default function (rawContent: string) {
   }
 
   const {
-    markdown: markdownContent,
     headerHtml,
     title,
     description,
-  } = parseHeaderFromMarkdown(
+    attributes,
+    markdown: markdownContent,
+  } = parseMarkdownAttributes(
     rawContent,
     isObject(loaderOptions.autoHelmet) && (loaderOptions.autoHelmet as any).formatTitle
   );
 
-  // compile changelog
-  const source = fm<{ [key: string]: any }>(markdownContent);
-  const attributes = source.attributes;
+  // Compile changelog
   if (attributes.changelog) {
-    return compilerChangelog(source.body, headerHtml);
+    return compilerChangelog(markdownContent, headerHtml);
   }
 
   const markdownClassAttribute = jsxAttribute(

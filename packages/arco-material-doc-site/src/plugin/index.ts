@@ -6,12 +6,14 @@ import { ModuleUMDInfo } from '@arco-materials/material-preview-utils/es/interfa
 
 import parseComment from './parseComment';
 import parseRawComment, { Comment } from './parseRawComment';
-import parseModuleExport, { ModuleExportMap } from './parseModuleExport';
+import parseModuleExport, { ModuleExportInfoMap } from './parseModuleExport';
 import tryGetUMDInfo from '../utils/tryGetUMDInfo';
 import { PLACEHOLDER_ARCO_SITE_MODULE_INFO } from '../constant';
 import encodeInfo from '../utils/encodeInfo';
 import getTitleOfMarkdown from '../utils/getTitleOfMarkdown';
 import { GlobConfigForBuild, MainConfig } from '../interface';
+import parseMarkdownTitle from './parseMarkdownTitle';
+import removeMarkdownDemoPart from '../utils/removeMarkdownDemoPart';
 
 export type ModuleInfo = {
   name: string;
@@ -22,6 +24,7 @@ export type ModuleInfo = {
     info: Record<string, string>;
     rawCode?: string;
   }>;
+  outline: Array<{ depth: number; text: string }>;
 };
 
 export type ModuleInfoOfEntry = {
@@ -86,9 +89,9 @@ export default class ArcoSiteModuleInfoPlugin {
    */
   getModuleInfoMap({
     chunkInfoList,
-    submoduleMap,
+    moduleExportInfoMap,
   }: {
-    submoduleMap: ModuleExportMap;
+    moduleExportInfoMap: ModuleExportInfoMap;
     chunkInfoList: Array<ChunkInfo>;
   }): Record<string, ModuleInfoOfEntry[]> {
     // Parse raw comment
@@ -100,7 +103,7 @@ export default class ArcoSiteModuleInfoPlugin {
     const moduleInfoMap = {};
 
     for (const { name: chunkName, entry } of chunkInfoList) {
-      if (!submoduleMap[entry]) {
+      if (!moduleExportInfoMap[entry]) {
         continue;
       }
 
@@ -123,13 +126,16 @@ export default class ArcoSiteModuleInfoPlugin {
       const moduleInfo = [];
 
       // Inject comment for module info
-      submoduleMap[entry].forEach(({ name, dependencies }) => {
-        const documentSubmodules =
-          submoduleMap[dependencies.find(({ key }) => key === 'doc')?.path];
+      // [entry] is the entry file for webpack building
+      moduleExportInfoMap[entry].forEach(({ name, dependencies }) => {
+        // Submodule info for pure document imported by buildConfig.glob.doc
+        const pureDocSubmodules =
+          moduleExportInfoMap[dependencies.find(({ key }) => key === 'doc')?.path];
+        // Submodule info for component imported by buildConfig.glob.component
         const componentSubmodules =
-          submoduleMap[dependencies.find(({ key }) => key === 'component')?.path];
+          moduleExportInfoMap[dependencies.find(({ key }) => key === 'component')?.path];
 
-        if (!documentSubmodules && !componentSubmodules) {
+        if (!pureDocSubmodules && !componentSubmodules) {
           return;
         }
 
@@ -139,11 +145,10 @@ export default class ArcoSiteModuleInfoPlugin {
           component: [],
         };
 
-        if (documentSubmodules) {
-          documentSubmodules.forEach(({ name, dependencies }) => {
-            const documentPath = dependencies.find(
-              ({ path }) => this.paths.doc.indexOf(path) > -1
-            )?.path;
+        if (pureDocSubmodules) {
+          pureDocSubmodules.forEach(({ name, dependencies }) => {
+            const { path: documentPath, rawCode: documentContent } =
+              dependencies.find(({ path }) => this.paths.doc.indexOf(path) > -1) || {};
             if (documentPath) {
               submoduleInfo.doc.push({
                 name,
@@ -151,6 +156,7 @@ export default class ArcoSiteModuleInfoPlugin {
                 info: {
                   name: getTitleOfMarkdown(dependencies[0].path),
                 },
+                outline: parseMarkdownTitle(documentContent),
               });
             }
           });
@@ -161,28 +167,36 @@ export default class ArcoSiteModuleInfoPlugin {
             const demoEntryPath = dependencies.find(
               ({ path }) => this.paths.demo.indexOf(path) > -1
             )?.path;
-            const demoSubmodules = submoduleMap[demoEntryPath];
+            const demoSubmodules = moduleExportInfoMap[demoEntryPath];
             const commentList = demoCommentMap[demoEntryPath];
-
-            if (demoSubmodules) {
-              const componentComment = commentList?.[0] || {};
-              const demoCommentList = commentList ? commentList.slice(-demoSubmodules.length) : [];
-
-              submoduleInfo.component.push({
+            const componentInfo = {
+              ...(commentList?.[0] || {}),
+              umd: tryGetUMDInfo(demoEntryPath),
+            };
+            const demoCommentList = commentList ? commentList.slice(-demoSubmodules.length) : [];
+            const demoInfoList = demoSubmodules.map(({ name, dependencies }, index) => {
+              return {
                 name,
-                info: {
-                  ...componentComment,
-                  umd: tryGetUMDInfo(demoEntryPath),
-                },
-                children: demoSubmodules.map(({ name, dependencies }, index) => {
-                  return {
-                    name,
-                    rawCode: dependencies[0]?.rawCode || '',
-                    info: demoCommentList[index] || {},
-                  };
-                }),
-              });
-            }
+                rawCode: dependencies[0]?.rawCode || '',
+                info: demoCommentList[index] || {},
+              };
+            });
+            const apiDocument = parseMarkdownTitle(
+              removeMarkdownDemoPart(
+                dependencies.find(({ path }) => path.endsWith('.md'))?.rawCode || ''
+              )
+            );
+
+            submoduleInfo.component.push({
+              name,
+              info: componentInfo,
+              children: demoInfoList,
+              outline: [
+                { depth: 1, text: componentInfo.title || name },
+                ...demoInfoList.map(({ name }) => ({ depth: 2, text: name })),
+                ...apiDocument,
+              ],
+            });
           });
         }
 
@@ -196,7 +210,7 @@ export default class ArcoSiteModuleInfoPlugin {
   }
 
   apply(compiler) {
-    let submoduleMap: ModuleExportMap = {};
+    let moduleExportInfoMap: ModuleExportInfoMap = {};
     let hasInjectedModuleInfo = false;
     const chunkInfoList: ChunkInfo[] = [];
 
@@ -231,7 +245,7 @@ export default class ArcoSiteModuleInfoPlugin {
         });
 
         // Parse the export module info of demo files
-        submoduleMap = parseModuleExport({
+        moduleExportInfoMap = parseModuleExport({
           context: compiler.context,
           validPaths: this.paths.demo.concat(
             glob.sync(path.resolve(path.dirname(chunkInfoList[0].entry), '**/*'))
@@ -247,7 +261,7 @@ export default class ArcoSiteModuleInfoPlugin {
       if (compilation.hooks.processAssets) {
         compilation.hooks.processAssets.tap('ArcoSiteModuleInfoPlugin', (assets) => {
           const moduleInfoMap = this.getModuleInfoMap({
-            submoduleMap,
+            moduleExportInfoMap,
             chunkInfoList,
           });
 
@@ -289,7 +303,7 @@ export default class ArcoSiteModuleInfoPlugin {
 
       const moduleInfoMap = this.getModuleInfoMap({
         chunkInfoList,
-        submoduleMap,
+        moduleExportInfoMap,
       });
 
       chunkInfoList.forEach(({ name: chunkName, files }) => {

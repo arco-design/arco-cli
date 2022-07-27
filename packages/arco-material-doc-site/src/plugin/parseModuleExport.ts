@@ -16,7 +16,8 @@ type ModuleExportInfo = {
   }>;
 };
 
-export type ModuleExportMap = {
+export type ModuleExportInfoMap = {
+  /** key is file path, value is list of exported module info */
   [key: string]: Array<ModuleExportInfo>;
 };
 
@@ -31,8 +32,8 @@ export default function parseModuleExport({
   statsModules: Array<{ [key: string]: any }>;
   context: string;
   validPaths: string[];
-}): ModuleExportMap {
-  const result: ModuleExportMap = {};
+}): ModuleExportInfoMap {
+  const result: ModuleExportInfoMap = {};
 
   for (const { name } of statsModules) {
     const pathCurrent = path.resolve(context, name);
