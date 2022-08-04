@@ -1,3 +1,4 @@
+import { Tokens } from 'marked';
 import marked from '../parser/marked';
 
 const getType = (text) => {
@@ -69,7 +70,7 @@ export const getDataFromChangelog = (content: string) => {
     } else if (item.type === 'heading' && item.depth === 3) {
       const type = getType(item.text);
       const listToken = tokens[index + 1];
-      for (const item of listToken.items) {
+      for (const item of (listToken as Tokens.List).items) {
         const content = getContent(item);
 
         addChangelog(
