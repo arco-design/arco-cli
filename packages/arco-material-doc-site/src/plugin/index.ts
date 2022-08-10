@@ -54,7 +54,9 @@ export default class ArcoSiteModuleInfoPlugin {
 
     const extendPathList = ({ doc, component }: GlobConfigForBuild) => {
       docPathList = docPathList.concat(glob.sync(path.resolve(doc)));
-      demoPathList = demoPathList.concat(glob.sync(path.resolve(component.base, component.demo)));
+      if (component.demo) {
+        demoPathList = demoPathList.concat(glob.sync(path.resolve(component.base, component.demo)));
+      }
     };
 
     if (globs) {
@@ -174,10 +176,10 @@ export default class ArcoSiteModuleInfoPlugin {
               umd: tryGetUMDInfo(demoEntryPath),
             };
             const demoCommentList = commentList ? commentList.slice(-demoSubmodules.length) : [];
-            const demoInfoList = demoSubmodules.map(({ name, dependencies }, index) => {
+            const demoInfoList = demoSubmodules.map(({ name, value, dependencies }, index) => {
               return {
                 name,
-                rawCode: dependencies[0]?.rawCode || '',
+                rawCode: dependencies[0]?.rawCode || value,
                 info: demoCommentList[index] || {},
               };
             });
