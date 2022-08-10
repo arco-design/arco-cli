@@ -18,7 +18,7 @@ export default function tryGenerateAliasMapForWebpack() {
 
   let packagePathList = [];
   const extendPackagePathList = ({ component }: GlobConfigForBuild) => {
-    if (component.base) {
+    if (component?.base) {
       packagePathList = packagePathList.concat(glob.sync(component.base));
     }
   };

@@ -52,9 +52,13 @@ export default class ArcoSiteModuleInfoPlugin {
     let docPathList = [];
     let demoPathList = [];
 
-    const extendPathList = ({ doc, component }: GlobConfigForBuild) => {
-      docPathList = docPathList.concat(glob.sync(path.resolve(doc)));
-      if (component.demo) {
+    const extendPathList = (
+      { doc, component }: GlobConfigForBuild = { doc: null, component: null }
+    ) => {
+      if (doc) {
+        docPathList = docPathList.concat(glob.sync(path.resolve(doc)));
+      }
+      if (component?.base && component?.demo) {
         demoPathList = demoPathList.concat(glob.sync(path.resolve(component.base, component.demo)));
       }
     };
