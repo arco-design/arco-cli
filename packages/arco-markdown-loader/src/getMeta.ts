@@ -23,7 +23,7 @@ const transformTs2Js = (code) => {
     plugins: [['@babel/plugin-transform-typescript', { isTSX: true }]],
   }).code;
 
-  return prettier.format(body);
+  return prettier.format(body, { parser: 'babel' });
 };
 
 const getMetaFromComment: (string, boolean) => DemoMeta = (source, isTsx) => {
