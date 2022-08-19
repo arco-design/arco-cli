@@ -14,11 +14,11 @@ async function checkGitRemote() {
       print();
     } else {
       print.error(['arco publish'], locale.ERROR_NO_GIT_ORIGIN);
-      process.exit();
+      process.exit(1);
     }
   } else {
     print.error(['arco publish'], locale.ERROR_NO_GIT_INIT);
-    process.exit();
+    process.exit(1);
   }
 }
 
@@ -40,7 +40,7 @@ export default async function ({ configFileName }: PublishOptions = {}) {
 
   if (Array.isArray(packages) && packages.length > 1) {
     print.error('[arco publish]', locale.ERROR_IN_MONOREPO);
-    process.exit();
+    process.exit(1);
   }
 
   await checkGitRemote();

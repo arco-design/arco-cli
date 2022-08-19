@@ -223,7 +223,7 @@ if (process.argv[2] !== 'env' && checkEnv() === false) {
     })
     .catch((err) => {
       print.error(err);
-      process.exit(0);
+      process.exit(1);
     });
 } else {
   program.parse(process.argv);

@@ -76,12 +76,12 @@ export default async function ({
 }: ProjectInitOptions) {
   if (!projectName) {
     print.error(`\n${locale.ERROR_NO_PROJECT_NAME}\n`);
-    process.exit(0);
+    process.exit(1);
   }
 
   if (!(await isGitStatusClean())) {
     print.error(`\n${locale.ERROR_GIT_DIRTY}\n`);
-    process.exit(0);
+    process.exit(1);
   }
 
   // project init path
