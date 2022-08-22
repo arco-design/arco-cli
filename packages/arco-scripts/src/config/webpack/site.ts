@@ -64,11 +64,6 @@ const baseConfig = {
         exclude: /node_modules/,
         loader: require.resolve('babel-loader'),
         options: babelConfig,
-        // loader: require.resolve('esbuild-loader'),
-        // options: {
-        //   loader: 'tsx',
-        //   target: 'es2015',
-        // },
       },
       {
         test: /\.md$/,
@@ -76,11 +71,6 @@ const baseConfig = {
           {
             loader: require.resolve('babel-loader'),
             options: babelConfig,
-            // loader: require.resolve('esbuild-loader'),
-            // options: {
-            //   loader: 'jsx',
-            //   target: 'es2015',
-            // },
           },
           {
             loader: require.resolve('arco-markdown-loader'),
