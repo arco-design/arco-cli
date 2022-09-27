@@ -198,8 +198,10 @@ export default class ArcoSiteModuleInfoPlugin {
               info: componentInfo,
               children: demoInfoList,
               outline: [
-                { depth: 1, text: componentInfo.title || name },
-                ...demoInfoList.map(({ name }) => ({ depth: 2, text: name })),
+                ...demoInfoList.map(({ name, info }) => ({
+                  depth: 2,
+                  text: info?.title || info?.name || name,
+                })),
                 ...apiDocument,
               ],
             });
