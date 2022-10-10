@@ -139,6 +139,11 @@ export interface MainConfig {
        */
       noSandbox?: boolean;
       /**
+       * Whether to show only code snippets
+       * @zh 是否仅渲染代码片段
+       */
+      codeOnly?: boolean;
+      /**
        * Default layout of demo/code zone
        * @zh 默认的预览/代码区域布局
        */

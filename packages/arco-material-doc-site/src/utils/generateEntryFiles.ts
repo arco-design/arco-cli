@@ -4,12 +4,14 @@ import path from 'path';
 import ora from 'ora';
 import glob from 'glob';
 import globParent from 'glob-parent';
+import { print } from 'arco-cli-dev-utils';
 import locale from '../locale';
 import getMainConfig from './getMainConfig';
 import { DocumentInfo, GlobConfigForBuild } from '../interface';
 import { PLACEHOLDER_ARCO_SITE_MODULE_INFO } from '../constant';
 import getTitleOfMarkdown from './getTitleOfMarkdown';
 import getSubmodulePath, { SubmodulePathInfo } from './getSubmodulePath';
+import getArcoHost from './getArcoHost';
 
 type ExportModuleInfo = {
   name: string;
@@ -105,22 +107,17 @@ async function extendSiteConfigFromRemoteGroupSetting() {
   // Try to get arcoDesignLabTheme from remote group settings
   if (groupInfo?.id && !siteConfig.arcoDesignLabTheme) {
     try {
+      const arcoHost = await getArcoHost(groupInfo.private);
       const spinner = ora();
       spinner.start(locale.TIP_USE_THEME_FROM_REMOTE_GROUP_CONFIG_ING);
 
       const {
-        data: { result: hostInfo },
-      } = await axios.get('https://arco.design/material/api/getHostInfo');
-      const {
         data: {
           result: [{ theme, name: groupName }],
         },
-      } = await axios.post(
-        `${hostInfo[groupInfo.private ? 'private' : 'public'].arco}/material/api/group/`,
-        {
-          id: groupInfo.id,
-        }
-      );
+      } = await axios.post(`${arcoHost}/material/api/group/`, {
+        id: groupInfo.id,
+      });
 
       if (theme) {
         spinner.succeed(locale.TIP_USE_THEME_FROM_REMOTE_GROUP_CONFIG_DONE(groupName, theme));
@@ -128,7 +125,13 @@ async function extendSiteConfigFromRemoteGroupSetting() {
       } else {
         spinner.succeed(locale.TIP_USE_THEME_FROM_REMOTE_GROUP_CONFIG_FAIL);
       }
-    } catch (e) {}
+    } catch (err) {
+      print.error(
+        '[arco-doc-site]',
+        `Failed to extend group configuration of group-${groupInfo.id} from remote`
+      );
+      console.error(err);
+    }
   }
 }
 

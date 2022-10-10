@@ -14,6 +14,7 @@ import getMainConfig, { getMainConfigPath } from '../utils/getMainConfig';
 import webpackCallback from '../utils/webpackCallback';
 import generateEntryFiles, { getPathEntryByLanguage } from '../utils/generateEntryFiles';
 import { dev as webpackConfigDev, prod as webpackConfigProd } from '../config/webpack.config';
+import getArcoHost from '../utils/getArcoHost';
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -113,14 +114,14 @@ program
   .description('dev mode')
   .option('-l, --language [language]', locale.TIP_DEV_OPTION_LANGUAGE)
   .action(async ({ language }: { language: string }) => {
+    const {
+      group,
+      site: { languages },
+    } = getMainConfig();
     const globsToWatch = await generateEntryFiles();
 
-    if (!language) {
-      const {
-        site: { languages },
-      } = getMainConfig();
-      language = languages[0];
-    }
+    // Set default language
+    language = language || languages[0];
 
     // Set dev entry for webpack config
     try {
@@ -144,8 +145,34 @@ program
       return;
     }
 
-    const compiler = webpack(webpackConfigDev);
+    // Extend dev server options
     const devSeverOptions = { ...(webpackConfigDev as any).devServer };
+    const arcoHost = await getArcoHost(group?.private);
+    const proxy = {
+      target: arcoHost,
+      cookieDomainRewrite: `${devSeverOptions.host || 'localhost'}:${devSeverOptions.port}`,
+      secure: false,
+      changeOrigin: true,
+    };
+    const apiPath = '/material/api';
+    devSeverOptions.proxy = devSeverOptions.proxy || {};
+
+    if (Array.isArray(devSeverOptions.proxy)) {
+      if (
+        !devSeverOptions.proxy.find(
+          (item) => Array.isArray(item?.context) && item.context.indexOf(apiPath) > -1
+        )
+      ) {
+        (devSeverOptions.proxy as any).push({
+          context: [apiPath],
+          ...proxy,
+        });
+      }
+    } else if (!devSeverOptions.proxy[apiPath]) {
+      devSeverOptions.proxy[apiPath] = proxy;
+    }
+
+    const compiler = webpack(webpackConfigDev);
     const server = new WebpackDevServer(devSeverOptions, compiler);
     await server.start();
 
