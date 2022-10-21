@@ -17,6 +17,7 @@ import {
   JSXIdentifier,
   JSXText,
   JSXAttribute,
+  ExpressionStatement,
 } from '@babel/types';
 
 import marked from './parser/marked';
@@ -187,8 +188,8 @@ function loaderForArcoComponentDoc(
           : `<>
             <div className="ac-toolbar">${ButtonJSX}</div>
             <Component />${DrawerJSX}</>`;
-
-        const element = babelParse(componentJsx).program.body[0];
+        const expressionStatement = babelParse(componentJsx).program.body[0] as ExpressionStatement
+        const element = expressionStatement.expression
         _path.replaceWith(element);
         _path.stop();
       }
