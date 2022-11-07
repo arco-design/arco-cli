@@ -3,4 +3,4 @@
 *.json
 **/template/**
 packages/*/lib/*
-packages/arco-components/es/*
+fixtures

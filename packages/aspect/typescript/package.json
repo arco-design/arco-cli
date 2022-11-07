@@ -1,0 +1,22 @@
+{
+  "name": "@arco-cli/typescript",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/compiler": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "lodash": "^4.17.21",
+    "typescript": "^4.9.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

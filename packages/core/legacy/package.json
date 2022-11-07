@@ -1,0 +1,46 @@
+{
+  "name": "@arco-cli/legacy",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "chalk": "^4.1.2",
+    "cli-spinners": "^2.7.0",
+    "find-up": "^5.0.0",
+    "fs-extra": "^10.1.0",
+    "gitconfig": "^2.0.8",
+    "globby": "^11.1.0",
+    "ignore": "^5.2.1",
+    "isbinaryfile": "^5.0.0",
+    "node-fetch": "^2.6.7",
+    "normalize-path": "^3.0.0",
+    "object-hash": "^3.0.0",
+    "ora": "^5.4.1",
+    "parse-gitignore": "^1.0.1",
+    "pino": "^8.7.0",
+    "pino-pretty": "^9.1.1",
+    "p-map": "^4.0.0",
+    "p-map-series": "^2.1.0",
+    "prompt": "^1.3.0",
+    "ramda": "^0.28.0",
+    "serialize-error": "^8.1.0",
+    "string-format": "^2.0.0",
+    "uniqid": "^5.4.0",
+    "vinyl": "^3.0.0",
+    "vinyl-file": "^3.0.0",
+    "yn": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/prompt": "^1.1.4"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@arco-cli/pubsub",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "sh ../../../scripts/build.sh dev",
+    "build": "sh ../../../scripts/build.sh",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "@arco-cli/ui": "^0.1.0",
+    "@babel/runtime": "^7.20.6",
+    "eventemitter2": "^6.4.9",
+    "penpal": "^6.2.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

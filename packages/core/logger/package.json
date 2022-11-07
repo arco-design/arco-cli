@@ -1,0 +1,22 @@
+{
+  "name": "@arco-cli/logger",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "chalk": "^4.1.2",
+    "pretty-time": "^1.1.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

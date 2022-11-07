@@ -1,17 +1,24 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "declaration": true,
+    "sourceMap": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "module": "CommonJS",
     "target": "es6",
     "moduleResolution": "node",
-    "jsx": "preserve",
-    "lib": ["ES2020"]
+    "jsx": "react",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2020"
+    ]
   },
   "exclude": ["node_modules"]
 }

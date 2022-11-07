@@ -1,0 +1,13 @@
+@import '../style/z-indexes';
+
+$navbarHeight: 60px;
+
+.navbar {
+  display: flex;
+  align-items: center;
+  height: $navbarHeight;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 16px;
+  z-index: $navbar-zIndex;
+}

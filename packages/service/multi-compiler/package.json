@@ -1,0 +1,23 @@
+{
+  "name": "@arco-cli/multi-compiler",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/compiler": "^0.1.0",
+    "@arco-cli/component": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "chalk": "^4.1.2",
+    "p-map-series": "^2.1.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

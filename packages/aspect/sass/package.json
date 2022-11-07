@@ -1,0 +1,21 @@
+{
+  "name": "@arco-cli/sass",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/compiler": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "sass": "^1.57.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

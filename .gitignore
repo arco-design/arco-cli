@@ -61,10 +61,6 @@ typings/
 # next.js build output
 .next
 
-isolate/arco-doc-site-components/dist
-isolate/arco-doc-site-components/es
-isolate/arco-doc-site-components/lib
-
 **/__test__/fixtures/es
 **/__test__/fixtures/lib
 **/__test__/fixtures/dist
@@ -74,5 +70,5 @@ isolate/arco-doc-site-components/lib
 **/.DS_Store
 
 package-lock.json
-
-packages/*/lib
+fixtures/**/dist
+packages/**/dist

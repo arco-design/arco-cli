@@ -1,0 +1,24 @@
+{
+  "name": "@arco-cli/envs",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/component": "^0.1.0",
+    "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/logger": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "lodash": "^4.17.21",
+    "p-map-series": "^2.1.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

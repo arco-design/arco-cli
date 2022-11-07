@@ -1,0 +1,39 @@
+{
+  "name": "@arco-cli/arco",
+  "version": "0.1.0",
+  "description": "Main entry for arco cli",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/aspect-loader": "^0.1.0",
+    "@arco-cli/bundler": "^0.1.0",
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/compiler": "^0.1.0",
+    "@arco-cli/component": "^0.1.0",
+    "@arco-cli/docs": "^0.1.0",
+    "@arco-cli/envs": "^0.1.0",
+    "@arco-cli/express": "^0.1.0",
+    "@arco-cli/graphql": "^0.1.0",
+    "@arco-cli/jest": "^0.1.0",
+    "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/logger": "^0.1.0",
+    "@arco-cli/preview": "^0.1.0",
+    "@arco-cli/pubsub": "^0.1.0",
+    "@arco-cli/react": "^0.1.0",
+    "@arco-cli/react-router": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "@arco-cli/tester": "^0.1.0",
+    "@arco-cli/ui": "^0.1.0",
+    "@arco-cli/workspace": "^0.1.0",
+    "fs-extra": "^10.1.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

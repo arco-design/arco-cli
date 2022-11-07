@@ -1,0 +1,30 @@
+{
+  "name": "@arco-cli/cli",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/stone": "^0.1.0",
+    "@arco-cli/logger": "^0.1.0",
+    "@arco-cli/legacy": "^0.1.0",
+    "chalk": "^4.1.2",
+    "didyoumean": "^1.2.2",
+    "ink": "^3.2.0",
+    "lodash": "^4.17.21",
+    "pad-right": "^0.2.2",
+    "react": "^17.0.2",
+    "yargs": "^17.6.2"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.13"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

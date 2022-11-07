@@ -1,0 +1,14 @@
+{
+  "arco.aspect/workspace": {
+    "components": {
+      "Button": {
+        "rootDir": "Button",
+        "mainFile": "index.ts",
+        "mainStyleFile": "style/index.less",
+        "config": {
+          "arco.env/react": {}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@arco-cli/graphql",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/logger": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "@graphql-modules/core": "^0.7.17",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^14.7.0",
+    "graphql-subscriptions": "^1.2.1",
+    "lodash": "^4.17.21",
+    "node-fetch": "^3.3.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

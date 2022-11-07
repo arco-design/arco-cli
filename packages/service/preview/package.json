@@ -1,0 +1,34 @@
+{
+  "name": "@arco-cli/preview",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "sh ../../../scripts/build.sh dev",
+    "build": "sh ../../../scripts/build.sh",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/aspect-loader": "^0.1.0",
+    "@arco-cli/bundler": "^0.1.0",
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/component": "^0.1.0",
+    "@arco-cli/envs": "^0.1.0",
+    "@arco-cli/logger": "^0.1.0",
+    "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/pubsub": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "@arco-cli/webpack": "^0.1.0",
+    "@arco-cli/workspace": "^0.1.0",
+    "@arco-cli/ui": "^0.1.0",
+    "@babel/runtime": "^7.20.6",
+    "fs-extra": "^10.1.0",
+    "ink": "^3.2.0",
+    "lodash": "^4.17.21",
+    "penpal": "^6.2.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

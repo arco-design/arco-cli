@@ -1,0 +1,20 @@
+{
+  "name": "@arco-cli/aspect-loader",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "fs-extra": "^10.1.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

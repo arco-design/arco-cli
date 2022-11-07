@@ -1,0 +1,41 @@
+import { Server } from 'http';
+
+/**
+ * interface for implementing dev servers.
+ */
+export interface DevServer {
+  /**
+   * attach to given port and start an http server
+   */
+  listen(port: number): Server | Promise<Server>;
+
+  /**
+   * display name of the dev-server.
+   */
+  displayName?: string;
+
+  /**
+   * icon of the dev-server.
+   */
+  icon?: string;
+
+  /**
+   * serialized config of the dev-server.
+   */
+  displayConfig?(): string;
+
+  /**
+   * path to the config in the filesystem.
+   */
+  configPath?: string;
+
+  /**
+   * id of the dev-server.
+   */
+  id: string;
+
+  /**
+   * return the dev-server version.
+   */
+  version?(): string;
+}

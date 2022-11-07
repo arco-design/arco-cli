@@ -1,0 +1,14 @@
+{
+  "name": "my-button-demo",
+  "version": "0.1.0",
+  "scripts": {
+    "test": "arco test"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.20.6"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@arco-cli/less",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/compiler": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "less": "^4.1.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

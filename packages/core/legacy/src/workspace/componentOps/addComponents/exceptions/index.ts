@@ -1,0 +1,1 @@
+export { IgnoredDirectoryError } from './ignoredDirectoryError';

@@ -1,0 +1,22 @@
+{
+  "name": "@arco-cli/react-router",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "sh ../../../scripts/build.sh dev",
+    "build": "sh ../../../scripts/build.sh",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/compiler": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "@arco-cli/ui": "^0.1.0",
+    "@babel/runtime": "^7.20.6"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}
