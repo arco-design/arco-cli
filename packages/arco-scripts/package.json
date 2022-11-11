@@ -1,6 +1,6 @@
 {
   "name": "arco-scripts",
-  "version": "1.27.10",
+  "version": "1.27.11",
   "description": "Arco scripts.",
   "main": "lib/bin.js",
   "types": "lib/interface.d.ts",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@svgr/webpack": "^4.2.0",
     "arco-cli-dev-utils": "^1.1.1",
-    "arco-markdown-loader": "^1.0.7",
+    "arco-markdown-loader": "^1.0.8",
     "arco-scripts-babel-config": "^1.0.0",
     "axios": "~0",
     "babel-jest": "^26.0.1",
