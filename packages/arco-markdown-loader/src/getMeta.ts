@@ -15,7 +15,7 @@ type DemoMeta = {
   cssSilent?: boolean;
 };
 
-const codeRegex = /^(([ \t]*`{3,4})([^\n]*)([\s\S]+?)(^[ \t]*\2))/gm;
+const codeRegex = /^(([ \t]*`{3,4})([^\r\n]*)([\s\S]+?)(^[ \t]*\2))/gm;
 
 const transformTs2Js = (code) => {
   if (!code) return '';
