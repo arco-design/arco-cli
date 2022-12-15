@@ -16,4 +16,5 @@ export default {
   ERROR_NEED_PUPPETEER:
     '自动截图需要依赖 puppeteer (https://www.npmjs.com/package/puppeteer) 模块，请全局安装此模块之后再次尝试',
   ERROR_AUTO_SCREENSHOT_FAILED: '自动生成物料截图失败',
+  ERROR_NONE_PACKAGE_FOUNDED: '此目录下没有发现任何物料包，请在有效的物料项目中执行此命令',
 };

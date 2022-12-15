@@ -179,8 +179,13 @@ export default async function ({
   // Try to sync meta in all specified paths
   const originalPath = process.cwd();
   paths = paths ? (Array.isArray(paths) ? paths : [paths]) : getConfig(configFileName).packages;
-  await Promise.all((paths as []).map((path) => syncMeta(path)));
 
-  messageQueue.flush();
+  if (paths && paths.length) {
+    await Promise.all((paths as []).map((path) => syncMeta(path)));
+    messageQueue.flush();
+  } else {
+    print.error(`${locale.ERROR_NONE_PACKAGE_FOUNDED}\n${originalPath}`);
+  }
+
   process.chdir(originalPath);
 }

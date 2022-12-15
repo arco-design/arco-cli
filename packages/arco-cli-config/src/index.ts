@@ -45,11 +45,12 @@ export const getConfig = (
       } catch (e) {}
     }
   }
+
   if (Array.isArray(config.packages) && config.packages.length) {
     let paths = [];
     config.packages.forEach((p) => (paths = paths.concat(glob.sync(`${root}/${p}`))));
     config.packages = paths;
-  } else {
+  } else if (root) {
     config.packages = [root];
   }
 

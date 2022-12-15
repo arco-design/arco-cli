@@ -19,4 +19,6 @@ export default {
   ERROR_NEED_PUPPETEER:
     'Automatic screenshots relies on puppeteer (https://www.npmjs.com/package/puppeteer), please try again after installing this package globally',
   ERROR_AUTO_SCREENSHOT_FAILED: 'Failed to generate material screenshot automatically',
+  ERROR_NONE_PACKAGE_FOUNDED:
+    'No material package was found in this directory, please execute this command in a valid material project',
 };

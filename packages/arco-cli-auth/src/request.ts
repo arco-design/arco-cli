@@ -2,6 +2,7 @@ import axios from 'axios';
 import { print, getGlobalInfo } from 'arco-cli-dev-utils';
 
 const ARCO_TOKEN = 'x-arco-token';
+const TIMEOUT_REQUEST = 1000 * 15;
 
 const request = (
   method: 'all' | 'get' | 'delete' | 'post' | 'put',
@@ -14,6 +15,7 @@ const request = (
   const cliConfig = getGlobalInfo();
   const instance = axios.create({
     baseURL: `${cliConfig.host.arco}/material/api/`,
+    timeout: TIMEOUT_REQUEST,
   });
 
   option.headers = {
