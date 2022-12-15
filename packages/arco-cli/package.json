@@ -1,6 +1,6 @@
 {
   "name": "arco-cli",
-  "version": "1.27.3",
+  "version": "1.27.4",
   "description": "Init an Arco material project quickly",
   "keywords": [
     "arco",
@@ -17,14 +17,14 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "arco-cli-auth": "^1.0.2",
-    "arco-cli-block": "^1.0.3",
+    "arco-cli-auth": "^1.0.3",
+    "arco-cli-block": "^1.0.4",
     "arco-cli-create-template": "^1.0.1",
     "arco-cli-dev-utils": "^1.2.0",
-    "arco-cli-generate": "^1.0.2",
-    "arco-cli-init": "^1.2.3",
-    "arco-cli-publish": "^1.0.4",
-    "arco-cli-sync": "^1.12.4",
+    "arco-cli-generate": "^1.0.3",
+    "arco-cli-init": "^1.2.4",
+    "arco-cli-publish": "^1.0.5",
+    "arco-cli-sync": "^1.12.5",
     "axios": "~0",
     "chalk": "^4.0.0",
     "commander": "^4.1.1",
