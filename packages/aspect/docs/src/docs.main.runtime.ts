@@ -1,22 +1,32 @@
 import { MainRuntime } from '@arco-cli/cli';
-import { PreviewAspect, PreviewMain } from '@arco-cli/preview';
 import { Environment } from '@arco-cli/envs';
-
-import DocsAspect from './docs.aspect';
-import { DocsPreviewDefinition } from './docs.previewDefinition';
+import { PreviewAspect, PreviewMain } from '@arco-cli/preview';
+import { GraphqlAspect, GraphqlMain } from '@arco-cli/graphql';
+import { WorkspaceAspect, Workspace } from '@arco-cli/workspace';
 import { Component, ComponentMap } from '@arco-cli/component';
 import { AbstractVinyl } from '@arco-cli/legacy/dist/workspace/component/sources';
+
+import DocsAspect from './docs.aspect';
+import getDocsSchema from './docs.graphql';
+import { DocsPreviewDefinition } from './docs.previewDefinition';
 
 export class DocsMain {
   static runtime = MainRuntime;
 
-  static dependencies = [PreviewAspect];
+  static dependencies = [PreviewAspect, GraphqlAspect, WorkspaceAspect];
 
   static slots = [];
 
-  static provider([preview]: [PreviewMain]) {
+  static provider([preview, graphql, workspace]: [PreviewMain, GraphqlMain, Workspace]) {
     const docsMain = new DocsMain();
+
     preview.registerDefinition(new DocsPreviewDefinition(docsMain));
+    graphql.register(getDocsSchema());
+
+    if (workspace) {
+      // TODO notify workspace component loaded
+    }
+
     return docsMain;
   }
 

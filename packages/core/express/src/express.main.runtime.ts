@@ -48,9 +48,9 @@ export class ExpressMain {
     readonly config: ExpressConfig,
 
     /**
-     * slot for registering graphql modules
+     * slot for registering express route
      */
-    private moduleSlot: RouteSlot,
+    private routeSlot: RouteSlot,
 
     /**
      * logger extension.
@@ -74,7 +74,7 @@ export class ExpressMain {
   }
 
   private createRoutes() {
-    const routesSlots = this.moduleSlot.toArray();
+    const routesSlots = this.routeSlot.toArray();
     const routeEntries = routesSlots.map(([, routes]) => {
       return routes.map((route) => {
         const middlewares = flatten([this.verbValidation(route), route.middlewares]);
@@ -126,7 +126,7 @@ export class ExpressMain {
    * route will be added as `/api/${route}`
    */
   register(routes: Route[]) {
-    this.moduleSlot.register(routes);
+    this.routeSlot.register(routes);
     return this;
   }
 

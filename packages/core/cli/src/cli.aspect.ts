@@ -6,3 +6,5 @@ export const CLIAspect = Aspect.create({
   id: 'arco.core/cli',
   declareRuntime: MainRuntime,
 });
+
+export default CLIAspect;

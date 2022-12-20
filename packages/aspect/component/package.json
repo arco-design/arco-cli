@@ -11,6 +11,7 @@
   "dependencies": {
     "@arco-cli/aspect-loader": "^0.1.0",
     "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/express": "^0.1.0",
     "@arco-cli/graphql": "^0.1.0",
     "@arco-cli/legacy": "^0.1.0",
     "@arco-cli/logger": "^0.1.0",

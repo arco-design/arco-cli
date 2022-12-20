@@ -9,9 +9,9 @@ import { ComponentError } from '../componentError';
 const componentOverviewFields = gql`
   fragment componentOverviewFields on Component {
     id
+    name
     description
     labels
-    displayName
     server {
       env
       url

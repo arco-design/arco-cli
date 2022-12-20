@@ -4,7 +4,7 @@ import { Spin } from '@arco-design/web-react';
 import { LoaderContext, useLoaderApi } from '../globalLoader';
 
 import '../style/global.scss';
-import style from './style/index.module.scss';
+import styles from './index.module.scss';
 
 export function ClientContext({ children }: { children: ReactNode }) {
   const [loaderApi, isLoading] = useLoaderApi();
@@ -12,7 +12,7 @@ export function ClientContext({ children }: { children: ReactNode }) {
   return (
     <React.StrictMode>
       <LoaderContext.Provider value={loaderApi}>
-        <Spin loading={isLoading} className={style.loader}>
+        <Spin loading={isLoading} className={styles.loader}>
           {children}
         </Spin>
       </LoaderContext.Provider>

@@ -132,8 +132,8 @@ export class GraphqlMain {
     });
   }
 
-  private buildModules(schemaSlot?: SchemaSlot) {
-    const schemaSlots = schemaSlot ? schemaSlot.toArray() : this.moduleSlot.toArray();
+  private buildModules(schemaSlot: SchemaSlot = this.moduleSlot) {
+    const schemaSlots = schemaSlot.toArray();
     return schemaSlots.map(([extensionId, schema]) => {
       const moduleDeps = this.getModuleDependencies(extensionId);
 
@@ -162,7 +162,6 @@ export class GraphqlMain {
     const deps = this.context.getDependencies(extension);
     const ids = deps.map((dep) => dep.id);
 
-    // @ts-ignore check :TODO why types are breaking here.
     return Array.from(this.modules.entries())
       .map(([depId, module]) => {
         const dep = ids.includes(depId);

@@ -7,7 +7,7 @@ import { SlotRouter } from '@arco-cli/react-router/dist/ui';
 
 import { useWorkspace } from './hooks/useWorkspace';
 
-import style from './style/workspace.module.scss';
+import styles from './style/workspace.module.scss';
 
 interface WorkspaceProps {
   routes: RouteProps[];
@@ -17,15 +17,15 @@ export function Workspace({ routes }: WorkspaceProps) {
   const { workspace } = useWorkspace();
 
   if (!workspace) {
-    return <div className={style.emptyContainer} />;
+    return <div className={styles.emptyContainer} />;
   }
 
   return (
-    <div className={style.workspaceWrapper}>
+    <div className={styles.workspaceWrapper}>
       <Navbar title={workspace.name} />
-      <main className={style.main}>
-        <div className={style.sidebar}>Sider</div>
-        <div className={style.overview}>
+      <main className={styles.main}>
+        <div className={styles.sidebar}>Sider</div>
+        <div className={styles.overview}>
           <SlotRouter routes={routes}>
             <Route index element={<h1>Workspace Overview</h1>} />
           </SlotRouter>

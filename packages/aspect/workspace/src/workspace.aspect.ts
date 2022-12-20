@@ -6,3 +6,5 @@ export const WorkspaceAspect = Aspect.create({
   id: 'arco.aspect/workspace',
   declareRuntime: MainRuntime,
 });
+
+export default WorkspaceAspect;

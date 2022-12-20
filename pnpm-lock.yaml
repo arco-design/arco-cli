@@ -168,17 +168,21 @@ importers:
       '@arco-cli/cli': ^0.1.0
       '@arco-cli/component': ^0.1.0
       '@arco-cli/envs': ^0.1.0
+      '@arco-cli/graphql': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
       '@arco-cli/logger': ^0.1.0
       '@arco-cli/stone': ^0.1.0
+      graphql-tag: ^2.12.6
       lodash: ^4.17.21
     dependencies:
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/component': link:../component
       '@arco-cli/envs': link:../envs
+      '@arco-cli/graphql': link:../../core/graphql
       '@arco-cli/legacy': link:../../core/legacy
       '@arco-cli/logger': link:../../core/logger
       '@arco-cli/stone': link:../../core/stone
+      graphql-tag: 2.12.6
       lodash: 4.17.21
 
   packages/aspect/component:
@@ -218,20 +222,28 @@ importers:
       '@arco-cli/cli': ^0.1.0
       '@arco-cli/component': ^0.1.0
       '@arco-cli/envs': ^0.1.0
+      '@arco-cli/graphql': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
       '@arco-cli/logger': ^0.1.0
       '@arco-cli/preview': ^0.1.0
       '@arco-cli/stone': ^0.1.0
+      '@arco-cli/ui': ^0.1.0
+      '@arco-cli/workspace': ^0.1.0
       '@babel/runtime': ^7.20.6
+      graphql-tag: ^2.12.6
     dependencies:
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/component': link:../component
       '@arco-cli/envs': link:../envs
+      '@arco-cli/graphql': link:../../core/graphql
       '@arco-cli/legacy': link:../../core/legacy
       '@arco-cli/logger': link:../../core/logger
       '@arco-cli/preview': link:../../service/preview
       '@arco-cli/stone': link:../../core/stone
+      '@arco-cli/ui': link:../../service/ui
+      '@arco-cli/workspace': link:../workspace
       '@babel/runtime': 7.20.6
+      graphql-tag: 2.12.6
 
   packages/aspect/envs:
     specifiers:
@@ -396,6 +408,7 @@ importers:
       '@arco-cli/graphql': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
       '@arco-cli/logger': ^0.1.0
+      '@arco-cli/react-router': ^0.1.0
       '@arco-cli/stone': ^0.1.0
       '@arco-cli/ui': ^0.1.0
       '@arco-cli/ui-foundation-react': ^0.1.0
@@ -414,6 +427,7 @@ importers:
       '@arco-cli/graphql': link:../../core/graphql
       '@arco-cli/legacy': link:../../core/legacy
       '@arco-cli/logger': link:../../core/logger
+      '@arco-cli/react-router': link:../react-router
       '@arco-cli/stone': link:../../core/stone
       '@arco-cli/ui': link:../../service/ui
       '@arco-cli/ui-foundation-react': link:../../ui-foundation/react
@@ -430,10 +444,12 @@ importers:
       '@arco-cli/cli': ^0.1.0
       '@arco-cli/stone': ^0.1.0
       fs-extra: ^10.1.0
+      glob: ^8.0.3
     dependencies:
       '@arco-cli/cli': link:../cli
       '@arco-cli/stone': link:../stone
       fs-extra: 10.1.0
+      glob: 8.0.3
 
   packages/core/cli:
     specifiers:

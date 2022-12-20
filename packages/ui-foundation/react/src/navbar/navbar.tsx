@@ -4,7 +4,7 @@ import type { RouteProps } from 'react-router-dom';
 import { SlotRouter } from '@arco-cli/react-router/dist/ui';
 import cn from 'classnames';
 
-import style from './navbar.module.scss';
+import styles from './navbar.module.scss';
 
 export interface NavbarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'className' | 'title'> {
   className?: string | string[];
@@ -18,7 +18,7 @@ export interface NavbarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'class
  */
 export function Navbar({ menu = [], className, title }: NavbarProps) {
   return (
-    <div className={cn(style.navbar, className)}>
+    <div className={cn(styles.navbar, className)}>
       <h1>{title}</h1>
       <SlotRouter routes={menu} />
     </div>

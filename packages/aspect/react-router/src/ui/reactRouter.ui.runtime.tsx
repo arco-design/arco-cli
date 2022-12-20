@@ -6,8 +6,8 @@ import type { Location, NavigationType, RouteProps } from 'react-router-dom';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
 import { UIRuntime } from '@arco-cli/ui/dist/ui.aspect';
 
-import { SlotRouter } from './ui';
-import { ReactRouterAspect } from './reactRouter.aspect';
+import { SlotRouter } from './slotRouter';
+import { ReactRouterAspect } from '../reactRouter.aspect';
 
 export type RouteSlot = SlotRegistry<RouteProps>;
 

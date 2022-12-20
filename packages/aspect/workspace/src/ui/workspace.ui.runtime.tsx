@@ -2,26 +2,28 @@
 import React from 'react';
 import type { RouteProps } from 'react-router-dom';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
-import { ComponentAspect, ComponentUI } from '@arco-cli/component';
-import { UIAspect, UIUI, UIRuntime, UIRootUI as UIRoot } from '@arco-cli/ui';
+import { DocsAspect } from '@arco-cli/docs/dist/ui';
+import { ComponentAspect, ComponentUI } from '@arco-cli/component/dist/ui';
+import { UIAspect, UIUI, UIRuntime, UIRootUI as UIRoot } from '@arco-cli/ui/dist/ui';
 
-import { WorkspaceAspect } from './workspace.aspect';
-import { Workspace } from './ui/workspace';
-import { GraphqlProvider } from './ui/graphqlProvider';
+import { WorkspaceAspect } from '../workspace.aspect';
+import { Workspace } from './workspace';
+import { GraphqlProvider } from './graphqlProvider';
 
 type RouteSlot = SlotRegistry<RouteProps>;
 
 export class WorkspaceUI {
   static runtime = UIRuntime;
 
-  static dependencies = [UIAspect, ComponentAspect];
+  // TODO ensure load order, WorkspaceAspect should load at last
+  static dependencies = [UIAspect, ComponentAspect, DocsAspect];
 
   static slots = [Slot.withType<RouteProps>()];
 
   static provider([ui, componentUI]: [UIUI, ComponentUI], _config, [routeSlot]: [RouteSlot]) {
     const workspaceUI = new WorkspaceUI(routeSlot, componentUI);
     ui.registerRoot(workspaceUI.uiRoot.bind(workspaceUI));
-    workspaceUI.registerRoutes({
+    workspaceUI.registerRoute({
       path: workspaceUI.componentUI.routePath,
       element: workspaceUI.componentUI.getComponentUI(WorkspaceAspect.id),
     });
@@ -30,7 +32,7 @@ export class WorkspaceUI {
 
   constructor(private routeSlot: RouteSlot, private componentUI: ComponentUI) {}
 
-  registerRoutes(route: RouteProps) {
+  registerRoute(route: RouteProps) {
     this.routeSlot.register(route);
     return this;
   }

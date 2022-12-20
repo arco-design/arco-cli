@@ -1,4 +1,4 @@
-import path, { sep } from 'path';
+import path, { join } from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import errorOverlayMiddleware from 'react-dev-utils/errorOverlayMiddleware';
@@ -15,11 +15,7 @@ import { html } from './html';
 import { fallbacksProvidePluginConfig } from './webpackFallbacksProvidePluginConfig';
 import { fallbacksAliases } from './webpackFallbacksAliases';
 
-const publicUrlOrPath = getPublicUrlOrPath(
-  process.env.NODE_ENV === 'development',
-  sep,
-  `${sep}/public`
-);
+const publicUrlOrPath = getPublicUrlOrPath(process.env.NODE_ENV === 'development', '/', `/public`);
 
 export default function configFactory(
   _devServerID: string,
@@ -129,7 +125,7 @@ export default function configFactory(
 
       devMiddleware: {
         // forward static files
-        publicPath: publicUrlOrPath,
+        publicPath: join('/', publicRoot),
       },
     },
 

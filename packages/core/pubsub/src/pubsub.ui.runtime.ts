@@ -1,7 +1,7 @@
-import { UIRuntime } from '@arco-cli/ui';
 import { EventEmitter2 } from 'eventemitter2';
 import { connectToChild } from 'penpal';
 import type { AsyncMethodReturns } from 'penpal/lib/types';
+import { UIRuntime } from '@arco-cli/ui/dist/ui.aspect';
 
 import { ArcoBaseEvent } from './arcoBaseEvent';
 import { PubsubAspect } from './pubsub.aspect';

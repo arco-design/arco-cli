@@ -3,6 +3,7 @@ import { LoggerAspect } from '@arco-cli/logger';
 import { PubsubAspect } from '@arco-cli/pubsub';
 import { ExpressAspect } from '@arco-cli/express';
 import { GraphqlAspect } from '@arco-cli/graphql';
+import { ComponentAspect } from '@arco-cli/component';
 import { EnvsAspect } from '@arco-cli/envs';
 import { ReactAspect } from '@arco-cli/react';
 import { ReactRouterAspect } from '@arco-cli/react-router';
@@ -14,7 +15,6 @@ import { JestAspect } from '@arco-cli/jest';
 import { DocsAspect } from '@arco-cli/docs';
 import { UIAspect } from '@arco-cli/ui';
 import { WorkspaceAspect } from '@arco-cli/workspace';
-import { ComponentAspect } from '@arco-cli/component';
 import { ArcoAspect } from './arco.aspect';
 
 export const manifestMap = {
@@ -23,6 +23,7 @@ export const manifestMap = {
   [PubsubAspect.id]: PubsubAspect,
   [ExpressAspect.id]: ExpressAspect,
   [GraphqlAspect.id]: GraphqlAspect,
+  [ComponentAspect.id]: ComponentAspect,
   [EnvsAspect.id]: EnvsAspect,
   [ReactAspect.id]: ReactAspect,
   [ReactRouterAspect.id]: ReactRouterAspect,
@@ -34,7 +35,6 @@ export const manifestMap = {
   [DocsAspect.id]: DocsAspect,
   [UIAspect.id]: UIAspect,
   [WorkspaceAspect.id]: WorkspaceAspect,
-  [ComponentAspect.id]: ComponentAspect,
 };
 
 export function isCoreAspect(id: string) {

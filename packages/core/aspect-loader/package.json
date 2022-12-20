@@ -11,7 +11,8 @@
   "dependencies": {
     "@arco-cli/cli": "^0.1.0",
     "@arco-cli/stone": "^0.1.0",
-    "fs-extra": "^10.1.0"
+    "fs-extra": "^10.1.0",
+    "glob": "^8.0.3"
   },
   "files": [
     "dist"

@@ -1,15 +1,15 @@
 import { Slot, SlotRegistry } from '@arco-cli/stone';
 
 import { PREVIEW_MODULES } from './previewModules';
-import { PreviewNotFoundError } from './exceptions';
-import PreviewAspect, { PreviewRuntime } from './preview.aspect';
+import { PreviewNotFoundError } from '../exceptions';
+import PreviewAspect, { PreviewRuntime } from '../preview.aspect';
 import {
   PreviewModule,
   PreviewType,
   RenderingContext,
   RenderingContextSlot,
   RenderingContextProvider,
-} from './types';
+} from '../types';
 
 // forward linkModules for generate-link.ts
 export { linkModules } from './previewModules';

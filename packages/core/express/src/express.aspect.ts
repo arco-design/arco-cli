@@ -5,3 +5,5 @@ export const ExpressAspect = Aspect.create({
   dependencies: [],
   defaultConfig: {},
 });
+
+export default ExpressAspect;

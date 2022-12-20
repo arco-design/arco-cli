@@ -1,15 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { ReactNode } from 'react';
-import {
-  PreviewAspect,
-  RenderingContext,
-  PreviewPreview,
-  PreviewRuntime,
-  PreviewModule,
-} from '@arco-cli/preview';
+import type { RenderingContext, PreviewModule } from '@arco-cli/preview';
+import { PreviewAspect, PreviewPreview, PreviewRuntime } from '@arco-cli/preview/dist/preview';
 
-import { DocsAspect } from './docs.aspect';
-import type { Docs } from './docs';
+import { DocsAspect } from '../docs.aspect';
+import type { Docs } from '../docs';
 
 export type DocsRootProps = {
   Provider: React.ComponentType | undefined;

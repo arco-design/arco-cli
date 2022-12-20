@@ -17,6 +17,7 @@
     "@arco-cli/stone": "^0.1.0",
     "@arco-cli/logger": "^0.1.0",
     "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/react-router": "^0.1.0",
     "@arco-cli/ui": "^0.1.0",
     "@arco-cli/ui-foundation-react": "^0.1.0",
     "@arco-design/web-react": "^2.42.2",

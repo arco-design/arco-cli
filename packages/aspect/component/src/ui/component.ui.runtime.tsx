@@ -1,11 +1,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import type { RouteProps } from 'react-router-dom';
-import { UIRuntime } from '@arco-cli/ui';
+import { UIRuntime } from '@arco-cli/ui/dist/ui.aspect';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
 
-import { Component, ComponentPageElement, ComponentPageSlot } from './ui/component';
-import ComponentAspect from './component.aspect';
+import ComponentAspect from '../component.aspect';
+import { Component, ComponentPageElement, ComponentPageSlot } from './component';
 
 type RouteSlot = SlotRegistry<RouteProps>;
 

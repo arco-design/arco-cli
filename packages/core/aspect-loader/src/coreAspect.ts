@@ -1,5 +1,6 @@
+import glob from 'glob';
 import { join, resolve } from 'path';
-import { existsSync, readdir } from 'fs-extra';
+import { existsSync } from 'fs-extra';
 
 const CLI_NPM_PACKAGE_SCOPE = '@arco-cli';
 
@@ -39,15 +40,15 @@ export function getAspectDistDir(id: string) {
 export async function getAspectDef(aspectName: string, runtime?: string) {
   const dirPath = getAspectDistDir(aspectName);
 
-  const files = await readdir(dirPath);
-  let runtimeFile;
-  if (runtime) {
-    runtimeFile = files.find((file) => file.includes(`.${runtime}.runtime.js`)) || null;
-  }
+  const files = glob.sync(`${dirPath}/**/**.js`);
+  const aspectPath = files.find((file) => file.includes('.aspect.js')) || join(dirPath, '..');
+  const runtimePath = runtime
+    ? files.find((file) => file.includes(`.${runtime}.runtime.js`))
+    : null;
 
   return {
     id: aspectName,
-    aspectPath: join(dirPath, '..'),
-    runtimePath: runtimeFile ? resolve(`${dirPath}/${runtimeFile}`) : null,
+    aspectPath,
+    runtimePath,
   };
 }

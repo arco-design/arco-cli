@@ -1,7 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { flatten } from 'lodash';
 import { Workspace } from '@arco-cli/workspace';
-import { StartPlugin, StartPluginOptions } from '@arco-cli/ui';
+import { StartPlugin, StartPluginOptions, ProxyEntry } from '@arco-cli/ui';
 import { BundlerMain } from '@arco-cli/bundler';
 import { PubsubMain } from '@arco-cli/pubsub';
 import { ComponentServer } from '@arco-cli/bundler/dist/componentServer';
@@ -64,6 +65,24 @@ export class PreviewStartPlugin implements StartPlugin {
     previewServers.forEach((server) => server.listen());
     // TODO watch
     this.previewServers = this.previewServers.concat(previewServers);
+  }
+
+  getProxy(): ProxyEntry[] {
+    const proxyConfigs = this.previewServers.map<ProxyEntry[]>((server) => {
+      return [
+        {
+          context: [`/preview/${server.context.envRuntime.id}`],
+          target: `http://localhost:${server.port}`,
+        },
+        {
+          context: [`/_hmr/${server.context.envRuntime.id}`],
+          target: `http://localhost:${server.port}`,
+          ws: true,
+        },
+      ];
+    });
+
+    return flatten(proxyConfigs);
   }
 
   render = () => {

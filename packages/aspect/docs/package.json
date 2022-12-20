@@ -12,11 +12,15 @@
     "@arco-cli/cli": "^0.1.0",
     "@arco-cli/component": "^0.1.0",
     "@arco-cli/envs": "^0.1.0",
+    "@arco-cli/graphql": "^0.1.0",
     "@arco-cli/legacy": "^0.1.0",
     "@arco-cli/logger": "^0.1.0",
     "@arco-cli/preview": "^0.1.0",
     "@arco-cli/stone": "^0.1.0",
-    "@babel/runtime": "^7.20.6"
+    "@arco-cli/ui": "^0.1.0",
+    "@arco-cli/workspace": "^0.1.0",
+    "@babel/runtime": "^7.20.6",
+    "graphql-tag": "^2.12.6"
   },
   "files": [
     "dist"

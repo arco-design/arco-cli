@@ -8,7 +8,7 @@ import { Slot, SlotRegistry } from '@arco-cli/stone';
 import { ReactRouterAspect, ReactRouterUI } from '@arco-cli/react-router';
 import { ClientContext } from '@arco-cli/ui-foundation-react/dist/clientContext';
 
-import UIAspect, { UIRuntime } from './ui.aspect';
+import UIAspect, { UIRuntime } from '../ui.aspect';
 import { UIRootFactory } from './uiRoot.ui';
 
 type UIRootSlot = SlotRegistry<UIRootFactory>;

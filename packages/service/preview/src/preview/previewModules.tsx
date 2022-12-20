@@ -1,4 +1,4 @@
-import type { PreviewModule, ModuleFile } from './types';
+import type { PreviewModule, ModuleFile } from '../types';
 
 type ModuleId = string;
 

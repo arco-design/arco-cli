@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { CSSProperties, HTMLAttributes } from 'react';
-import { BASE_DOCS_DOMAIN } from '@arco-cli/legacy/dist/constants';
+
+const BASE_DOCS_DOMAIN = '#';
 
 const styles: Record<string, CSSProperties> = {
   link: {

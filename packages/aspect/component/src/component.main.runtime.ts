@@ -17,8 +17,9 @@ export class ComponentMain {
   static dependencies = [GraphqlAspect];
 
   static provider([graphql]: [GraphqlMain], _config, [hostSlot]: [ComponentHostSlot]) {
-    graphql.register(getComponentSchema());
-    return new ComponentMain(hostSlot);
+    const componentMain = new ComponentMain(hostSlot);
+    graphql.register(getComponentSchema(componentMain));
+    return componentMain;
   }
 
   private _priorHost: ComponentFactory | undefined;

@@ -11,7 +11,7 @@ import { ComponentModel } from './componentModel';
 import { useComponentQuery } from './hooks/useComponentQuery';
 import { useIdFromLocation } from './hooks/useIdFromLocation';
 
-import style from './component.module.scss';
+import styles from './component.module.scss';
 
 export type ComponentPageElement = {
   type: 'before' | 'after';
@@ -39,7 +39,7 @@ export function Component({
 }: ComponentProps) {
   const idFromLocation = useIdFromLocation();
   const resolvedComponentIdStr = path || idFromLocation;
-  const { component, error } = useComponentQuery(host, componentId || idFromLocation);
+  const { component, error } = useComponentQuery(componentId || idFromLocation, host);
 
   useEffect(() => onComponentChange?.(component), [component]);
   // cleanup when unmounting component
@@ -66,7 +66,7 @@ export function Component({
   return (
     <ComponentProvider component={component}>
       {before}
-      <div className={style.container}>
+      <div className={styles.container}>
         {routes ? <SlotRouter parentPath={`${resolvedComponentIdStr}/*`} routes={routes} /> : null}
       </div>
       {after}

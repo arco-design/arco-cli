@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useEffect } from 'react';
 import {
   useQuery,
   OperationVariables,
@@ -22,9 +24,11 @@ export function useDataQuery<TData = any, TVariables = OperationVariables>(
 
   useLoader(loading);
 
-  if (error) {
-    Message.error(error.toString());
-  }
+  useEffect(() => {
+    if (error) {
+      Message.error(error.toString());
+    }
+  }, [error]);
 
   return res;
 }

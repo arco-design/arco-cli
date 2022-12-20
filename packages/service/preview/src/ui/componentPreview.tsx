@@ -7,6 +7,7 @@ import { ComponentModel } from '@arco-cli/component/dist/ui';
 import { toPreviewUrl } from './urls';
 import { computePreviewScale } from './computePreviewScale';
 import { useIframeContentHeight } from './useIframeContentHeight';
+
 import styles from './preview.module.scss';
 
 // omitting 'referrerPolicy' because of an TS error during build. Re-include when needed

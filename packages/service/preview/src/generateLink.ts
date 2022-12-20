@@ -17,7 +17,7 @@ export function generateLink(
 
   return `
 import { linkModules } from '${toWindowsCompatiblePath(
-    require.resolve('./preview.preview.runtime')
+    require.resolve('./preview/preview.preview.runtime')
   )}';
 ${
   mainModule
