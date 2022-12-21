@@ -4,10 +4,6 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
 const matchNothingRegex = 'a^';
 
-// This is the production and development configuration.
-// It is focused on developer experience, fast rebuilds, and a minimal bundle.
-// eslint-disable-next-line complexity
-// export default function (workDir: string, envId: string): Configuration {
 export default function (workDir: string, envId: string): Configuration {
   return {
     module: {

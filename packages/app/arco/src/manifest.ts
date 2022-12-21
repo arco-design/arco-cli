@@ -11,10 +11,13 @@ import { BundlerAspect } from '@arco-cli/bundler';
 import { PreviewAspect } from '@arco-cli/preview';
 import { TesterAspect } from '@arco-cli/tester';
 import { CompilerAspect } from '@arco-cli/compiler';
+import { BuilderAspect } from '@arco-cli/builder';
 import { JestAspect } from '@arco-cli/jest';
 import { DocsAspect } from '@arco-cli/docs';
 import { UIAspect } from '@arco-cli/ui';
 import { WorkspaceAspect } from '@arco-cli/workspace';
+import { LessAspect } from '@arco-cli/less';
+import { SassAspect } from '@arco-cli/sass';
 import { ArcoAspect } from './arco.aspect';
 
 export const manifestMap = {
@@ -30,10 +33,13 @@ export const manifestMap = {
   [BundlerAspect.id]: BundlerAspect,
   [PreviewAspect.id]: PreviewAspect,
   [TesterAspect.id]: TesterAspect,
+  [BuilderAspect.id]: BuilderAspect,
   [CompilerAspect.id]: CompilerAspect,
   [JestAspect.id]: JestAspect,
   [DocsAspect.id]: DocsAspect,
   [UIAspect.id]: UIAspect,
+  [LessAspect.id]: LessAspect,
+  [SassAspect.id]: SassAspect,
   [WorkspaceAspect.id]: WorkspaceAspect,
 };
 

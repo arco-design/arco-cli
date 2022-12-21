@@ -14,6 +14,10 @@ import {
   TypescriptCompilerOptions,
 } from '@arco-cli/typescript';
 import { WebpackConfigTransformer, WebpackMain } from '@arco-cli/webpack';
+import { MultiCompilerMain } from '@arco-cli/multi-compiler';
+import { SassMain } from '@arco-cli/sass';
+import { LessMain } from '@arco-cli/less';
+
 import { ReactAspect } from './react.aspect';
 import basePreviewConfigFactory from './webpack/webpack.config.base';
 import componentPreviewDevConfigFactory from './webpack/webpack.config.component.dev';
@@ -28,9 +32,12 @@ const buildTsConfig = require('./typescript/tsconfig.build.json');
 export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler> {
   constructor(
     private workspace: Workspace,
+    private multiCompiler: MultiCompilerMain,
     private jest: JestMain,
     private tsAspect: TypescriptMain,
-    private webpack: WebpackMain
+    private webpack: WebpackMain,
+    private less: LessMain,
+    private sass: SassMain
   ) {}
 
   private createTsCompilerOptions(mode: CompilerMode = 'dev'): TypescriptCompilerOptions {
@@ -85,7 +92,12 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler> {
   }
 
   getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
-    return this.createTsCjsCompiler('dev', transformers, tsModule);
+    // TODO determine es module type
+    return this.multiCompiler.createCompiler([
+      this.createTsCjsCompiler('dev', transformers, tsModule),
+      this.less.createCompiler(),
+      this.sass.createCompiler(),
+    ]);
   }
 
   getDevServer(

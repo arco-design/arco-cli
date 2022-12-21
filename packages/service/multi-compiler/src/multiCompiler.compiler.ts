@@ -85,7 +85,7 @@ export class MultiCompiler implements Compiler {
         if (!compiler.transpileFile) {
           return files;
         }
-        return files?.flatMap(async (file) => {
+        return files?.flatMap((file) => {
           if (!compiler.isFileSupported(file?.outputPath)) return [file];
           const params = { ...options, filePath: file.outputPath };
           const compiledContent = compiler.transpileFile?.(file.outputText, params);

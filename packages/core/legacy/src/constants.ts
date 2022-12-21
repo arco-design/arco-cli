@@ -116,3 +116,7 @@ export const CLI_VERSION = packageFile.version;
 export const CLI_DESCRIPTION = '';
 
 export const CLI_USAGE = '[--version] [--help] <command> [<args>]';
+
+export const CLI_COMPONENT_PATTERN_HELP = `component name, package name, or component pattern. use component pattern to select multiple components.
+use comma to separate patterns and "!" to exclude. e.g. "ui/**, !ui/button"
+wrap the pattern with quotes`;

@@ -120,6 +120,7 @@ importers:
   packages/app/arco:
     specifiers:
       '@arco-cli/aspect-loader': ^0.1.0
+      '@arco-cli/builder': ^0.1.0
       '@arco-cli/bundler': ^0.1.0
       '@arco-cli/cli': ^0.1.0
       '@arco-cli/compiler': ^0.1.0
@@ -130,11 +131,13 @@ importers:
       '@arco-cli/graphql': ^0.1.0
       '@arco-cli/jest': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
+      '@arco-cli/less': ^0.1.0
       '@arco-cli/logger': ^0.1.0
       '@arco-cli/preview': ^0.1.0
       '@arco-cli/pubsub': ^0.1.0
       '@arco-cli/react': ^0.1.0
       '@arco-cli/react-router': ^0.1.0
+      '@arco-cli/sass': ^0.1.0
       '@arco-cli/stone': ^0.1.0
       '@arco-cli/tester': ^0.1.0
       '@arco-cli/ui': ^0.1.0
@@ -142,6 +145,7 @@ importers:
       fs-extra: ^10.1.0
     dependencies:
       '@arco-cli/aspect-loader': link:../../core/aspect-loader
+      '@arco-cli/builder': link:../../aspect/builder
       '@arco-cli/bundler': link:../../aspect/bundler
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../../service/compiler
@@ -152,16 +156,48 @@ importers:
       '@arco-cli/graphql': link:../../core/graphql
       '@arco-cli/jest': link:../../aspect/jest
       '@arco-cli/legacy': link:../../core/legacy
+      '@arco-cli/less': link:../../aspect/less
       '@arco-cli/logger': link:../../core/logger
       '@arco-cli/preview': link:../../service/preview
       '@arco-cli/pubsub': link:../../core/pubsub
       '@arco-cli/react': link:../../env/react
       '@arco-cli/react-router': link:../../aspect/react-router
+      '@arco-cli/sass': link:../../aspect/sass
       '@arco-cli/stone': link:../../core/stone
       '@arco-cli/tester': link:../../service/tester
       '@arco-cli/ui': link:../../service/ui
       '@arco-cli/workspace': link:../../aspect/workspace
       fs-extra: 10.1.0
+
+  packages/aspect/builder:
+    specifiers:
+      '@arco-cli/cli': ^0.1.0
+      '@arco-cli/component': ^0.1.0
+      '@arco-cli/envs': ^0.1.0
+      '@arco-cli/legacy': ^0.1.0
+      '@arco-cli/logger': ^0.1.0
+      '@arco-cli/stone': ^0.1.0
+      '@arco-cli/tester': ^0.1.0
+      '@arco-cli/workspace': ^0.1.0
+      chalk: ^4.1.2
+      cleargraph: ^5.8.0
+      ink: ^3.2.0
+      p-map-series: ^2.1.0
+      pretty-time: ^1.1.0
+    dependencies:
+      '@arco-cli/cli': link:../../core/cli
+      '@arco-cli/component': link:../component
+      '@arco-cli/envs': link:../envs
+      '@arco-cli/legacy': link:../../core/legacy
+      '@arco-cli/logger': link:../../core/logger
+      '@arco-cli/stone': link:../../core/stone
+      '@arco-cli/tester': link:../../service/tester
+      '@arco-cli/workspace': link:../workspace
+      chalk: 4.1.2
+      cleargraph: 5.8.0
+      ink: 3.2.0
+      p-map-series: 2.1.0
+      pretty-time: 1.1.0
 
   packages/aspect/bundler:
     specifiers:
@@ -189,6 +225,7 @@ importers:
     specifiers:
       '@arco-cli/aspect-loader': ^0.1.0
       '@arco-cli/cli': ^0.1.0
+      '@arco-cli/express': ^0.1.0
       '@arco-cli/graphql': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
       '@arco-cli/logger': ^0.1.0
@@ -204,6 +241,7 @@ importers:
     dependencies:
       '@arco-cli/aspect-loader': link:../../core/aspect-loader
       '@arco-cli/cli': link:../../core/cli
+      '@arco-cli/express': link:../../core/express
       '@arco-cli/graphql': link:../../core/graphql
       '@arco-cli/legacy': link:../../core/legacy
       '@arco-cli/logger': link:../../core/logger
@@ -631,7 +669,10 @@ importers:
       '@arco-cli/envs': ^0.1.0
       '@arco-cli/jest': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
+      '@arco-cli/less': ^0.1.0
       '@arco-cli/logger': ^0.1.0
+      '@arco-cli/multi-compiler': ^0.1.0
+      '@arco-cli/sass': ^0.1.0
       '@arco-cli/stone': ^0.1.0
       '@arco-cli/tester': ^0.1.0
       '@arco-cli/typescript': ^0.1.0
@@ -688,7 +729,10 @@ importers:
       '@arco-cli/envs': link:../../aspect/envs
       '@arco-cli/jest': link:../../aspect/jest
       '@arco-cli/legacy': link:../../core/legacy
+      '@arco-cli/less': link:../../aspect/less
       '@arco-cli/logger': link:../../core/logger
+      '@arco-cli/multi-compiler': link:../../service/multi-compiler
+      '@arco-cli/sass': link:../../aspect/sass
       '@arco-cli/stone': link:../../core/stone
       '@arco-cli/tester': link:../../service/tester
       '@arco-cli/typescript': link:../../aspect/typescript

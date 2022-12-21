@@ -32,9 +32,6 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 
 const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000');
 
-// This is the production and development configuration.
-// It is focused on developer experience, fast rebuilds, and a minimal bundle.
-// eslint-disable-next-line complexity
 export default function (isEnvProduction = false): Configuration {
   // Variable used for enabling profiling in Production
   // passed into alias object. Uses a flag if passed into the build command
@@ -46,12 +43,6 @@ export default function (isEnvProduction = false): Configuration {
     postCssLoaderPath: require.resolve('postcss-loader'),
     postCssConfig,
   };
-
-  // We will provide `paths.publicUrlOrPath` to our app
-  // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
-  // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
-  // Get environment variables to inject into our app.
-  // const env = getClientEnvironment(publicUrlOrPath.slice(0, -1));
 
   return {
     // TODO: make the dev tool according to shouldUseSourceMap and isEnvProduction
@@ -113,7 +104,6 @@ export default function (isEnvProduction = false): Configuration {
               // See https://github.com/webpack/webpack/issues/6571
               sideEffects: true,
             },
-
             // Process application JS with Babel.
             // The preset includes JSX, Flow, TypeScript, and some ESNext features.
             {

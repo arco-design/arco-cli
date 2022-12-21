@@ -30,7 +30,7 @@ export class LessCompiler implements Compiler {
     return [
       {
         outputText: cssContent.css.toString(),
-        outputPath: options.filePath,
+        outputPath: this.getDistPathBySrcPath(options.filePath),
       },
     ];
   }

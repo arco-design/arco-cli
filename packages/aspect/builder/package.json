@@ -1,5 +1,5 @@
 {
-  "name": "@arco-cli/compiler",
+  "name": "@arco-cli/builder",
   "version": "0.1.0",
   "main": "./dist/index.js",
   "scripts": {
@@ -12,12 +12,14 @@
     "@arco-cli/cli": "^0.1.0",
     "@arco-cli/component": "^0.1.0",
     "@arco-cli/envs": "^0.1.0",
-    "@arco-cli/logger": "^0.1.0",
     "@arco-cli/legacy": "^0.1.0",
-    "@arco-cli/pubsub": "^0.1.0",
+    "@arco-cli/logger": "^0.1.0",
     "@arco-cli/stone": "^0.1.0",
+    "@arco-cli/tester": "^0.1.0",
     "@arco-cli/workspace": "^0.1.0",
     "chalk": "^4.1.2",
+    "cleargraph": "^5.8.0",
+    "ink": "^3.2.0",
     "pretty-time": "^1.1.0",
     "p-map-series": "^2.1.0"
   },

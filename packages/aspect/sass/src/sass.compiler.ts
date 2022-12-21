@@ -1,4 +1,4 @@
-import { compile } from 'sass';
+import { compileString } from 'sass';
 import { Compiler, TranspileFileParams, TranspileFileOutput } from '@arco-cli/compiler';
 
 export class SassCompiler implements Compiler {
@@ -6,14 +6,14 @@ export class SassCompiler implements Compiler {
 
   shouldCopyNonSupportedFiles = false;
 
-  constructor(readonly id: string, readonly displayName = 'Less') {}
+  constructor(readonly id: string, readonly displayName = 'Sass') {}
 
   getDistPathBySrcPath(srcPath: string): string {
-    return srcPath.replace('.less', '.css');
+    return srcPath.replace('.scss', '.css');
   }
 
   isFileSupported(filePath: string): boolean {
-    return filePath.endsWith('.less');
+    return filePath.endsWith('.scss');
   }
 
   version(): string {
@@ -25,12 +25,12 @@ export class SassCompiler implements Compiler {
   }
 
   transpileFile(fileContent: string, options: TranspileFileParams): TranspileFileOutput {
-    const cssContent = compile(fileContent).css;
+    const cssContent = compileString(fileContent).css;
 
     return [
       {
         outputText: cssContent,
-        outputPath: options.filePath,
+        outputPath: this.getDistPathBySrcPath(options.filePath),
       },
     ];
   }
