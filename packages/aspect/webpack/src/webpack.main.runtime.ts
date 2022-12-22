@@ -1,12 +1,22 @@
 import { MainRuntime } from '@arco-cli/cli';
 import { WorkspaceAspect, Workspace } from '@arco-cli/workspace';
-import { BundlerMode, DevServer, DevServerContext, Target } from '@arco-cli/bundler';
-import webpack from 'webpack';
+import { LoggerAspect, LoggerMain } from '@arco-cli/logger';
+import {
+  BundlerContext,
+  BundlerMode,
+  DevServer,
+  DevServerContext,
+  Target,
+} from '@arco-cli/bundler';
+import webpack, { Configuration } from 'webpack';
 import WsDevServer from 'webpack-dev-server';
+
 import { WebpackAspect } from './webpack.aspect';
 import { WebpackConfigMutator } from './webpackConfigMutator';
-import devServerConfigFactory from './config/webpack.dev.config';
 import { WebpackDevServer } from './webpack.devServer';
+import { WebpackBundler } from './webpack.bundler';
+import baseConfigFactory from './config/webpack.config';
+import devServerConfigFactory from './config/webpack.dev.config';
 
 export type GlobalWebpackConfigTransformContext = {
   mode: BundlerMode;
@@ -47,16 +57,39 @@ function runTransformersWithContext(
 export class WebpackMain {
   static runtime = MainRuntime;
 
-  static dependencies = [WorkspaceAspect];
+  static dependencies = [WorkspaceAspect, LoggerAspect];
 
   static slots = [];
 
-  static provider([workspace]: [Workspace]) {
-    const webpackMain = new WebpackMain(workspace);
+  static provider([workspace, loggerMain]: [Workspace, LoggerMain]) {
+    const logger = loggerMain.createLogger(WebpackAspect.id);
+    const webpackMain = new WebpackMain(workspace, logger);
     return webpackMain;
   }
 
-  constructor(private workspace) {}
+  constructor(private workspace, private logger) {}
+
+  private createConfigs(
+    targets: Target[],
+    factory: (target: Target, context: BundlerContext) => Configuration,
+    transformers: WebpackConfigTransformer[],
+    transformerContext: GlobalWebpackConfigTransformContext,
+    bundlerContext: BundlerContext
+  ) {
+    transformers = transformers || [];
+
+    return targets.map((target) => {
+      const baseConfig = factory(target, bundlerContext);
+      const configMutator = new WebpackConfigMutator(baseConfig);
+      const context = { ...transformerContext, target };
+      const afterMutation = runTransformersWithContext(
+        configMutator.clone(),
+        context,
+        transformers
+      );
+      return afterMutation.raw;
+    });
+  }
 
   /**
    * create an instance of webpack dev server for a set of components
@@ -82,6 +115,32 @@ export class WebpackMain {
     ]);
     // @ts-ignore - fix this
     return new WebpackDevServer(afterMutation.raw, webpack, WsDevServer);
+  }
+
+  createBundler(
+    context: BundlerContext,
+    transformers?: WebpackConfigTransformer[],
+    initialConfigs?: webpack.Configuration[],
+    webpackInstance?: any
+  ) {
+    const transformerContext: GlobalWebpackConfigTransformContext = { mode: 'prod' };
+    // eslint-disable-next-line max-len
+    const configs =
+      initialConfigs ||
+      this.createConfigs(
+        context.targets,
+        baseConfigFactory,
+        transformers,
+        transformerContext,
+        context
+      );
+    return new WebpackBundler(
+      context.targets,
+      configs,
+      this.logger,
+      webpackInstance || webpack,
+      context.metaData
+    );
   }
 }
 

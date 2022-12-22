@@ -1,5 +1,6 @@
 import type { Component } from '@arco-cli/component';
 import { ExecutionContext } from '@arco-cli/envs';
+import { Workspace } from '@arco-cli/workspace';
 import type { ComponentResult } from './types';
 import { TaskResultsList } from './taskResultsList';
 import { TaskResults } from './buildPipe';
@@ -15,7 +16,7 @@ export const TaskIdDelimiter = ':';
  * A folder to write artifacts generated during a build task
  * This folder is used in the core envs and excluded by default from the package tar file
  */
-export const CAPSULE_ARTIFACTS_DIR = 'artifacts';
+export const ARTIFACTS_DIR = 'artifacts';
 
 export interface BuildTaskResult {
   /**
@@ -25,6 +26,12 @@ export interface BuildTaskResult {
 }
 
 export interface BuildContext extends ExecutionContext {
+  // TODO workspace path
+  /**
+   * Workspace path for build
+   */
+  workspace: Workspace;
+
   /**
    * all components about to be built/tagged.
    */

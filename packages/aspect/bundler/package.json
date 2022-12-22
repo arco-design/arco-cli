@@ -9,6 +9,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@arco-cli/builder": "^0.1.0",
     "@arco-cli/cli": "^0.1.0",
     "@arco-cli/component": "^0.1.0",
     "@arco-cli/envs": "^0.1.0",

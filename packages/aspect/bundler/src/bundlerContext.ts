@@ -1,5 +1,5 @@
 import { Component } from '@arco-cli/component';
-import { ExecutionContext } from '@arco-cli/envs';
+import { BuildContext } from '@arco-cli/builder';
 
 export type LibraryOptions = {
   /**
@@ -168,12 +168,6 @@ export type Target = {
   hostRootDir?: string;
 
   /**
-   * Array of host dependencies, they are used later in case you use one of the following:
-   *
-   */
-  hostDependencies?: string[];
-
-  /**
    * Make the hostDependencies externals. externals (from webpack docs):
    * The externals configuration option provides a way of excluding dependencies from the output bundles.
    * Instead, the created bundle relies on that dependency to be present in the consumer's (any end-user application) environment.
@@ -188,7 +182,7 @@ export type Target = {
   aliasHostDependencies?: boolean;
 };
 
-export interface BundlerContext extends ExecutionContext {
+export interface BundlerContext extends BuildContext {
   /**
    * all components about to be build
    */

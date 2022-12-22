@@ -35,7 +35,9 @@ export class ComponentInfo {
 
   readonly packageJson: Record<string, any>;
 
-  readonly packageJsonPath: string;
+  readonly packageDir: string;
+
+  readonly packageDirAbs: string;
 
   constructor(
     { mainFile, mainStyleFile, rootDir, config }: ComponentConfig,
@@ -58,7 +60,8 @@ export class ComponentInfo {
     for (const dirPath of dirsToSearchPkgJson) {
       const packageJsonPath = path.join(dirPath, PACKAGE_JSON);
       if (fs.existsSync(packageJsonPath)) {
-        this.packageJsonPath = path.relative(packageJsonPath, workspacePath);
+        this.packageDir = path.relative(dirPath, workspacePath);
+        this.packageDirAbs = dirPath;
         this.packageJson = fs.readJSONSync(packageJsonPath);
       }
     }

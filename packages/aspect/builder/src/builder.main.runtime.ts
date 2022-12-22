@@ -25,8 +25,8 @@ export class BuilderMain {
     [taskSlot]: [TaskSlot]
   ) {
     const logger = loggerMain.createLogger(BuilderAspect.id);
-    const buildService = new BuilderService(taskSlot, logger);
-    const builder = new BuilderMain(envs, buildService);
+    const buildService = new BuilderService(workspace, taskSlot, logger);
+    const builder = new BuilderMain(envs, buildService, taskSlot);
 
     envs.registerService(buildService);
     cli.register(new BuilderCmd(builder, workspace, logger));
@@ -34,7 +34,19 @@ export class BuilderMain {
     return builder;
   }
 
-  constructor(private envs: EnvsMain, private buildService) {}
+  constructor(
+    private envs: EnvsMain,
+    private buildService: BuilderService,
+    private buildTaskSlot: TaskSlot
+  ) {}
+
+  /**
+   * register a build task to apply on all component build pipelines.
+   */
+  registerBuildTasks(tasks: BuildTask[]) {
+    this.buildTaskSlot.register(tasks);
+    return this;
+  }
 
   async build(componnets: Component[], options?: BuilderServiceOptions) {
     const envs = await this.envs.createEnvironment(componnets);

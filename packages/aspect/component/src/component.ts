@@ -48,7 +48,15 @@ export class Component {
   }
 
   get packageDir() {
-    return path.dirname(this.info.packageJsonPath);
+    return this.info.packageDir;
+  }
+
+  get packageDirAbs() {
+    return this.info.packageDirAbs;
+  }
+
+  get mainFile() {
+    return this.info.mainFile;
   }
 
   static async loadFromFileSystem(info: ComponentInfo, projectPath: string) {

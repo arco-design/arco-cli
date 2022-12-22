@@ -1,6 +1,10 @@
+import { Bundler, BundlerContext } from '@arco-cli/bundler';
+import { EnvPreviewConfig } from '@arco-cli/preview';
+
 /**
  * add a custom type and include all properties from within the environment.
  */
+
 export interface Environment {
   // :TODO need to define an abstract type for service handlers (now using any)
   [key: string]: any;
@@ -50,4 +54,17 @@ export interface CompilerEnv<T = any> extends Environment {
    * Returns a compiler
    */
   getCompiler: () => T;
+}
+
+export interface PreviewEnv extends Environment {
+  /**
+   * Returns a bundler for the preview.
+   * Required for `bit build` & `bit start`
+   */
+  getBundler?: (context: BundlerContext, transformers: any[]) => Promise<Bundler>;
+
+  /**
+   * Returns preview config like the strategy name to use when bundling the components for the preview
+   */
+  getPreviewConfig?: () => EnvPreviewConfig;
 }

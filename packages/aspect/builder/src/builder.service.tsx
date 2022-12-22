@@ -2,6 +2,7 @@
 import React from 'react';
 import { Text, Newline } from 'ink';
 import { Logger } from '@arco-cli/logger';
+import { Workspace } from '@arco-cli/workspace';
 import { Component } from '@arco-cli/component';
 import { EnvDefinition, EnvService, ExecutionContext } from '@arco-cli/envs';
 
@@ -31,7 +32,7 @@ export type BuilderDescriptor = { tasks: string[] };
 export class BuilderService implements EnvService<BuildServiceResults, BuilderDescriptor> {
   name = 'builder';
 
-  constructor(private taskSlot: TaskSlot, private logger: Logger) {}
+  constructor(private workspace: Workspace, private taskSlot: TaskSlot, private logger: Logger) {}
 
   async runOnce(envsExecutionContext: ExecutionContext[], options: BuilderServiceOptions) {
     const envs = envsExecutionContext.map((context) => context.envDefinition);
@@ -49,7 +50,8 @@ export class BuilderService implements EnvService<BuildServiceResults, BuilderDe
 
     const envsBuildContext: EnvsBuildContext = {};
     envsExecutionContext.forEach((executionContext) => {
-      envsExecutionContext[executionContext.id] = Object.assign(executionContext, {
+      envsBuildContext[executionContext.id] = Object.assign(executionContext, {
+        workspace: this.workspace,
         previousTasksResults: [],
       });
     });

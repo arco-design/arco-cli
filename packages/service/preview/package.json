@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@arco-cli/aspect-loader": "^0.1.0",
+    "@arco-cli/builder": "^0.1.0",
     "@arco-cli/bundler": "^0.1.0",
     "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/compiler": "^0.1.0",
     "@arco-cli/component": "^0.1.0",
     "@arco-cli/envs": "^0.1.0",
     "@arco-cli/logger": "^0.1.0",
