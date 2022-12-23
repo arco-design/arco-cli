@@ -1,4 +1,5 @@
 import { join } from 'path';
+import pMapSeries from 'p-map-series';
 import {
   Compiler,
   CompilerOptions,
@@ -6,6 +7,7 @@ import {
   TranspileFileParams,
 } from '@arco-cli/compiler';
 import { Component } from '@arco-cli/component';
+import { BuildContext, BuildTaskResult, mergeComponentResults } from '@arco-cli/builder';
 
 export type MultiCompilerOptions = {
   targetExtension?: string;
@@ -30,6 +32,19 @@ export class MultiCompiler implements Compiler {
 
   private firstMatchedCompiler(filePath: string): Compiler | undefined {
     return this.compilers.find((compiler) => compiler.isFileSupported(filePath));
+  }
+
+  private getArtifactDefinition() {
+    return [
+      {
+        generatedBy: this.id,
+        name: this.compilerOptions.artifactName || 'dist',
+        globPatterns: this.compilerOptions.distGlobPatterns || [
+          `${this.distDir}/**`,
+          `!${this.distDir}/tsconfig.tsbuildinfo`,
+        ],
+      },
+    ];
   }
 
   version(): string {
@@ -98,5 +113,17 @@ export class MultiCompiler implements Compiler {
     );
 
     return outputs;
+  }
+
+  async build(context: BuildContext): Promise<BuildTaskResult> {
+    const builds = await pMapSeries(this.compilers, async (compiler) => {
+      const buildResult = await compiler.build(context);
+      return buildResult.componentsResults;
+    });
+
+    return {
+      componentsResults: mergeComponentResults(builds),
+      artifacts: this.getArtifactDefinition(),
+    };
   }
 }

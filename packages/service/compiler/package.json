@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "main": "./dist/index.js",
   "scripts": {
-    "dev": "tsc -w",
-    "build": "tsc",
+    "dev": "sh ../../../scripts/build.sh dev",
+    "build": "sh ../../../scripts/build.sh",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@arco-cli/builder": "^0.1.0",
     "@arco-cli/cli": "^0.1.0",
     "@arco-cli/component": "^0.1.0",
     "@arco-cli/envs": "^0.1.0",
@@ -18,6 +19,7 @@
     "@arco-cli/stone": "^0.1.0",
     "@arco-cli/workspace": "^0.1.0",
     "chalk": "^4.1.2",
+    "fs-extra": "^10.1.0",
     "pretty-time": "^1.1.0",
     "p-map-series": "^2.1.0"
   },

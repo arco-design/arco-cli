@@ -4,7 +4,7 @@ import ts from 'typescript';
 import { CompilerEnv, PreviewEnv, TesterEnv } from '@arco-cli/envs';
 import { JestMain } from '@arco-cli/jest';
 import { Tester } from '@arco-cli/tester';
-import { Compiler } from '@arco-cli/compiler';
+import { CompilerMain, Compiler } from '@arco-cli/compiler';
 import { Workspace } from '@arco-cli/workspace';
 import { Bundler, BundlerContext, DevServer, DevServerContext } from '@arco-cli/bundler';
 import { pathNormalizeToLinux } from '@arco-cli/legacy/dist/utils/path';
@@ -35,6 +35,7 @@ const buildTsConfig = require('./typescript/tsconfig.build.json');
 export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, PreviewEnv {
   constructor(
     private workspace: Workspace,
+    private compiler: CompilerMain,
     private multiCompiler: MultiCompilerMain,
     private jest: JestMain,
     private tsAspect: TypescriptMain,
@@ -82,10 +83,28 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     return this.createWebpackBundler(context, mergedTransformers);
   }
 
-  createCjsJestTester(jestConfigPath?: string, jestModulePath?: string): Tester {
+  private createCjsJestTester(jestConfigPath?: string, jestModulePath?: string): Tester {
     const defaultConfig = join(__dirname, './jest/jest.cjs.config.js');
     const config = jestConfigPath || defaultConfig;
     return this.jest.createTester(config, jestModulePath || require.resolve('jest'));
+  }
+
+  private createEsmCompiler(
+    mode: CompilerMode = 'dev',
+    transformers: TsConfigTransformer[] = [],
+    tsModule = ts
+  ) {
+    const tsCompileOptions = this.createTsCompilerOptions(mode);
+    return this.tsAspect.createEsmCompiler(tsCompileOptions, transformers, tsModule);
+  }
+
+  private createCjsCompiler(
+    mode: CompilerMode = 'dev',
+    transformers: TsConfigTransformer[] = [],
+    tsModule = ts
+  ) {
+    const tsCompileOptions = this.createTsCompilerOptions(mode);
+    return this.tsAspect.createCjsCompiler(tsCompileOptions, transformers, tsModule);
   }
 
   /**
@@ -99,31 +118,23 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     return this.createCjsJestTester(jestConfigPath, jestModulePath);
   }
 
-  createTsEsmCompiler(
-    mode: CompilerMode = 'dev',
-    transformers: TsConfigTransformer[] = [],
-    tsModule = ts
-  ) {
-    const tsCompileOptions = this.createTsCompilerOptions(mode);
-    return this.tsAspect.createEsmCompiler(tsCompileOptions, transformers, tsModule);
-  }
-
-  createTsCjsCompiler(
-    mode: CompilerMode = 'dev',
-    transformers: TsConfigTransformer[] = [],
-    tsModule = ts
-  ) {
-    const tsCompileOptions = this.createTsCompilerOptions(mode);
-    return this.tsAspect.createCjsCompiler(tsCompileOptions, transformers, tsModule);
-  }
-
   getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
     // TODO determine es module type
     return this.multiCompiler.createCompiler([
-      this.createTsCjsCompiler('dev', transformers, tsModule),
+      this.createCjsCompiler('dev', transformers, tsModule),
       this.less.createCompiler(),
       this.sass.createCompiler(),
     ]);
+  }
+
+  createEsmCompilerTask(transformers: TsConfigTransformer[] = [], tsModule = ts) {
+    const tsCompiler = this.createEsmCompiler('build', transformers, tsModule);
+    return this.compiler.createTask('TSCompiler', tsCompiler);
+  }
+
+  createCjsCompilerTask(transformers: TsConfigTransformer[] = [], tsModule = ts) {
+    const tsCompiler = this.createCjsCompiler('build', transformers, tsModule);
+    return this.compiler.createTask('TSCompiler', tsCompiler);
   }
 
   getDevServer(

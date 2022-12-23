@@ -2,8 +2,10 @@ import { MainRuntime } from '@arco-cli/cli';
 import { EnvsAspect, EnvsMain } from '@arco-cli/envs';
 import { JestAspect, JestMain } from '@arco-cli/jest';
 import { TypescriptAspect, TypescriptMain } from '@arco-cli/typescript';
+import { BuilderAspect, BuilderMain } from '@arco-cli/builder';
 import { WebpackAspect, WebpackMain } from '@arco-cli/webpack';
 import { WorkspaceAspect, Workspace } from '@arco-cli/workspace';
+import { CompilerAspect, CompilerMain } from '@arco-cli/compiler';
 import { MultiCompilerAspect, MultiCompilerMain } from '@arco-cli/multi-compiler';
 import { SassAspect, SassMain } from '@arco-cli/sass';
 import { LessAspect, LessMain } from '@arco-cli/less';
@@ -16,6 +18,8 @@ export class ReactMain {
 
   static dependencies = [
     WorkspaceAspect,
+    BuilderAspect,
+    CompilerAspect,
     MultiCompilerAspect,
     EnvsAspect,
     JestAspect,
@@ -29,6 +33,8 @@ export class ReactMain {
 
   static provider([
     workspace,
+    builder,
+    compiler,
     multiCompiler,
     envs,
     jestMain,
@@ -38,6 +44,8 @@ export class ReactMain {
     sassMain,
   ]: [
     Workspace,
+    BuilderMain,
+    CompilerMain,
     MultiCompilerMain,
     EnvsMain,
     JestMain,
@@ -49,6 +57,7 @@ export class ReactMain {
     const reactMain = new ReactMain();
     const reactEnv = new ReactEnv(
       workspace,
+      compiler,
       multiCompiler,
       jestMain,
       tsMain,
@@ -57,6 +66,9 @@ export class ReactMain {
       sassMain
     );
     envs.registerEnv(reactEnv);
+
+    builder.registerBuildTasks([reactEnv.createEsmCompilerTask()]);
+
     return reactMain;
   }
 

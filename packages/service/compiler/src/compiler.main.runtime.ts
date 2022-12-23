@@ -6,6 +6,8 @@ import { LoggerAspect, LoggerMain } from '@arco-cli/logger';
 import { CompileCmd } from './compiler.cmd';
 import { CompilerAspect } from './compiler.aspect';
 import { WorkspaceCompiler } from './workspaceCompiler';
+import { CompilerTask } from './compiler.task';
+import { Compiler } from './types';
 
 export class CompilerMain {
   static runtime = MainRuntime;
@@ -28,6 +30,10 @@ export class CompilerMain {
   }
 
   constructor() {}
+
+  createTask(name: string, compiler: Compiler): CompilerTask {
+    return new CompilerTask(CompilerAspect.id, name, compiler);
+  }
 }
 
 CompilerAspect.addRuntime(CompilerMain);

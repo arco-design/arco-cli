@@ -14,11 +14,7 @@
     "target": "es6",
     "moduleResolution": "node",
     "jsx": "react",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2020"
-    ]
+    "lib": ["DOM", "DOM.Iterable", "ES2020"]
   },
   "exclude": ["node_modules"]
 }

@@ -13,6 +13,7 @@
     "react": "^16.8.0 || ^17.0.0"
   },
   "dependencies": {
+    "@arco-cli/builder": "^0.1.0",
     "@arco-cli/bundler": "^0.1.0",
     "@arco-cli/cli": "^0.1.0",
     "@arco-cli/compiler": "^0.1.0",

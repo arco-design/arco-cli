@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "main": "./dist/index.js",
   "scripts": {
-    "dev": "tsc -w",
-    "build": "tsc",
+    "dev": "sh ../../../scripts/build.sh dev",
+    "build": "sh ../../../scripts/build.sh",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run build"
   },

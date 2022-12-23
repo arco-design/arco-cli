@@ -11,4 +11,4 @@ fi
 
 # Generate .d.ts for dist files
 # Compile .ts with babel and copy tsc un-support files
-babel src -d dist -x ".ts,.tsx,.js" --copy-files --verbose --config-file $babel_config_path $babel_options & tsc --emitDeclarationOnly $tsc_option
+babel src -d dist -x ".ts,.tsx,.js" --copy-files --verbose --config-file $babel_config_path $babel_options

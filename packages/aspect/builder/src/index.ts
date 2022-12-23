@@ -10,5 +10,7 @@ export {
   BuildTaskHelper,
   ARTIFACTS_DIR,
 } from './buildTask';
+export { TaskResultsList } from './taskResultsList';
+export { mergeComponentResults } from './mergeComponentResults';
 export type { ComponentResult } from './types';
 export type { BuilderMain } from './builder.main.runtime';

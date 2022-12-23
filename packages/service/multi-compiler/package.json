@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "main": "./dist/index.js",
   "scripts": {
-    "dev": "tsc -w",
-    "build": "tsc",
+    "dev": "sh ../../../scripts/build.sh dev",
+    "build": "sh ../../../scripts/build.sh",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@arco-cli/builder": "^0.1.0",
     "@arco-cli/cli": "^0.1.0",
     "@arco-cli/compiler": "^0.1.0",
     "@arco-cli/component": "^0.1.0",
