@@ -182,6 +182,7 @@ importers:
       chalk: ^4.1.2
       cleargraph: ^5.8.0
       ink: ^3.2.0
+      lodash: ^4.17.21
       p-map-series: ^2.1.0
       pretty-time: ^1.1.0
     dependencies:
@@ -196,6 +197,7 @@ importers:
       chalk: 4.1.2
       cleargraph: 5.8.0
       ink: 3.2.0
+      lodash: 4.17.21
       p-map-series: 2.1.0
       pretty-time: 1.1.0
 
@@ -675,6 +677,7 @@ importers:
 
   packages/env/react:
     specifiers:
+      '@arco-cli/builder': ^0.1.0
       '@arco-cli/bundler': ^0.1.0
       '@arco-cli/cli': ^0.1.0
       '@arco-cli/compiler': ^0.1.0
@@ -738,6 +741,7 @@ importers:
       typescript: ^4.9.3
       webpack: ^5.75.0
     dependencies:
+      '@arco-cli/builder': link:../../aspect/builder
       '@arco-cli/bundler': link:../../aspect/bundler
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../../service/compiler
@@ -833,6 +837,7 @@ importers:
 
   packages/service/multi-compiler:
     specifiers:
+      '@arco-cli/builder': ^0.1.0
       '@arco-cli/cli': ^0.1.0
       '@arco-cli/compiler': ^0.1.0
       '@arco-cli/component': ^0.1.0
@@ -840,6 +845,7 @@ importers:
       chalk: ^4.1.2
       p-map-series: ^2.1.0
     dependencies:
+      '@arco-cli/builder': link:../../aspect/builder
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../compiler
       '@arco-cli/component': link:../../aspect/component

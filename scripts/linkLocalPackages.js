@@ -2,41 +2,13 @@
 const path = require('path');
 const fs = require('fs-extra');
 const chalk = require('chalk');
-const { exec } = require('child_process');
+const getLocalPackages = require('./getLocalPackages');
 
-const DIR_PACKAGES = path.resolve(__dirname, '../packages');
 const DIR_NODE_MODULES = path.resolve(__dirname, '../node_modules');
-
-function collectLocalPackages() {
-  return new Promise((resolve, reject) => {
-    exec('lerna list --json', (error, stdout, stderr) => {
-      const errMsg = 'Failed to collect packages info via [lerna list]';
-
-      if (error) {
-        reject({
-          error,
-          msg: errMsg,
-        });
-      }
-
-      try {
-        const infoList = JSON.parse(stdout).filter(({ location }) =>
-          location.startsWith(DIR_PACKAGES)
-        );
-        resolve(infoList);
-      } catch (error) {
-        reject({
-          error,
-          msg: stderr || errMsg,
-        });
-      }
-    });
-  });
-}
 
 async function linkLocalPackages() {
   try {
-    const packages = await collectLocalPackages();
+    const packages = await getLocalPackages();
     const packagesDone = [];
     packages.forEach(({ name, location }) => {
       const from = location;

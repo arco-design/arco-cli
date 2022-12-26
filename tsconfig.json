@@ -4,6 +4,7 @@
     "declaration": true,
     "sourceMap": true,
     "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "esModuleInterop": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

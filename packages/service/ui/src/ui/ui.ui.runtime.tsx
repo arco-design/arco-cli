@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BrowserRouter } from 'react-router-dom';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
-import { ReactRouterAspect, ReactRouterUI } from '@arco-cli/react-router';
+import { ReactRouterAspect, ReactRouterUI } from '@arco-cli/react-router/dist/ui';
 import { ClientContext } from '@arco-cli/ui-foundation-react/dist/clientContext';
 
 import UIAspect, { UIRuntime } from '../ui.aspect';

@@ -1,0 +1,174 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@arco-cli/arco": [
+        "../../packages/app/arco/src/index.ts"
+      ],
+      "@arco-cli/arco/dist/*": [
+        "../../packages/app/arco/src/*"
+      ],
+      "@arco-cli/builder": [
+        "../../packages/aspect/builder/src/index.ts"
+      ],
+      "@arco-cli/builder/dist/*": [
+        "../../packages/aspect/builder/src/*"
+      ],
+      "@arco-cli/bundler": [
+        "../../packages/aspect/bundler/src/index.ts"
+      ],
+      "@arco-cli/bundler/dist/*": [
+        "../../packages/aspect/bundler/src/*"
+      ],
+      "@arco-cli/component": [
+        "../../packages/aspect/component/src/index.ts"
+      ],
+      "@arco-cli/component/dist/*": [
+        "../../packages/aspect/component/src/*"
+      ],
+      "@arco-cli/docs": [
+        "../../packages/aspect/docs/src/index.ts"
+      ],
+      "@arco-cli/docs/dist/*": [
+        "../../packages/aspect/docs/src/*"
+      ],
+      "@arco-cli/envs": [
+        "../../packages/aspect/envs/src/index.ts"
+      ],
+      "@arco-cli/envs/dist/*": [
+        "../../packages/aspect/envs/src/*"
+      ],
+      "@arco-cli/jest": [
+        "../../packages/aspect/jest/src/index.ts"
+      ],
+      "@arco-cli/jest/dist/*": [
+        "../../packages/aspect/jest/src/*"
+      ],
+      "@arco-cli/less": [
+        "../../packages/aspect/less/src/index.ts"
+      ],
+      "@arco-cli/less/dist/*": [
+        "../../packages/aspect/less/src/*"
+      ],
+      "@arco-cli/react-router": [
+        "../../packages/aspect/react-router/src/index.ts"
+      ],
+      "@arco-cli/react-router/dist/*": [
+        "../../packages/aspect/react-router/src/*"
+      ],
+      "@arco-cli/sass": [
+        "../../packages/aspect/sass/src/index.ts"
+      ],
+      "@arco-cli/sass/dist/*": [
+        "../../packages/aspect/sass/src/*"
+      ],
+      "@arco-cli/typescript": [
+        "../../packages/aspect/typescript/src/index.ts"
+      ],
+      "@arco-cli/typescript/dist/*": [
+        "../../packages/aspect/typescript/src/*"
+      ],
+      "@arco-cli/webpack": [
+        "../../packages/aspect/webpack/src/index.ts"
+      ],
+      "@arco-cli/webpack/dist/*": [
+        "../../packages/aspect/webpack/src/*"
+      ],
+      "@arco-cli/workspace": [
+        "../../packages/aspect/workspace/src/index.ts"
+      ],
+      "@arco-cli/workspace/dist/*": [
+        "../../packages/aspect/workspace/src/*"
+      ],
+      "@arco-cli/aspect-loader": [
+        "../../packages/core/aspect-loader/src/index.ts"
+      ],
+      "@arco-cli/aspect-loader/dist/*": [
+        "../../packages/core/aspect-loader/src/*"
+      ],
+      "@arco-cli/cli": [
+        "../../packages/core/cli/src/index.ts"
+      ],
+      "@arco-cli/cli/dist/*": [
+        "../../packages/core/cli/src/*"
+      ],
+      "@arco-cli/express": [
+        "../../packages/core/express/src/index.ts"
+      ],
+      "@arco-cli/express/dist/*": [
+        "../../packages/core/express/src/*"
+      ],
+      "@arco-cli/graphql": [
+        "../../packages/core/graphql/src/index.ts"
+      ],
+      "@arco-cli/graphql/dist/*": [
+        "../../packages/core/graphql/src/*"
+      ],
+      "@arco-cli/legacy": [
+        "../../packages/core/legacy/src/index.ts"
+      ],
+      "@arco-cli/legacy/dist/*": [
+        "../../packages/core/legacy/src/*"
+      ],
+      "@arco-cli/logger": [
+        "../../packages/core/logger/src/index.ts"
+      ],
+      "@arco-cli/logger/dist/*": [
+        "../../packages/core/logger/src/*"
+      ],
+      "@arco-cli/pubsub": [
+        "../../packages/core/pubsub/src/index.ts"
+      ],
+      "@arco-cli/pubsub/dist/*": [
+        "../../packages/core/pubsub/src/*"
+      ],
+      "@arco-cli/stone": [
+        "../../packages/core/stone/src/index.ts"
+      ],
+      "@arco-cli/stone/dist/*": [
+        "../../packages/core/stone/src/*"
+      ],
+      "@arco-cli/react": [
+        "../../packages/env/react/src/index.ts"
+      ],
+      "@arco-cli/react/dist/*": [
+        "../../packages/env/react/src/*"
+      ],
+      "@arco-cli/compiler": [
+        "../../packages/service/compiler/src/index.ts"
+      ],
+      "@arco-cli/compiler/dist/*": [
+        "../../packages/service/compiler/src/*"
+      ],
+      "@arco-cli/multi-compiler": [
+        "../../packages/service/multi-compiler/src/index.ts"
+      ],
+      "@arco-cli/multi-compiler/dist/*": [
+        "../../packages/service/multi-compiler/src/*"
+      ],
+      "@arco-cli/preview": [
+        "../../packages/service/preview/src/index.ts"
+      ],
+      "@arco-cli/preview/dist/*": [
+        "../../packages/service/preview/src/*"
+      ],
+      "@arco-cli/tester": [
+        "../../packages/service/tester/src/index.ts"
+      ],
+      "@arco-cli/tester/dist/*": [
+        "../../packages/service/tester/src/*"
+      ],
+      "@arco-cli/ui": [
+        "../../packages/service/ui/src/index.ts"
+      ],
+      "@arco-cli/ui/dist/*": [
+        "../../packages/service/ui/src/*"
+      ],
+      "@arco-cli/ui-foundation-react": [
+        "../../packages/ui-foundation/react/src/index.ts"
+      ],
+      "@arco-cli/ui-foundation-react/dist/*": [
+        "../../packages/ui-foundation/react/src/*"
+      ]
+    }
+  }
+}
