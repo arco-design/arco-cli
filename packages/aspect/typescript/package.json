@@ -11,9 +11,13 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@arco-cli/builder": "^0.1.0",
     "@arco-cli/cli": "^0.1.0",
     "@arco-cli/compiler": "^0.1.0",
+    "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/logger": "^0.1.0",
     "@arco-cli/stone": "^0.1.0",
+    "fs-extra": "^10.1.0",
     "lodash": "^4.17.21",
     "typescript": "^4.9.3"
   },

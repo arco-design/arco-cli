@@ -1,23 +1,27 @@
 import { MainRuntime } from '@arco-cli/cli';
 import { EnvsAspect, EnvsMain } from '@arco-cli/envs';
 import { JestAspect, JestMain } from '@arco-cli/jest';
-import { TypescriptAspect, TypescriptMain } from '@arco-cli/typescript';
 import { BuilderAspect, BuilderMain } from '@arco-cli/builder';
 import { WebpackAspect, WebpackMain } from '@arco-cli/webpack';
-import { WorkspaceAspect, Workspace } from '@arco-cli/workspace';
 import { CompilerAspect, CompilerMain } from '@arco-cli/compiler';
 import { MultiCompilerAspect, MultiCompilerMain } from '@arco-cli/multi-compiler';
+import { TsConfigTransformer, TypescriptAspect, TypescriptMain } from '@arco-cli/typescript';
 import { SassAspect, SassMain } from '@arco-cli/sass';
 import { LessAspect, LessMain } from '@arco-cli/less';
 
 import { ReactAspect } from './react.aspect';
 import { ReactEnv } from './react.env';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const tsconfig = require('./typescript/tsconfig.json');
+
+const DEFAULT_ESM_DIR = 'es';
+const DEFAULT_CJS_DIR = 'lib';
+
 export class ReactMain {
   static runtime = MainRuntime;
 
   static dependencies = [
-    WorkspaceAspect,
     BuilderAspect,
     CompilerAspect,
     MultiCompilerAspect,
@@ -32,7 +36,6 @@ export class ReactMain {
   static slots = [];
 
   static provider([
-    workspace,
     builder,
     compiler,
     multiCompiler,
@@ -43,7 +46,6 @@ export class ReactMain {
     lessMain,
     sassMain,
   ]: [
-    Workspace,
     BuilderMain,
     CompilerMain,
     MultiCompilerMain,
@@ -56,7 +58,6 @@ export class ReactMain {
   ]) {
     const reactMain = new ReactMain();
     const reactEnv = new ReactEnv(
-      workspace,
       compiler,
       multiCompiler,
       jestMain,
@@ -67,7 +68,24 @@ export class ReactMain {
     );
     envs.registerEnv(reactEnv);
 
-    builder.registerBuildTasks([reactEnv.createEsmCompilerTask()]);
+    const transformer: TsConfigTransformer = (config) => {
+      config
+        .mergeTsConfig(tsconfig)
+        .setArtifactName('declaration')
+        .setShouldCopyNonSupportedFiles(false);
+      return config;
+    };
+
+    builder.registerBuildTasks([
+      reactEnv.createEsmCompilerTask({
+        transformers: [transformer],
+        compilerOptions: { distDir: DEFAULT_ESM_DIR },
+      }),
+      reactEnv.createCjsCompilerTask({
+        transformers: [transformer],
+        compilerOptions: { distDir: DEFAULT_CJS_DIR },
+      }),
+    ]);
 
     return reactMain;
   }

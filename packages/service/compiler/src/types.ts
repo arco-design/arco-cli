@@ -38,7 +38,7 @@ export interface CompilerOptions {
   /**
    * relative path of the dist directory inside the capsule. e.g. "dist".
    */
-  distDir: string;
+  distDir?: string;
 
   /**
    * determines which ones of the generated files will be saved while building

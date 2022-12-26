@@ -1,5 +1,5 @@
 {
-  "name": "@arco-cli/multi-compiler",
+  "name": "@arco-cli/mdx",
   "version": "0.1.0",
   "main": "./dist/index.js",
   "scripts": {
@@ -11,14 +11,15 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@arco-cli/builder": "^0.1.0",
-    "@arco-cli/cli": "^0.1.0",
-    "@arco-cli/compiler": "^0.1.0",
-    "@arco-cli/component": "^0.1.0",
     "@arco-cli/legacy": "^0.1.0",
-    "@arco-cli/stone": "^0.1.0",
-    "chalk": "^4.1.2",
-    "p-map-series": "^2.1.0"
+    "@mdx-js/mdx": "^1.6.22",
+    "loader-utils": "^3.2.1",
+    "remark-admonitions": "^1.2.1",
+    "remark-frontmatter": "^2.0.0",
+    "unist-util-remove": "^2.1.0",
+    "unist-util-visit": "^2.0.3",
+    "vfile": "^4.2.1",
+    "yaml": "^1.10.2"
   },
   "files": [
     "dist"

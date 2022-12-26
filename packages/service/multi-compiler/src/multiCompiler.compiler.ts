@@ -6,45 +6,35 @@ import {
   TranspileFileOutput,
   TranspileFileParams,
 } from '@arco-cli/compiler';
+import { DEFAULT_DIST_DIRNAME } from '@arco-cli/legacy/dist/constants';
 import { Component } from '@arco-cli/component';
-import { BuildContext, BuildTaskResult, mergeComponentResults } from '@arco-cli/builder';
-
-export type MultiCompilerOptions = {
-  targetExtension?: string;
-};
+import {
+  BuildContext,
+  BuildTaskResult,
+  mergeComponentResults,
+  TaskResultsList,
+} from '@arco-cli/builder';
 
 export class MultiCompiler implements Compiler {
   displayName = 'Multi compiler';
+
+  distDir: string;
 
   shouldCopyNonSupportedFiles =
     typeof this.compilerOptions.shouldCopyNonSupportedFiles === 'boolean'
       ? this.compilerOptions.shouldCopyNonSupportedFiles
       : true;
 
-  distDir = 'dist';
-
   constructor(
     readonly id: string,
     readonly compilers: Compiler[],
-    readonly compilerOptions: Partial<CompilerOptions> = {},
-    readonly options: MultiCompilerOptions = {}
-  ) {}
+    readonly compilerOptions: Partial<CompilerOptions> = {}
+  ) {
+    this.distDir = compilerOptions.distDir || DEFAULT_DIST_DIRNAME;
+  }
 
   private firstMatchedCompiler(filePath: string): Compiler | undefined {
     return this.compilers.find((compiler) => compiler.isFileSupported(filePath));
-  }
-
-  private getArtifactDefinition() {
-    return [
-      {
-        generatedBy: this.id,
-        name: this.compilerOptions.artifactName || 'dist',
-        globPatterns: this.compilerOptions.distGlobPatterns || [
-          `${this.distDir}/**`,
-          `!${this.distDir}/tsconfig.tsbuildinfo`,
-        ],
-      },
-    ];
   }
 
   version(): string {
@@ -115,6 +105,24 @@ export class MultiCompiler implements Compiler {
     return outputs;
   }
 
+  async preBuild(context: BuildContext) {
+    await Promise.all(
+      this.compilers.map(async (compiler) => {
+        if (!compiler.preBuild) return;
+        await compiler.preBuild(context);
+      })
+    );
+  }
+
+  async postBuild(context: BuildContext, taskResults: TaskResultsList) {
+    await Promise.all(
+      this.compilers.map(async (compiler) => {
+        if (!compiler.postBuild) return;
+        await compiler.postBuild(context, taskResults);
+      })
+    );
+  }
+
   async build(context: BuildContext): Promise<BuildTaskResult> {
     const builds = await pMapSeries(this.compilers, async (compiler) => {
       const buildResult = await compiler.build(context);
@@ -123,7 +131,6 @@ export class MultiCompiler implements Compiler {
 
     return {
       componentsResults: mergeComponentResults(builds),
-      artifacts: this.getArtifactDefinition(),
     };
   }
 }

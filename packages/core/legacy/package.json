@@ -21,6 +21,7 @@
     "ignore": "^5.2.1",
     "isbinaryfile": "^5.0.0",
     "node-fetch": "^2.6.7",
+    "node-source-walk": "^5.0.0",
     "normalize-path": "^3.0.0",
     "object-hash": "^3.0.0",
     "ora": "^5.4.1",

@@ -60,6 +60,7 @@ export default function (isEnvProduction = false): Configuration {
         'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime.js'),
         'react/jsx-runtime': require.resolve('react/jsx-runtime.js'),
         'react-dom/server': require.resolve('react-dom/server'),
+        '@mdx-js/react': require.resolve('@mdx-js/react'),
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',
@@ -114,7 +115,10 @@ export default function (isEnvProduction = false): Configuration {
                 babelrc: false,
                 configFile: false,
                 customize: require.resolve('babel-preset-react-app/webpack-overrides'),
-                presets: [require.resolve('@babel/preset-react')],
+                presets: [
+                  require.resolve('@babel/preset-react'),
+                  require.resolve('@babel/preset-typescript'),
+                ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.
@@ -135,13 +139,14 @@ export default function (isEnvProduction = false): Configuration {
                     babelrc: false,
                     configFile: false,
                     presets: [
-                      require.resolve('@babel/preset-react'),
                       require.resolve('@babel/preset-env'),
+                      require.resolve('@babel/preset-react'),
+                      require.resolve('@babel/preset-typescript'),
                     ],
                   },
                 },
                 {
-                  loader: require.resolve('@mdx-js/loader'),
+                  loader: require.resolve('@arco-cli/mdx/dist/loader'),
                 },
               ],
             },

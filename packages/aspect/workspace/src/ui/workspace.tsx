@@ -24,7 +24,13 @@ export function Workspace({ routes }: WorkspaceProps) {
     <div className={styles.workspaceWrapper}>
       <Navbar title={workspace.name} />
       <main className={styles.main}>
-        <div className={styles.sidebar}>Sider</div>
+        <div className={styles.sidebar}>
+          <ul>
+            {workspace.components.map((component) => {
+              return <li>{component.name}</li>;
+            })}
+          </ul>
+        </div>
         <div className={styles.overview}>
           <SlotRouter routes={routes}>
             <Route index element={<h1>Workspace Overview</h1>} />

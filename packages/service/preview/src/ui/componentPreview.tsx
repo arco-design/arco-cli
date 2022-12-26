@@ -76,7 +76,7 @@ export function ComponentPreview({
   const [height, setHeight] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   // TODO scale
-  const isScaling = false;
+  const isScaling = true;
   const currentRef = isScaling ? iframeRef : heightIframeRef;
 
   usePubsubIframe(pubsub ? currentRef : undefined);

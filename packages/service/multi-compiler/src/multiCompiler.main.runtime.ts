@@ -14,7 +14,12 @@ export class MultiCompilerMain {
    * create a multi-compiler `Compiler` instance.
    */
   createCompiler(compilers: Compiler[], options: Partial<CompilerOptions> = {}) {
-    return new MultiCompiler(MultiCompilerAspect.id, compilers, options, {});
+    compilers.forEach((compiler) => {
+      if (options.distDir) {
+        compiler.distDir = options.distDir;
+      }
+    });
+    return new MultiCompiler(MultiCompilerAspect.id, compilers, options);
   }
 }
 

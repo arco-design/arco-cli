@@ -1,12 +1,25 @@
+import path from 'path';
+import fs from 'fs-extra';
 import { render, version } from 'less';
-import { Compiler, TranspileFileParams, TranspileFileOutput } from '@arco-cli/compiler';
+import { BuildContext, BuildTaskResult } from '@arco-cli/builder';
+import {
+  Compiler,
+  TranspileFileParams,
+  TranspileFileOutput,
+  CompilerOptions,
+} from '@arco-cli/compiler';
+import { DEFAULT_DIST_DIRNAME } from '@arco-cli/legacy/dist/constants';
 
 export class LessCompiler implements Compiler {
-  distDir = 'dist';
+  readonly displayName = 'Less';
+
+  distDir: string;
 
   shouldCopyNonSupportedFiles = false;
 
-  constructor(readonly id: string, readonly displayName = 'Less') {}
+  constructor(readonly id: string, options: Partial<CompilerOptions>) {
+    this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
+  }
 
   getDistPathBySrcPath(srcPath: string): string {
     return srcPath.replace('.less', '.css');
@@ -33,5 +46,42 @@ export class LessCompiler implements Compiler {
         outputPath: this.getDistPathBySrcPath(options.filePath),
       },
     ];
+  }
+
+  async build(context: BuildContext): Promise<BuildTaskResult> {
+    const results = await Promise.all(
+      context.components.map(async (component) => {
+        const componentResult = {
+          component,
+          errors: [],
+        };
+
+        await Promise.all(
+          component.files
+            .filter((file) => {
+              return this.isFileSupported(file.path);
+            })
+            .map(async (file) => {
+              try {
+                const { css } = await render(file.contents.toString());
+                const targetPath = path.join(
+                  component.packageDirAbs,
+                  this.distDir,
+                  this.getDistPathBySrcPath(file.relative)
+                );
+                await fs.writeFile(targetPath, css);
+              } catch (err) {
+                componentResult.errors.push(err);
+              }
+            })
+        );
+
+        return componentResult;
+      })
+    );
+
+    return {
+      componentsResults: results,
+    };
   }
 }

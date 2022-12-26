@@ -1,4 +1,6 @@
 import { MainRuntime } from '@arco-cli/cli';
+import { CompilerOptions } from '@arco-cli/compiler';
+
 import { SassAspect } from './sass.aspect';
 import { SassCompiler } from './sass.compiler';
 
@@ -15,8 +17,8 @@ export class SassMain {
 
   constructor() {}
 
-  createCompiler() {
-    return new SassCompiler(SassAspect.id);
+  createCompiler(option: Partial<CompilerOptions> = {}) {
+    return new SassCompiler(SassAspect.id, option);
   }
 }
 

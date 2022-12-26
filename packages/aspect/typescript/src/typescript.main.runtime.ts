@@ -1,6 +1,7 @@
 import ts from 'typescript';
 import { MainRuntime } from '@arco-cli/cli';
 import { Compiler } from '@arco-cli/compiler';
+import { LoggerAspect, LoggerMain } from '@arco-cli/logger';
 import { TypescriptAspect } from './typescript.aspect';
 import { TypescriptCompiler } from './typescript.compiler';
 import { TypescriptCompilerOptions } from './compilerOptions';
@@ -30,15 +31,16 @@ function runTransformersWithContext(
 export class TypescriptMain {
   static runtime = MainRuntime;
 
-  static dependencies = [];
+  static dependencies = [LoggerAspect];
 
   static slots = [];
 
-  static provider() {
-    return new TypescriptMain();
+  static provider([loggerMain]: [LoggerMain]) {
+    const logger = loggerMain.createLogger(TypescriptAspect.id);
+    return new TypescriptMain(logger);
   }
 
-  constructor() {}
+  constructor(private logger) {}
 
   /**
    * Create a transformer that change the ts module to CommonJS
@@ -75,7 +77,7 @@ export class TypescriptMain {
       transformerContext,
       transformers
     );
-    return new TypescriptCompiler(TypescriptAspect.id, afterMutation.raw, tsModule);
+    return new TypescriptCompiler(TypescriptAspect.id, afterMutation.raw, tsModule, this.logger);
   }
 
   /**
@@ -86,7 +88,7 @@ export class TypescriptMain {
     transformers: TsConfigTransformer[] = [],
     tsModule = ts
   ) {
-    return this.createCompiler(options, [this.getCjsTransformer(), ...transformers], tsModule);
+    return this.createCompiler(options, [...transformers, this.getCjsTransformer()], tsModule);
   }
 
   /**
@@ -97,7 +99,7 @@ export class TypescriptMain {
     transformers: TsConfigTransformer[] = [],
     tsModule = ts
   ) {
-    return this.createCompiler(options, [this.getEsmTransformer(), ...transformers], tsModule);
+    return this.createCompiler(options, [...transformers, this.getEsmTransformer()], tsModule);
   }
 }
 

@@ -4,8 +4,7 @@ import ts from 'typescript';
 import { CompilerEnv, PreviewEnv, TesterEnv } from '@arco-cli/envs';
 import { JestMain } from '@arco-cli/jest';
 import { Tester } from '@arco-cli/tester';
-import { CompilerMain, Compiler } from '@arco-cli/compiler';
-import { Workspace } from '@arco-cli/workspace';
+import { CompilerMain, Compiler, CompilerOptions } from '@arco-cli/compiler';
 import { Bundler, BundlerContext, DevServer, DevServerContext } from '@arco-cli/bundler';
 import { pathNormalizeToLinux } from '@arco-cli/legacy/dist/utils/path';
 import {
@@ -27,6 +26,12 @@ import componentPreviewProdConfigFactory from './webpack/webpack.config.componen
 
 type CompilerMode = 'build' | 'dev';
 
+type CreateTsCompilerTaskOptions = {
+  tsModule?: typeof ts;
+  transformers?: TsConfigTransformer[];
+  compilerOptions?: CompilerOptions;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const defaultTsConfig = require('./typescript/tsconfig.json');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -34,7 +39,6 @@ const buildTsConfig = require('./typescript/tsconfig.build.json');
 
 export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, PreviewEnv {
   constructor(
-    private workspace: Workspace,
     private compiler: CompilerMain,
     private multiCompiler: MultiCompilerMain,
     private jest: JestMain,
@@ -119,7 +123,6 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   }
 
   getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
-    // TODO determine es module type
     return this.multiCompiler.createCompiler([
       this.createCjsCompiler('dev', transformers, tsModule),
       this.less.createCompiler(),
@@ -127,14 +130,40 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     ]);
   }
 
-  createEsmCompilerTask(transformers: TsConfigTransformer[] = [], tsModule = ts) {
-    const tsCompiler = this.createEsmCompiler('build', transformers, tsModule);
-    return this.compiler.createTask('TSCompiler', tsCompiler);
+  createEsmCompilerTask({
+    transformers,
+    tsModule,
+    compilerOptions,
+  }: CreateTsCompilerTaskOptions = {}) {
+    return this.compiler.createTask(
+      'TSCompilerESM',
+      this.multiCompiler.createCompiler(
+        [
+          this.createEsmCompiler('build', transformers, tsModule),
+          this.less.createCompiler(),
+          this.sass.createCompiler(),
+        ],
+        compilerOptions
+      )
+    );
   }
 
-  createCjsCompilerTask(transformers: TsConfigTransformer[] = [], tsModule = ts) {
-    const tsCompiler = this.createCjsCompiler('build', transformers, tsModule);
-    return this.compiler.createTask('TSCompiler', tsCompiler);
+  createCjsCompilerTask({
+    transformers,
+    tsModule,
+    compilerOptions,
+  }: CreateTsCompilerTaskOptions = {}) {
+    return this.compiler.createTask(
+      'TSCompilerCJS',
+      this.multiCompiler.createCompiler(
+        [
+          this.createCjsCompiler('build', transformers, tsModule),
+          this.less.createCompiler(),
+          this.sass.createCompiler(),
+        ],
+        compilerOptions
+      )
+    );
   }
 
   getDevServer(
@@ -142,7 +171,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     transformers: WebpackConfigTransformer[] = []
   ): DevServer {
     const baseConfig = basePreviewConfigFactory(false);
-    const componentDevConfig = componentPreviewDevConfigFactory(this.workspace.path, context.id);
+    const componentDevConfig = componentPreviewDevConfigFactory(context.id);
 
     const defaultTransformer: WebpackConfigTransformer = (configMutator) => {
       const merged = configMutator.merge([baseConfig, componentDevConfig]);
