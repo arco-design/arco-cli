@@ -1,0 +1,1 @@
+export { DocReader } from './docReader';

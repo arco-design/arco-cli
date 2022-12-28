@@ -18,6 +18,7 @@ import { UIAspect } from '@arco-cli/ui';
 import { WorkspaceAspect } from '@arco-cli/workspace';
 import { LessAspect } from '@arco-cli/less';
 import { SassAspect } from '@arco-cli/sass';
+import { MDXAspect } from '@arco-cli/mdx';
 import { ArcoAspect } from './arco.aspect';
 
 export const manifestMap = {
@@ -41,6 +42,7 @@ export const manifestMap = {
   [LessAspect.id]: LessAspect,
   [SassAspect.id]: SassAspect,
   [WorkspaceAspect.id]: WorkspaceAspect,
+  [MDXAspect.id]: MDXAspect,
 };
 
 export function isCoreAspect(id: string) {

@@ -1,21 +1,36 @@
 import gql from 'graphql-tag';
+import { Component } from '@arco-cli/component';
+import { DocsMain } from './docs.main.runtime';
 
-export default function () {
+export default function (docs: DocsMain) {
   return {
     typeDefs: gql`
       extend type Component {
         description: String
         labels: [String]
+        outline: [ComponentOutline]
+      }
+
+      type ComponentOutline {
+        depth: Int
+        text: String
       }
     `,
     resolvers: {
       Component: {
-        description: () => {
-          return 'TODO component description';
+        description: (component: Component) => {
+          const doc = docs.getDoc(component);
+          return doc?.description || '';
         },
 
-        labels: () => {
-          return ['TODO label', 'TODO label 2'];
+        labels: (component: Component) => {
+          const doc = docs.getDoc(component);
+          return doc?.labels || [];
+        },
+
+        outline: (component: Component) => {
+          const doc = docs.getDoc(component);
+          return doc?.outline || [];
         },
       },
     },

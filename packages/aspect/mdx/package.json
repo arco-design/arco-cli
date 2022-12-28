@@ -11,7 +11,10 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/docs": "^0.1.0",
     "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
     "@mdx-js/mdx": "^1.6.22",
     "loader-utils": "^3.2.1",
     "remark-admonitions": "^1.2.1",

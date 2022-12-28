@@ -3,8 +3,11 @@ import path from 'path';
 import { SourceFile } from '@arco-cli/legacy/dist/workspace/component/sources';
 import { ComponentInfo } from '@arco-cli/legacy/dist/workspace/componentInfo';
 import { ComponentNotFoundInPathError } from '@arco-cli/legacy/dist/workspace/component/exceptions';
+import { ExtensionDataEntry, ExtensionDataList } from './extensionData';
 
 export class Component {
+  public extensions: ExtensionDataList = new ExtensionDataList();
+
   constructor(private info: ComponentInfo, public files: SourceFile[] = []) {}
 
   get id() {
@@ -57,6 +60,17 @@ export class Component {
 
   get mainFile() {
     return this.info.mainFile;
+  }
+
+  async upsertExtensionData(extension: string, data: Record<string, any>) {
+    if (!data) return;
+    const existingExtension = this.extensions.findExtension(extension);
+    if (existingExtension) {
+      // Only merge top level of extension data
+      Object.assign(existingExtension.data, data);
+    } else {
+      this.extensions.push(await new ExtensionDataEntry(extension, undefined, data));
+    }
   }
 
   static async loadFromFileSystem(info: ComponentInfo, projectPath: string) {

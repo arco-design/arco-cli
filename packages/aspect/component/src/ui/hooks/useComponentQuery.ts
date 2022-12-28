@@ -12,6 +12,10 @@ const componentOverviewFields = gql`
     name
     description
     labels
+    outline {
+      depth
+      text
+    }
     server {
       env
       url

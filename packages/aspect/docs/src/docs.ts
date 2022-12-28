@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { ReactElement } from 'react';
+import { ReactElement, ComponentType } from 'react';
 
 export type Example = {
   title?: string;
@@ -13,7 +13,7 @@ export type Docs = {
   /**
    * default is the docs content.
    */
-  default: React.ComponentType;
+  default: ComponentType;
 
   /**
    * component abstract.

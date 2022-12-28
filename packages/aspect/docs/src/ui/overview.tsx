@@ -8,7 +8,22 @@ export function Overview() {
 
   return (
     <div>
-      <h1>TODO component overview</h1>
+      <div>
+        <h1>{component.name}</h1>
+        <h2>{component.description}</h2>
+        <ul>
+          {component.labels.map((label, index) => (
+            <li key={index}>{label}</li>
+          ))}
+        </ul>
+        <ul>
+          {component.outline.map(({ text, depth }, index) => (
+            <li key={index} style={{ marginLeft: 8 * (depth - 1) }}>
+              {text}
+            </li>
+          ))}
+        </ul>
+      </div>
       <ComponentPreview
         style={{ width: '100%', height: '100%' }}
         pubsub

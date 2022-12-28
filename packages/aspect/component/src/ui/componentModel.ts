@@ -3,6 +3,11 @@ export type ComponentServer = {
   url: string;
 };
 
+export type ComponentOutline = {
+  text: string;
+  depth: number;
+};
+
 export type ComponentModelProps = {
   id: string;
   name: string;
@@ -12,6 +17,7 @@ export type ComponentModelProps = {
   labels?: string[];
   host?: string;
   server?: ComponentServer;
+  outline?: ComponentOutline[];
 };
 
 export class ComponentModel {
@@ -23,7 +29,8 @@ export class ComponentModel {
     readonly host: string,
     readonly server: ComponentServer | undefined,
     readonly description = '',
-    readonly labels: string[] = []
+    readonly labels: string[] = [],
+    readonly outline: ComponentOutline[] = []
   ) {}
 
   static from({
@@ -35,8 +42,19 @@ export class ComponentModel {
     server,
     description,
     labels,
+    outline,
   }: ComponentModelProps) {
-    return new ComponentModel(id, name, packageName, version, host, server, description, labels);
+    return new ComponentModel(
+      id,
+      name,
+      packageName,
+      version,
+      host,
+      server,
+      description,
+      labels,
+      outline
+    );
   }
 
   static fromArray(componentsProps: ComponentModelProps[]) {

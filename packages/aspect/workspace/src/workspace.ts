@@ -1,30 +1,33 @@
 import path from 'path';
 import fs from 'fs-extra';
 import { uniqBy } from 'lodash';
+import { SlotRegistry } from '@arco-cli/stone';
 import { ComponentFactory, Component } from '@arco-cli/component';
 import { AspectLoaderMain, getAspectDef } from '@arco-cli/aspect-loader';
 import { ComponentInfo } from '@arco-cli/legacy/dist/workspace/componentInfo';
 import { getFilesByDir } from '@arco-cli/legacy/dist/workspace/componentOps/addComponents';
 import { getGitIgnoreForArco } from '@arco-cli/legacy/dist/utils/ignore';
+
 import { WorkspaceConfig } from './type';
+import { OnComponentLoad } from './type/onComponentEvents';
+
+export type OnComponentLoadSlot = SlotRegistry<OnComponentLoad>;
 
 export type WorkspaceProps = {
   path: string;
   config: WorkspaceConfig;
   aspectLoader: AspectLoaderMain;
+  onComponentLoadSlot: OnComponentLoadSlot;
 };
 
 export class Workspace implements ComponentFactory {
-  public path: string;
-
-  private config: WorkspaceConfig;
-
-  private aspectLoader: AspectLoaderMain;
-
-  private componentInfoList: ComponentInfo[] = [];
-
-  static async load(props: WorkspaceProps): Promise<Workspace> {
-    const workspace = new Workspace(props);
+  static async load({
+    path,
+    config,
+    aspectLoader,
+    onComponentLoadSlot,
+  }: WorkspaceProps): Promise<Workspace> {
+    const workspace = new Workspace(path, config, aspectLoader, onComponentLoadSlot);
     const workspacePath = workspace.path;
     const gitIgnore = getGitIgnoreForArco(workspacePath);
     await Promise.all(
@@ -46,11 +49,14 @@ export class Workspace implements ComponentFactory {
     return workspace;
   }
 
-  constructor({ path, config, aspectLoader }: WorkspaceProps) {
-    this.path = path;
-    this.config = config;
-    this.aspectLoader = aspectLoader;
-  }
+  constructor(
+    public path: string,
+    private config: WorkspaceConfig,
+    private aspectLoader: AspectLoaderMain,
+    private onComponentLoadSlot: OnComponentLoadSlot
+  ) {}
+
+  private componentInfoList: ComponentInfo[] = [];
 
   private get modulesPath() {
     return path.join(this.path, 'node_modules');
@@ -62,6 +68,11 @@ export class Workspace implements ComponentFactory {
 
   get name() {
     return this.config.name || this.path.split('/').pop();
+  }
+
+  onComponentLoad(loadFn: OnComponentLoad) {
+    this.onComponentLoadSlot.register(loadFn);
+    return this;
   }
 
   /**
@@ -87,17 +98,30 @@ export class Workspace implements ComponentFactory {
 
   async get(id: string) {
     const componentInfo = this.componentInfoList.find((info) => info.id === id);
-    return componentInfo ? Component.loadFromFileSystem(componentInfo, this.path) : null;
+
+    if (!componentInfo) {
+      return null;
+    }
+
+    const component = await Component.loadFromFileSystem(componentInfo, this.path);
+    const onComponentLoadTasks = this.onComponentLoadSlot
+      .toArray()
+      .map(async ([extension, onLoad]) => {
+        const data = await onLoad(component);
+        return component.upsertExtensionData(extension, data);
+      });
+
+    await Promise.all(onComponentLoadTasks);
+
+    return component;
   }
 
   async getMany(ids: string[]) {
-    const components = await Promise.all(
-      ids.map(async (id) => {
-        const component = await this.get(id);
-        return component;
+    return Promise.all(
+      ids.map((id) => {
+        return this.get(id);
       })
     );
-    return components;
   }
 
   async getManyByPattern(_pattern: string, _throwForNoMatch?: boolean) {

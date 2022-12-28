@@ -1,3 +1,4 @@
+import { Slot } from '@arco-cli/stone';
 import { LoggerAspect, LoggerMain } from '@arco-cli/logger';
 import { EnvsAspect, EnvsMain } from '@arco-cli/envs';
 import { UIAspect, UIMain } from '@arco-cli/ui';
@@ -7,11 +8,12 @@ import { getWorkspaceInfo } from '@arco-cli/legacy/dist/workspace/workspaceLocat
 import { GraphqlAspect, GraphqlMain } from '@arco-cli/graphql';
 
 import { MainRuntime, WorkspaceAspect } from './workspace.aspect';
-import { Workspace } from './workspace';
+import { OnComponentLoadSlot, Workspace } from './workspace';
 import { WorkspaceUiRoot } from './workspace.uiRoot';
 import { WorkspaceNotFoundError } from './exceptions';
 import { WorkspaceConfig } from './type';
 import getWorkspaceSchema from './workspace.graphql';
+import { OnComponentLoad } from './type/onComponentEvents';
 
 export const WorkspaceMain = {
   name: WorkspaceAspect.id,
@@ -25,7 +27,7 @@ export const WorkspaceMain = {
     AspectLoaderAspect,
     GraphqlAspect,
   ],
-  slots: [],
+  slots: [Slot.withType<OnComponentLoad>()],
   provider: async (
     [_loggerMain, ui, component, _envs, aspectLoader, graphql]: [
       LoggerMain,
@@ -36,7 +38,7 @@ export const WorkspaceMain = {
       GraphqlMain
     ],
     config: WorkspaceConfig,
-    _slots,
+    [onComponentLoadSlot]: [OnComponentLoadSlot],
     stone
   ) => {
     const arcoConfig = stone.config.get('arco.app/arco');
@@ -46,7 +48,12 @@ export const WorkspaceMain = {
       throw new WorkspaceNotFoundError();
     }
 
-    const workspace = await Workspace.load({ path: workspaceInfo.path, config, aspectLoader });
+    const workspace = await Workspace.load({
+      path: workspaceInfo.path,
+      config,
+      aspectLoader,
+      onComponentLoadSlot,
+    });
 
     ui.registerUiRoot(new WorkspaceUiRoot(workspace));
     component.registerHost(workspace);

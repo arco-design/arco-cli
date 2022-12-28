@@ -1,0 +1,1 @@
+export { FileExtensionNotSupportedError } from './fileExtensionNotSupportedError';

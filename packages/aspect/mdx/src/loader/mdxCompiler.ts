@@ -19,23 +19,21 @@ export type MDXCompileOptions = {
   arcoFlavour: boolean;
 };
 
-export const DEFAULT_RENDERER = `
+const DEFAULT_RENDERER = `
 // @ts-nocheck
 import React from 'react'
+import { mdx } from '@mdx-js/react'
 
 /* @jsxRuntime classic */
+/* @jsx mdx */
 `;
 
-function computeOptions(opts: Partial<MDXCompileOptions>) {
-  const defaultOptions = {
-    remarkPlugins: [remarkNotes],
-    compilers: [],
-    renderer: DEFAULT_RENDERER,
-    arcoFlavour: true,
-  };
-
-  return Object.assign(defaultOptions, opts);
-}
+const DEFAULT_OPTIONS: Partial<MDXCompileOptions> = {
+  remarkPlugins: [remarkNotes],
+  compilers: [],
+  renderer: DEFAULT_RENDERER,
+  arcoFlavour: true,
+};
 
 /**
  * compile an mdx file with frontmatter formatted (yaml) metadata.
@@ -53,9 +51,7 @@ export function compile(
 ): Promise<CompileOutput> {
   const contentFile = getFile(content, options.filepath);
   return new Promise((resolve, reject) => {
-    const opts = computeOptions(options);
-    const mdxCompiler = createCompiler(opts);
-
+    const mdxCompiler = createCompiler(options);
     mdxCompiler.process(contentFile, (err: Error | undefined, file: any) => {
       if (err) return reject(err);
       const output = new CompileOutput(file, DEFAULT_RENDERER);
@@ -72,15 +68,22 @@ export function compileSync(
   options: Partial<MDXCompileOptions> = {}
 ): CompileOutput {
   const contentFile = getFile(mdxContent, options.filepath);
-  const opts = computeOptions(options);
-  const mdxCompiler = createCompiler(opts);
+  const mdxCompiler = createCompiler(options);
   const file = mdxCompiler.processSync(contentFile);
   return new CompileOutput(file, DEFAULT_RENDERER);
 }
 
-function createCompiler(options: Partial<MDXCompileOptions>) {
+function getFile(contents: string, path?: string) {
+  return path ? vfile({ contents, path }) : vfile(contents);
+}
+
+function createCompiler(opts: Partial<MDXCompileOptions>) {
+  const options = {
+    ...DEFAULT_OPTIONS,
+    ...opts,
+  };
   const mustPlugins = options.arcoFlavour
-    ? [[detectFrontmatter, ['yaml']], extractMetadata, extractImports]
+    ? [[detectFrontmatter, ['yaml']], extractMetadata, extractImports, extractHeadings]
     : [extractImports];
   const mustRehypePlugins = [];
 
@@ -105,6 +108,8 @@ function extractMetadata() {
         );
       }
     });
+
+    remove(tree, 'yaml');
   };
 }
 
@@ -126,11 +131,30 @@ function extractImports() {
       });
       (file.data.imports ||= []).push(...imports);
     });
-
-    remove(tree, 'yaml');
   };
 }
 
-function getFile(contents: string, path?: string) {
-  return path ? vfile({ contents, path }) : vfile(contents);
+function extractHeadings() {
+  const getHeadingText = (node, text = '') => {
+    const nodeTypeHasTextValue = ['inlineCode', 'text'];
+    if (Array.isArray(node.children)) {
+      for (const c of node.children) {
+        text += getHeadingText(c);
+      }
+    } else if (nodeTypeHasTextValue.indexOf(node.type) > -1) {
+      text += node.value;
+    }
+    return text;
+  };
+
+  return function transformer(tree, file) {
+    visit(tree, 'heading', (node: any) => {
+      const text = getHeadingText(node);
+      const heading = {
+        text,
+        depth: node.depth,
+      };
+      (file.data.headings ||= []).push(heading);
+    });
+  };
 }

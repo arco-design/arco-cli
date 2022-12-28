@@ -16,8 +16,14 @@ export class CompileOutput {
    * get the mdx file metadata.
    */
   getMetadata() {
-    const data: any = this.file.data;
-    return data.frontmatter;
+    return (this.file.data as any).frontmatter;
+  }
+
+  /**
+   * get headings of markdown.
+   */
+  getOutline() {
+    return (this.file.data as any).headings;
   }
 
   /**

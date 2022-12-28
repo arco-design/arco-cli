@@ -27,7 +27,7 @@ export function Workspace({ routes }: WorkspaceProps) {
         <div className={styles.sidebar}>
           <ul>
             {workspace.components.map((component) => {
-              return <li>{component.name}</li>;
+              return <li key={component.id}>{component.name}</li>;
             })}
           </ul>
         </div>
