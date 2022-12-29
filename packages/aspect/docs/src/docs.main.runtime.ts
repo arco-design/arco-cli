@@ -101,7 +101,7 @@ export class DocsMain {
       try {
         const docReader = this.getDocReader(docFile.extname);
         if (!docReader) throw new FileExtensionNotSupportedError(docFile.relative, docFile.extname);
-        const doc = await docReader.read(docFile.relative, docFile.contents, component);
+        const doc = await docReader.read(docFile.path, docFile.contents, component);
         return doc;
       } catch (err: any) {
         // it's ok to fail here.

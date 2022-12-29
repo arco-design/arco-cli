@@ -2,6 +2,7 @@
 import React from 'react';
 import { defaultDocs, Docs } from '@arco-cli/docs';
 import { ErrorBoundary } from 'react-error-boundary';
+import { MDXLayout } from '../markdown/mdxLayout';
 
 interface DocsContentProps {
   docs?: Docs;
@@ -16,11 +17,13 @@ function ErrorFallback({ error }: { error: Error }) {
   );
 }
 
-export function DocsContent({ docs = defaultDocs }: DocsContentProps) {
+export function DocsContent({ docs = defaultDocs, ...rest }: DocsContentProps) {
   const Content: any = typeof docs.default === 'function' ? docs.default : () => null;
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Content />
+      <MDXLayout {...rest}>
+        <Content />
+      </MDXLayout>
     </ErrorBoundary>
   );
 }

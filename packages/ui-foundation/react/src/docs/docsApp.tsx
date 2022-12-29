@@ -5,6 +5,8 @@ import type { Docs } from '@arco-cli/docs';
 import { DocsTheme } from './docsTheme';
 import { DocsContent } from './docsContent';
 
+import '../style/global.scss';
+
 interface ReactDocsAppProps {
   docs?: Docs;
 }

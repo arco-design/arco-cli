@@ -1,29 +1,17 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useContext } from 'react';
 import { ComponentPreview } from '@arco-cli/preview/dist/ui';
-import { ComponentContext } from '@arco-cli/component/dist/ui';
+import { ComponentContext, ComponentMeta } from '@arco-cli/component/dist/ui';
+
+import styles from './overview.module.scss';
 
 export function Overview() {
   const component = useContext(ComponentContext);
 
   return (
-    <div>
-      <div>
-        <h1>{component.name}</h1>
-        <h2>{component.description}</h2>
-        <ul>
-          {component.labels.map((label, index) => (
-            <li key={index}>{label}</li>
-          ))}
-        </ul>
-        <ul>
-          {component.outline.map(({ text, depth }, index) => (
-            <li key={index} style={{ marginLeft: 8 * (depth - 1) }}>
-              {text}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className={styles.overview}>
+      <ComponentMeta component={component} />
+      <hr className={styles.divider} />
       <ComponentPreview
         style={{ width: '100%', height: '100%' }}
         pubsub

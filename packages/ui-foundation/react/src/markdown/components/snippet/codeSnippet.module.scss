@@ -1,0 +1,43 @@
+.snippetWrapper {
+  position: relative;
+  margin-bottom: 16px;
+
+  &:hover {
+    .copyIcon {
+      opacity: 1;
+    }
+  }
+
+  .codeSnippet {
+    padding: 16px !important;
+    border-radius: 10px;
+    background-color: white;
+    font-size: var(--bit-p-xs);
+    margin: 0 !important; // this is so that the copy icon will consistantly sit at the corner of the snippet
+  }
+
+  .copyIcon {
+    margin-left: 8px;
+    padding: 2px;
+    border-radius: 8px;
+    background-color: white;
+    opacity: 0;
+    color: #414141;
+    cursor: pointer;
+    transition: opacity 300ms ease-in-out;
+    box-sizing: border-box;
+    width: 24px;
+  }
+
+  code {
+    font-family: inherit !important;
+  }
+}
+
+.copy {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}

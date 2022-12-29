@@ -1,5 +1,8 @@
+import path from 'path';
 import yaml from 'yaml';
+import glob from 'glob';
 import vfile from 'vfile';
+import fs from 'fs-extra';
 import mdx from '@mdx-js/mdx';
 import detectFrontmatter from 'remark-frontmatter';
 import visit from 'unist-util-visit';
@@ -18,6 +21,8 @@ export type MDXCompileOptions = {
   renderer: string;
   arcoFlavour: boolean;
 };
+
+const DEMO_VIEW_COMPONENT_NAME = 'ArcoDemoView';
 
 const DEFAULT_RENDERER = `
 // @ts-nocheck
@@ -83,7 +88,13 @@ function createCompiler(opts: Partial<MDXCompileOptions>) {
     ...opts,
   };
   const mustPlugins = options.arcoFlavour
-    ? [[detectFrontmatter, ['yaml']], extractMetadata, extractImports, extractHeadings]
+    ? [
+        [detectFrontmatter, ['yaml']],
+        extractMetadata,
+        extractImports,
+        extractHeadings,
+        extractComponentDemos,
+      ]
     : [extractImports];
   const mustRehypePlugins = [];
 
@@ -155,6 +166,46 @@ function extractHeadings() {
         depth: node.depth,
       };
       (file.data.headings ||= []).push(heading);
+    });
+  };
+}
+
+function extractComponentDemos() {
+  return function transformer(tree, file) {
+    const imports = file.data.imports || [];
+
+    // this will visit div like below
+    // <div data-arco-demo="BasicDemo">...anything from user</div>
+    visit(tree, 'jsx', (node: any) => {
+      if (/^<div/i.test(node.value)) {
+        const [, attribute] = node.value.match(/^<div([^>]*)>/i) || [];
+        const metadata: { demo?: string } = {};
+
+        (attribute || '').replace(/data-arco-(\w+)="([^"]+)"/i, (_, key, value) => {
+          metadata[key] = value;
+          return '';
+        });
+
+        let demoCode = '';
+        for (const { identifier, fromModule } of imports) {
+          if (identifier === metadata.demo) {
+            let demoPath = path.join(file.dirname, fromModule);
+            if (!/\.[jt]sx?$/.test(demoPath)) {
+              const [globPath] = glob.sync(`${demoPath}.*`);
+              demoPath = globPath || demoPath;
+            }
+            try {
+              demoCode = fs.readFileSync(demoPath).toString();
+            } catch (e) {}
+
+            break;
+          }
+        }
+
+        if (metadata.demo) {
+          node.value = `<${DEMO_VIEW_COMPONENT_NAME} code={\`${demoCode}\`} children={${node.value}} />`;
+        }
+      }
     });
   };
 }

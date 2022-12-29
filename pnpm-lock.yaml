@@ -14,6 +14,7 @@ importers:
       '@babel/preset-react': ^7.18.6
       '@babel/preset-typescript': ^7.18.6
       '@babel/runtime': ^7.20.6
+      '@mdx-js/react': ^1.6.22
       '@testing-library/react': ^12.1.5
       '@types/fs-extra': ^9.0.11
       '@types/gulp': ^4.0.8
@@ -62,6 +63,7 @@ importers:
       '@babel/preset-react': 7.18.6
       '@babel/preset-typescript': 7.18.6
       '@babel/runtime': 7.20.6
+      '@mdx-js/react': 1.6.22_react@17.0.2
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
       babel-plugin-ramda: 2.1.1
       chalk: 4.1.2
@@ -101,7 +103,7 @@ importers:
       stylelint: 14.14.0
       stylelint-config-standard: 29.0.0_stylelint@14.14.0
 
-  fixtures/component:
+  fixtures/workspace:
     specifiers:
       '@arco-cli/arco': ^0.1.0
       '@babel/runtime': ^7.20.6
@@ -340,6 +342,8 @@ importers:
       '@arco-cli/legacy': ^0.1.0
       '@arco-cli/stone': ^0.1.0
       '@mdx-js/mdx': ^1.6.22
+      fs-extra: ^10.1.0
+      glob: ^8.0.3
       loader-utils: ^3.2.1
       remark-admonitions: ^1.2.1
       remark-frontmatter: ^2.0.0
@@ -353,6 +357,8 @@ importers:
       '@arco-cli/legacy': link:../../core/legacy
       '@arco-cli/stone': link:../../core/stone
       '@mdx-js/mdx': 1.6.22
+      fs-extra: 10.1.0
+      glob: 8.0.3
       loader-utils: 3.2.1
       remark-admonitions: 1.2.1
       remark-frontmatter: 2.0.0
@@ -1033,24 +1039,28 @@ importers:
     specifiers:
       '@apollo/client': ^3.7.2
       '@arco-cli/docs': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/preview': ^0.1.0
       '@arco-cli/react-router': ^0.1.0
       '@arco-design/web-react': ^2.42.2
       '@babel/runtime': ^7.20.6
+      '@mdx-js/react': ^1.6.22
+      '@types/mdx-js__react': ^1.5.5
       classnames: ^2.3.2
+      copy-to-clipboard: ^3.3.3
       react-error-boundary: ^3.1.4
+      react-syntax-highlighter: ^15.5.0
       uuid: ^9.0.0
     dependencies:
       '@apollo/client': 3.7.2
       '@arco-cli/docs': link:../../aspect/docs
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/preview': link:../../service/preview
       '@arco-cli/react-router': link:../../aspect/react-router
       '@arco-design/web-react': 2.42.2
       '@babel/runtime': 7.20.6
+      '@mdx-js/react': 1.6.22
+      '@types/mdx-js__react': 1.5.5
       classnames: 2.3.2
+      copy-to-clipboard: 3.3.3
       react-error-boundary: 3.1.4
+      react-syntax-highlighter: 15.5.0
       uuid: 9.0.0
 
 packages:
@@ -4788,6 +4798,14 @@ packages:
       react: ^16.13.1 || ^17.0.0
     dev: false
 
+  /@mdx-js/react/1.6.22_react@17.0.2:
+    resolution: {integrity: sha512-TDoPum4SHdfPiGSAaRBw7ECyI8VaHpK8GJugbJIJuqyh6kzw9ZLJZW3HGL3NNrJGxcAixUvqROm+YuQOo5eXtg==}
+    peerDependencies:
+      react: ^16.13.1 || ^17.0.0
+    dependencies:
+      react: 17.0.2
+    dev: false
+
   /@mdx-js/util/1.6.22:
     resolution: {integrity: sha512-H1rQc1ZOHANWBvPcW+JpGwr+juXSxM8Q8YCkm3GhZd8REu1fHR3z99CErO1p9pkcfcxZnMdIZdIsXkOHY0NilA==}
     dev: false
@@ -5649,6 +5667,12 @@ packages:
     resolution: {integrity: sha512-W864tg/Osz1+9f4lrGTZpCSO5/z4608eUp19tbozkq2HJK6i3z1kT0H9tlADXuYIb1YYOBByU4Jsqkk75q48qA==}
     dependencies:
       '@types/unist': 2.0.6
+    dev: false
+
+  /@types/mdx-js__react/1.5.5:
+    resolution: {integrity: sha512-k8pnaP6JXVlQh18HgL5X6sYFNC/qZnzO7R2+HsmwrwUd+JnnsU0d9lyyT0RQrHg1anxDU36S98TI/fsGtmYqqg==}
+    dependencies:
+      '@types/react': 17.0.52
     dev: false
 
   /@types/merge-stream/1.1.2:
@@ -7735,6 +7759,12 @@ packages:
     resolution: {integrity: sha512-1j20GZTsvKNkc4BY3NpMOM8tt///wY3FpIzozTOFO2ffuZcV61nojHXVKIy3WM+7ADCy5FVhdZYHYDdgTU0yJw==}
     dependencies:
       is-what: 3.14.1
+    dev: false
+
+  /copy-to-clipboard/3.3.3:
+    resolution: {integrity: sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==}
+    dependencies:
+      toggle-selection: 1.0.6
     dev: false
 
   /core-js-compat/3.26.1:
@@ -10014,6 +10044,10 @@ packages:
       readable-stream: 3.6.0
     dev: false
 
+  /highlight.js/10.7.3:
+    resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
+    dev: false
+
   /hmac-drbg/1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
     dependencies:
@@ -11769,6 +11803,13 @@ packages:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
     dependencies:
       tslib: 2.4.1
+    dev: false
+
+  /lowlight/1.20.0:
+    resolution: {integrity: sha512-8Ktj+prEb1RoCPkEOrPMYUN/nCggB7qAWe3a7OpMjWQkh3l2RD5wKRQ+o8Q8YuI9RG/xs95waaI/E6ym/7NsTw==}
+    dependencies:
+      fault: 1.0.4
+      highlight.js: 10.7.3
     dev: false
 
   /lru-cache/5.1.1:
@@ -13914,6 +13955,16 @@ packages:
     engines: {node: '>=4'}
     dev: false
 
+  /prismjs/1.27.0:
+    resolution: {integrity: sha512-t13BGPUlFDR7wRB5kQDG4jjl7XeuH6jbJGt11JHPL96qwsEHNX2+68tFXqc1/k+/jALsbSWJKUOT/hcYAZ5LkA==}
+    engines: {node: '>=6'}
+    dev: false
+
+  /prismjs/1.29.0:
+    resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
+    engines: {node: '>=6'}
+    dev: false
+
   /proc-log/2.0.1:
     resolution: {integrity: sha512-Kcmo2FhfDTXdcbfDH76N7uBYHINxc/8GW7UAVuVP9I+Va3uHSerrnKV6dLooga/gh7GlgzuCCr/eoldnL1muGw==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
@@ -14348,6 +14399,18 @@ packages:
       react: 17.0.2
     dev: false
 
+  /react-syntax-highlighter/15.5.0:
+    resolution: {integrity: sha512-+zq2myprEnQmH5yw6Gqc8lD55QHnpKaU8TOcFeC/Lg/MQSs8UknEA0JC4nTZGFAXC2J2Hyj/ijJ7NlabyPi2gg==}
+    peerDependencies:
+      react: '>= 0.14.0'
+    dependencies:
+      '@babel/runtime': 7.20.6
+      highlight.js: 10.7.3
+      lowlight: 1.20.0
+      prismjs: 1.29.0
+      refractor: 3.6.0
+    dev: false
+
   /react-transition-group/4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
     peerDependencies:
@@ -14496,6 +14559,14 @@ packages:
     dependencies:
       indent-string: 4.0.0
       strip-indent: 3.0.0
+
+  /refractor/3.6.0:
+    resolution: {integrity: sha512-MY9W41IOWxxk31o+YvFCNyNzdkc9M20NoZK5vq6jkv4I/uh2zkWcfudj0Q1fovjUQJrNewS9NMzeTtqPf+n5EA==}
+    dependencies:
+      hastscript: 6.0.0
+      parse-entities: 2.0.0
+      prismjs: 1.27.0
+    dev: false
 
   /regenerate-unicode-properties/10.1.0:
     resolution: {integrity: sha512-d1VudCLoIGitcU/hEg2QqvyGZQmdC0Lf8BqdOMXGFSvJP4bNV1+XqbPQeHHLD51Jh4QJJ225dlIFvY4Ly6MXmQ==}
@@ -15788,6 +15859,10 @@ packages:
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
+
+  /toggle-selection/1.0.6:
+    resolution: {integrity: sha512-BiZS+C1OS8g/q2RRbJmy59xpyghNBqrr6k5L/uKBGRsTfxmu3ffiRnd8mlGPUVayg8pvfi5urfnu8TU7DVOkLQ==}
+    dev: false
 
   /toidentifier/1.0.0:
     resolution: {integrity: sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==}

@@ -1,13 +1,6 @@
-.overviewWrapper {
-  overflow: auto;
-
-  .componentOverviewBlock {
-    padding: 50px 40px 10px 40px;
-    max-width: 1440px;
-    margin-bottom: 0;
+.overview {
+  .divider {
+    border: none;
+    border-bottom: 2px solid var(--color-border);
   }
-}
-
-.legacyPreview {
-  margin: 0 auto;
 }
