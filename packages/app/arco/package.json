@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Main entry for arco cli",
   "main": "./dist/index.js",
+  "bin": {
+    "arco": "bin/arco"
+  },
   "scripts": {
     "dev": "sh ../../../scripts/build.sh dev",
     "build": "sh ../../../scripts/build.sh",
@@ -39,7 +42,8 @@
     "fs-extra": "^10.1.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
   "license": "MIT"
 }

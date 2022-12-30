@@ -15,7 +15,7 @@ export type PreviewModule<T = any> = {
   /**
    * Dictionary mapping components to their preview metadata
    */
-  componentMapMetadata: Record<string, unknown>;
+  componentMetadataMap: Record<string, unknown>;
 
   /**
    * The 'main file' for this Preview type

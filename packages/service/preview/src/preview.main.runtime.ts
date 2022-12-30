@@ -9,7 +9,7 @@ import { ExecutionContext, PreviewEnv } from '@arco-cli/envs';
 import { AspectDefinition } from '@arco-cli/aspect-loader';
 import { Workspace, WorkspaceAspect } from '@arco-cli/workspace';
 import { PubsubAspect, PubsubMain } from '@arco-cli/pubsub';
-import { Component, ComponentMap } from '@arco-cli/component';
+import { Component } from '@arco-cli/component';
 import { BuilderAspect, BuilderMain } from '@arco-cli/builder';
 import { sha1 } from '@arco-cli/legacy/dist/utils';
 
@@ -145,47 +145,46 @@ export class PreviewMain {
     return resolvedAspects;
   }
 
-  /**
-   * write a link to load custom modules dynamically.
-   */
-  private writeLink(
-    prefix: string,
-    moduleMap: ComponentMap<string[]>,
-    defaultModule: string | undefined,
-    dirName: string
-  ) {
-    const contents = generateLink(prefix, moduleMap, defaultModule);
-    const hash = sha1(contents);
-    const targetPath = join(dirName, `${prefix}-${this.timestamp}.js`);
-
-    // write only if link has changed (prevents triggering fs watches)
-    if (this.writeHash.get(targetPath) !== hash) {
-      fs.writeFileSync(targetPath, contents);
-      this.writeHash.set(targetPath, hash);
-    }
-
-    return targetPath;
-  }
-
   private updateLinkFiles(context: ExecutionContext, components: Component[] = []) {
     const previews = this.previewSlot.values();
     const paths = previews.map(async (previewDef) => {
-      const templatePath = await previewDef.renderTemplatePath?.(context.env);
-      const map = await previewDef.getModuleMap(components);
-      const withPaths = map.map<string[]>((files) => {
-        return files.map((file) => file.path);
-      });
-
       const dirPath = join(this.cacheDir, context.id);
       if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath, { recursive: true });
       }
 
-      return this.writeLink(previewDef.prefix, withPaths, templatePath, dirPath);
+      const prefix = previewDef.prefix;
+      const templatePath = await previewDef.renderTemplatePath?.(context.env);
+      const componentMap = (await previewDef.getModuleMap(components)).map((files) => {
+        return files.map((file) => file.path);
+      });
+      const componentMetadataMap = await previewDef.getMetadataMap?.(components, context.env);
+
+      const contents = generateLink({
+        prefix,
+        componentMap,
+        mainModule: templatePath,
+        componentMetadataMap,
+      });
+      const hash = sha1(contents);
+      const targetPath = join(dirPath, `${prefix}-${this.timestamp}.js`);
+
+      // write only if link has changed (prevents triggering fs watches)
+      if (this.writeHash.get(targetPath) !== hash) {
+        fs.writeFileSync(targetPath, contents);
+        this.writeHash.set(targetPath, hash);
+      }
+
+      return targetPath;
     });
 
     return Promise.all(paths);
   }
+
+  // TODO handle component change and update file entry
+  // private handleComponentChange() {
+  //   // this.updateLinkFiles();
+  // }
 
   getDefs(): PreviewDefinition[] {
     return this.previewSlot.values();
@@ -230,6 +229,7 @@ export class PreviewMain {
     const hash = sha1(contents);
     const targetPath = join(targetDir, `${prefix}-${this.timestamp}.js`);
 
+    // TODO clear cache before preview
     // write only if link has changed (prevents triggering fs watches)
     if (this.writeHash.get(targetPath) !== hash) {
       fs.writeFileSync(targetPath, contents);

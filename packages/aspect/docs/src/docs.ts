@@ -24,16 +24,10 @@ export type Docs = {
    * array of labels.
    */
   labels: string[];
-
-  /**
-   * @deprecated
-   */
-  examples: Example[];
 };
 
 export const defaultDocs: Docs = {
   default: () => null,
   labels: [],
   abstract: '',
-  examples: [],
 };

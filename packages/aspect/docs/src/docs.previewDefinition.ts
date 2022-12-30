@@ -1,7 +1,6 @@
-import type { Component, ComponentMap } from '@arco-cli/component';
+import type { Component } from '@arco-cli/component';
 import type { Environment } from '@arco-cli/envs';
 import type { PreviewDefinition } from '@arco-cli/preview';
-import type { AbstractVinyl } from '@arco-cli/legacy/dist/workspace/component/sources';
 
 import { DocsMain } from './docs.main.runtime';
 
@@ -29,7 +28,14 @@ export class DocsPreviewDefinition implements PreviewDefinition {
   /**
    * files to load.
    */
-  async getModuleMap(components: Component[]): Promise<ComponentMap<AbstractVinyl[]>> {
+  async getModuleMap(components: Component[]) {
     return this.docs.getDocsMap(components);
+  }
+
+  /**
+   * metadata to collect
+   */
+  async getMetadataMap(components: Component[], env: Environment) {
+    return this.docs.getDocMetadata(components, env);
   }
 }

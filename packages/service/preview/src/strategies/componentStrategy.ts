@@ -14,7 +14,7 @@ import type {
   Target,
 } from '@arco-cli/bundler';
 import { BundlingStrategy, ComputeTargetsContext } from '../bundlingStrategy';
-import type { PreviewDefinition } from '../previewDefinition';
+import type { PreviewDefinition } from '../types';
 import type { ComponentPreviewMetaData, PreviewMain } from '../preview.main.runtime';
 import { generateComponentLink } from './generateComponentLink';
 import { PreviewOutputFileNotFoundError } from '../exceptions';
@@ -297,9 +297,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     component: Component
   ): Promise<string> {
     const moduleMapsPromise = defs.map(async (previewDef) => {
-      const moduleMap = await previewDef.getModuleMap([component]);
-      const metadata = previewDef.getMetadata ? await previewDef.getMetadata(component) : undefined;
-      const maybeFiles = moduleMap.get(component);
+      const maybeFiles = (await previewDef.getModuleMap([component])).get(component);
       if (!maybeFiles) return { prefix: previewDef.prefix, paths: [] };
 
       const [, files] = maybeFiles;
@@ -312,7 +310,6 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
       return {
         prefix: previewDef.prefix,
         paths: compiledPaths,
-        metadata,
       };
     });
 

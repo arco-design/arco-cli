@@ -29,7 +29,7 @@ export interface PreviewDefinition {
   getModuleMap(components: Component[]): Promise<ComponentMap<AbstractVinyl[]>>;
 
   /**
-   * Get metadata for the preview
+   * get all component metadata needed in the preview runtime.
    */
-  getMetadata?: (component: Component) => Promise<unknown>;
+  getMetadataMap?(components: Component[], env: Environment): Promise<ComponentMap<unknown>>;
 }

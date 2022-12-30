@@ -55,7 +55,6 @@ export function ErrorPage({ code, title, style, children, ...rest }: ErrorPagePr
       <h1 style={styles.title} className="arco-error-page-title">
         {title}
       </h1>
-      <img alt="error-tip" style={styles.img} src={`https://static.bit.dev/harmony/${code}.svg`} />
       {children}
     </div>
   );

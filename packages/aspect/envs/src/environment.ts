@@ -58,8 +58,18 @@ export interface CompilerEnv<T = any> extends Environment {
 
 export interface PreviewEnv extends Environment {
   /**
+   * Returns a path to a docs template.
+   * Required for `arco start` & `arco build`
+   */
+  getDocsTemplate?: () => string;
+
+  /**
+   * Return metadata of current component document, like properties info
+   */
+  getDocsMetadata?: () => unknown;
+
+  /**
    * Returns a bundler for the preview.
-   * Required for `bit build` & `bit start`
    */
   getBundler?: (context: BundlerContext, transformers: any[]) => Promise<Bundler>;
 

@@ -1,11 +1,15 @@
+/**
+ * This is the entry for preview-runtime render
+ */
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ReactDOM from 'react-dom';
+import { App } from './app';
 
-import { DocsApp } from './docsApp';
-import { MOUNT_ROOT_ID } from '../constants';
+const MOUNT_ROOT_ID = 'root';
 
 export default function (props) {
-  ReactDOM.render(<DocsApp {...props} />, document.querySelector(`#${MOUNT_ROOT_ID}`));
+  ReactDOM.render(<App {...props} />, document.querySelector(`#${MOUNT_ROOT_ID}`));
 }

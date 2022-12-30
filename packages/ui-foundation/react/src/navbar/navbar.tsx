@@ -19,7 +19,7 @@ export interface NavbarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'class
 export function Navbar({ menu = [], className, title }: NavbarProps) {
   return (
     <div className={cn(styles.navbar, className)}>
-      <h1>{title}</h1>
+      <div className={styles.logo}>{title}</div>
       <SlotRouter routes={menu} />
     </div>
   );

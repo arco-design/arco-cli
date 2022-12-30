@@ -1,5 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import React, { ReactNode } from 'react';
 import type { RenderingContext, PreviewModule } from '@arco-cli/preview';
 import { PreviewAspect, PreviewPreview, PreviewRuntime } from '@arco-cli/preview/dist/preview';
 
@@ -7,10 +5,10 @@ import { DocsAspect } from '../docs.aspect';
 import type { Docs } from '../docs';
 
 export type DocsRootProps = {
-  Provider: React.ComponentType | undefined;
   componentId: string;
   docs: Docs | undefined;
   context: RenderingContext;
+  propertiesTable: Record<string, any>;
 };
 
 export class DocsPreview {
@@ -44,7 +42,7 @@ export class DocsPreview {
       context,
       componentId,
       docs: docsModule as Docs,
-      Provider: NoopProvider as React.ComponentType,
+      propertiesTable: modules.componentMetadataMap[componentId],
     };
 
     modules.mainModule.default(docsProps);
@@ -52,7 +50,3 @@ export class DocsPreview {
 }
 
 DocsAspect.addRuntime(DocsPreview);
-
-function NoopProvider({ children }: { children: ReactNode }) {
-  return children;
-}

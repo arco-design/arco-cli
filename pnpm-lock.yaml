@@ -731,6 +731,7 @@ importers:
       '@arco-cli/bundler': ^0.1.0
       '@arco-cli/cli': ^0.1.0
       '@arco-cli/compiler': ^0.1.0
+      '@arco-cli/docs': ^0.1.0
       '@arco-cli/envs': ^0.1.0
       '@arco-cli/jest': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
@@ -766,6 +767,7 @@ importers:
       camelcase: ^6.3.0
       css-loader: ^6.7.2
       css-minimizer-webpack-plugin: ^4.2.2
+      graphql-tag: ^2.12.6
       identity-obj-proxy: ^3.0.0
       ink: ^3.2.0
       jest-environment-jsdom: ^29.3.1
@@ -780,6 +782,7 @@ importers:
       postcss-preset-env: ^7.8.3
       react-app-polyfill: ^3.0.0
       react-dev-utils: ^12.0.1
+      react-error-boundary: ^3.1.4
       react-error-overlay: ^6.0.11
       react-refresh: ^0.14.0
       resolve-url-loader: ^5.0.0
@@ -788,6 +791,7 @@ importers:
       strip-ansi: ^7.0.1
       style-loader: ^3.3.1
       terser-webpack-plugin: ^5.3.6
+      ts-document: ~0
       typescript: ^4.9.3
       webpack: ^5.75.0
     dependencies:
@@ -795,6 +799,7 @@ importers:
       '@arco-cli/bundler': link:../../aspect/bundler
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../../service/compiler
+      '@arco-cli/docs': link:../../aspect/docs
       '@arco-cli/envs': link:../../aspect/envs
       '@arco-cli/jest': link:../../aspect/jest
       '@arco-cli/legacy': link:../../core/legacy
@@ -830,6 +835,7 @@ importers:
       camelcase: 6.3.0
       css-loader: 6.7.2_webpack@5.75.0
       css-minimizer-webpack-plugin: 4.2.2_webpack@5.75.0
+      graphql-tag: 2.12.6
       identity-obj-proxy: 3.0.0
       ink: 3.2.0
       jest-environment-jsdom: 29.3.1
@@ -844,6 +850,7 @@ importers:
       postcss-preset-env: 7.8.3_postcss@8.4.20
       react-app-polyfill: 3.0.0
       react-dev-utils: 12.0.1_vfotqvx6lgcbf3upbs6hgaza4q
+      react-error-boundary: 3.1.4
       react-error-overlay: 6.0.11
       react-refresh: 0.14.0
       resolve-url-loader: 5.0.0
@@ -852,6 +859,7 @@ importers:
       strip-ansi: 7.0.1
       style-loader: 3.3.1_webpack@5.75.0
       terser-webpack-plugin: 5.3.6_webpack@5.75.0
+      ts-document: 0.7.0_typescript@4.9.3
       typescript: 4.9.3
       webpack: 5.75.0
 
@@ -1038,7 +1046,6 @@ importers:
   packages/ui-foundation/react:
     specifiers:
       '@apollo/client': ^3.7.2
-      '@arco-cli/docs': ^0.1.0
       '@arco-cli/react-router': ^0.1.0
       '@arco-design/web-react': ^2.42.2
       '@babel/runtime': ^7.20.6
@@ -1046,12 +1053,10 @@ importers:
       '@types/mdx-js__react': ^1.5.5
       classnames: ^2.3.2
       copy-to-clipboard: ^3.3.3
-      react-error-boundary: ^3.1.4
       react-syntax-highlighter: ^15.5.0
       uuid: ^9.0.0
     dependencies:
       '@apollo/client': 3.7.2
-      '@arco-cli/docs': link:../../aspect/docs
       '@arco-cli/react-router': link:../../aspect/react-router
       '@arco-design/web-react': 2.42.2
       '@babel/runtime': 7.20.6
@@ -1059,7 +1064,6 @@ importers:
       '@types/mdx-js__react': 1.5.5
       classnames: 2.3.2
       copy-to-clipboard: 3.3.3
-      react-error-boundary: 3.1.4
       react-syntax-highlighter: 15.5.0
       uuid: 9.0.0
 
@@ -5457,6 +5461,15 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: false
 
+  /@ts-morph/common/0.10.1:
+    resolution: {integrity: sha512-rKN/VtZUUlW4M+6vjLFSaFc1Z9sK+1hh0832ucPtPkXqOw/mSWE80Lau4z2zTPNTqtxAjfZbvKpQcEwJy0KIEg==}
+    dependencies:
+      fast-glob: 3.2.12
+      minimatch: 3.1.2
+      mkdirp: 1.0.4
+      path-browserify: 1.0.1
+    dev: false
+
   /@tsconfig/node10/1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
 
@@ -7433,6 +7446,10 @@ packages:
   /co/4.6.0:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
+
+  /code-block-writer/10.1.1:
+    resolution: {integrity: sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==}
+    dev: false
 
   /code-excerpt/3.0.0:
     resolution: {integrity: sha512-VHNTVhd7KsLGOqfX3SyeO8RyYPMp1GJOg194VITk04WMYCv4plV68YWe6TJZxd9MhobjtpMRnVky01gqZsalaw==}
@@ -12189,7 +12206,6 @@ packages:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
     hasBin: true
-    dev: true
 
   /modify-values/1.0.1:
     resolution: {integrity: sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==}
@@ -15916,6 +15932,15 @@ packages:
     resolution: {integrity: sha512-rvuRbTarPXmMb79SmzEp8aqXNKcK+y0XaB298IXueQ8I2PsrATcPBCSPyK/dDNa2iWOhKlfNnOjdAOTBU/nkFA==}
     dev: false
 
+  /ts-document/0.7.0_typescript@4.9.3:
+    resolution: {integrity: sha512-7EH0VHo3JOAx9AWtieglkWXz0AV7L1u6uHdtuDh3Hm7S4UW4nYiTjHY7bqFQiffnbEoH42XkQE4luTFE551Deg==}
+    peerDependencies:
+      typescript: '>= 4.3.x'
+    dependencies:
+      ts-morph: 11.0.3
+      typescript: 4.9.3
+    dev: false
+
   /ts-invariant/0.10.3:
     resolution: {integrity: sha512-uivwYcQaxAucv1CzRp2n/QdYPo4ILf9VXgH19zEIjFx2EJufV16P0JtJVpYHy89DItG6Kwj2oIUjrcK5au+4tQ==}
     engines: {node: '>=8'}
@@ -15960,6 +15985,13 @@ packages:
       semver: 7.3.8
       typescript: 4.9.3
       yargs-parser: 21.1.1
+    dev: false
+
+  /ts-morph/11.0.3:
+    resolution: {integrity: sha512-ymuPkndv9rzqTLiHWMkVrFXWcN4nBiBGhRP/kTC9F5amAAl7BNLfyrsTzMD1o9A0zishKoF1KQT/0yyFhJnPgA==}
+    dependencies:
+      '@ts-morph/common': 0.10.1
+      code-block-writer: 10.1.1
     dev: false
 
   /ts-node/10.9.1_xs6lakymg7xkuy2axsjc66vbve:

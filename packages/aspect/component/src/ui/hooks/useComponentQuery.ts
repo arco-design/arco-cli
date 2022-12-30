@@ -68,5 +68,5 @@ export function useComponentQuery(componentId: string, host: string, skip?: bool
         : undefined,
       loading,
     };
-  }, [rawComponent, host, error]);
+  }, [error, loading, rawComponent, host]);
 }

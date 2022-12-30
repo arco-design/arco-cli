@@ -75,9 +75,18 @@ export class DocsMain {
   /**
    * returns an array of doc file paths for a set of components.
    */
-  getDocsMap(components: Component[]): ComponentMap<AbstractVinyl[]> {
+  getDocsMap(components: Component[]) {
     return ComponentMap.as<AbstractVinyl[]>(components, (component) => {
       return this.getDocsFiles(component);
+    });
+  }
+
+  /**
+   * return any component metadata generate by env, like component property tables
+   */
+  getDocMetadata(components: Component[], env: Environment) {
+    return ComponentMap.as<Record<string, any>>(components, (component) => {
+      return env.getDocsMetadata?.(component.files);
     });
   }
 

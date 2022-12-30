@@ -1,6 +1,6 @@
 import { BuildContext, BuildTaskResult } from '@arco-cli/builder';
 import { Target, BundlerResult, BundlerContext } from '@arco-cli/bundler';
-import { PreviewDefinition } from './previewDefinition';
+import { PreviewDefinition } from './types';
 import { PreviewTask } from './preview.task';
 
 export interface ComputeTargetsContext extends BuildContext {

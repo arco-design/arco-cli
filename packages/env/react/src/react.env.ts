@@ -7,6 +7,7 @@ import { Tester } from '@arco-cli/tester';
 import { CompilerMain, Compiler, CompilerOptions } from '@arco-cli/compiler';
 import { Bundler, BundlerContext, DevServer, DevServerContext } from '@arco-cli/bundler';
 import { pathNormalizeToLinux } from '@arco-cli/legacy/dist/utils/path';
+import { SourceFile } from '@arco-cli/legacy/dist/workspace/component/sources';
 import {
   TypescriptMain,
   TsConfigTransformer,
@@ -23,6 +24,7 @@ import basePreviewConfigFactory from './webpack/webpack.config.base';
 import basePreviewProdConfigFactory from './webpack/webpack.config.base.prod';
 import componentPreviewDevConfigFactory from './webpack/webpack.config.component.dev';
 import componentPreviewProdConfigFactory from './webpack/webpack.config.component.prod';
+import { parser } from './tsdoc';
 
 type CompilerMode = 'build' | 'dev';
 
@@ -182,7 +184,13 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   }
 
   getDocsTemplate() {
-    return require.resolve('@arco-cli/ui-foundation-react/dist/docs/index.js');
+    return require.resolve('@arco-cli/react/dist/ui/index.js');
+  }
+
+  getDocsMetadata(files: SourceFile[]) {
+    // TODO determine which file to parse
+    const [file] = files.filter((file) => file.basename.indexOf('interface.ts') > -1);
+    return parser(file);
   }
 
   getPreviewConfig() {

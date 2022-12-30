@@ -1,10 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ThemeProps {}
 
-export function DocsTheme(props: PropsWithChildren<ThemeProps>) {
+export function Theme(props: PropsWithChildren<ThemeProps>) {
   const { children } = props;
   const hash = window.location.hash || '';
   const [, hashQuery] = hash.split('?');
@@ -14,5 +14,5 @@ export function DocsTheme(props: PropsWithChildren<ThemeProps>) {
   // TODO theme toggle
   console.log(`Current theme ${theme}`);
 
-  return children;
+  return <div>{children}</div>;
 }
