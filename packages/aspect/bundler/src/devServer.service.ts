@@ -62,7 +62,6 @@ export class DevServerService implements EnvService<ComponentServer, DevServerDe
       // don't start with a leading "/" because it generates errors on Windows
       rootPath: `preview/${context.envRuntime.id}`,
       publicPath: `${sep}public`,
-      aliasHostDependencies: true,
     });
   }
 

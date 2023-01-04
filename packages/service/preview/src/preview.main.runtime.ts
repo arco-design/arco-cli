@@ -225,7 +225,7 @@ export class PreviewMain {
     return filePath;
   }
 
-  writeLinkContents(contents: string, targetDir: string, prefix: string) {
+  writeBuildEntry(contents: string, targetDir: string, prefix: string) {
     const hash = sha1(contents);
     const targetPath = join(targetDir, `${prefix}-${this.timestamp}.js`);
 

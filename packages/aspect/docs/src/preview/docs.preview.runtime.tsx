@@ -8,7 +8,7 @@ export type DocsRootProps = {
   componentId: string;
   docs: Docs | undefined;
   context: RenderingContext;
-  propertiesTable: Record<string, any>;
+  metadata: Record<string, any>;
 };
 
 export class DocsPreview {
@@ -42,7 +42,7 @@ export class DocsPreview {
       context,
       componentId,
       docs: docsModule as Docs,
-      propertiesTable: modules.componentMetadataMap[componentId],
+      metadata: modules.componentMetadataMap[componentId],
     };
 
     modules.mainModule.default(docsProps);

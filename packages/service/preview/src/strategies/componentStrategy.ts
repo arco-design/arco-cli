@@ -16,7 +16,7 @@ import type {
 import { BundlingStrategy, ComputeTargetsContext } from '../bundlingStrategy';
 import type { PreviewDefinition } from '../types';
 import type { ComponentPreviewMetaData, PreviewMain } from '../preview.main.runtime';
-import { generateComponentLink } from './generateComponentLink';
+import { generatePreviewBundleEntry } from './generatePreviewBundleEntry';
 import { PreviewOutputFileNotFoundError } from '../exceptions';
 
 export const PREVIEW_CHUNK_SUFFIX = 'preview';
@@ -74,8 +74,6 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
         entries,
         components,
         outputPath,
-        aliasHostDependencies: true,
-        externalizeHostDependencies: true,
       };
     });
   }
@@ -116,7 +114,6 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
       [chunks.componentPreview]: {
         filename: this.getComponentChunkFileName(fsCompatibleId, 'preview'),
         import: componentPreviewPath,
-        dependOn: chunks.component,
         library: { name: chunks.componentPreview, type: 'umd' },
       },
     };
@@ -124,7 +121,6 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     if (chunks.component) {
       entries[chunks.component] = {
         filename: this.getComponentChunkFileName(fsCompatibleId, 'component'),
-        dependOn: undefined,
         import: componentPath,
         library: { name: chunks.component, type: 'umd' },
       };
@@ -297,25 +293,35 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     component: Component
   ): Promise<string> {
     const moduleMapsPromise = defs.map(async (previewDef) => {
-      const maybeFiles = (await previewDef.getModuleMap([component])).get(component);
-      if (!maybeFiles) return { prefix: previewDef.prefix, paths: [] };
+      const previewFiles = (await previewDef.getModuleMap([component])).getValueByComponentId(
+        component.id
+      );
 
-      const [, files] = maybeFiles;
-      const compiledPaths = this.getPaths(
+      if (!previewFiles) {
+        return { prefix: previewDef.prefix, previewPaths: [] };
+      }
+
+      const previewPaths = this.getPaths(
         context,
         component,
-        files.map((file) => file.relative)
+        previewFiles.map((file) => file.relative)
       );
+      const renderPath = await previewDef.renderTemplatePath?.(context.env);
+      const metadata = (
+        await previewDef.getMetadataMap([component], context.env)
+      ).getValueByComponentId(component.id);
 
       return {
         prefix: previewDef.prefix,
-        paths: compiledPaths,
+        previewPaths,
+        renderPath,
+        metadata,
       };
     });
 
     const moduleMaps = await Promise.all(moduleMapsPromise);
-    const contents = generateComponentLink(moduleMaps);
+    const contents = generatePreviewBundleEntry(moduleMaps);
 
-    return this.preview.writeLinkContents(contents, this.getCacheDir(context), 'preview');
+    return this.preview.writeBuildEntry(contents, this.getCacheDir(context), 'preview');
   }
 }

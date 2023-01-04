@@ -6,11 +6,11 @@ import { Theme } from './theme';
 import { Content as DocContent } from './doc/content';
 import { PropertiesTable } from './doc/propertiesTable';
 
-export function App({ docs, propertiesTable }: DocsRootProps) {
+export function App({ docs, metadata }: DocsRootProps) {
   return (
     <Theme>
       <DocContent docs={docs} />
-      <PropertiesTable schema={propertiesTable} />
+      <PropertiesTable schema={metadata} />
     </Theme>
   );
 }

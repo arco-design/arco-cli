@@ -125,11 +125,17 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   }
 
   getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
-    return this.multiCompiler.createCompiler([
-      this.createCjsCompiler('dev', transformers, tsModule),
-      this.less.createCompiler(),
-      this.sass.createCompiler(),
-    ]);
+    return this.multiCompiler.createCompiler(
+      [
+        this.createCjsCompiler('dev', transformers, tsModule),
+        this.less.createCompiler(),
+        this.sass.createCompiler(),
+      ],
+      // TODO config dist-dir name
+      {
+        distDir: 'lib',
+      }
+    );
   }
 
   createEsmCompilerTask({
@@ -184,7 +190,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   }
 
   getDocsTemplate() {
-    return require.resolve('@arco-cli/react/dist/ui/index.js');
+    return require.resolve('./preview/index.js');
   }
 
   getDocsMetadata(files: SourceFile[]) {
