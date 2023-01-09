@@ -1,4 +1,6 @@
+import { debounce } from 'lodash';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
+import { PubsubAspect, PubsubPreview } from '@arco-cli/pubsub/dist/preview';
 
 import { PREVIEW_MODULES } from './previewModules';
 import { PreviewNotFoundError } from '../exceptions';
@@ -10,6 +12,7 @@ import {
   RenderingContextSlot,
   RenderingContextProvider,
 } from '../types';
+import { SizeEvent } from './sizeEvent';
 
 // forward linkModules for generate-link.ts
 export { linkModules } from './previewModules';
@@ -17,22 +20,23 @@ export { linkModules } from './previewModules';
 type PreviewSlot = SlotRegistry<PreviewType>;
 
 export class PreviewPreview {
-  static dependencies = [];
+  static dependencies = [PubsubAspect];
 
   static slots = [Slot.withType<PreviewType>(), Slot.withType<RenderingContextProvider>()];
 
   static runtime = PreviewRuntime;
 
   static provider(
-    _deps,
+    [pubsub]: [PubsubPreview],
     _config,
     [previewSlot, renderingContextSlot]: [PreviewSlot, RenderingContextSlot]
   ) {
-    const previewPreview = new PreviewPreview(previewSlot, renderingContextSlot);
+    const previewPreview = new PreviewPreview(pubsub, previewSlot, renderingContextSlot);
     return previewPreview;
   }
 
   constructor(
+    private pubsub: PubsubPreview,
     private previewSlot: PreviewSlot,
     private renderingContextSlot: RenderingContextSlot
   ) {}
@@ -80,7 +84,29 @@ export class PreviewPreview {
   }
 
   private reportSize() {
-    // TODO report size
+    if (!window?.parent || !window?.document) return;
+
+    const sendPubsubEvent = () => {
+      this.pubsub.pub(
+        PreviewAspect.id,
+        new SizeEvent({
+          width: window.document.body.offsetWidth,
+          height: window.document.body.offsetHeight,
+        })
+      );
+    };
+
+    window.document.body.addEventListener('resize', debounce(sendPubsubEvent, 300));
+
+    let counter = 0;
+    const interval = setInterval(() => {
+      counter += 1;
+      if (counter > 5) {
+        clearInterval(interval);
+        return;
+      }
+      sendPubsubEvent();
+    }, 200);
   }
 
   registerPreview(preview: PreviewType) {

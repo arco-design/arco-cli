@@ -1,0 +1,14 @@
+.titleRow {
+  display: grid;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--preview-color-border);
+
+  &.hide {
+    display: none;
+  }
+}
+
+.titleCol {
+  text-transform: uppercase;
+  color: var(--preview-color-text-2);
+}

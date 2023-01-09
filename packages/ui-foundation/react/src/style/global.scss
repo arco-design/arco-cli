@@ -1,1 +1,8 @@
 @import '~@arco-design/web-react/dist/css/arco.css';
+
+html,
+body {
+  * {
+    box-sizing: border-box;
+  }
+}

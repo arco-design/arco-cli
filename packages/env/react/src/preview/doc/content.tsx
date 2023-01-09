@@ -1,11 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React from 'react';
-import { defaultDocs, Docs } from '@arco-cli/docs';
+import React, { ComponentType } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { MDXLayout } from '@arco-cli/ui-foundation-react/dist/markdown/mdxLayout';
 
 interface DocsContentProps {
-  docs?: Docs;
+  doc?: ComponentType;
 }
 
 function ErrorFallback({ error }: { error: Error }) {
@@ -17,13 +15,11 @@ function ErrorFallback({ error }: { error: Error }) {
   );
 }
 
-export function Content({ docs = defaultDocs, ...rest }: DocsContentProps) {
-  const Content: any = typeof docs.default === 'function' ? docs.default : () => null;
+export function Content({ doc }: DocsContentProps) {
+  const Content: any = typeof doc === 'function' ? doc : () => null;
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <MDXLayout {...rest}>
-        <Content />
-      </MDXLayout>
+      <Content />
     </ErrorBoundary>
   );
 }

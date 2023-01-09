@@ -2,9 +2,9 @@
 import React, { AnchorHTMLAttributes } from 'react';
 import cs from 'classnames';
 
-import styles from './link.module.scss';
+import styles from './anchor.module.scss';
 
-export function Link({
+export function Anchor({
   href,
   children,
   className,
@@ -16,7 +16,7 @@ export function Link({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className={cs(styles.link, className)}
+      className={cs(styles.anchor, className)}
     >
       {children}
     </a>

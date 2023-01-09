@@ -1,5 +1,8 @@
+@import './variable';
+
 .mdxContent {
   line-height: 1.5;
+  padding-right: calc($doc-anchor-width + 60px);
 
   img {
     max-width: 100%;

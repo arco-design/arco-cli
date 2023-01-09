@@ -1,0 +1,1 @@
+export { DocAnchor } from './docAnchor';

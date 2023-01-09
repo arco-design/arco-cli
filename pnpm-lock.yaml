@@ -341,6 +341,7 @@ importers:
       '@arco-cli/docs': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
       '@arco-cli/stone': ^0.1.0
+      '@arco-cli/ui-foundation-react': ^0.1.0
       '@mdx-js/mdx': ^1.6.22
       fs-extra: ^10.1.0
       glob: ^8.0.3
@@ -356,6 +357,7 @@ importers:
       '@arco-cli/docs': link:../docs
       '@arco-cli/legacy': link:../../core/legacy
       '@arco-cli/stone': link:../../core/stone
+      '@arco-cli/ui-foundation-react': link:../../ui-foundation/react
       '@mdx-js/mdx': 1.6.22
       fs-extra: 10.1.0
       glob: 8.0.3
@@ -773,7 +775,6 @@ importers:
       jest-environment-jsdom: ^29.3.1
       less-loader: ^11.1.0
       lodash: ^4.17.21
-      mini-css-extract-plugin: ^2.7.2
       new-url-loader: ^0.1.1
       postcss: ^8.4.20
       postcss-flexbugs-fixes: ^5.0.2
@@ -841,7 +842,6 @@ importers:
       jest-environment-jsdom: 29.3.1
       less-loader: 11.1.0_webpack@5.75.0
       lodash: 4.17.21
-      mini-css-extract-plugin: 2.7.2_webpack@5.75.0
       new-url-loader: 0.1.1_webpack@5.75.0
       postcss: 8.4.20
       postcss-flexbugs-fixes: 5.0.2_postcss@8.4.20
@@ -12084,16 +12084,6 @@ packages:
   /min-indent/1.0.1:
     resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
     engines: {node: '>=4'}
-
-  /mini-css-extract-plugin/2.7.2_webpack@5.75.0:
-    resolution: {integrity: sha512-EdlUizq13o0Pd+uCp+WO/JpkLvHRVGt97RqfeGhXqAcorYo1ypJSpkV+WDT0vY/kmh/p7wRdJNJtuyK540PXDw==}
-    engines: {node: '>= 12.13.0'}
-    peerDependencies:
-      webpack: ^5.0.0
-    dependencies:
-      schema-utils: 4.0.0
-      webpack: 5.75.0
-    dev: false
 
   /minimalistic-assert/1.0.1:
     resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}

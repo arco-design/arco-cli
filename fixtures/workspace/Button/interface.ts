@@ -7,8 +7,10 @@ export interface ButtonProps {
   /**
    * @zh 按钮尺寸
    * @en Size of Button
+   * @version 2.0.0
+   * @defaultValue 'small'
    */
-  size?: 'large' | 'small' | 'mini';
+  size: 'large' | 'small' | 'mini';
   /**
    * @zh 按钮装填
    * @en Status of Button

@@ -1,12 +1,13 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ComponentType } from 'react';
 import type { RenderingContext, PreviewModule } from '@arco-cli/preview';
 import { PreviewAspect, PreviewPreview, PreviewRuntime } from '@arco-cli/preview/dist/preview';
 
 import { DocsAspect } from '../docs.aspect';
-import type { Docs } from '../docs';
 
 export type DocsRootProps = {
   componentId: string;
-  docs: Docs | undefined;
+  doc: ComponentType | undefined;
   context: RenderingContext;
   metadata: Record<string, any>;
 };
@@ -41,7 +42,7 @@ export class DocsPreview {
     const docsProps: DocsRootProps = {
       context,
       componentId,
-      docs: docsModule as Docs,
+      doc: docsModule?.default,
       metadata: modules.componentMetadataMap[componentId],
     };
 

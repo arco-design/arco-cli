@@ -2,8 +2,6 @@
 import React from 'react';
 import { CodeSnippet } from './codeSnippet';
 
-import styles from './snippet.module.scss';
-
 export type SnippetProps = {
   children: string;
   live?: boolean | string;
@@ -15,5 +13,5 @@ export function Snippet({ children, live }: SnippetProps) {
     return null;
   }
 
-  return <CodeSnippet className={styles.snippet}>{children}</CodeSnippet>;
+  return <CodeSnippet>{children}</CodeSnippet>;
 }

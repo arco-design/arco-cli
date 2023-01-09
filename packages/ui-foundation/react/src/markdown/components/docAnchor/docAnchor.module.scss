@@ -1,0 +1,33 @@
+@import '../../variable';
+
+.docAnchor {
+  position: fixed;
+  right: 0;
+  top: 80px;
+  box-sizing: border-box;
+  width: $doc-anchor-width;
+  padding-left: 6px;
+  border-left: 2px solid var(--preview-color-border);
+  list-style: none;
+
+  .anchor {
+    display: block;
+    line-height: 1.5715;
+    margin-bottom: 2px;
+    padding: 4px 8px;
+    border-radius: 2px;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    font-size: 14px;
+    color: var(--preview-color-text-2);
+
+    &:hover {
+      background-color: var(--preview-color-fill-2);
+      color: var(--preview-color-text-1);
+      font-weight: 500;
+    }
+  }
+}

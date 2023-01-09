@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@arco-cli/cli": "^0.1.0",
+    "@arco-cli/preview": "^0.1.0",
     "@arco-cli/stone": "^0.1.0",
     "@arco-cli/ui": "^0.1.0",
     "@babel/runtime": "^7.20.6",
