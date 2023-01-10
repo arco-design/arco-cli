@@ -1,7 +1,9 @@
 import path from 'path';
 import fs from 'fs-extra';
+import mapSeries from 'p-map-series';
 import { uniqBy } from 'lodash';
 import { SlotRegistry } from '@arco-cli/stone';
+import { PubsubMain } from '@arco-cli/pubsub';
 import { ComponentFactory, Component } from '@arco-cli/component';
 import { AspectLoaderMain, getAspectDef } from '@arco-cli/aspect-loader';
 import { ComponentInfo } from '@arco-cli/legacy/dist/workspace/componentInfo';
@@ -9,57 +11,88 @@ import { getFilesByDir } from '@arco-cli/legacy/dist/workspace/componentOps/addC
 import { getGitIgnoreForArco } from '@arco-cli/legacy/dist/utils/ignore';
 
 import { WorkspaceConfig } from './type';
-import { OnComponentLoad } from './type/onComponentEvents';
+import {
+  SerializableResults,
+  OnComponentChange,
+  OnComponentEventResult,
+  OnComponentLoad,
+  OnComponentAdd,
+  OnComponentRemove,
+} from './type/onComponentEvents';
+import { Watcher } from './watch/watcher';
+
+export type OnComponentAddSlot = SlotRegistry<OnComponentAdd>;
 
 export type OnComponentLoadSlot = SlotRegistry<OnComponentLoad>;
+
+export type OnComponentChangeSlot = SlotRegistry<OnComponentChange>;
+
+export type OnComponentRemoveSlot = SlotRegistry<OnComponentRemove>;
 
 export type WorkspaceProps = {
   path: string;
   config: WorkspaceConfig;
+  pubsub: PubsubMain;
   aspectLoader: AspectLoaderMain;
+  onComponentAddSlot: OnComponentAddSlot;
   onComponentLoadSlot: OnComponentLoadSlot;
+  onComponentChangeSlot: OnComponentChangeSlot;
+  onComponentRemoveSlot: OnComponentRemoveSlot;
 };
 
 export class Workspace implements ComponentFactory {
   static async load({
     path,
     config,
+    pubsub,
     aspectLoader,
+    onComponentAddSlot,
     onComponentLoadSlot,
+    onComponentChangeSlot,
+    onComponentRemoveSlot,
   }: WorkspaceProps): Promise<Workspace> {
-    const workspace = new Workspace(path, config, aspectLoader, onComponentLoadSlot);
-    const workspacePath = workspace.path;
-    const gitIgnore = getGitIgnoreForArco(workspacePath);
-    await Promise.all(
-      Object.entries(workspace.componentConfigMap).map(async ([name, config]) => {
-        const componentInfo = ComponentInfo.fromJson(config, name, workspacePath);
-        const rootDir = config.rootDir;
-        if (rootDir) {
-          try {
-            componentInfo.files = await getFilesByDir(rootDir, workspacePath, gitIgnore);
-          } catch (error) {
-            componentInfo.files = [];
-            componentInfo.noFilesError = error;
-          }
-        }
-        workspace.componentInfoList.push(componentInfo);
-      })
+    const workspace = new Workspace(
+      path,
+      config,
+      pubsub,
+      aspectLoader,
+      onComponentAddSlot,
+      onComponentLoadSlot,
+      onComponentChangeSlot,
+      onComponentRemoveSlot
     );
 
+    await workspace.updateComponentInfo();
     return workspace;
   }
 
   constructor(
     public path: string,
     private config: WorkspaceConfig,
+    private pubsub: PubsubMain,
     private aspectLoader: AspectLoaderMain,
-    private onComponentLoadSlot: OnComponentLoadSlot
+    private onComponentAddSlot: OnComponentAddSlot,
+    private onComponentLoadSlot: OnComponentLoadSlot,
+    private onComponentChangeSlot: OnComponentChangeSlot,
+    private onComponentRemoveSlot: OnComponentRemoveSlot
   ) {}
+
+  readonly watcher = new Watcher(this, this.pubsub);
+
+  private componentCache: Record<string, Component> = {};
 
   private componentInfoList: ComponentInfo[] = [];
 
   private get modulesPath() {
     return path.join(this.path, 'node_modules');
+  }
+
+  private clearComponentCache(componentId?: string) {
+    if (componentId) {
+      delete this.componentCache[componentId];
+    } else {
+      this.componentCache = {};
+    }
   }
 
   get componentConfigMap() {
@@ -70,8 +103,63 @@ export class Workspace implements ComponentFactory {
     return this.config.name || this.path.split('/').pop();
   }
 
-  onComponentLoad(loadFn: OnComponentLoad) {
+  async updateComponentInfo(componentId?: string) {
+    if (!componentId) {
+      // clear component infos, and re-collect info from workspace config file
+      this.componentInfoList = [];
+    }
+
+    // clear component cache, as component info may have changed
+    this.clearComponentCache(componentId);
+
+    const workspacePath = this.path;
+    const infoList = this.componentInfoList;
+    const gitIgnore = getGitIgnoreForArco(workspacePath);
+
+    await Promise.all(
+      Object.entries(this.componentConfigMap).map(async ([id, config]) => {
+        if (componentId && componentId !== id) {
+          return;
+        }
+
+        const componentInfo = ComponentInfo.fromJson(config, id, workspacePath);
+        const rootDir = config.rootDir;
+        if (rootDir) {
+          try {
+            componentInfo.files = await getFilesByDir(rootDir, workspacePath, gitIgnore);
+          } catch (error) {
+            componentInfo.files = [];
+            componentInfo.noFilesError = error;
+          }
+        }
+
+        const index = componentId && infoList.findIndex((info) => info.id === componentId);
+        if (index) {
+          infoList[index] = componentInfo;
+        } else {
+          infoList.push(componentInfo);
+        }
+      })
+    );
+  }
+
+  registerOnComponentLoad(loadFn: OnComponentLoad) {
     this.onComponentLoadSlot.register(loadFn);
+    return this;
+  }
+
+  registerOnComponentAdd(onComponentAddFunc: OnComponentAdd) {
+    this.onComponentAddSlot.register(onComponentAddFunc);
+    return this;
+  }
+
+  registerOnComponentChange(onComponentChangeFunc: OnComponentChange) {
+    this.onComponentChangeSlot.register(onComponentChangeFunc);
+    return this;
+  }
+
+  registerOnComponentRemove(onComponentRemoveFunc: OnComponentRemove) {
+    this.onComponentRemoveSlot.register(onComponentRemoveFunc);
     return this;
   }
 
@@ -100,7 +188,12 @@ export class Workspace implements ComponentFactory {
     const componentInfo = this.componentInfoList.find((info) => info.id === id);
 
     if (!componentInfo) {
+      this.clearComponentCache(id);
       return null;
+    }
+
+    if (this.componentCache[id]) {
+      return this.componentCache[id];
     }
 
     const component = await Component.loadFromFileSystem(componentInfo, this.path);
@@ -112,6 +205,7 @@ export class Workspace implements ComponentFactory {
       });
 
     await Promise.all(onComponentLoadTasks);
+    this.componentCache[id] = component;
 
     return component;
   }
@@ -153,11 +247,59 @@ export class Workspace implements ComponentFactory {
       coreAspectDefs = coreAspectDefs.filter(({ runtimePath }) => runtimePath);
     }
 
-    const uniqDefs = uniqBy(coreAspectDefs, (def) => `${def.aspectPath}-${def.runtimePath}`);
-
-    return uniqDefs;
+    return uniqBy(coreAspectDefs, (def) => `${def.aspectPath}-${def.runtimePath}`);
   }
 
   // TODO track a new added component
   async track() {}
+
+  toAbsolutePath(pathStr: string): string {
+    if (path.isAbsolute(pathStr))
+      throw new Error(`toAbsolutePath expects relative path, got ${pathStr}`);
+    return path.join(this.path, pathStr);
+  }
+
+  toRelativePath(pathToCheck: string): string {
+    const absolutePath = path.resolve(pathToCheck);
+    return path.relative(this.path, absolutePath);
+  }
+
+  async triggerOnComponentAdd(id: string): Promise<OnComponentEventResult[]> {
+    const component = await this.get(id);
+    const onAddEntries = this.onComponentAddSlot.toArray();
+    const results: Array<{ extensionId: string; results: SerializableResults }> = [];
+    const files = component.files.map((file) => file.path);
+
+    await mapSeries(onAddEntries, async ([extension, onAddFunc]) => {
+      const onAddResult = await onAddFunc(component, files);
+      results.push({ extensionId: extension, results: onAddResult });
+    });
+
+    return results;
+  }
+
+  async triggerOnComponentChange(id: string, files: string[]): Promise<OnComponentEventResult[]> {
+    const component = await this.get(id);
+    const onChangeEntries = this.onComponentChangeSlot.toArray();
+    const results: Array<{ extensionId: string; results: SerializableResults }> = [];
+
+    await mapSeries(onChangeEntries, async ([extension, onChangeFunc]) => {
+      const onChangeResult = await onChangeFunc(component, files);
+      results.push({ extensionId: extension, results: onChangeResult });
+    });
+
+    return results;
+  }
+
+  async triggerOnComponentRemove(id: string): Promise<OnComponentEventResult[]> {
+    const onRemoveEntries = this.onComponentRemoveSlot.toArray();
+    const results: Array<{ extensionId: string; results: SerializableResults }> = [];
+
+    await mapSeries(onRemoveEntries, async ([extension, onRemoveFunc]) => {
+      const onRemoveResult = await onRemoveFunc(id);
+      results.push({ extensionId: extension, results: onRemoveResult });
+    });
+
+    return results;
+  }
 }

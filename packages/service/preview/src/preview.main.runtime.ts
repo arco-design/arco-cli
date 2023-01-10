@@ -5,13 +5,14 @@ import { MainRuntime } from '@arco-cli/cli';
 import { DIR_CACHE_ROOT } from '@arco-cli/legacy/dist/constants';
 import { BundlerAspect, BundlerMain, Asset } from '@arco-cli/bundler';
 import { UIAspect, UIMain } from '@arco-cli/ui';
-import { ExecutionContext, PreviewEnv } from '@arco-cli/envs';
+import { EnvsAspect, EnvsMain, ExecutionContext, PreviewEnv } from '@arco-cli/envs';
 import { AspectDefinition } from '@arco-cli/aspect-loader';
 import { Workspace, WorkspaceAspect } from '@arco-cli/workspace';
 import { PubsubAspect, PubsubMain } from '@arco-cli/pubsub';
 import { Component } from '@arco-cli/component';
 import { BuilderAspect, BuilderMain } from '@arco-cli/builder';
 import { sha1 } from '@arco-cli/legacy/dist/utils';
+import { Logger, LoggerAspect, LoggerMain } from '@arco-cli/logger';
 
 import PreviewAspect, { PreviewRuntime } from './preview.aspect';
 import { PreviewStartPlugin } from './preview.startPlugin';
@@ -24,6 +25,11 @@ import { COMPONENT_PREVIEW_STRATEGY_NAME, ComponentBundlingStrategy } from './st
 import { BundlingStrategyNotFoundError } from './exceptions';
 
 const DEFAULT_CACHE_DIR = join(DIR_CACHE_ROOT, PreviewAspect.id);
+
+const NOOP_RESULT = {
+  results: [],
+  toString: () => `updating link file`,
+};
 
 export type PreviewStrategyName = 'env' | 'component';
 
@@ -65,25 +71,44 @@ export type PreviewDefinitionSlot = SlotRegistry<PreviewDefinition>;
 export class PreviewMain {
   static runtime = MainRuntime;
 
-  static dependencies = [WorkspaceAspect, UIAspect, BundlerAspect, PubsubAspect, BuilderAspect];
+  static dependencies = [
+    WorkspaceAspect,
+    UIAspect,
+    BundlerAspect,
+    PubsubAspect,
+    BuilderAspect,
+    LoggerAspect,
+    EnvsAspect,
+  ];
 
   static slots = [Slot.withType<PreviewDefinition>()];
 
   static provider(
-    [workspace, uiMain, bundler, pubsub, builder]: [
+    [workspace, uiMain, bundler, pubsub, builder, loggerMain, envs]: [
       Workspace,
       UIMain,
       BundlerMain,
       PubsubMain,
-      BuilderMain
+      BuilderMain,
+      LoggerMain,
+      EnvsMain
     ],
     config: PreviewConfig,
     [previewSlot]: [PreviewDefinitionSlot]
   ) {
-    const preview = new PreviewMain(config, workspace, uiMain, previewSlot);
+    const logger = loggerMain.createLogger(PreviewAspect.id);
+    const preview = new PreviewMain(config, workspace, uiMain, logger, envs, previewSlot);
 
     if (workspace) {
-      uiMain.registerStartPlugin(new PreviewStartPlugin(workspace, bundler, pubsub));
+      uiMain.registerStartPlugin(new PreviewStartPlugin(workspace, bundler, pubsub, logger));
+      // workspace.registerOnComponentLoad(() => {});
+      // workspace.registerOnComponentChange(async () => {});
+      // workspace.registerOnComponentAdd(async () => {});
+      workspace.registerOnComponentChange((component) =>
+        preview.handleComponentChange(component, (currentComponents) =>
+          currentComponents.update(component)
+        )
+      );
     }
 
     builder.registerBuildTasks([new PreviewTask(preview)]);
@@ -99,6 +124,8 @@ export class PreviewMain {
     public config: PreviewConfig,
     private workspace: Workspace | undefined,
     private ui: UIMain,
+    private logger: Logger,
+    private envs: EnvsMain,
     private previewSlot: PreviewDefinitionSlot
   ) {}
 
@@ -181,10 +208,27 @@ export class PreviewMain {
     return Promise.all(paths);
   }
 
-  // TODO handle component change and update file entry
-  // private handleComponentChange() {
-  //   // this.updateLinkFiles();
-  // }
+  private async handleComponentChange(
+    c: Component,
+    updater: (currentComponents: ExecutionRef) => void
+  ) {
+    const env = this.envs.getEnv(c);
+    const envId = env.id.toString();
+
+    const executionRef = this.executionRefs.get(envId);
+    if (!executionRef) {
+      this.logger.warn(
+        `failed to update link file for component "${c.id.toString()}" - could not find execution context for ${envId}`
+      );
+      return NOOP_RESULT;
+    }
+
+    // add / remove / etc
+    updater(executionRef);
+    await this.updateLinkFiles(executionRef.executionCtx, executionRef.currentComponents);
+
+    return NOOP_RESULT;
+  }
 
   getDefs(): PreviewDefinition[] {
     return this.previewSlot.values();

@@ -36,7 +36,7 @@ export class DocsMain {
     graphql.register(getDocsSchema(docsMain));
 
     if (workspace) {
-      workspace.onComponentLoad(async (component) => {
+      workspace.registerOnComponentLoad(async (component) => {
         const doc = await docsMain.computeDoc(component);
         return {
           doc: doc?.toObject(),

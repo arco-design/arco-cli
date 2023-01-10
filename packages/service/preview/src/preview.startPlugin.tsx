@@ -6,6 +6,8 @@ import { StartPlugin, StartPluginOptions, ProxyEntry } from '@arco-cli/ui';
 import { BundlerMain } from '@arco-cli/bundler';
 import { PubsubMain } from '@arco-cli/pubsub';
 import { ComponentServer } from '@arco-cli/bundler/dist/componentServer';
+import { Logger } from '@arco-cli/logger';
+
 import { CompilationResult, SubscribeToWebpackEvents } from './webpackEventsListener';
 import { PreviewServerStatus } from './cli/previewServerStatus/previewServerStatus';
 
@@ -16,7 +18,8 @@ export class PreviewStartPlugin implements StartPlugin {
   constructor(
     private workspace: Workspace,
     private bundler: BundlerMain,
-    private pubsub: PubsubMain
+    private pubsub: PubsubMain,
+    private logger: Logger
   ) {}
 
   previewServers: ComponentServer[] = [];
@@ -63,7 +66,14 @@ export class PreviewStartPlugin implements StartPlugin {
     const conponents = await this.workspace.getManyByPattern(options.pattern);
     const previewServers = await this.bundler.devServer(conponents);
     previewServers.forEach((server) => server.listen());
-    // TODO watch
+
+    // DON'T add wait! this promise never resolve, so it will stop all the start process!
+    this.workspace.watcher.watchAll({}).catch((error) => {
+      const msg = `watcher found an error`;
+      this.logger.error(msg, error);
+      this.logger.console(`${msg}, ${error.message}`);
+    });
+
     this.previewServers = this.previewServers.concat(previewServers);
   }
 

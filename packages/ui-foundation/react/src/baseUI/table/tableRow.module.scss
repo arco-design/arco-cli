@@ -37,8 +37,13 @@
 
 .version,
 .required {
-  color: var(--preview-color-text-2);
+  margin: 0 4px;
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-size: 10px;
   white-space: nowrap;
+  background: var(--preview-color-fill-1);
+  color: var(--preview-color-text-3);
 }
 
 .name {

@@ -18,13 +18,14 @@ import { MultiCompilerMain } from '@arco-cli/multi-compiler';
 import { SassMain } from '@arco-cli/sass';
 import { LessMain } from '@arco-cli/less';
 import { PreviewStrategyName, COMPONENT_PREVIEW_STRATEGY_NAME } from '@arco-cli/preview';
+import { sha1 } from '@arco-cli/legacy/dist/utils';
 
 import { ReactAspect } from './react.aspect';
 import basePreviewConfigFactory from './webpack/webpack.config.base';
 import basePreviewProdConfigFactory from './webpack/webpack.config.base.prod';
 import componentPreviewDevConfigFactory from './webpack/webpack.config.component.dev';
 import componentPreviewProdConfigFactory from './webpack/webpack.config.component.prod';
-import { parser } from './tsdoc';
+import { Doclet, parser } from './tsdoc';
 
 type CompilerMode = 'build' | 'dev';
 
@@ -49,6 +50,9 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     private less: LessMain,
     private sass: SassMain
   ) {}
+
+  // TODO caching logic should be refactored to DocsAspect
+  private docMetadataCache: Record<string, { hash: string; docletList: Doclet[] }> = {};
 
   private createTsCompilerOptions(mode: CompilerMode = 'dev'): TypescriptCompilerOptions {
     const tsconfig = mode === 'dev' ? cloneDeep(defaultTsConfig) : cloneDeep(buildTsConfig);
@@ -196,7 +200,17 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   getDocsMetadata(files: SourceFile[]) {
     // TODO determine which file to parse
     const [file] = files.filter((file) => file.basename.indexOf('interface.ts') > -1);
-    return parser(file);
+    const hash = sha1(file.contents);
+
+    if (this.docMetadataCache[file.path]?.hash !== hash) {
+      const docletList = parser(file);
+      this.docMetadataCache[file.path] = {
+        hash,
+        docletList,
+      };
+    }
+
+    return this.docMetadataCache[file.path].docletList;
   }
 
   getPreviewConfig() {

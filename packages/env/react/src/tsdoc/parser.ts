@@ -1,4 +1,4 @@
-import { generate } from 'ts-document';
+import { generate, Project } from 'ts-document';
 import { InterfaceSchema, TagType } from 'ts-document/lib/interface';
 import logger from '@arco-cli/legacy/dist/logger';
 import { SourceFile } from '@arco-cli/legacy/dist/workspace/component/sources';
@@ -13,6 +13,11 @@ export function parser(file: SourceFile): Doclet[] {
     const componentsInfo = generate(file.path, {
       sourceFilesPaths: [file.path],
       strictDeclarationOrder: true,
+      project: new Project({
+        compilerOptions: {
+          jsx: 'react' as any,
+        },
+      }),
     });
 
     // componentInfo will be an Array when strictDeclarationOrder is true
@@ -26,9 +31,11 @@ export function parser(file: SourceFile): Doclet[] {
             const findDescription = (tags: TagType[]): string => {
               return tags.find(({ name }) => name === 'en' || name === 'zh')?.value || '';
             };
-
             const findDefault = (tags: TagType[]): string => {
               return tags.find(({ name }) => name === 'defaultValue')?.value;
+            };
+            const findVersion = (tags: TagType[]): string => {
+              return tags.find(({ name }) => name === 'version')?.value;
             };
 
             return {
@@ -37,6 +44,7 @@ export function parser(file: SourceFile): Doclet[] {
               required: !isOptional,
               description: findDescription(tags),
               defaultValue: findDefault(tags),
+              version: findVersion(tags),
             };
           }),
         };

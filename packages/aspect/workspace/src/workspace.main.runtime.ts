@@ -1,19 +1,30 @@
 import { Slot } from '@arco-cli/stone';
 import { LoggerAspect, LoggerMain } from '@arco-cli/logger';
-import { EnvsAspect, EnvsMain } from '@arco-cli/envs';
 import { UIAspect, UIMain } from '@arco-cli/ui';
 import { ComponentAspect, ComponentMain } from '@arco-cli/component';
 import { AspectLoaderAspect, AspectLoaderMain } from '@arco-cli/aspect-loader';
 import { getWorkspaceInfo } from '@arco-cli/legacy/dist/workspace/workspaceLocator';
 import { GraphqlAspect, GraphqlMain } from '@arco-cli/graphql';
+import { PubsubAspect, PubsubMain } from '@arco-cli/pubsub';
 
 import { MainRuntime, WorkspaceAspect } from './workspace.aspect';
-import { OnComponentLoadSlot, Workspace } from './workspace';
+import {
+  OnComponentAddSlot,
+  OnComponentChangeSlot,
+  OnComponentLoadSlot,
+  OnComponentRemoveSlot,
+  Workspace,
+} from './workspace';
 import { WorkspaceUiRoot } from './workspace.uiRoot';
 import { WorkspaceNotFoundError } from './exceptions';
 import { WorkspaceConfig } from './type';
 import getWorkspaceSchema from './workspace.graphql';
-import { OnComponentLoad } from './type/onComponentEvents';
+import {
+  OnComponentAdd,
+  OnComponentChange,
+  OnComponentLoad,
+  OnComponentRemove,
+} from './type/onComponentEvents';
 
 export const WorkspaceMain = {
   name: WorkspaceAspect.id,
@@ -23,22 +34,32 @@ export const WorkspaceMain = {
     LoggerAspect,
     UIAspect,
     ComponentAspect,
-    EnvsAspect,
+    PubsubAspect,
     AspectLoaderAspect,
     GraphqlAspect,
   ],
-  slots: [Slot.withType<OnComponentLoad>()],
+  slots: [
+    Slot.withType<OnComponentLoad>(),
+    Slot.withType<OnComponentAdd>(),
+    Slot.withType<OnComponentChange>(),
+    Slot.withType<OnComponentRemove>(),
+  ],
   provider: async (
-    [_loggerMain, ui, component, _envs, aspectLoader, graphql]: [
+    [_loggerMain, ui, component, pubsub, aspectLoader, graphql]: [
       LoggerMain,
       UIMain,
       ComponentMain,
-      EnvsMain,
+      PubsubMain,
       AspectLoaderMain,
       GraphqlMain
     ],
     config: WorkspaceConfig,
-    [onComponentLoadSlot]: [OnComponentLoadSlot],
+    [onComponentLoadSlot, onComponentAddSlot, onComponentChangeSlot, onComponentRemoveSlot]: [
+      OnComponentLoadSlot,
+      OnComponentAddSlot,
+      OnComponentChangeSlot,
+      OnComponentRemoveSlot
+    ],
     stone
   ) => {
     const arcoConfig = stone.config.get('arco.app/arco');
@@ -51,8 +72,12 @@ export const WorkspaceMain = {
     const workspace = await Workspace.load({
       path: workspaceInfo.path,
       config,
+      pubsub,
       aspectLoader,
       onComponentLoadSlot,
+      onComponentAddSlot,
+      onComponentChangeSlot,
+      onComponentRemoveSlot,
     });
 
     ui.registerUiRoot(new WorkspaceUiRoot(workspace));
