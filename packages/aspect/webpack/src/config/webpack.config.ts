@@ -47,9 +47,7 @@ export default function configFactory(target: Target, context: BundlerContext): 
     },
 
     resolve: {
-      // TODO - check - we should not need both fallbacks and alias and provider plugin
       alias: fallbacksAliases,
-
       fallback: fallbacks,
     },
 

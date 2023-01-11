@@ -3,8 +3,12 @@
     "components": {
       "Button": {
         "rootDir": "Button",
-        "mainFile": "index.ts",
-        "mainStyleFile": "style/index.less",
+        "entries": {
+          "main": "index.ts",
+          "style": "style/index.less",
+          "jsdoc": "interface.ts",
+          "preview": "__docs__/index.mdx"
+        },
         "config": {
           "arco.env/react": {}
         }

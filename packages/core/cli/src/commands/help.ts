@@ -5,7 +5,7 @@ import { formatHelp } from '../help';
 export class HelpCmd implements Command {
   name = 'help';
 
-  description = 'Shows help information';
+  description = 'show help information';
 
   // Default command (meaning, if no args are provided, this will be used)
   // https://github.com/yargs/yargs/blob/master/docs/advanced.md#default-command

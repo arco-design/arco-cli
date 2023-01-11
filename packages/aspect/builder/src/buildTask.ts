@@ -26,7 +26,6 @@ export interface BuildTaskResult {
 }
 
 export interface BuildContext extends ExecutionContext {
-  // TODO workspace path
   /**
    * Workspace path for build
    */

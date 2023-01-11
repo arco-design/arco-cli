@@ -58,8 +58,8 @@ export class Component {
     return this.info.packageDirAbs;
   }
 
-  get mainFile() {
-    return this.info.mainFile;
+  get entries() {
+    return this.info.entries;
   }
 
   async upsertExtensionData(extension: string, data: Record<string, any>) {

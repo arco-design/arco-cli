@@ -2,7 +2,6 @@ import { join, resolve, basename, dirname } from 'path';
 import { existsSync, ensureDirSync, copyFileSync, removeSync } from 'fs-extra';
 import { Component } from '@arco-cli/component';
 import { flatten, isEmpty, chunk } from 'lodash';
-import { Compiler } from '@arco-cli/compiler';
 import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 import { ARTIFACTS_DIR, ComponentResult } from '@arco-cli/builder';
 import type {
@@ -103,7 +102,11 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     context: ComputeTargetsContext
   ): Promise<ComponentEntry> {
     const componentPreviewPath = await this.computePaths(previewDefs, context, component);
-    const [componentPath] = this.getPaths(context, component, [component.mainFile]);
+    const componentPath = resolve(
+      context.workspace.path,
+      component.componentDir,
+      component.entries.main
+    );
     const chunks = {
       componentPreview: this.getComponentChunkId(component.id, 'preview'),
       component: context.splitComponentBundle ? component.id : undefined,
@@ -158,17 +161,6 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     // handle cases where the asset name is something like my-image.svg?hash (while the filename in the fs is just my-image.svg)
     const [name] = asset.name.split('?');
     return name;
-  }
-
-  private getPaths(
-    context: ComputeTargetsContext,
-    component: Component,
-    fileRelativePaths: string[]
-  ) {
-    const compiler: Compiler = context.env.getCompiler();
-    return fileRelativePaths.map((file) =>
-      join(component.packageDirAbs, compiler.getDistPathBySrcPath(file))
-    );
   }
 
   private copyAssetsToCapsules(context: BundlerContext, result: BundlerResult) {
@@ -301,11 +293,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
         return { prefix: previewDef.prefix, previewPaths: [] };
       }
 
-      const previewPaths = this.getPaths(
-        context,
-        component,
-        previewFiles.map((file) => file.relative)
-      );
+      const previewPaths = previewFiles.map((file) => file.path);
       const renderPath = await previewDef.renderTemplatePath?.(context.env);
       const metadata = (
         await previewDef.getMetadataMap([component], context.env)

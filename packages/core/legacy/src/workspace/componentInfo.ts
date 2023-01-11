@@ -6,9 +6,19 @@ import { PACKAGE_JSON } from '../constants';
 export type ComponentAspectConfig = { [aspectId: string]: Record<string, any> | '-' };
 
 export type ComponentConfig = {
+  // root dir of component, relative path to workspace
   rootDir: string;
-  mainFile: string;
-  mainStyleFile?: string;
+  // entry file info of component
+  entries: {
+    // component entry, relative path to root dir
+    main: string;
+    // style entry, relative path to root dir
+    style?: string;
+    // preview entry, relative path to root dir
+    preview?: string;
+    // jsdoc parse entry, relative path to root dir
+    jsdoc?: string;
+  };
   config: ComponentAspectConfig;
 };
 
@@ -23,9 +33,7 @@ export class ComponentInfo {
 
   files: ComponentInfoFiles[];
 
-  mainFile: string;
-
-  mainStyleFile?: string;
+  entries: ComponentConfig['entries'];
 
   rootDir: string;
 
@@ -40,13 +48,12 @@ export class ComponentInfo {
   readonly packageDirAbs: string;
 
   constructor(
-    { mainFile, mainStyleFile, rootDir, config }: ComponentConfig,
+    { entries, rootDir, config }: ComponentConfig,
     name: string,
     workspacePath: string,
     files?: ComponentInfoFiles[]
   ) {
-    this.mainFile = mainFile;
-    this.mainStyleFile = mainStyleFile;
+    this.entries = entries;
     this.rootDir = rootDir;
     this.config = config;
     this.name = name || '';

@@ -14,7 +14,7 @@ Render component overview like below:
 
 ```js
 const preview = window['my-button-demo/Button-preview'];
-preview.overviewRender({ docs: preview.overview[0], metadata: preview.overviewMetadata });
+preview.overviewRender({ doc: preview.overview[0]?.default, metadata: preview.overviewMetadata });
 ```
 
 # Basic Usage

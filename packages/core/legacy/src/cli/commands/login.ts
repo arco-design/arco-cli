@@ -5,7 +5,7 @@ import { Group } from '../commandGroups';
 export default class Login implements LegacyCommand {
   name = 'login';
 
-  description = 'Log in to Arco CLI';
+  description = 'log in to Arco CLI';
 
   group: Group = 'general';
 

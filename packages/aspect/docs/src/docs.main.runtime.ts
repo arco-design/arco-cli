@@ -49,10 +49,11 @@ export class DocsMain {
 
   constructor(private logger: Logger, private docReaderSlot: DocReaderSlot) {}
 
-  private getDocsFiles(component: Component): AbstractVinyl[] {
-    // TODO set doc file path
-    const docFiles = [`__docs__/index.mdx`];
-    return component.files.filter((file) => docFiles.includes(file.relative));
+  private getDocFiles(component: Component): AbstractVinyl[] {
+    const previewEntry = component.entries.preview;
+    return component.files.filter((file) =>
+      (Array.isArray(previewEntry) ? previewEntry : [previewEntry]).includes(file.relative)
+    );
   }
 
   private getDocReader(extension: string) {
@@ -77,7 +78,7 @@ export class DocsMain {
    */
   getDocsMap(components: Component[]) {
     return ComponentMap.as<AbstractVinyl[]>(components, (component) => {
-      return this.getDocsFiles(component);
+      return this.getDocFiles(component);
     });
   }
 
@@ -86,7 +87,9 @@ export class DocsMain {
    */
   getDocMetadata(components: Component[], env: Environment) {
     return ComponentMap.as<Record<string, any>>(components, (component) => {
-      return env.getDocsMetadata?.(component.files);
+      return env.getDocsMetadata?.(
+        component.files.find((file) => file.relative === component.entries.jsdoc)
+      );
     });
   }
 
@@ -102,7 +105,7 @@ export class DocsMain {
    * compute a doc for a component.
    */
   async computeDoc(component: Component) {
-    const docFiles = this.getDocsFiles(component);
+    const docFiles = this.getDocFiles(component);
     if (docFiles.length) {
       // currently taking the first docs file found with an abstract. (we support only one)
       const docFile = docFiles[0];

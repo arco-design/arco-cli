@@ -21,7 +21,9 @@
     "experimentalDecorators": true
   },
   "exclude": [
-    "dist"
+    "dist",
+    "**/__test__",
+    "**/__docs__"
   ],
   "include": [
     "Button"

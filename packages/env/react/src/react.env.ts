@@ -129,17 +129,11 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   }
 
   getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
-    return this.multiCompiler.createCompiler(
-      [
-        this.createCjsCompiler('dev', transformers, tsModule),
-        this.less.createCompiler(),
-        this.sass.createCompiler(),
-      ],
-      // TODO config dist-dir name
-      {
-        distDir: 'lib',
-      }
-    );
+    return this.multiCompiler.createCompiler([
+      this.createCjsCompiler('dev', transformers, tsModule),
+      this.less.createCompiler(),
+      this.sass.createCompiler(),
+    ]);
   }
 
   createEsmCompilerTask({
@@ -197,11 +191,10 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     return require.resolve('./preview/index.js');
   }
 
-  getDocsMetadata(files: SourceFile[]) {
-    // TODO determine which file to parse
-    const [file] = files.filter((file) => file.basename.indexOf('interface.ts') > -1);
-    const hash = sha1(file.contents);
+  getDocsMetadata(file: SourceFile) {
+    if (!file) return [];
 
+    const hash = sha1(file.contents);
     if (this.docMetadataCache[file.path]?.hash !== hash) {
       const docletList = parser(file);
       this.docMetadataCache[file.path] = {
