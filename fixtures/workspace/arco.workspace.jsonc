@@ -1,16 +1,31 @@
 {
   "arco.aspect/workspace": {
     "components": {
-      "Button": {
-        "rootDir": "Button",
+      "StandaloneButton": {
+        "rootDir": "packages/button/src",
         "entries": {
           "main": "index.ts",
           "style": "style/index.less",
           "jsdoc": "interface.ts",
           "preview": "__docs__/index.mdx"
-        },
-        "config": {
-          "arco.env/react": {}
+        }
+      },
+      "Button": {
+        "rootDir": "packages/library/components/Button",
+        "entries": {
+          "main": "index.ts",
+          "style": "style/index.less",
+          "jsdoc": "interface.ts",
+          "preview": "__docs__/index.mdx"
+        }
+      },
+      "Tag": {
+        "rootDir": "packages/library/components/Tag",
+        "entries": {
+          "main": "index.ts",
+          "style": "style/index.less",
+          "jsdoc": "interface.ts",
+          "preview": "__docs__/index.mdx"
         }
       }
     }
