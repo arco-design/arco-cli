@@ -21,7 +21,21 @@ export class CompilerTask implements BuildTask {
   ) {}
 
   async execute(context: BuildContext): Promise<BuildTaskResult> {
-    const buildResults = await this.compilerInstance.build(context);
+    const uniqueComponents: Component[] = [];
+    for (const component of context.components) {
+      if (!uniqueComponents.find((com) => com.componentDir === component.componentDir)) {
+        uniqueComponents.push(component);
+      }
+    }
+
+    // we condense the list of components that need to be built according to componentDir
+    // no need to repeat the build process multiple times if the components have the same root directory
+    // but do NOT change buildContext directly
+    const buildResults = await this.compilerInstance.build({
+      ...context,
+      components: uniqueComponents,
+    } as BuildContext);
+
     return buildResults;
   }
 
@@ -31,13 +45,11 @@ export class CompilerTask implements BuildTask {
         this.copyNonSupportedFiles(component, this.compilerInstance)
       )
     );
-    if (!this.compilerInstance.preBuild) return;
-    await this.compilerInstance.preBuild(context);
+    await this.compilerInstance.preBuild?.(context);
   }
 
   async postBuild?(context: BuildContext, tasksResults: TaskResultsList): Promise<void> {
-    if (!this.compilerInstance.postBuild) return;
-    await this.compilerInstance.postBuild(context, tasksResults);
+    await this.compilerInstance.postBuild?.(context, tasksResults);
   }
 
   async copyNonSupportedFiles(component: Component, compiler: Compiler) {

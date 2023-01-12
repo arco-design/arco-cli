@@ -1,7 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React from 'react';
+import React, { useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Route, RouteProps } from 'react-router-dom';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import history from 'history/browser';
 import { Navbar } from '@arco-cli/ui-foundation-react/dist/navbar';
 import { SlotRouter } from '@arco-cli/react-router/dist/ui';
 
@@ -14,6 +16,7 @@ interface WorkspaceProps {
 }
 
 export function Workspace({ routes }: WorkspaceProps) {
+  const [componentId, setComponentId] = useState(null);
   const { workspace } = useWorkspace();
 
   if (!workspace) {
@@ -26,17 +29,23 @@ export function Workspace({ routes }: WorkspaceProps) {
       <main className={styles.main}>
         <div className={styles.sidebar}>
           <ul>
-            {workspace.components.map((component) => {
+            {workspace.components.map(({ id, name }) => {
               return (
-                <li key={component.id}>
-                  <a href={`/${component.id}`}>{component.name}</a>
+                <li
+                  key={id}
+                  onClick={() => {
+                    history.push(`/${id}`);
+                    setComponentId(id);
+                  }}
+                >
+                  {name}
                 </li>
               );
             })}
           </ul>
         </div>
         <div className={styles.overview}>
-          <SlotRouter routes={routes}>
+          <SlotRouter key={componentId} routes={routes}>
             <Route index element={<h1>Workspace Overview</h1>} />
           </SlotRouter>
         </div>

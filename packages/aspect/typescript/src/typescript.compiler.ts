@@ -1,19 +1,19 @@
 import path from 'path';
 import fs from 'fs-extra';
 import ts from 'typescript';
-import { merge } from 'lodash';
+import { merge, cloneDeep } from 'lodash';
 import { Logger } from '@arco-cli/logger';
 import { Compiler, TranspileFileOutput, TranspileFileParams } from '@arco-cli/compiler';
 import { BuildContext, BuildTaskResult, ComponentResult } from '@arco-cli/builder';
 import ArcoError from '@arco-cli/legacy/dist/error/arcoError';
 import { DEFAULT_DIST_DIRNAME } from '@arco-cli/legacy/dist/constants';
+import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 
 import { TypescriptCompilerOptions } from './compilerOptions';
 import { TsConfigPareFailedError } from './exceptions';
 import TypescriptAspect from './typescript.aspect';
 
 const FILENAME_TSCONFIG = 'tsconfig.json';
-// const FILENAME_TSCONFIG_BUILD = 'tsconfig.build.json';
 
 export class TypescriptCompiler implements Compiler {
   displayName = 'TypeScript';
@@ -76,20 +76,31 @@ export class TypescriptCompiler implements Compiler {
   }
 
   private async writeComponentTsConfig(context: BuildContext) {
+    const workspacePath = context.workspace.path;
     await Promise.all(
       context.components.map(async ({ id: componentId, componentDir, packageDirAbs }) => {
-        const tsconfig = this.options.tsconfig;
+        const componentDirAbs = path.join(workspacePath, componentDir);
+        const outDirAbs = path.join(packageDirAbs, this.distDir);
+        const tsconfig = cloneDeep(this.options.tsconfig);
+
+        // avoid change this.options.config directly
+        // different components might have different ts configs
         merge(tsconfig, {
-          include: [componentDir],
+          include: [componentDirAbs],
           compilerOptions: {
-            outDir: this.distDir,
-            rootDir: componentDir,
+            outDir: outDirAbs,
+            rootDir: componentDirAbs,
           },
         });
 
-        const tsconfigPath = path.join(packageDirAbs, `${this.distDir}.${FILENAME_TSCONFIG}`);
-        this.componentTsConfigMap[componentId] = tsconfigPath;
+        const tsconfigPath = path.join(
+          this.getCacheDir(context),
+          toFsCompatible(componentId),
+          `${this.distDir}.${FILENAME_TSCONFIG}`
+        );
+        await fs.ensureFile(tsconfigPath);
         await fs.writeFile(tsconfigPath, this.stringifyTsconfig(tsconfig));
+        this.componentTsConfigMap[componentId] = tsconfigPath;
       })
     );
   }
@@ -164,9 +175,13 @@ export class TypescriptCompiler implements Compiler {
     // eslint-disable-next-line no-cond-assign
     while ((nextProject = solutionBuilder.getNextInvalidatedProject())) {
       // nextProject is path of its tsconfig.json
-      const packagePath = path.dirname(nextProject.project);
-      const component = components.find((com) => com.packageDirAbs === packagePath);
-      if (!component) throw new Error(`unable to find component for ${packagePath}`);
+      const projectPath = path.dirname(nextProject.project);
+      const component = components.find((com) => {
+        // tsconfig.json for component building will be generated in cache dir named component_id
+        // find target component of this tsconfig.json
+        return path.basename(projectPath) === toFsCompatible(com.id);
+      });
+      if (!component) throw new Error(`unable to find component for ${projectPath}`);
 
       longProcessLogger.logProgress(component.id);
       currentComponentResult.component = component;

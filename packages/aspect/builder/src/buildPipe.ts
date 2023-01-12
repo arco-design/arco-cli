@@ -92,8 +92,7 @@ export class BuildPipe {
   private async executePreBuild() {
     this.logger.setStatusLine('executing pre-build for all tasks');
     await mapSeries(this.tasksQueue, async ({ task, env }) => {
-      if (!task.preBuild) return;
-      await task.preBuild(this.getBuildContext(env.id));
+      await task.preBuild?.(this.getBuildContext(env.id));
     });
     this.logger.consoleSuccess();
   }
@@ -143,8 +142,7 @@ export class BuildPipe {
   private async executePostBuild(tasksResults: TaskResultsList) {
     this.logger.setStatusLine('executing post-build for all tasks');
     await mapSeries(this.tasksQueue, async ({ task, env }) => {
-      if (!task.postBuild) return;
-      await task.postBuild(this.getBuildContext(env.id), tasksResults);
+      await task.postBuild?.(this.getBuildContext(env.id), tasksResults);
     });
     this.logger.consoleSuccess();
   }

@@ -8,8 +8,10 @@ export type ComponentAspectConfig = { [aspectId: string]: Record<string, any> | 
 export type ComponentConfig = {
   // root dir of component, relative path to workspace
   rootDir: string;
+  // name of component
+  name: string;
   // entry file info of component
-  entries: {
+  entries?: {
     // component entry, relative path to root dir
     main: string;
     // style entry, relative path to root dir
@@ -48,8 +50,7 @@ export class ComponentInfo {
   readonly packageDirAbs: string;
 
   constructor(
-    { entries, rootDir, config }: ComponentConfig,
-    name: string,
+    { name, entries, rootDir, config }: ComponentConfig,
     workspacePath: string,
     files?: ComponentInfoFiles[]
   ) {
@@ -67,9 +68,10 @@ export class ComponentInfo {
     for (const dirPath of dirsToSearchPkgJson) {
       const packageJsonPath = path.join(dirPath, PACKAGE_JSON);
       if (fs.existsSync(packageJsonPath)) {
-        this.packageDir = path.relative(dirPath, workspacePath);
+        this.packageDir = path.relative(workspacePath, dirPath);
         this.packageDirAbs = dirPath;
         this.packageJson = fs.readJSONSync(packageJsonPath);
+        break;
       }
     }
   }
@@ -98,7 +100,14 @@ export class ComponentInfo {
     return this.packageJson?.peerDependencies || {};
   }
 
-  static fromJson(json: ComponentConfig, name: string, workspacePath: string) {
-    return new ComponentInfo(json, name, workspacePath);
+  // test if a component name match a given component id
+  // name: Button, id: library/Button => true
+  // name: Tag, id: library/Button => false
+  static nameMatchId(name = '', id = '') {
+    return id.endsWith(`/${name}`);
+  }
+
+  static fromJson(json: ComponentConfig, workspacePath: string) {
+    return new ComponentInfo(json, workspacePath);
   }
 }

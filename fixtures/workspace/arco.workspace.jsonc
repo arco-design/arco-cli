@@ -1,33 +1,36 @@
 {
   "arco.aspect/workspace": {
-    "components": {
-      "StandaloneButton": {
-        "rootDir": "packages/button/src",
+    "components": [
+      {
+        "name": "StandaloneButton",
+        "rootDir": "packages/button/src"
+      },
+      {
+        "name": "LibraryButton",
+        "rootDir": "packages/library/components",
         "entries": {
-          "main": "index.ts",
-          "style": "style/index.less",
-          "jsdoc": "interface.ts",
-          "preview": "__docs__/index.mdx"
+          "main": "Button/index.ts",
+          "style": "Button/style/index.less",
+          "jsdoc": "Button/interface.ts",
+          "preview": "Button/__docs__/index.mdx"
         }
       },
-      "Button": {
-        "rootDir": "packages/library/components/Button",
+      {
+        "name": "LibraryTag",
+        "rootDir": "packages/library/components",
         "entries": {
-          "main": "index.ts",
-          "style": "style/index.less",
-          "jsdoc": "interface.ts",
-          "preview": "__docs__/index.mdx"
-        }
-      },
-      "Tag": {
-        "rootDir": "packages/library/components/Tag",
-        "entries": {
-          "main": "index.ts",
-          "style": "style/index.less",
-          "jsdoc": "interface.ts",
-          "preview": "__docs__/index.mdx"
+          "main": "Tag/index.ts",
+          "style": "Tag/style/index.less",
+          "jsdoc": "Tag/interface.ts",
+          "preview": "Tag/__docs__/index.mdx"
         }
       }
+    ],
+    "defaultComponentEntries": {
+      "main": "index.ts",
+      "style": "style/index.less",
+      "jsdoc": "interface.ts",
+      "preview": "__docs__/index.mdx"
     }
   }
 }

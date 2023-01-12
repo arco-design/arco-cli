@@ -6,7 +6,7 @@ import { SlotRegistry } from '@arco-cli/stone';
 import { PubsubMain } from '@arco-cli/pubsub';
 import { ComponentFactory, Component } from '@arco-cli/component';
 import { AspectLoaderMain, getAspectDef } from '@arco-cli/aspect-loader';
-import { ComponentInfo } from '@arco-cli/legacy/dist/workspace/componentInfo';
+import { ComponentInfo, ComponentConfig } from '@arco-cli/legacy/dist/workspace/componentInfo';
 import { getFilesByDir } from '@arco-cli/legacy/dist/workspace/componentOps/addComponents';
 import { getGitIgnoreForArco } from '@arco-cli/legacy/dist/utils/ignore';
 
@@ -75,13 +75,24 @@ export class Workspace implements ComponentFactory {
     private onComponentLoadSlot: OnComponentLoadSlot,
     private onComponentChangeSlot: OnComponentChangeSlot,
     private onComponentRemoveSlot: OnComponentRemoveSlot
-  ) {}
+  ) {
+    const configs = this.config.components;
+    for (const config of configs) {
+      config.entries = {
+        ...configs.entries,
+        ...this.config.defaultComponentEntries,
+      };
+    }
+    this.componentConfigList = configs;
+  }
 
   readonly watcher = new Watcher(this, this.pubsub);
 
   private componentCache: Record<string, Component> = {};
 
   private componentInfoList: ComponentInfo[] = [];
+
+  private componentConfigList: ComponentConfig[] = [];
 
   private get modulesPath() {
     return path.join(this.path, 'node_modules');
@@ -93,10 +104,6 @@ export class Workspace implements ComponentFactory {
     } else {
       this.componentCache = {};
     }
-  }
-
-  get componentConfigMap() {
-    return this.config.components || {};
   }
 
   get name() {
@@ -117,12 +124,12 @@ export class Workspace implements ComponentFactory {
     const gitIgnore = getGitIgnoreForArco(workspacePath);
 
     await Promise.all(
-      Object.entries(this.componentConfigMap).map(async ([id, config]) => {
-        if (componentId && componentId !== id) {
-          return;
-        }
+      this.componentConfigList.map(async (config) => {
+        if (componentId && !ComponentInfo.nameMatchId(config.name, componentId)) return;
 
-        const componentInfo = ComponentInfo.fromJson(config, id, workspacePath);
+        const componentInfo = ComponentInfo.fromJson(config, workspacePath);
+        if (componentId && componentId !== componentInfo.id) return;
+
         const rootDir = config.rootDir;
         if (rootDir) {
           try {

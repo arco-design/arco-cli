@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import { Logger } from '@arco-cli/logger';
+import { Workspace } from '@arco-cli/workspace';
 import { EnvService, ExecutionContext, EnvDefinition } from '@arco-cli/envs';
 import { Tester, Tests, CallbackFn } from './tester';
 
@@ -30,7 +31,7 @@ export type TesterDescriptor = {
 export class TesterService implements EnvService<Tests, TesterDescriptor> {
   name = 'tester';
 
-  constructor(private logger: Logger) {}
+  constructor(private logger: Logger, private workspace: Workspace) {}
 
   _callback: CallbackFn | undefined;
 
@@ -54,8 +55,7 @@ export class TesterService implements EnvService<Tests, TesterDescriptor> {
     const tester: Tester = context.env.getTester();
     const testerContext = Object.assign(context, {
       watch: options.watch,
-      // TODO root path
-      rootPath: '/Users/helium/Desktop/arco-cli/fixtures/component',
+      rootPath: this.workspace.path,
     });
     const results = await tester.test(testerContext);
     return results;

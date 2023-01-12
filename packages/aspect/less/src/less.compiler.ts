@@ -38,11 +38,10 @@ export class LessCompiler implements Compiler {
   }
 
   transpileFile(fileContent: string, options: TranspileFileParams): TranspileFileOutput {
-    const cssContent = render(fileContent);
-
+    // TODO we may don't need compile cmd, then transpileFile method can be removed
     return [
       {
-        outputText: cssContent.css.toString(),
+        outputText: fileContent.toString(),
         outputPath: this.getDistPathBySrcPath(options.filePath),
       },
     ];

@@ -17,7 +17,7 @@ export class TesterMain {
 
   static provider([cli, envs, loggerMain, workspace]: [CLIMain, EnvsMain, LoggerMain, Workspace]) {
     const logger = loggerMain.createLogger(TesterAspect.id);
-    const testerService = new TesterService(logger);
+    const testerService = new TesterService(logger, workspace);
     const tester = new TesterMain(envs, testerService);
     cli.register(new TestCmd(tester, logger, workspace));
     return tester;

@@ -19,7 +19,6 @@ export function Overview() {
         previewName="overview"
         viewport={null}
         scrolling="no"
-        fullContentHeight
       />
     </div>
   );
