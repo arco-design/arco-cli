@@ -37,6 +37,8 @@ export default function parseComment(options: {
             return;
           }
         }
+      } else {
+        targetComment[key] = value;
       }
     }
   });
