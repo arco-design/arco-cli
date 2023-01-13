@@ -9,10 +9,12 @@ export default function parseComment(options: {
 }): { [key: string]: string } {
   const { comment, targetLanguage = 'zh-cn', skip = [] } = options;
   const splitLabel = `${Math.random()}`;
+  // Do NOT modify options.comment directly, this function may execute multi-times
+  const targetComment = {};
 
   Object.entries(comment).forEach(([key, value]) => {
     if (key === 'children') {
-      comment[key] = value.map((v) => parseComment({ ...options, comment: v }));
+      targetComment[key] = value.map((v) => parseComment({ ...options, comment: v }));
       return;
     }
 
@@ -28,7 +30,7 @@ export default function parseComment(options: {
           const str = stringList[length];
           const regExp = new RegExp(`^${targetLanguage}`, 'i');
           if (regExp.test(str)) {
-            comment[key] = str
+            targetComment[key] = str
               .replace(regExp, '')
               .replace(/^:\s*|\s*\n$/g, '')
               .replace(/\n/g, '\\n');
@@ -39,5 +41,5 @@ export default function parseComment(options: {
     }
   });
 
-  return comment;
+  return targetComment;
 }

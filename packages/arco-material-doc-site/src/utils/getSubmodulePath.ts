@@ -24,7 +24,9 @@ export default function getSubmodulePath(
     Object.entries(glob).forEach(([key, item]) => {
       let entryFilePath = null;
 
-      if (languages.length > 1 && key === 'doc') {
+      // both doc and component may have different entries according to language
+      // component entry will import API doc like README.[language].md
+      if (languages.length > 1 && ['doc', 'component'].indexOf(key) > -1) {
         entryFilePath = {};
         languages.forEach((lang) => (entryFilePath[lang] = `./${submoduleKey}/${key}.${lang}.js`));
       } else {
