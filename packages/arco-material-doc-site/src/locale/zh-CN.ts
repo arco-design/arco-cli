@@ -15,4 +15,7 @@ export default {
 
   TIP_AUTO_GENERATE_ENTRY_FILE_ING: '正在自动生成站点入口文件...',
   TIP_AUTO_GENERATE_ENTRY_FILE_DONE: '已成功生成站点入口文件',
+
+  TIP_PREVIEW_PORT: '指定文件服务器运行的端口号',
+  TIP_PREVIEW_PATH: '指定 localPreviewUrl 的路径',
 };

@@ -12,6 +12,7 @@ import { PLACEHOLDER_ARCO_SITE_MODULE_INFO } from '../constant';
 import getTitleOfMarkdown from './getTitleOfMarkdown';
 import getSubmodulePath, { SubmodulePathInfo } from './getSubmodulePath';
 import getArcoHost from './getArcoHost';
+import getFilenameByLanguage from './getFilenameByLanguage';
 
 type ExportModuleInfo = {
   name: string;
@@ -223,8 +224,8 @@ function generateSubmodules(
                   .basename(p)
                   .replace(/(?:-|^)(\w)/g, (_, $1) => $1.toUpperCase())
                   .replace(/[^a-z1-9]/gi, ''),
-                pathDemo: demo && path.resolve(p, demo),
-                pathDoc: doc && path.resolve(p, doc),
+                pathDemo: demo && path.resolve(p, getFilenameByLanguage(demo, language)),
+                pathDoc: doc && path.resolve(p, getFilenameByLanguage(doc, language)),
                 pathStyle: style && path.resolve(p, style),
               };
             })

@@ -2,11 +2,12 @@
 
 import fs from 'fs-extra';
 import axios from 'axios';
+import open from 'open';
 import program from 'commander';
 import chokidar from 'chokidar';
 import { webpack } from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
-import { print } from 'arco-cli-dev-utils';
+import { print, fileServer, getGlobalInfo } from 'arco-cli-dev-utils';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 import locale from '../locale';
@@ -179,5 +180,34 @@ program
     // Watch file and re-generate entry files
     hotUpdateEntries(globsToWatch);
   });
+
+program
+  .command('preview')
+  .description('preview a doc site from local dist files')
+  .option('--path [path]', locale.TIP_PREVIEW_PATH)
+  .option('-p, --port [port]', locale.TIP_PREVIEW_PORT)
+  .option('-l, --language [language]', locale.TIP_DEV_OPTION_LANGUAGE)
+  .action(
+    async ({
+      language,
+      port = 9093,
+      path: previewPath = '',
+    }: {
+      path: string;
+      port: number;
+      language: string;
+    }) => {
+      const hostArco = getGlobalInfo().host?.arco || 'https://arco.design';
+      const query = `localPreviewUrl=http://localhost:${port}${previewPath}`;
+      const openBrowser = (url) => {
+        open(url);
+        console.log(`Visit ${url}`);
+      };
+      fileServer(port);
+      openBrowser(
+        `${hostArco}/material/team/SitePreview${language ? `/${language}` : ''}?${query}`
+      );
+    }
+  );
 
 program.parse(process.argv);

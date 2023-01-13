@@ -15,4 +15,7 @@ export default {
 
   TIP_AUTO_GENERATE_ENTRY_FILE_ING: 'Auto-generating site entry file...',
   TIP_AUTO_GENERATE_ENTRY_FILE_DONE: 'The site entry file has been successfully generated',
+
+  TIP_PREVIEW_PORT: 'Specify the port number on which the file server runs',
+  TIP_PREVIEW_PATH: 'Specify the value of localPreviewUrl',
 };
