@@ -1,5 +1,5 @@
 import gitconfig from 'gitconfig';
-import R from 'ramda';
+import { isNil } from 'lodash';
 import { ENV_VARIABLE_CONFIG_PREFIX } from '../../../constants';
 import GeneralError from '../../../error/generalerror';
 import Config from '../../../globalConfig/config';
@@ -53,7 +53,7 @@ export async function get(key: string): Promise<string | undefined> {
     return config;
   })();
   const val = config ? config.get(key) : undefined;
-  if (!R.isNil(val)) return val;
+  if (!isNil(val)) return val;
 
   try {
     return await gitconfig.get(key);
@@ -77,11 +77,11 @@ export function getSync(key: string): string | undefined {
     return config;
   })();
   const val = config ? config.get(key) : undefined;
-  if (!R.isNil(val)) return val;
+  if (!isNil(val)) return val;
 
   const gitConfigCache = gitCache().get() || {};
   if (key in gitConfigCache) {
-    return gitConfigCache[val];
+    return gitConfigCache[key];
   }
 
   try {

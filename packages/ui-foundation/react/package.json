@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "main": "./dist/index.js",
   "scripts": {
-    "dev": "sh ../../../scripts/build.sh dev",
-    "build": "sh ../../../scripts/build.sh",
+    "dev": "sh ../../../scripts/build.sh dev esm",
+    "build": "sh ../../../scripts/build.sh esm",
     "build-type": "sh ../../../scripts/build-type.sh",
     "clean": "rm -rf dist",
     "clean-type": "find dist -name *.d.ts |xargs rm -rf",
@@ -20,6 +20,7 @@
     "@types/mdx-js__react": "^1.5.5",
     "classnames": "^2.3.2",
     "copy-to-clipboard": "^3.3.3",
+    "react-error-boundary": "^3.1.4",
     "react-syntax-highlighter": "^15.5.0",
     "uuid": "^9.0.0"
   },

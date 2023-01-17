@@ -1,1 +1,2 @@
-export { ComponentMenu, ComponentMenuProps } from './componentMenu';
+export { ComponentMenu } from './componentMenu';
+export type { ComponentMenuProps } from './componentMenu';

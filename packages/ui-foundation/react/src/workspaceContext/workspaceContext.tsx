@@ -5,7 +5,7 @@ import { ComponentModel } from '@arco-cli/component/dist/ui';
 import { LoaderContext, useLoaderApi } from '../globalLoader';
 
 import '../style/global.scss';
-import styles from './workspace.module.scss';
+import styles from './workspaceContext.module.scss';
 
 type WorkspaceContextType = {
   name: string;

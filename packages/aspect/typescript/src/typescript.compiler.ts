@@ -6,7 +6,11 @@ import { Logger } from '@arco-cli/logger';
 import { Compiler, TranspileFileOutput, TranspileFileParams } from '@arco-cli/compiler';
 import { BuildContext, BuildTaskResult, ComponentResult } from '@arco-cli/builder';
 import ArcoError from '@arco-cli/legacy/dist/error/arcoError';
-import { DEFAULT_DIST_DIRNAME } from '@arco-cli/legacy/dist/constants';
+import {
+  DEFAULT_DIST_DIRNAME,
+  DEFAULT_TEST_CASE_DIRNAME,
+  DEFAULT_COMPONENT_DOCS_DIRNAME,
+} from '@arco-cli/legacy/dist/constants';
 import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 
 import { TypescriptCompilerOptions } from './compilerOptions';
@@ -87,6 +91,10 @@ export class TypescriptCompiler implements Compiler {
         // different components might have different ts configs
         merge(tsconfig, {
           include: [componentDirAbs],
+          exclude: [
+            path.join(componentDirAbs, '**', DEFAULT_TEST_CASE_DIRNAME),
+            path.join(componentDirAbs, '**', DEFAULT_COMPONENT_DOCS_DIRNAME),
+          ],
           compilerOptions: {
             outDir: outDirAbs,
             rootDir: componentDirAbs,

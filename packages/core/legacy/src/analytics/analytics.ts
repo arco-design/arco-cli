@@ -1,6 +1,6 @@
 import os from 'os';
 import yn from 'yn';
-import R from 'ramda';
+import { isNil, isEmpty, filter } from 'lodash';
 import uniqid from 'uniqid';
 import hashObj from 'object-hash';
 import { serializeError } from 'serialize-error';
@@ -92,7 +92,7 @@ class Analytics {
       if (cmd.length && cmd[0] !== 'config' && !process.env.CI) {
         const analyticsReporting = getSync(CFG_ANALYTICS_REPORTING_KEY);
         const errorReporting = getSync(CFG_ANALYTICS_ERROR_REPORTS_KEY);
-        return R.isNil(analyticsReporting) && R.isNil(errorReporting);
+        return isNil(analyticsReporting) && isNil(errorReporting);
       }
       return false;
     }
@@ -137,8 +137,8 @@ class Analytics {
 
   static _hashFlags(flags: Record<string, any>) {
     const hashedFlags = {};
-    const definedFlags = R.filter((flag) => typeof flag !== 'undefined', flags);
-    if (this.anonymous && !R.isEmpty(definedFlags)) {
+    const definedFlags = filter(flags, (flag) => typeof flag !== 'undefined');
+    if (this.anonymous && !isEmpty(definedFlags)) {
       Object.keys(definedFlags).forEach((key) => {
         hashedFlags[key] = this._hashLightly(flags[key]);
       });

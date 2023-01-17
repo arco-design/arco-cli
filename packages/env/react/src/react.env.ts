@@ -188,7 +188,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   }
 
   getDocsTemplate() {
-    return require.resolve('./preview/index.js');
+    return require.resolve('@arco-cli/ui-foundation-react/dist/preview/index.js');
   }
 
   getDocsMetadata(file: SourceFile) {

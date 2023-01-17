@@ -1,1 +1,2 @@
-export { DemoView, DemoViewProps } from './demoView';
+export { DemoView } from './demoView';
+export type { DemoViewProps } from './demoView';

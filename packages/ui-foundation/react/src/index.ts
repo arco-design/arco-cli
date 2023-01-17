@@ -1,9 +1,10 @@
 export * from './constants';
-export { Grid, GridProps, Table, TableProps } from './baseUI';
+export { Grid, Table } from './baseUI';
+export type { GridProps, TableProps } from './baseUI';
 export { LoaderContext, useLoader, useLoaderApi } from './globalLoader';
 export { useDataQuery } from './hooks/useDataQuery';
-export { MDXLayout, MarkdownComponents } from './markdown';
-export { Navbar, NavbarProps } from './navbar';
+export { Navbar } from './navbar';
+export type { NavbarProps } from './navbar';
 export { ErrorPage, NotFoundPage, ContactFooter } from './pages';
 export { SideBar } from './sideBar';
 export { ThemeSwitcher } from './themeSwitcher';

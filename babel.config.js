@@ -5,12 +5,6 @@ module.exports = function (api) {
 
   const plugins = [
     'ramda',
-    [
-      '@babel/plugin-transform-modules-commonjs',
-      {
-        lazy: () => true,
-      },
-    ],
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-transform-runtime',

@@ -1,7 +1,16 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
-import { Table } from '@arco-cli/ui-foundation-react';
+import { Table } from '../../baseUI/table';
 
-import type { DocProp } from '../../tsdoc/types';
+// Type from @arco-cli/react/dist/tsdoc/types
+type DocProp = {
+  name: string;
+  description: string;
+  required: boolean;
+  type: string;
+  defaultValue?: string;
+  version?: string;
+};
 
 type PropertySchema = {
   name: string;

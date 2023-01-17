@@ -1,4 +1,3 @@
-import R from 'ramda';
 import vinylFile from 'vinyl-file';
 import AbstractVinyl from './abstractVinyl';
 import logger from '../../../logger/logger';
@@ -13,10 +12,9 @@ export default class SourceFile extends AbstractVinyl {
   ): SourceFile {
     try {
       const file = new SourceFile(vinylFile.readSync(filePath, { base, cwd: consumerPath }));
-      const addToFile = (value, key) => {
+      Object.entries(extendedProps).forEach(([key, value]) => {
         file[key] = value;
-      };
-      R.forEachObjIndexed(addToFile, extendedProps);
+      });
       return file;
     } catch (err: any) {
       logger.errorAndAddBreadCrumb(

@@ -89,6 +89,10 @@ export const DEFAULT_ANALYTICS_DOMAIN = `TODO: date analytics`;
 
 export const DEFAULT_DIST_DIRNAME = 'dist';
 
+export const DEFAULT_TEST_CASE_DIRNAME = '__test__';
+
+export const DEFAULT_COMPONENT_DOCS_DIRNAME = '__docs__';
+
 export const DEFAULT_LANGUAGE = 'javascript';
 
 /**
