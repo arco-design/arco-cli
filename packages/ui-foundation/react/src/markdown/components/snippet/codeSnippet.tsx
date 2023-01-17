@@ -43,10 +43,6 @@ export function CodeSnippet({
   children,
   ...rest
 }: CodeSnippetProps) {
-  const handleClick = () => {
-    copy(children.toString());
-  };
-
   const trimmedChildren = useMemo(() => children.trim(), [children]);
 
   return (
@@ -61,14 +57,7 @@ export function CodeSnippet({
         {trimmedChildren}
       </Highlighter>
 
-      <div className={styles.copy}>
-        <img
-          src="https://static.bit.cloud/Community/icons/copy.svg"
-          onClick={handleClick}
-          className={styles.copyIcon}
-          alt="Copy"
-        />
-      </div>
+      <div className={styles.copy} onClick={() => copy(children.toString())} />
     </div>
   );
 }

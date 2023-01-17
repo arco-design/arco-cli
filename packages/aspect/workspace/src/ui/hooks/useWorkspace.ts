@@ -1,6 +1,7 @@
-import { gql } from '@apollo/client';
-import { useDataQuery } from '@arco-cli/ui-foundation-react/dist/hooks/useDataQuery';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { useMemo } from 'react';
+import { gql } from '@apollo/client';
+import { useDataQuery } from '@arco-cli/ui-foundation-react';
 import { WorkspaceModel } from '../workspaceModel';
 
 const wcComponentFields = gql`

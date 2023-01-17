@@ -1,0 +1,52 @@
+.workspaceOverview {
+  $componentCardMargin: 12px;
+
+  .workspaceTitle {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 28px;
+    font-weight: 600;
+
+    :global(.arco-icon) {
+      margin-right: 8px;
+    }
+  }
+
+  .gallery {
+    display: flex;
+    margin: 0 (-$componentCardMargin);
+
+    .componentCard {
+      display: flex;
+      flex-direction: column;
+      width: calc(20% - $componentCardMargin);
+      height: 120px;
+      margin: $componentCardMargin;
+      padding: 8px;
+      border: 1px solid var(--preview-color-border);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--preview-color-text-1);
+      text-decoration: none;
+
+      &:global(:hover) {
+        box-shadow: 0 0 6px var(--preview-color-fill-2);
+      }
+
+      .title {
+        margin-bottom: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .packageName {
+        font-size: 12px;
+        color: var(--preview-color-text-2);
+      }
+    }
+  }
+}

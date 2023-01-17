@@ -5,15 +5,33 @@ $navbarHeight: 60px;
 .navbar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: $navbarHeight;
   padding: 0 12px;
   box-sizing: border-box;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--preview-color-border);
   font-size: 16px;
   z-index: $navbar-zIndex;
 
-  .logo {
-    font-size: 24px;
+  .title {
+    display: flex;
+    align-items: center;
+    max-width: 320px;
+    font-size: 18px;
     font-weight: 600;
+    color: var(--preview-color-text-1);
+
+    .logo {
+      height: 32px;
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+
+    .text {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 }

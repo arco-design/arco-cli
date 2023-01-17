@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useMemo, useRef } from 'react';
 import gql from 'graphql-tag';
-import { useDataQuery } from '@arco-cli/ui-foundation-react/dist/hooks/useDataQuery';
+import { useDataQuery } from '@arco-cli/ui-foundation-react';
 
 import { ComponentModel } from '../componentModel';
 import { ComponentError } from '../componentError';

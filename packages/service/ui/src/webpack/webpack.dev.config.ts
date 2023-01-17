@@ -281,6 +281,18 @@ export function devConfig(
           test: stylesRegexps.cssNoModulesRegex,
           use: [require.resolve('style-loader'), require.resolve('css-loader')],
         },
+        {
+          // loads svg as react component, like:
+          // import starUrl, { ReactComponent as StarIcon } from './star.svg';
+          // (remove when there is native support for both options from webpack5 / svgr)
+          test: /\.svg$/,
+          use: [
+            {
+              loader: require.resolve('@svgr/webpack'),
+              options: { titleProp: true, ref: true },
+            },
+          ],
+        },
       ],
     },
     plugins: [

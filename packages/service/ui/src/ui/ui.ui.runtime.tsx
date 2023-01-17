@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
 import { ReactRouterAspect, ReactRouterUI } from '@arco-cli/react-router/dist/ui';
-import { ClientContext } from '@arco-cli/ui-foundation-react/dist/clientContext';
 
 import UIAspect, { UIRuntime } from '../ui.aspect';
 import { UIRootFactory } from './uiRoot.ui';
@@ -44,9 +43,7 @@ export class UIUI {
     const routes = this.router.renderRoutes(uiRoot.routes);
 
     ReactDOM.render(
-      <ClientContext>
-        <BrowserRouter>{routes}</BrowserRouter>
-      </ClientContext>,
+      <BrowserRouter>{routes}</BrowserRouter>,
       document.querySelector(`#${MOUNT_ROOT_ID}`)
     );
   }

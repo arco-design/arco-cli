@@ -76,14 +76,14 @@ export class Workspace implements ComponentFactory {
     private onComponentChangeSlot: OnComponentChangeSlot,
     private onComponentRemoveSlot: OnComponentRemoveSlot
   ) {
-    const configs = this.config.components;
-    for (const config of configs) {
-      config.entries = {
-        ...configs.entries,
+    const componentConfigs = this.config.components;
+    for (const c of componentConfigs) {
+      c.entries = {
         ...this.config.defaultComponentEntries,
+        ...c.entries,
       };
     }
-    this.componentConfigList = configs;
+    this.componentConfigList = componentConfigs;
   }
 
   readonly watcher = new Watcher(this, this.pubsub);

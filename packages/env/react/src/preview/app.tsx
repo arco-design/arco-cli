@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import type { DocsRootProps } from '@arco-cli/docs/dist/preview';
-import { MDXLayout } from '@arco-cli/ui-foundation-react/dist/markdown/mdxLayout';
+import { MDXLayout } from '@arco-cli/ui-foundation-react';
 
 import { Theme } from './theme';
 import { Content as DocContent } from './doc/content';

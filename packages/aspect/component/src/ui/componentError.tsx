@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
-import { NotFoundPage } from '@arco-cli/ui-foundation-react/dist/pages';
+import { NotFoundPage } from '@arco-cli/ui-foundation-react';
 
 export class ComponentError {
   constructor(

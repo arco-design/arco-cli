@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from '@arco-cli/ui-foundation-react/dist/baseUI';
+import { Table } from '@arco-cli/ui-foundation-react';
 
 import type { DocProp } from '../../tsdoc/types';
 

@@ -9,6 +9,7 @@
     font-weight: 600;
     margin: 12px 0;
     padding: 0;
+    color: var(--preview-color-text-1);
   }
 
   .descriptions {
@@ -23,10 +24,15 @@
 
     .label {
       margin-right: 8px;
-      padding: 2px 8px;
-      border: 1px solid var(--color-border);
+      padding: 1px 6px;
+      border: 1px solid var(--preview-color-border);
       border-radius: 2px;
       font-size: 12px;
+      color: var(--preview-color-text-2);
     }
+  }
+
+  .usage {
+    color: var(--preview-color-text-2);
   }
 }

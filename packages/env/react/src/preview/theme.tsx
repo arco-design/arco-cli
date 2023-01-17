@@ -6,13 +6,12 @@ interface ThemeProps {}
 
 export function Theme(props: PropsWithChildren<ThemeProps>) {
   const { children } = props;
-  const hash = window.location.hash || '';
-  const [, hashQuery] = hash.split('?');
-  const params = new URLSearchParams(hashQuery);
-  const theme = params.get('theme') || 'light';
+  // const hash = window.location.hash || '';
+  // const [, hashQuery] = hash.split('?');
+  // const params = new URLSearchParams(hashQuery);
+  // const theme = params.get('theme') || 'light';
 
   // TODO theme toggle
-  console.log(`Current theme ${theme}`);
 
   return <div>{children}</div>;
 }

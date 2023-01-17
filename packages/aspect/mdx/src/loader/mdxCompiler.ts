@@ -8,10 +8,7 @@ import detectFrontmatter from 'remark-frontmatter';
 import visit from 'unist-util-visit';
 import remove from 'unist-util-remove';
 import remarkNotes from 'remark-admonitions';
-import {
-  COMPONENT_NAME_DEMO_VIEW,
-  COMPONENT_NAME_DOC_ANCHOR,
-} from '@arco-cli/ui-foundation-react/dist/markdown/components';
+import { MarkdownComponents } from '@arco-cli/ui-foundation-react';
 import { detectiveEs6 } from '@arco-cli/legacy/dist/workspace/component/dependencies/detectives';
 
 import { CompileOutput } from './compileOutput';
@@ -174,7 +171,9 @@ function extractHeadings() {
     file.data.headings = headings;
     tree.children.push({
       type: 'jsx',
-      value: `<${COMPONENT_NAME_DOC_ANCHOR} outlineJsonStr={\`${JSON.stringify(headings)}\`} />`,
+      value: `<${MarkdownComponents.COMPONENT_NAME_DOC_ANCHOR} outlineJsonStr={\`${JSON.stringify(
+        headings
+      )}\`} />`,
     });
   };
 }
@@ -212,7 +211,7 @@ function extractComponentDemos() {
         }
 
         if (metadata.demo) {
-          node.value = `<${COMPONENT_NAME_DEMO_VIEW} code={\`${demoCode}\`} children={${node.value}} />`;
+          node.value = `<${MarkdownComponents.COMPONENT_NAME_DEMO_VIEW} code={\`${demoCode}\`} children={${node.value}} />`;
         }
       }
     });

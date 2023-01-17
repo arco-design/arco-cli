@@ -20,7 +20,7 @@ export function ComponentMeta({ component }: ComponentMetaProps) {
             </li>
           ))}
         </ul>
-        <pre>npm i {component.packageName}</pre>
+        <pre className={styles.usage}>npm i {component.packageName}</pre>
       </div>
     </div>
   );
