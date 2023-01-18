@@ -1,5 +1,4 @@
 import fs from 'fs-extra';
-import { Analytics } from './analytics/analytics';
 import { handleUnhandledRejection } from './cli/handleErrors';
 import { CLI_VERSION, DIR_GLOBAL_CONFIG, DIR_GLOBAL_LOGS } from './constants';
 import { printWarning } from './logger';
@@ -18,7 +17,7 @@ export async function bootstrap() {
   warnIfRunningAsRoot();
   verifyNodeVersionCompatibility();
   await ensureDirectories();
-  await Analytics.promptAnalyticsIfNeeded();
+  // await Analytics.promptAnalyticsIfNeeded();
 }
 
 async function ensureDirectories() {

@@ -7,7 +7,7 @@ import { serializeError } from 'serialize-error';
 // import path from 'path';
 // import { fork } from 'child_process';
 
-import { getSync, setSync } from '../api/workspace/lib/globalConfig';
+import { getSync, setSync } from '../globalConfig';
 import { CLIArgs } from '../cli/command';
 import {
   CLI_VERSION,
@@ -44,6 +44,7 @@ class Breadcrumb {
   }
 }
 
+// TODO analytics data report
 class Analytics {
   static username: string;
 
@@ -81,12 +82,13 @@ class Analytics {
     const id = getSync(CFG_ANALYTICS_USERID_KEY);
     if (id) return id;
     const newId = uniqid();
-    setSync(CFG_ANALYTICS_USERID_KEY, newId);
+    setSync({ [CFG_ANALYTICS_USERID_KEY]: newId });
     return newId;
   }
 
   static promptAnalyticsIfNeeded(): Promise<void> {
     const cmd = process.argv.slice(2);
+
     function shouldPromptForAnalytics() {
       // do not prompt analytics approval for arco config command (so you can configure it in CI envs)
       if (cmd.length && cmd[0] !== 'config' && !process.env.CI) {
@@ -99,18 +101,23 @@ class Analytics {
 
     if (shouldPromptForAnalytics()) {
       const uniqId = uniqid();
-      if (!getSync(CFG_ANALYTICS_USERID_KEY)) setSync(CFG_ANALYTICS_USERID_KEY, uniqId);
-      // @ts-ignore AUTO-ADDED-AFTER-MIGRATION-PLEASE-FIX!
+      if (!getSync(CFG_ANALYTICS_USERID_KEY)) {
+        setSync({ CFG_ANALYTICS_USERID_KEY: uniqId });
+      }
+
+      // @ts-ignore
       return analyticsPrompt().then(({ analyticsResponse }) => {
-        setSync(CFG_ANALYTICS_REPORTING_KEY, yn(analyticsResponse));
+        setSync({ [CFG_ANALYTICS_REPORTING_KEY]: yn(analyticsResponse) });
+
         if (!yn(analyticsResponse)) {
           return errorReportingPrompt().then(({ errResponse }) => {
-            return setSync(CFG_ANALYTICS_ERROR_REPORTS_KEY, yn(errResponse));
+            return setSync({ [CFG_ANALYTICS_ERROR_REPORTS_KEY]: yn(errResponse) });
           });
         }
         return null;
       });
     }
+
     return Promise.resolve();
   }
 
@@ -172,7 +179,6 @@ class Analytics {
   }
 
   static sendData(): Promise<void> {
-    // TODO data report
     // return new Promise((resolve, reject) => {
     //   if (this.analytics_usage || (this.error_usage && !this.success)) {
     //     const file = path.join(__dirname, 'analyticsSender.js');

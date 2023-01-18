@@ -1,7 +1,7 @@
 import chalk from 'chalk';
-import { Analytics, LEVEL } from '../analytics/analytics';
 import ArcoError from '../error/arcoError';
-import hashErrorIfNeeded from '../error/hashErrorObject';
+// import { Analytics, LEVEL } from '../analytics/analytics';
+// import hashErrorIfNeeded from '../error/hashErrorObject';
 
 const errorsMap: Array<[Error, (err: Error) => string]> = [];
 
@@ -32,14 +32,14 @@ function getErrorMessage(
  * reason why we don't check (err instanceof AbstractError) is that it could be thrown from a fork,
  * in which case, it loses its class and has only the fields.
  */
-function sendToAnalyticsAndSentry(err: Error) {
-  const possiblyHashedError = hashErrorIfNeeded(err);
-  // @ts-ignore
-  const shouldNotReportToSentry = Boolean(err.isUserError || err.code === 'EACCES');
-  // only level FATAL are reported to Sentry.
-  const level = shouldNotReportToSentry ? LEVEL.INFO : LEVEL.FATAL;
-  Analytics.setError(level, possiblyHashedError);
-}
+// function sendToAnalyticsAndSentry(err: Error) {
+//   const possiblyHashedError = hashErrorIfNeeded(err);
+//   // @ts-ignore
+//   const shouldNotReportToSentry = Boolean(err.isUserError || err.code === 'EACCES');
+//   // only level FATAL are reported to Sentry.
+//   const level = shouldNotReportToSentry ? LEVEL.INFO : LEVEL.FATAL;
+//   Analytics.setError(level, possiblyHashedError);
+// }
 
 function handleNonArcoCustomErrors(err: Error): string {
   const { code, path } = err as any;
@@ -65,7 +65,8 @@ export default (err: Error): { message: string; error: Error } => {
     err.message = errorMessage;
     return errorMessage;
   };
-  sendToAnalyticsAndSentry(err);
+
+  // sendToAnalyticsAndSentry(err);
   const errorMessage = getErrMsg();
   return { message: chalk.red(errorMessage), error: err };
 };

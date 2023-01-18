@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import * as path from 'path';
 
 import { mapToObject } from '../utils';
-import { DIR_GLOBAL_CONFIG, FILE_GLOBAL_CONFIG } from '../constants';
+import { CFG_HOST_ARCO_KEY, DIR_GLOBAL_CONFIG, FILE_GLOBAL_CONFIG } from '../constants';
 
 function getPath() {
   return path.join(DIR_GLOBAL_CONFIG, FILE_GLOBAL_CONFIG);
@@ -25,6 +25,19 @@ export default class Config extends Map<string, string | boolean> {
     return fs.outputFileSync(getPath(), this.toJson());
   }
 
+  get(key) {
+    const value = super.get(key);
+    if (value !== undefined) return value;
+
+    switch (key) {
+      case CFG_HOST_ARCO_KEY:
+        return 'https://arco.design';
+
+      default:
+        return undefined;
+    }
+  }
+
   static loadSync(): Config {
     const configPath = getPath();
     if (!fs.existsSync(configPath)) {
@@ -32,8 +45,8 @@ export default class Config extends Map<string, string | boolean> {
       config.writeSync();
       return config;
     }
-    const contents = fs.readFileSync(configPath);
-    return new Config(Object.entries(JSON.parse(contents.toString())));
+    const contents = fs.readJsonSync(configPath);
+    return new Config(Object.entries(contents));
   }
 
   static async load(): Promise<Config> {
@@ -44,7 +57,7 @@ export default class Config extends Map<string, string | boolean> {
       await config.write();
       return config;
     }
-    const contents = await fs.readFile(configPath);
-    return new Config(Object.entries(JSON.parse(contents.toString())));
+    const contents = await fs.readJson(configPath);
+    return new Config(Object.entries(contents));
   }
 }

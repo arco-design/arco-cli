@@ -1,10 +1,10 @@
 import yn from 'yn';
 import chalk from 'chalk';
 import format from 'string-format';
-import { serializeError } from 'serialize-error';
 import { Logger as PinoLogger, Level } from 'pino';
-import { Analytics } from '../analytics/analytics';
-import { getSync } from '../api/workspace/lib/globalConfig';
+// import { serializeError } from 'serialize-error';
+// import { Analytics } from '../analytics/analytics';
+import { getSync } from '../globalConfig';
 import defaultHandleError from '../cli/defaultErrorHandler';
 import { CFG_LOG_JSON_FORMAT, CFG_LOG_LEVEL } from '../constants';
 import { Profiler } from './profiler';
@@ -28,16 +28,16 @@ function getLogLevel(): Level {
   return defaultLevel;
 }
 
-function addBreadCrumb(category: string, message: string, data: Record<string, any>, extraData) {
-  data = data || {};
-  const hashedData = {};
-  Object.keys(data).forEach((key) => {
-    hashedData[key] = Analytics.hashData(data[key]);
-  });
-  const messageWithHashedData = format(message, hashedData);
-  extraData = extraData instanceof Error ? serializeError(extraData) : extraData;
-  Analytics.addBreadCrumb(category, messageWithHashedData, extraData);
-}
+// function addBreadCrumb(category: string, message: string, data: Record<string, any>, extraData) {
+//   data = data || {};
+//   const hashedData = {};
+//   Object.keys(data).forEach((key) => {
+//     hashedData[key] = Analytics.hashData(data[key]);
+//   });
+//   const messageWithHashedData = format(message, hashedData);
+//   extraData = extraData instanceof Error ? serializeError(extraData) : extraData;
+//   Analytics.addBreadCrumb(category, messageWithHashedData, extraData);
+// }
 
 const logLevel = getLogLevel();
 const jsonFormat =
@@ -113,9 +113,8 @@ class ArcoLogger implements IArcoLogger {
    */
   console(msg?: string | Error, level?: Level, color?: string) {
     level = level || 'info';
-    if (!msg) {
-      return;
-    }
+    if (!msg) return;
+
     let messageStr: string;
     if (msg instanceof Error) {
       const { message } = defaultHandleError(msg);
@@ -123,10 +122,12 @@ class ArcoLogger implements IArcoLogger {
     } else {
       messageStr = msg;
     }
+
     if (!this.shouldWriteToConsole) {
       this[level](messageStr);
       return;
     }
+
     if (color) {
       try {
         messageStr = chalk[color](messageStr);
@@ -135,6 +136,10 @@ class ArcoLogger implements IArcoLogger {
       }
     }
     pinoLoggerConsole[level](messageStr);
+  }
+
+  clearConsole() {
+    process.stdout.write(process.platform === 'win32' ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H');
   }
 
   /**
@@ -160,7 +165,7 @@ class ArcoLogger implements IArcoLogger {
   }
 
   async exitAfterFlush(code, commandName: string, cliOutput = '') {
-    await Analytics.sendData();
+    // await Analytics.sendData();
     const isSuccess = code === 0;
     const level = isSuccess ? 'info' : 'error';
     if (cliOutput) {
@@ -211,7 +216,7 @@ class ArcoLogger implements IArcoLogger {
     if (!message) throw new TypeError('addToLoggerAndToBreadCrumb, message is missing');
     const messageWithData = data ? format(message, data) : message;
     this.logger[level](`${category}, ${messageWithData}`, extraData);
-    addBreadCrumb(category, message, data, extraData);
+    // addBreadCrumb(category, message, data, extraData);
   }
 
   switchToConsoleLogger(level?: Level) {

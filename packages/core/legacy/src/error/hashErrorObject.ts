@@ -2,7 +2,7 @@ import yn from 'yn';
 import hash from 'object-hash';
 
 import logger from '../logger/logger';
-import { getSync } from '../api/workspace/lib/globalConfig';
+import { getSync } from '../globalConfig';
 import { CFG_ANALYTICS_ANONYMOUS_KEY } from '../constants';
 import cloneErrorObject, { systemFields } from './cloneErrorObject';
 

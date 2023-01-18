@@ -649,9 +649,11 @@ importers:
   packages/core/legacy:
     specifiers:
       '@types/prompt': ^1.1.4
+      axios: ^1.2.2
       bluebird: ^3.7.2
       chalk: ^4.1.2
       cli-spinners: ^2.7.0
+      connect: ^3.7.0
       find-up: ^5.0.0
       fs-extra: ^10.1.0
       gitconfig: ^2.0.8
@@ -663,6 +665,7 @@ importers:
       node-source-walk: ^5.0.0
       normalize-path: ^3.0.0
       object-hash: ^3.0.0
+      open: ^8.4.0
       ora: ^5.4.1
       p-map: ^4.0.0
       p-map-series: ^2.1.0
@@ -677,9 +680,11 @@ importers:
       vinyl-file: ^3.0.0
       yn: ^4.0.0
     dependencies:
+      axios: 1.2.2
       bluebird: 3.7.2
       chalk: 4.1.2
       cli-spinners: 2.7.0
+      connect: 3.7.0
       find-up: 5.0.0
       fs-extra: 10.1.0
       gitconfig: 2.0.8
@@ -691,6 +696,7 @@ importers:
       node-source-walk: 5.0.0
       normalize-path: 3.0.0
       object-hash: 3.0.0
+      open: 8.4.0
       ora: 5.4.1
       p-map: 4.0.0
       p-map-series: 2.1.0
@@ -6668,15 +6674,14 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /axios/1.1.3:
-    resolution: {integrity: sha512-00tXVRwKx/FZr/IDVFt4C+f9FYairX517WoGCL6dpOntqLkZofjhu43F/Xl44UOpqa+9sLFDrG/XAnFsUYgkDA==}
+  /axios/1.2.2:
+    resolution: {integrity: sha512-bz/J4gS2S3I7mpN/YZfGFTqhXTYzRho8Ay38w2otuuDR322KzFIWm/4W2K6gIwvWaws5n+mnb7D1lN9uD+QH6Q==}
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
-    dev: true
 
   /axobject-query/2.2.0:
     resolution: {integrity: sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA==}
@@ -7671,6 +7676,18 @@ packages:
   /connect-history-api-fallback/2.0.0:
     resolution: {integrity: sha512-U73+6lQFmfiNPrYbXqr6kZ1i1wiRqXnp2nhMsINseWXO8lDau0LGEffJ8kQi4EjLZympVgRdvqjAgiZ1tgzDDA==}
     engines: {node: '>=0.8'}
+    dev: false
+
+  /connect/3.7.0:
+    resolution: {integrity: sha512-ZqRXc+tZukToSNmh5C2iWMSoV3X1YUcPbqEM4DkEG5tNQXrQUZCNVGGv3IuicnkMtPfGf3Xtp8WCXs295iQ1pQ==}
+    engines: {node: '>= 0.10.0'}
+    dependencies:
+      debug: 2.6.9
+      finalhandler: 1.1.2
+      parseurl: 1.3.3
+      utils-merge: 1.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /console-control-strings/1.1.0:
@@ -9364,6 +9381,21 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       to-regex-range: 5.0.1
+
+  /finalhandler/1.1.2:
+    resolution: {integrity: sha512-aAWcW57uxVNrQZqFXjITpW3sIUQmHGG3qSb9mUah9MgMC4NeWhNOlNjXEYq3HjRAvL6arUviZGGJsBg6z0zsWA==}
+    engines: {node: '>= 0.8'}
+    dependencies:
+      debug: 2.6.9
+      encodeurl: 1.0.2
+      escape-html: 1.0.3
+      on-finished: 2.3.0
+      parseurl: 1.3.3
+      statuses: 1.5.0
+      unpipe: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /finalhandler/1.2.0:
     resolution: {integrity: sha512-5uXcUVftlQMFnWC9qu/svkWv3GTd2PfUhK/3PLkYNAe7FbqJMt3515HaxE6eRL74GdsriiwujiawdaB1BpEISg==}
@@ -12580,7 +12612,7 @@ packages:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.0-rc.27
       '@zkochan/js-yaml': 0.0.6
-      axios: 1.1.3
+      axios: 1.2.2
       chalk: 4.1.0
       chokidar: 3.5.3
       cli-cursor: 3.1.0
@@ -12695,6 +12727,13 @@ packages:
 
   /on-exit-leak-free/2.1.0:
     resolution: {integrity: sha512-VuCaZZAjReZ3vUwgOB8LxAosIurDiAW0s13rI1YwmaP++jvcxP77AWoQvenZebpCA2m8WC1/EosPYPMjnRAp/w==}
+    dev: false
+
+  /on-finished/2.3.0:
+    resolution: {integrity: sha512-ikqdkGAAyf/X/gPhXGvfgAytDZtDbr+bkNUJ0N9h5MI/dmdgCs3l6hoHrcUv41sRKew3jIwrp4qQDXiK99Utww==}
+    engines: {node: '>= 0.8'}
+    dependencies:
+      ee-first: 1.1.1
     dev: false
 
   /on-finished/2.4.1:
@@ -14093,7 +14132,6 @@ packages:
 
   /proxy-from-env/1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
-    dev: true
 
   /prr/1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}

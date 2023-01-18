@@ -52,7 +52,7 @@ export class StartCmd implements Command {
         .catch((error) => this.logger.error(error));
     }
 
-    this.ui.clearConsole();
+    this.logger.clearConsole();
 
     return <UIServerConsole futureUiServer={uiServer} url={this.ui.publicUrl} />;
   }

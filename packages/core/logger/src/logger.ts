@@ -54,6 +54,10 @@ export class Logger implements IArcoLogger {
     loader.stop();
   }
 
+  clearConsole() {
+    logger.clearConsole();
+  }
+
   /**
    * print to the screen. if message is empty, print the last logged message.
    */

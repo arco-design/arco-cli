@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { getSync } from '../api/workspace/lib/globalConfig';
+import { getSync } from '../globalConfig';
 import { CFG_ANALYTICS_DOMAIN_KEY, DEFAULT_ANALYTICS_DOMAIN } from '../constants';
 
 const ANALYTICS_DOMAIN = getSync(CFG_ANALYTICS_DOMAIN_KEY) || DEFAULT_ANALYTICS_DOMAIN;

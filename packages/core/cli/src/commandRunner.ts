@@ -5,7 +5,6 @@ import { CLIArgs, Command, Flags, RenderResult } from '@arco-cli/legacy/dist/cli
 import { parseCommandName } from '@arco-cli/legacy/dist/cli/commandRegistry';
 import loader from '@arco-cli/legacy/dist/cli/loader';
 import { handleErrorAndExit } from '@arco-cli/legacy/dist/cli/handleErrors';
-import { Analytics } from '@arco-cli/legacy/dist/analytics/analytics';
 
 export class CommandRunner {
   constructor(private command: Command, private args: CLIArgs, private flags: Flags) {
@@ -15,7 +14,7 @@ export class CommandRunner {
   private readonly commandName: string;
 
   private bootstrapCommand() {
-    Analytics.init(this.commandName, this.flags, this.args);
+    // Analytics.init(this.commandName, this.flags, this.args);
     logger.info(`[*] started a new command: "${this.commandName}" with the following data:`, {
       args: this.args,
       flags: this.flags,

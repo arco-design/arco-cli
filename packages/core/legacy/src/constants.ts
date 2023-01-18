@@ -55,9 +55,17 @@ export const CFG_NO_WARNINGS = 'no_warnings';
 
 export const CFG_USER_EMAIL_KEY = 'user.email';
 
-export const CFG_USER_TOKEN_KEY = 'user.token';
+export const CFG_USER_TOKEN_KEY = 'x-arco-token';
 
 export const CFG_USER_NAME_KEY = 'user.name';
+
+export const CFG_USER_ACCOUNT_TYPE_KET = 'user.accountType';
+
+export const CFG_HOST_NPM_KEY = 'host.npm';
+
+export const CFG_HOST_UNPKG_KEY = 'host.unpkg';
+
+export const CFG_HOST_ARCO_KEY = 'host.arco';
 
 export const CFG_ANALYTICS_DOMAIN_KEY = 'analytics_domain';
 

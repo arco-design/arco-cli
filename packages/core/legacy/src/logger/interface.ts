@@ -14,6 +14,8 @@ export interface IArcoLogger {
   fatal(message: string, ...meta: any[]): void;
 
   console(msg: string): void;
+
+  clearConsole(): void;
 }
 
 export { Level as LoggerLevel };
