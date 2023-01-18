@@ -4,7 +4,6 @@ module.exports = function (api) {
   const presets = ['@babel/preset-react', '@babel/typescript'];
 
   const plugins = [
-    'ramda',
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-transform-runtime',
