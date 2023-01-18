@@ -1,10 +1,10 @@
 root=`git rev-parse --show-toplevel`
 babel_config_path="${root}/babel.config.js"
 
-babel_options="--plugins=@babel/plugin-transform-modules-commonjs"
+babel_options=""
 
 if [[ $1 == dev ]]; then
-  babel_options="${babel_options} --watch --source-maps"
+  babel_options="--watch --source-maps"
 fi
 
 # Compile .ts with babel and copy tsc un-support files
