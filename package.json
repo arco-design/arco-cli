@@ -10,7 +10,8 @@
     "format": "prettier --config .prettierrc --write \"packages/**/*.{js,jsx,ts,tsx}\"",
     "eslint": "eslint packages/ --fix --cache --quiet --ext .js,.jsx,.ts,.tsx",
     "stylelint": "stylelint 'packages/**/*.less' --fix --cache",
-    "preRelease": "lerna run clean && lerna run build"
+    "preRelease": "lerna run clean && lerna run build",
+    "dev": "lerna run dev --parallel"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",
