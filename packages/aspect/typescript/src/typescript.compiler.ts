@@ -85,7 +85,14 @@ export class TypescriptCompiler implements Compiler {
       context.components.map(async ({ id: componentId, componentDir, packageDirAbs }) => {
         const componentDirAbs = path.join(workspacePath, componentDir);
         const outDirAbs = path.join(packageDirAbs, this.distDir);
-        const tsconfig = cloneDeep(this.options.tsconfig);
+
+        let tsconfig: Record<string, any>;
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          tsconfig = require(`${packageDirAbs}/tsconfig.json`);
+        } catch (e) {
+          tsconfig = cloneDeep(this.options.tsconfig);
+        }
 
         // avoid change this.options.config directly
         // different components might have different ts configs
@@ -100,6 +107,11 @@ export class TypescriptCompiler implements Compiler {
             rootDir: componentDirAbs,
           },
         });
+
+        // convert tsconfig.extends to absolute path
+        if (tsconfig.extends) {
+          tsconfig.extends = path.resolve(packageDirAbs, tsconfig.extends);
+        }
 
         const tsconfigPath = path.join(
           this.getCacheDir(context),

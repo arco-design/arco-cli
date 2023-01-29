@@ -8,9 +8,11 @@ import { MultiCompilerAspect, MultiCompilerMain } from '@arco-cli/multi-compiler
 import { TsConfigTransformer, TypescriptAspect, TypescriptMain } from '@arco-cli/typescript';
 import { SassAspect, SassMain } from '@arco-cli/sass';
 import { LessAspect, LessMain } from '@arco-cli/less';
+import { WorkspaceAspect, Workspace } from '@arco-cli/workspace';
 
 import { ReactAspect } from './react.aspect';
 import { ReactEnv } from './react.env';
+import { ReactConfig } from './types/reactConfig';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const tsconfig = require('./typescript/tsconfig.json');
@@ -22,6 +24,7 @@ export class ReactMain {
   static runtime = MainRuntime;
 
   static dependencies = [
+    WorkspaceAspect,
     BuilderAspect,
     CompilerAspect,
     MultiCompilerAspect,
@@ -35,29 +38,36 @@ export class ReactMain {
 
   static slots = [];
 
-  static provider([
-    builder,
-    compiler,
-    multiCompiler,
-    envs,
-    jestMain,
-    tsMain,
-    webpackMain,
-    lessMain,
-    sassMain,
-  ]: [
-    BuilderMain,
-    CompilerMain,
-    MultiCompilerMain,
-    EnvsMain,
-    JestMain,
-    TypescriptMain,
-    WebpackMain,
-    LessMain,
-    SassMain
-  ]) {
+  static provider(
+    [
+      workspace,
+      builder,
+      compiler,
+      multiCompiler,
+      envs,
+      jestMain,
+      tsMain,
+      webpackMain,
+      lessMain,
+      sassMain,
+    ]: [
+      Workspace,
+      BuilderMain,
+      CompilerMain,
+      MultiCompilerMain,
+      EnvsMain,
+      JestMain,
+      TypescriptMain,
+      WebpackMain,
+      LessMain,
+      SassMain
+    ],
+    config: ReactConfig
+  ) {
     const reactMain = new ReactMain();
     const reactEnv = new ReactEnv(
+      config,
+      workspace,
       compiler,
       multiCompiler,
       jestMain,

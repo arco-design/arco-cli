@@ -32,5 +32,8 @@
       "jsdoc": "interface.ts",
       "preview": "__docs__/index.mdx"
     }
+  },
+  "arco.env/react": {
+    "jestConfigPath": "./jest.config.js"
   }
 }

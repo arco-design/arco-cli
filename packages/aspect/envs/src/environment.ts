@@ -66,7 +66,7 @@ export interface PreviewEnv extends Environment {
   /**
    * Return metadata of current component document, like properties info
    */
-  getDocsMetadata?: () => unknown;
+  getDocsMetadata?: (file: any) => unknown;
 
   /**
    * Returns a bundler for the preview.

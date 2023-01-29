@@ -1,0 +1,6 @@
+{
+  "extends": "../../../../node_modules/@arco-cli/react/dist/typescript/tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve"
+  }
+}

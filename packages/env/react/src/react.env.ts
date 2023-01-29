@@ -19,6 +19,7 @@ import { SassMain } from '@arco-cli/sass';
 import { LessMain } from '@arco-cli/less';
 import { PreviewStrategyName, COMPONENT_PREVIEW_STRATEGY_NAME } from '@arco-cli/preview';
 import { sha1 } from '@arco-cli/legacy/dist/utils';
+import { Workspace } from '@arco-cli/workspace';
 
 import { ReactAspect } from './react.aspect';
 import basePreviewConfigFactory from './webpack/webpack.config.base';
@@ -26,8 +27,7 @@ import basePreviewProdConfigFactory from './webpack/webpack.config.base.prod';
 import componentPreviewDevConfigFactory from './webpack/webpack.config.component.dev';
 import componentPreviewProdConfigFactory from './webpack/webpack.config.component.prod';
 import { Doclet, parser } from './tsdoc';
-
-type CompilerMode = 'build' | 'dev';
+import { ReactConfig } from './types/reactConfig';
 
 type CreateTsCompilerTaskOptions = {
   tsModule?: typeof ts;
@@ -37,11 +37,11 @@ type CreateTsCompilerTaskOptions = {
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const defaultTsConfig = require('./typescript/tsconfig.json');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const buildTsConfig = require('./typescript/tsconfig.build.json');
 
 export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, PreviewEnv {
   constructor(
+    private config: ReactConfig,
+    private workspace: Workspace,
     private compiler: CompilerMain,
     private multiCompiler: MultiCompilerMain,
     private jest: JestMain,
@@ -54,8 +54,8 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   // TODO caching logic should be refactored to DocsAspect
   private docMetadataCache: Record<string, { hash: string; docletList: Doclet[] }> = {};
 
-  private createTsCompilerOptions(mode: CompilerMode = 'dev'): TypescriptCompilerOptions {
-    const tsconfig = mode === 'dev' ? cloneDeep(defaultTsConfig) : cloneDeep(buildTsConfig);
+  private createTsCompilerOptions(): TypescriptCompilerOptions {
+    const tsconfig = cloneDeep(defaultTsConfig);
     const currentDir = pathNormalizeToLinux(__dirname);
     const compileJs = true;
     const compileJsx = true;
@@ -94,26 +94,20 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   }
 
   private createCjsJestTester(jestConfigPath?: string, jestModulePath?: string): Tester {
-    const defaultConfig = join(__dirname, './jest/jest.cjs.config.js');
-    const config = jestConfigPath || defaultConfig;
+    const defaultConfigPath = this.config.jestConfigPath
+      ? join(this.workspace.path, this.config.jestConfigPath)
+      : join(__dirname, './jest/jest.cjs.config.js');
+    const config = jestConfigPath || defaultConfigPath;
     return this.jest.createTester(config, jestModulePath || require.resolve('jest'));
   }
 
-  private createEsmCompiler(
-    mode: CompilerMode = 'dev',
-    transformers: TsConfigTransformer[] = [],
-    tsModule = ts
-  ) {
-    const tsCompileOptions = this.createTsCompilerOptions(mode);
+  private createEsmCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts) {
+    const tsCompileOptions = this.createTsCompilerOptions();
     return this.tsAspect.createEsmCompiler(tsCompileOptions, transformers, tsModule);
   }
 
-  private createCjsCompiler(
-    mode: CompilerMode = 'dev',
-    transformers: TsConfigTransformer[] = [],
-    tsModule = ts
-  ) {
-    const tsCompileOptions = this.createTsCompilerOptions(mode);
+  private createCjsCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts) {
+    const tsCompileOptions = this.createTsCompilerOptions();
     return this.tsAspect.createCjsCompiler(tsCompileOptions, transformers, tsModule);
   }
 
@@ -130,7 +124,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
 
   getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
     return this.multiCompiler.createCompiler([
-      this.createCjsCompiler('dev', transformers, tsModule),
+      this.createCjsCompiler(transformers, tsModule),
       this.less.createCompiler(),
       this.sass.createCompiler(),
     ]);
@@ -145,7 +139,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
       'TSCompilerESM',
       this.multiCompiler.createCompiler(
         [
-          this.createEsmCompiler('build', transformers, tsModule),
+          this.createEsmCompiler(transformers, tsModule),
           this.less.createCompiler(),
           this.sass.createCompiler(),
         ],
@@ -163,7 +157,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
       'TSCompilerCJS',
       this.multiCompiler.createCompiler(
         [
-          this.createCjsCompiler('build', transformers, tsModule),
+          this.createCjsCompiler(transformers, tsModule),
           this.less.createCompiler(),
           this.sass.createCompiler(),
         ],
