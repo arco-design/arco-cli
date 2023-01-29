@@ -309,7 +309,8 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
 
     const moduleMaps = await Promise.all(moduleMapsPromise);
     const contents = generatePreviewBundleEntry(moduleMaps);
+    const filenamePrefix = `preview.${toFsCompatible(component.id)}`;
 
-    return this.preview.writeBuildEntry(contents, this.getCacheDir(context), 'preview');
+    return this.preview.writeBuildEntry(contents, this.getCacheDir(context), filenamePrefix);
   }
 }

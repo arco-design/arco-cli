@@ -19,10 +19,12 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-graphql": "^0.12.0",
-    "graphql": "^14.7.0",
     "graphql-subscriptions": "^1.2.1",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.0"
+  },
+  "peerDependencies": {
+    "graphql": "~14"
   },
   "files": [
     "dist"

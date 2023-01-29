@@ -16,6 +16,9 @@
     "@arco-cli/tester": "^0.1.0",
     "fs-extra": "^10.1.0"
   },
+  "peerDependencies": {
+    "jest": "~29"
+  },
   "files": [
     "dist"
   ],
