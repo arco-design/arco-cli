@@ -6,4 +6,4 @@ A command-line interface tool for creating, developing and managing Arco materia
 
 `npm run init` to set up environment.
 
-`lerna run dev` to enter dev mode.
+`npm run dev` to enter dev mode.
