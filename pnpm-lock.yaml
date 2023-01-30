@@ -150,7 +150,7 @@ importers:
       react-router-dom: ^6.5.0
     dependencies:
       '@arco-cli/aspect-loader': link:../../core/aspect-loader
-      '@arco-cli/builder': link:../../aspect/builder
+      '@arco-cli/builder': link:../../service/builder
       '@arco-cli/bundler': link:../../aspect/bundler
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../../service/compiler
@@ -179,38 +179,6 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       react-router-dom: 6.5.0_sfoxds7t5ydpegc3knd667wn6m
 
-  packages/aspect/builder:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/tester': ^0.1.0
-      '@arco-cli/workspace': ^0.1.0
-      chalk: ^4.1.2
-      cleargraph: ^5.8.0
-      ink: ^3.2.0
-      lodash: ^4.17.21
-      p-map-series: ^2.1.0
-      pretty-time: ^1.1.0
-    dependencies:
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/component': link:../component
-      '@arco-cli/envs': link:../envs
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/tester': link:../../service/tester
-      '@arco-cli/workspace': link:../workspace
-      chalk: 4.1.2
-      cleargraph: 5.8.0
-      ink: 3.2.0
-      lodash: 4.17.21
-      p-map-series: 2.1.0
-      pretty-time: 1.1.0
-
   packages/aspect/bundler:
     specifiers:
       '@arco-cli/builder': ^0.1.0
@@ -224,7 +192,7 @@ importers:
       graphql-tag: ^2.12.6
       lodash: ^4.17.21
     dependencies:
-      '@arco-cli/builder': link:../builder
+      '@arco-cli/builder': link:../../service/builder
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/component': link:../component
       '@arco-cli/envs': link:../envs
@@ -341,7 +309,7 @@ importers:
       fs-extra: ^10.1.0
       less: ^4.1.3
     dependencies:
-      '@arco-cli/builder': link:../builder
+      '@arco-cli/builder': link:../../service/builder
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../../service/compiler
       '@arco-cli/legacy': link:../../core/legacy
@@ -407,7 +375,7 @@ importers:
       fs-extra: ^10.1.0
       sass: ^1.57.0
     dependencies:
-      '@arco-cli/builder': link:../builder
+      '@arco-cli/builder': link:../../service/builder
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../../service/compiler
       '@arco-cli/legacy': link:../../core/legacy
@@ -427,7 +395,7 @@ importers:
       lodash: ^4.17.21
       typescript: ^4.9.3
     dependencies:
-      '@arco-cli/builder': link:../builder
+      '@arco-cli/builder': link:../../service/builder
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../../service/compiler
       '@arco-cli/legacy': link:../../core/legacy
@@ -519,6 +487,7 @@ importers:
     specifiers:
       '@apollo/client': ^3.7.2
       '@arco-cli/aspect-loader': ^0.1.0
+      '@arco-cli/cli': ^0.1.0
       '@arco-cli/component': ^0.1.0
       '@arco-cli/docs': ^0.1.0
       '@arco-cli/envs': ^0.1.0
@@ -543,6 +512,7 @@ importers:
     dependencies:
       '@apollo/client': 3.7.2
       '@arco-cli/aspect-loader': link:../../core/aspect-loader
+      '@arco-cli/cli': link:../../core/cli
       '@arco-cli/component': link:../component
       '@arco-cli/docs': link:../docs
       '@arco-cli/envs': link:../envs
@@ -774,6 +744,7 @@ importers:
       '@arco-cli/typescript': ^0.1.0
       '@arco-cli/ui-foundation-react': ^0.1.0
       '@arco-cli/webpack': ^0.1.0
+      '@arco-cli/workspace': ^0.1.0
       '@babel/core': ^7.20.5
       '@babel/plugin-proposal-class-properties': ^7.18.6
       '@babel/plugin-proposal-decorators': ^7.20.5
@@ -823,7 +794,7 @@ importers:
       typescript: ^4.9.3
       webpack: ^5.75.0
     dependencies:
-      '@arco-cli/builder': link:../../aspect/builder
+      '@arco-cli/builder': link:../../service/builder
       '@arco-cli/bundler': link:../../aspect/bundler
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../../service/compiler
@@ -842,6 +813,7 @@ importers:
       '@arco-cli/typescript': link:../../aspect/typescript
       '@arco-cli/ui-foundation-react': link:../../ui-foundation/react
       '@arco-cli/webpack': link:../../aspect/webpack
+      '@arco-cli/workspace': link:../../aspect/workspace
       '@babel/core': 7.20.5
       '@babel/plugin-proposal-class-properties': 7.18.6_@babel+core@7.20.5
       '@babel/plugin-proposal-decorators': 7.20.5_@babel+core@7.20.5
@@ -891,6 +863,38 @@ importers:
       typescript: 4.9.3
       webpack: 5.75.0
 
+  packages/service/builder:
+    specifiers:
+      '@arco-cli/cli': ^0.1.0
+      '@arco-cli/component': ^0.1.0
+      '@arco-cli/envs': ^0.1.0
+      '@arco-cli/legacy': ^0.1.0
+      '@arco-cli/logger': ^0.1.0
+      '@arco-cli/stone': ^0.1.0
+      '@arco-cli/tester': ^0.1.0
+      '@arco-cli/workspace': ^0.1.0
+      chalk: ^4.1.2
+      cleargraph: ^5.8.0
+      ink: ^3.2.0
+      lodash: ^4.17.21
+      p-map-series: ^2.1.0
+      pretty-time: ^1.1.0
+    dependencies:
+      '@arco-cli/cli': link:../../core/cli
+      '@arco-cli/component': link:../../aspect/component
+      '@arco-cli/envs': link:../../aspect/envs
+      '@arco-cli/legacy': link:../../core/legacy
+      '@arco-cli/logger': link:../../core/logger
+      '@arco-cli/stone': link:../../core/stone
+      '@arco-cli/tester': link:../tester
+      '@arco-cli/workspace': link:../../aspect/workspace
+      chalk: 4.1.2
+      cleargraph: 5.8.0
+      ink: 3.2.0
+      lodash: 4.17.21
+      p-map-series: 2.1.0
+      pretty-time: 1.1.0
+
   packages/service/compiler:
     specifiers:
       '@arco-cli/builder': ^0.1.0
@@ -907,7 +911,7 @@ importers:
       p-map-series: ^2.1.0
       pretty-time: ^1.1.0
     dependencies:
-      '@arco-cli/builder': link:../../aspect/builder
+      '@arco-cli/builder': link:../builder
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/component': link:../../aspect/component
       '@arco-cli/envs': link:../../aspect/envs
@@ -932,7 +936,7 @@ importers:
       chalk: ^4.1.2
       p-map-series: ^2.1.0
     dependencies:
-      '@arco-cli/builder': link:../../aspect/builder
+      '@arco-cli/builder': link:../builder
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../compiler
       '@arco-cli/component': link:../../aspect/component
@@ -964,7 +968,7 @@ importers:
       penpal: ^6.2.2
     dependencies:
       '@arco-cli/aspect-loader': link:../../core/aspect-loader
-      '@arco-cli/builder': link:../../aspect/builder
+      '@arco-cli/builder': link:../builder
       '@arco-cli/bundler': link:../../aspect/bundler
       '@arco-cli/cli': link:../../core/cli
       '@arco-cli/compiler': link:../compiler

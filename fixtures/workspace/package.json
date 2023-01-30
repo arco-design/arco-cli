@@ -1,6 +1,12 @@
 {
   "name": "my-workspace",
   "version": "0.1.0",
+  "scripts": {
+    "start": "arco start",
+    "build": "arco build",
+    "test": "arco test",
+    "help": "arco help"
+  },
   "dependencies": {
     "@babel/runtime": "^7.20.6",
     "@arco-cli/arco": "^0.1.0",

@@ -1,13 +1,14 @@
 import { Slot } from '@arco-cli/stone';
 import { LoggerAspect, LoggerMain } from '@arco-cli/logger';
 import { UIAspect, UIMain } from '@arco-cli/ui';
+import { MainRuntime } from '@arco-cli/cli';
 import { ComponentAspect, ComponentMain } from '@arco-cli/component';
 import { AspectLoaderAspect, AspectLoaderMain } from '@arco-cli/aspect-loader';
 import { getWorkspaceInfo } from '@arco-cli/legacy/dist/workspace/workspaceLocator';
 import { GraphqlAspect, GraphqlMain } from '@arco-cli/graphql';
 import { PubsubAspect, PubsubMain } from '@arco-cli/pubsub';
 
-import { MainRuntime, WorkspaceAspect } from './workspace.aspect';
+import { WorkspaceAspect } from './workspace.aspect';
 import {
   OnComponentAddSlot,
   OnComponentChangeSlot,
@@ -29,7 +30,6 @@ import {
 export const WorkspaceMain = {
   name: WorkspaceAspect.id,
   runtime: MainRuntime,
-  defineRuntime: 'browser',
   dependencies: [
     LoggerAspect,
     UIAspect,

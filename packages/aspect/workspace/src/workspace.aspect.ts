@@ -1,10 +1,7 @@
-import { Aspect, RuntimeDefinition } from '@arco-cli/stone';
-
-export const MainRuntime = new RuntimeDefinition('main');
+import { Aspect } from '@arco-cli/stone';
 
 export const WorkspaceAspect = Aspect.create({
   id: 'arco.aspect/workspace',
-  declareRuntime: MainRuntime,
 });
 
 export default WorkspaceAspect;

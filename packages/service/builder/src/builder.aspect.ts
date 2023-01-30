@@ -1,7 +1,7 @@
 import { Aspect } from '@arco-cli/stone';
 
 export const BuilderAspect = Aspect.create({
-  id: 'arco.aspect/builder',
+  id: 'arco.service/builder',
 });
 
 export default BuilderAspect;

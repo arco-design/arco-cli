@@ -13,6 +13,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.2",
     "@arco-cli/aspect-loader": "^0.1.0",
+    "@arco-cli/cli": "^0.1.0",
     "@arco-cli/component": "^0.1.0",
     "@arco-cli/docs": "^0.1.0",
     "@arco-cli/envs": "^0.1.0",

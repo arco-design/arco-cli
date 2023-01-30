@@ -3,12 +3,12 @@
   "description": "Arco CLI & Arco Scripts",
   "private": true,
   "scripts": {
-    "init": "yarn && lerna bootstrap",
+    "init": "pnpm i && npm run build && npm run link",
+    "build": "lerna run build --parallel",
     "link": "node ./scripts/linkLocalPackages.js",
     "format": "prettier --config --write \"packages/**/*.{js,jsx,ts,tsx}\"",
     "eslint": "eslint packages/ --fix --cache --quiet --ext .js,.jsx,.ts,.tsx",
-    "stylelint": "stylelint 'packages/**/*.less' --fix --cache",
-    "preRelease": "lerna run clean && lerna run build"
+    "stylelint": "stylelint 'packages/**/*.less' --fix --cache"
   },
   "dependencies": {
     "@babel/cli": "^7.19.3",
