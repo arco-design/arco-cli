@@ -128,7 +128,6 @@ importers:
       '@arco-cli/service': ^0.1.0
       '@arco-cli/stone': ^0.1.0
       fs-extra: ^10.1.0
-      graphql: ^14.7.0
       react: ^17.0.2
       react-dom: ^17.0.2
       react-router-dom: ^6.5.0
@@ -140,7 +139,6 @@ importers:
       '@arco-cli/service': link:../service
       '@arco-cli/stone': link:../stone
       fs-extra: 10.1.0
-      graphql: 14.7.0
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-router-dom: 6.5.0_sfoxds7t5ydpegc3knd667wn6m
@@ -280,6 +278,7 @@ importers:
       express-graphql: ^0.12.0
       fs-extra: ^10.1.0
       glob: ^8.0.3
+      graphql: ^14.7.0
       graphql-subscriptions: ^1.2.1
       ink: ^3.2.0
       lodash: ^4.17.21
@@ -293,17 +292,18 @@ importers:
       '@arco-cli/service': link:../service
       '@arco-cli/stone': link:../stone
       '@babel/runtime': 7.20.6
-      '@graphql-modules/core': 0.7.17
+      '@graphql-modules/core': 0.7.17_graphql@14.7.0
       body-parser: 1.20.1
       chalk: 4.1.2
       cors: 2.8.5
       didyoumean: 1.2.2
       eventemitter2: 6.4.9
       express: 4.18.2
-      express-graphql: 0.12.0
+      express-graphql: 0.12.0_graphql@14.7.0
       fs-extra: 10.1.0
       glob: 8.0.3
-      graphql-subscriptions: 1.2.1
+      graphql: 14.7.0
+      graphql-subscriptions: 1.2.1_graphql@14.7.0
       ink: 3.2.0
       lodash: 4.17.21
       node-fetch: 3.3.0
@@ -2268,17 +2268,18 @@ packages:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
     dev: true
 
-  /@graphql-modules/core/0.7.17:
+  /@graphql-modules/core/0.7.17_graphql@14.7.0:
     resolution: {integrity: sha512-hGJa1VIsIHTKJ0Hc5gJfFrdhHAF1Vm+LWYeMNC5mPbVd/IZA1wVSpdLDjjliylLI6GnVRu1YreS2gXvFNXPJFA==}
     peerDependencies:
       graphql: ^14.1.1 || ^15.0.0
     dependencies:
       '@graphql-modules/di': 0.7.17
-      '@graphql-toolkit/common': 0.10.6
-      '@graphql-toolkit/schema-merging': 0.10.6
+      '@graphql-toolkit/common': 0.10.6_graphql@14.7.0
+      '@graphql-toolkit/schema-merging': 0.10.6_graphql@14.7.0
       apollo-server-caching: 0.5.1
       deepmerge: 4.2.2
-      graphql-tools: 5.0.0
+      graphql: 14.7.0
+      graphql-tools: 5.0.0_graphql@14.7.0
       tslib: 2.0.0
     transitivePeerDependencies:
       - encoding
@@ -2294,7 +2295,7 @@ packages:
       tslib: 2.0.0
     dev: false
 
-  /@graphql-toolkit/common/0.10.6:
+  /@graphql-toolkit/common/0.10.6_graphql@14.7.0:
     resolution: {integrity: sha512-rrH/KPheh/wCZzqUmNayBHd+aNWl/751C4iTL/327TzONdAVrV7ZQOyEkpGLW6YEFWPIlWxNkaBoEALIjCxTGg==}
     deprecated: GraphQL Toolkit is deprecated and merged into GraphQL Tools, so it will no longer get updates. Use GraphQL Tools instead to stay up-to-date! Check out https://www.graphql-tools.com/docs/migration-from-toolkit for migration and https://the-guild.dev/blog/graphql-tools-v6 for new changes.
     peerDependencies:
@@ -2302,20 +2303,22 @@ packages:
     dependencies:
       aggregate-error: 3.0.1
       camel-case: 4.1.1
-      graphql-tools: 5.0.0
+      graphql: 14.7.0
+      graphql-tools: 5.0.0_graphql@14.7.0
       lodash: 4.17.15
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@graphql-toolkit/schema-merging/0.10.6:
+  /@graphql-toolkit/schema-merging/0.10.6_graphql@14.7.0:
     resolution: {integrity: sha512-BNABgYaNCw4Li3EiH/x7oDpkN+ml3M0SWqjnsW1Pf2NcyfGlv033Bda+O/q4XYtseZ0OOOh52GLXtUgwyPFb8A==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
-      '@graphql-toolkit/common': 0.10.6
+      '@graphql-toolkit/common': 0.10.6_graphql@14.7.0
       deepmerge: 4.2.2
-      graphql-tools: 5.0.0
+      graphql: 14.7.0
+      graphql-tools: 5.0.0_graphql@14.7.0
       tslib: 1.11.1
     transitivePeerDependencies:
       - encoding
@@ -4967,22 +4970,24 @@ packages:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  /apollo-link-http-common/0.2.16:
+  /apollo-link-http-common/0.2.16_graphql@14.7.0:
     resolution: {integrity: sha512-2tIhOIrnaF4UbQHf7kjeQA/EmSorB7+HyJIIrUjJOKBgnXwuexi8aMecRlqTIDWcyVXCeqLhUnztMa6bOH/jTg==}
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
-      apollo-link: 1.2.14
+      apollo-link: 1.2.14_graphql@14.7.0
+      graphql: 14.7.0
       ts-invariant: 0.4.4
       tslib: 1.14.1
     dev: false
 
-  /apollo-link/1.2.14:
+  /apollo-link/1.2.14_graphql@14.7.0:
     resolution: {integrity: sha512-p67CMEFP7kOG1JZ0ZkYZwRDa369w5PIjtMjvrQd/HnIV8FRsHRqLqK+oAZQnFa1DDdZtOtHTi+aMIW6EatC2jg==}
     peerDependencies:
       graphql: ^0.11.3 || ^0.12.3 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
-      apollo-utilities: 1.3.4
+      apollo-utilities: 1.3.4_graphql@14.7.0
+      graphql: 14.7.0
       ts-invariant: 0.4.4
       tslib: 1.14.1
       zen-observable-ts: 0.8.21
@@ -4996,25 +5001,27 @@ packages:
       lru-cache: 5.1.1
     dev: false
 
-  /apollo-upload-client/13.0.0:
+  /apollo-upload-client/13.0.0_graphql@14.7.0:
     resolution: {integrity: sha512-lJ9/bk1BH1lD15WhWRha2J3+LrXrPIX5LP5EwiOUHv8PCORp4EUrcujrA3rI5hZeZygrTX8bshcuMdpqpSrvtA==}
     engines: {node: '>=10'}
     peerDependencies:
       graphql: 14 - 15
     dependencies:
       '@babel/runtime': 7.20.6
-      apollo-link: 1.2.14
-      apollo-link-http-common: 0.2.16
+      apollo-link: 1.2.14_graphql@14.7.0
+      apollo-link-http-common: 0.2.16_graphql@14.7.0
       extract-files: 8.1.0
+      graphql: 14.7.0
     dev: false
 
-  /apollo-utilities/1.3.4:
+  /apollo-utilities/1.3.4_graphql@14.7.0:
     resolution: {integrity: sha512-pk2hiWrCXMAy2fRPwEyhvka+mqwzeP60Jr1tRYi5xru+3ko94HI9o6lK0CT33/w4RDlxWchmdhDCrvdr+pHCig==}
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
       '@wry/equality': 0.1.11
       fast-json-stable-stringify: 2.1.0
+      graphql: 14.7.0
       ts-invariant: 0.4.4
       tslib: 1.14.1
     dev: false
@@ -7617,7 +7624,7 @@ packages:
       jest-message-util: 29.3.1
       jest-util: 29.3.1
 
-  /express-graphql/0.12.0:
+  /express-graphql/0.12.0_graphql@14.7.0:
     resolution: {integrity: sha512-DwYaJQy0amdy3pgNtiTDuGGM2BLdj+YO2SgbKoLliCfuHv3VVTt7vNG/ZqK2hRYjtYHE2t2KB705EU94mE64zg==}
     engines: {node: '>= 10.x'}
     peerDependencies:
@@ -7625,6 +7632,7 @@ packages:
     dependencies:
       accepts: 1.3.8
       content-type: 1.0.4
+      graphql: 14.7.0
       http-errors: 1.8.0
       raw-body: 2.5.1
     dev: false
@@ -8312,11 +8320,12 @@ packages:
       lodash: 4.17.21
     dev: false
 
-  /graphql-subscriptions/1.2.1:
+  /graphql-subscriptions/1.2.1_graphql@14.7.0:
     resolution: {integrity: sha512-95yD/tKi24q8xYa7Q9rhQN16AYj5wPbrb8tmHGM3WRc9EBmWrG/0kkMl+tQG8wcEuE9ibR4zyOM31p5Sdr2v4g==}
     peerDependencies:
       graphql: ^0.10.5 || ^0.11.3 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
+      graphql: 14.7.0
       iterall: 1.3.0
     dev: false
 
@@ -8329,16 +8338,17 @@ packages:
       tslib: 2.4.1
     dev: false
 
-  /graphql-tools/5.0.0:
+  /graphql-tools/5.0.0_graphql@14.7.0:
     resolution: {integrity: sha512-5zn3vtn//382b7G3Wzz3d5q/sh+f7tVrnxeuhTMTJ7pWJijNqLxH7VEzv8VwXCq19zAzHYEosFHfXiK7qzvk7w==}
     deprecated: This package has been deprecated and now it only exports makeExecutableSchema.\nAnd it will no longer receive updates.\nWe recommend you to migrate to scoped packages such as @graphql-tools/schema, @graphql-tools/utils and etc.\nCheck out https://www.graphql-tools.com to learn what package you should use instead
     peerDependencies:
       graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
-      apollo-link: 1.2.14
-      apollo-upload-client: 13.0.0
+      apollo-link: 1.2.14_graphql@14.7.0
+      apollo-upload-client: 13.0.0_graphql@14.7.0
       deprecated-decorator: 0.1.6
       form-data: 3.0.1
+      graphql: 14.7.0
       iterall: 1.3.0
       node-fetch: 2.6.7
       tslib: 1.14.1

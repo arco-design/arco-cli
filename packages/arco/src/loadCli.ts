@@ -2,7 +2,7 @@ import { resolve } from 'path';
 import { readdir } from 'fs-extra';
 import logger from '@arco-cli/legacy/dist/logger';
 import { Stone, Extension, RuntimeDefinition } from '@arco-cli/stone';
-import { Config, ConfigOptions } from '@arco-cli/stone/dist/stoneConfig';
+import { ConfigOptions, StoneConfig as Config } from '@arco-cli/stone/dist/stoneConfig';
 import {
   AspectLoaderAspect,
   AspectLoaderMain,

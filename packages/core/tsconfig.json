@@ -5,7 +5,14 @@
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
-      "@core/*": ["src/*"]
+      "@core/*": ["src/*"],
+      "@arco-cli/stone": ["../stone/src"],
+      "@arco-cli/legacy/dist/*": ["../legacy/src/*"],
+      "@arco-cli/core/dist/*": ["../core/src/*"],
+      "@arco-cli/aspect/dist/*": ["../aspect/src/*"],
+      "@arco-cli/service/dist*": ["../service/src/*"],
+      "@arco-cli/ui-foundation-react": ["../ui-foundation-react/src"],
+      "@arco-cli/ui-foundation-react/dist/*": ["../ui-foundation-react/src/*"]
     }
   }
 }
