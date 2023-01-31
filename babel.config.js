@@ -10,6 +10,7 @@ module.exports = function (api) {
     '@babel/plugin-proposal-object-rest-spread',
     '@babel/plugin-proposal-class-properties',
     'babel-plugin-transform-typescript-metadata',
+    'tsconfig-paths-module-resolver',
   ];
 
   return {

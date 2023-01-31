@@ -1,0 +1,47 @@
+{
+  "name": "@arco-cli/core",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "sh ../../scripts/build.sh dev",
+    "build": "sh ../../scripts/build.sh",
+    "build-type": "sh ../../scripts/build-type.sh",
+    "clean": "rm -rf dist",
+    "clean-type": "find dist -name *.d.ts |xargs rm -rf",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "graphql": "~14",
+    "react": "^16.8.0 || ^17.0.0"
+  },
+  "dependencies": {
+    "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/service": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "@babel/runtime": "^7.20.6",
+    "@graphql-modules/core": "^0.7.17",
+    "body-parser": "^1.20.1",
+    "chalk": "^4.1.2",
+    "cors": "^2.8.5",
+    "didyoumean": "^1.2.2",
+    "eventemitter2": "^6.4.9",
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "fs-extra": "^10.1.0",
+    "glob": "^8.0.3",
+    "graphql-subscriptions": "^1.2.1",
+    "ink": "^3.2.0",
+    "lodash": "^4.17.21",
+    "node-fetch": "^3.3.0",
+    "pad-right": "^0.2.2",
+    "penpal": "^6.2.2",
+    "pretty-time": "^1.1.0",
+    "yargs": "^17.6.2"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.13"
+  }
+}

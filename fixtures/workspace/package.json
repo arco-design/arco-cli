@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "scripts": {
     "start": "arco start",
-    "build": "arco build",
     "test": "arco test",
     "help": "arco help"
   },

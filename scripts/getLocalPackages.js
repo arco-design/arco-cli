@@ -5,7 +5,7 @@ const { exec } = require('child_process');
 const DIR_PACKAGES = path.resolve(__dirname, '../packages');
 
 /**
- * @returns {Promise<{ name: string; location: string }>}
+ * @returns {Promise<Array<{ name: string; location: string }>>}
  */
 module.exports = function () {
   return new Promise((resolve, reject) => {

@@ -1,0 +1,38 @@
+/**
+ * Colors
+ */
+body {
+  --preview-color-success: rgb(0 180 42);
+  --preview-color-warning: rgb(255 125 0);
+  --preview-color-danger: rgb(245 63 63);
+  --preview-color-primary: rgb(22 93 255);
+  --preview-color-bg: #fff;
+  --preview-color-border: rgb(229 230 235);
+  --preview-color-link: rgb(22 93 255);
+  --preview-color-text-1: rgb(29 33 41);
+  --preview-color-text-2: rgb(78 89 105);
+  --preview-color-text-3: rgb(134 144 156);
+  --preview-color-text-4: rgb(201 205 212);
+  --preview-color-fill-1: rgb(247 248 250);
+  --preview-color-fill-2: rgb(242 243 245);
+  --preview-color-fill-3: rgb(229 230 235);
+  --preview-color-fill-4: rgb(201 205 212);
+}
+
+body[arco-theme="dark"] {
+  --preview-color-success: rgb(39 195 70);
+  --preview-color-warning: rgb(251 233 75);
+  --preview-color-danger: rgb(247 105 101);
+  --preview-color-primary: rgb(60 126 255);
+  --preview-color-bg: #17171a;
+  --preview-color-border: rgb(229 230 235);
+  --preview-color-link: rgb(60 126 255);
+  --preview-color-text-1: rgb(255 255 255 / 90%);
+  --preview-color-text-2: rgb(255 255 255 / 70%);
+  --preview-color-text-3: rgb(255 255 255 / 50%);
+  --preview-color-text-4: rgb(255 255 255 / 30%);
+  --preview-color-fill-1: rgb(255 255 255 / 4%);
+  --preview-color-fill-2: rgb(255 255 255 / 8%);
+  --preview-color-fill-3: rgb(255 255 255 / 12%);
+  --preview-color-fill-4: rgb(255 255 255 / 16%);
+}

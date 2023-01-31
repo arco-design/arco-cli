@@ -29,6 +29,7 @@ importers:
       '@types/through2': ^2.0.36
       '@typescript-eslint/eslint-plugin': ^5.42.0
       '@typescript-eslint/parser': ^5.42.0
+      babel-plugin-tsconfig-paths-module-resolver: ^1.0.4
       chalk: ^4.1.2
       eslint: ^8.26.0
       eslint-config-airbnb: ^19.0.4
@@ -66,6 +67,7 @@ importers:
       '@babel/preset-typescript': 7.18.6_@babel+core@7.20.5
       '@babel/runtime': 7.20.6
       '@mdx-js/react': 1.6.22_react@17.0.2
+      babel-plugin-tsconfig-paths-module-resolver: 1.0.4
       chalk: 4.1.2
       fs-extra: 10.1.0
       lodash: 4.17.21
@@ -111,512 +113,208 @@ importers:
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^12.1.5
     dependencies:
-      '@arco-cli/arco': link:../../packages/app/arco
+      '@arco-cli/arco': link:../../packages/arco
       '@babel/runtime': 7.20.6
       '@testing-library/dom': 8.19.1
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 12.1.5
 
-  packages/app/arco:
+  packages/arco:
     specifiers:
-      '@arco-cli/aspect-loader': ^0.1.0
-      '@arco-cli/builder': ^0.1.0
-      '@arco-cli/bundler': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/compiler': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/docs': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
-      '@arco-cli/express': ^0.1.0
-      '@arco-cli/graphql': ^0.1.0
-      '@arco-cli/jest': ^0.1.0
+      '@arco-cli/aspect': ^0.1.0
+      '@arco-cli/core': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/less': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/mdx': ^0.1.0
-      '@arco-cli/preview': ^0.1.0
-      '@arco-cli/pubsub': ^0.1.0
       '@arco-cli/react': ^0.1.0
-      '@arco-cli/react-router': ^0.1.0
-      '@arco-cli/sass': ^0.1.0
+      '@arco-cli/service': ^0.1.0
       '@arco-cli/stone': ^0.1.0
-      '@arco-cli/tester': ^0.1.0
-      '@arco-cli/ui': ^0.1.0
-      '@arco-cli/workspace': ^0.1.0
       fs-extra: ^10.1.0
       graphql: ^14.7.0
       react: ^17.0.2
       react-dom: ^17.0.2
       react-router-dom: ^6.5.0
     dependencies:
-      '@arco-cli/aspect-loader': link:../../core/aspect-loader
-      '@arco-cli/builder': link:../../service/builder
-      '@arco-cli/bundler': link:../../aspect/bundler
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/compiler': link:../../service/compiler
-      '@arco-cli/component': link:../../aspect/component
-      '@arco-cli/docs': link:../../aspect/docs
-      '@arco-cli/envs': link:../../aspect/envs
-      '@arco-cli/express': link:../../core/express
-      '@arco-cli/graphql': link:../../core/graphql
-      '@arco-cli/jest': link:../../aspect/jest
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/less': link:../../aspect/less
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/mdx': link:../../aspect/mdx
-      '@arco-cli/preview': link:../../service/preview
-      '@arco-cli/pubsub': link:../../core/pubsub
-      '@arco-cli/react': link:../../env/react
-      '@arco-cli/react-router': link:../../aspect/react-router
-      '@arco-cli/sass': link:../../aspect/sass
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/tester': link:../../service/tester
-      '@arco-cli/ui': link:../../service/ui
-      '@arco-cli/workspace': link:../../aspect/workspace
+      '@arco-cli/aspect': link:../aspect
+      '@arco-cli/core': link:../core
+      '@arco-cli/legacy': link:../legacy
+      '@arco-cli/react': link:../react
+      '@arco-cli/service': link:../service
+      '@arco-cli/stone': link:../stone
       fs-extra: 10.1.0
       graphql: 14.7.0
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-router-dom: 6.5.0_sfoxds7t5ydpegc3knd667wn6m
 
-  packages/aspect/bundler:
+  packages/aspect:
     specifiers:
-      '@arco-cli/builder': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
-      '@arco-cli/graphql': ^0.1.0
+      '@apollo/client': ^3.7.2
+      '@arco-cli/core': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      graphql-tag: ^2.12.6
-      lodash: ^4.17.21
-    dependencies:
-      '@arco-cli/builder': link:../../service/builder
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/component': link:../component
-      '@arco-cli/envs': link:../envs
-      '@arco-cli/graphql': link:../../core/graphql
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/stone': link:../../core/stone
-      graphql-tag: 2.12.6
-      lodash: 4.17.21
-
-  packages/aspect/component:
-    specifiers:
-      '@arco-cli/aspect-loader': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/express': ^0.1.0
-      '@arco-cli/graphql': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/react-router': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/ui': ^0.1.0
-      '@arco-cli/ui-foundation-react': ^0.1.0
-      '@babel/runtime': ^7.20.6
-      fs-extra: ^10.1.0
-      graphql-tag: ^2.12.6
-      lodash: ^4.17.21
-      semver: ^7.3.8
-    dependencies:
-      '@arco-cli/aspect-loader': link:../../core/aspect-loader
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/express': link:../../core/express
-      '@arco-cli/graphql': link:../../core/graphql
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/react-router': link:../react-router
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/ui': link:../../service/ui
-      '@arco-cli/ui-foundation-react': link:../../ui-foundation/react
-      '@babel/runtime': 7.20.6
-      fs-extra: 10.1.0
-      graphql-tag: 2.12.6
-      lodash: 4.17.21
-      semver: 7.3.8
-
-  packages/aspect/docs:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
-      '@arco-cli/graphql': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/preview': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/ui': ^0.1.0
-      '@arco-cli/workspace': ^0.1.0
-      '@babel/runtime': ^7.20.6
-      graphql-tag: ^2.12.6
-    dependencies:
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/component': link:../component
-      '@arco-cli/envs': link:../envs
-      '@arco-cli/graphql': link:../../core/graphql
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/preview': link:../../service/preview
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/ui': link:../../service/ui
-      '@arco-cli/workspace': link:../workspace
-      '@babel/runtime': 7.20.6
-      graphql-tag: 2.12.6
-
-  packages/aspect/envs:
-    specifiers:
-      '@arco-cli/bundler': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/preview': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      lodash: ^4.17.21
-      p-map-series: ^2.1.0
-    dependencies:
-      '@arco-cli/bundler': link:../bundler
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/component': link:../component
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/preview': link:../../service/preview
-      '@arco-cli/stone': link:../../core/stone
-      lodash: 4.17.21
-      p-map-series: 2.1.0
-
-  packages/aspect/jest:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/tester': ^0.1.0
-      fs-extra: ^10.1.0
-    dependencies:
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/tester': link:../../service/tester
-      fs-extra: 10.1.0
-
-  packages/aspect/less:
-    specifiers:
-      '@arco-cli/builder': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/compiler': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      fs-extra: ^10.1.0
-      less: ^4.1.3
-    dependencies:
-      '@arco-cli/builder': link:../../service/builder
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/compiler': link:../../service/compiler
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/stone': link:../../core/stone
-      fs-extra: 10.1.0
-      less: 4.1.3
-
-  packages/aspect/mdx:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/docs': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
+      '@arco-cli/service': ^0.1.0
       '@arco-cli/stone': ^0.1.0
       '@arco-cli/ui-foundation-react': ^0.1.0
+      '@arco-design/web-react': ^2.42.2
+      '@babel/runtime': ^7.20.6
       '@mdx-js/mdx': ^1.6.22
-      fs-extra: ^10.1.0
-      glob: ^8.0.3
-      loader-utils: ^3.2.1
-      remark-admonitions: ^1.2.1
-      remark-frontmatter: ^2.0.0
-      unist-util-remove: ^2.1.0
-      unist-util-visit: ^2.0.3
-      vfile: ^4.2.1
-      yaml: ^1.10.2
-    dependencies:
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/docs': link:../docs
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/ui-foundation-react': link:../../ui-foundation/react
-      '@mdx-js/mdx': 1.6.22
-      fs-extra: 10.1.0
-      glob: 8.0.3
-      loader-utils: 3.2.1
-      remark-admonitions: 1.2.1
-      remark-frontmatter: 2.0.0
-      unist-util-remove: 2.1.0
-      unist-util-visit: 2.0.3
-      vfile: 4.2.1
-      yaml: 1.10.2
-
-  packages/aspect/react-router:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/compiler': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/ui': ^0.1.0
-      '@babel/runtime': ^7.20.6
-    dependencies:
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/compiler': link:../../service/compiler
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/ui': link:../../service/ui
-      '@babel/runtime': 7.20.6
-
-  packages/aspect/sass:
-    specifiers:
-      '@arco-cli/builder': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/compiler': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      fs-extra: ^10.1.0
-      sass: ^1.57.0
-    dependencies:
-      '@arco-cli/builder': link:../../service/builder
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/compiler': link:../../service/compiler
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/stone': link:../../core/stone
-      fs-extra: 10.1.0
-      sass: 1.57.0
-
-  packages/aspect/typescript:
-    specifiers:
-      '@arco-cli/builder': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/compiler': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      fs-extra: ^10.1.0
-      lodash: ^4.17.21
-      typescript: ^4.9.3
-    dependencies:
-      '@arco-cli/builder': link:../../service/builder
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/compiler': link:../../service/compiler
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/stone': link:../../core/stone
-      fs-extra: 10.1.0
-      lodash: 4.17.21
-      typescript: 4.9.3
-
-  packages/aspect/webpack:
-    specifiers:
-      '@arco-cli/bundler': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/pubsub': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/workspace': ^0.1.0
       assert: ^2.0.0
       browserify-zlib: ^0.2.0
       buffer: ^6.0.3
+      chalk: ^4.1.2
+      chokidar: ^3.5.3
       compression-webpack-plugin: ^10.0.0
       constants-browserify: ^1.0.0
       crypto-browserify: ^3.12.0
       domain-browser: ^4.22.0
       enhanced-resolve: ^4.5.0
+      fs-extra: ^10.1.0
+      glob: ^8.0.3
+      graphql-tag: ^2.12.6
       html-webpack-plugin: ^5.5.0
       https-browserify: ^1.0.0
+      less: ^4.1.3
+      loader-utils: ^3.2.1
       lodash: ^4.17.21
       os-browserify: ^0.3.0
       p-map-series: ^2.1.0
+      p-queue: ^6.6.2
       path-browserify: ^1.0.1
       process: ^0.11.10
       punycode: ^2.1.1
       querystring-es3: ^0.2.1
       react-dev-utils: ^12.0.1
+      remark-admonitions: ^1.2.1
+      remark-frontmatter: ^2.0.0
+      reset-css: ^5.0.1
+      sass: ^1.57.0
+      semver: ^7.3.8
       stream-browserify: ^3.0.0
       stream-http: ^3.2.0
       string_decoder: ^1.3.0
       timers-browserify: ^2.0.12
       tty-browserify: ^0.0.1
+      typescript: ^4.9.3
+      unist-util-remove: ^2.1.0
+      unist-util-visit: ^2.0.3
       url: ^0.11.0
       util: ^0.12.5
+      vfile: ^4.2.1
       vm-browserify: ^1.1.2
       webpack: ^5.75.0
       webpack-assets-manifest: ^5.1.0
       webpack-dev-server: ^4.11.1
       webpack-merge: ^5.8.0
+      yaml: ^1.10.2
     dependencies:
-      '@arco-cli/bundler': link:../bundler
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/pubsub': link:../../core/pubsub
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/workspace': link:../workspace
+      '@apollo/client': 3.7.2
+      '@arco-cli/core': link:../core
+      '@arco-cli/legacy': link:../legacy
+      '@arco-cli/service': link:../service
+      '@arco-cli/stone': link:../stone
+      '@arco-cli/ui-foundation-react': link:../ui-foundation-react
+      '@arco-design/web-react': 2.42.2
+      '@babel/runtime': 7.20.6
+      '@mdx-js/mdx': 1.6.22
       assert: 2.0.0
       browserify-zlib: 0.2.0
       buffer: 6.0.3
+      chalk: 4.1.2
+      chokidar: 3.5.3
       compression-webpack-plugin: 10.0.0_webpack@5.75.0
       constants-browserify: 1.0.0
       crypto-browserify: 3.12.0
       domain-browser: 4.22.0
       enhanced-resolve: 4.5.0
+      fs-extra: 10.1.0
+      glob: 8.0.3
+      graphql-tag: 2.12.6
       html-webpack-plugin: 5.5.0_webpack@5.75.0
       https-browserify: 1.0.0
+      less: 4.1.3
+      loader-utils: 3.2.1
       lodash: 4.17.21
       os-browserify: 0.3.0
       p-map-series: 2.1.0
+      p-queue: 6.6.2
       path-browserify: 1.0.1
       process: 0.11.10
       punycode: 2.1.1
       querystring-es3: 0.2.1
-      react-dev-utils: 12.0.1_webpack@5.75.0
+      react-dev-utils: 12.0.1_vfotqvx6lgcbf3upbs6hgaza4q
+      remark-admonitions: 1.2.1
+      remark-frontmatter: 2.0.0
+      reset-css: 5.0.1
+      sass: 1.57.0
+      semver: 7.3.8
       stream-browserify: 3.0.0
       stream-http: 3.2.0
       string_decoder: 1.3.0
       timers-browserify: 2.0.12
       tty-browserify: 0.0.1
+      typescript: 4.9.3
+      unist-util-remove: 2.1.0
+      unist-util-visit: 2.0.3
       url: 0.11.0
       util: 0.12.5
+      vfile: 4.2.1
       vm-browserify: 1.1.2
       webpack: 5.75.0
       webpack-assets-manifest: 5.1.0_webpack@5.75.0
       webpack-dev-server: 4.11.1_webpack@5.75.0
       webpack-merge: 5.8.0
+      yaml: 1.10.2
 
-  packages/aspect/workspace:
+  packages/core:
     specifiers:
-      '@apollo/client': ^3.7.2
-      '@arco-cli/aspect-loader': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/docs': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
-      '@arco-cli/graphql': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/pubsub': ^0.1.0
-      '@arco-cli/react-router': ^0.1.0
+      '@arco-cli/service': ^0.1.0
       '@arco-cli/stone': ^0.1.0
-      '@arco-cli/ui': ^0.1.0
-      '@arco-cli/ui-foundation-react': ^0.1.0
-      '@arco-design/web-react': ^2.42.2
       '@babel/runtime': ^7.20.6
+      '@graphql-modules/core': ^0.7.17
+      '@types/yargs': ^17.0.13
+      body-parser: ^1.20.1
       chalk: ^4.1.2
-      chokidar: ^3.5.3
-      fs-extra: ^10.1.0
-      graphql-tag: ^2.12.6
-      lodash: ^4.17.21
-      p-map-series: ^2.1.0
-      p-queue: ^6.6.2
-      reset-css: ^5.0.1
-    dependencies:
-      '@apollo/client': 3.7.2
-      '@arco-cli/aspect-loader': link:../../core/aspect-loader
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/component': link:../component
-      '@arco-cli/docs': link:../docs
-      '@arco-cli/envs': link:../envs
-      '@arco-cli/graphql': link:../../core/graphql
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/pubsub': link:../../core/pubsub
-      '@arco-cli/react-router': link:../react-router
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/ui': link:../../service/ui
-      '@arco-cli/ui-foundation-react': link:../../ui-foundation/react
-      '@arco-design/web-react': 2.42.2
-      '@babel/runtime': 7.20.6
-      chalk: 4.1.2
-      chokidar: 3.5.3
-      fs-extra: 10.1.0
-      graphql-tag: 2.12.6
-      lodash: 4.17.21
-      p-map-series: 2.1.0
-      p-queue: 6.6.2
-      reset-css: 5.0.1
-
-  packages/core/aspect-loader:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
+      cors: ^2.8.5
+      didyoumean: ^1.2.2
+      eventemitter2: ^6.4.9
+      express: ^4.18.2
+      express-graphql: ^0.12.0
       fs-extra: ^10.1.0
       glob: ^8.0.3
-    dependencies:
-      '@arco-cli/cli': link:../cli
-      '@arco-cli/stone': link:../stone
-      fs-extra: 10.1.0
-      glob: 8.0.3
-
-  packages/core/cli:
-    specifiers:
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@types/yargs': ^17.0.13
-      chalk: ^4.1.2
-      didyoumean: ^1.2.2
+      graphql-subscriptions: ^1.2.1
       ink: ^3.2.0
       lodash: ^4.17.21
+      node-fetch: ^3.3.0
       pad-right: ^0.2.2
+      penpal: ^6.2.2
+      pretty-time: ^1.1.0
       yargs: ^17.6.2
     dependencies:
       '@arco-cli/legacy': link:../legacy
-      '@arco-cli/logger': link:../logger
+      '@arco-cli/service': link:../service
       '@arco-cli/stone': link:../stone
+      '@babel/runtime': 7.20.6
+      '@graphql-modules/core': 0.7.17
+      body-parser: 1.20.1
       chalk: 4.1.2
+      cors: 2.8.5
       didyoumean: 1.2.2
+      eventemitter2: 6.4.9
+      express: 4.18.2
+      express-graphql: 0.12.0
+      fs-extra: 10.1.0
+      glob: 8.0.3
+      graphql-subscriptions: 1.2.1
       ink: 3.2.0
       lodash: 4.17.21
+      node-fetch: 3.3.0
       pad-right: 0.2.2
+      penpal: 6.2.2
+      pretty-time: 1.1.0
       yargs: 17.6.2
     devDependencies:
       '@types/yargs': 17.0.13
 
-  packages/core/express:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      body-parser: ^1.20.1
-      express: ^4.18.2
-      lodash: ^4.17.21
-    dependencies:
-      '@arco-cli/cli': link:../cli
-      '@arco-cli/legacy': link:../legacy
-      '@arco-cli/logger': link:../logger
-      '@arco-cli/stone': link:../stone
-      body-parser: 1.20.1
-      express: 4.18.2
-      lodash: 4.17.21
-
-  packages/core/graphql:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@graphql-modules/core': ^0.7.17
-      cors: ^2.8.5
-      express: ^4.18.2
-      express-graphql: ^0.12.0
-      graphql-subscriptions: ^1.2.1
-      lodash: ^4.17.21
-      node-fetch: ^3.3.0
-    dependencies:
-      '@arco-cli/cli': link:../cli
-      '@arco-cli/legacy': link:../legacy
-      '@arco-cli/logger': link:../logger
-      '@arco-cli/stone': link:../stone
-      '@graphql-modules/core': 0.7.17
-      cors: 2.8.5
-      express: 4.18.2
-      express-graphql: 0.12.0
-      graphql-subscriptions: 1.2.1
-      lodash: 4.17.21
-      node-fetch: 3.3.0
-
-  packages/core/legacy:
+  packages/legacy:
     specifiers:
       '@types/prompt': ^1.1.4
       axios: ^1.2.2
@@ -681,70 +379,14 @@ importers:
     devDependencies:
       '@types/prompt': 1.1.4
 
-  packages/core/logger:
+  packages/react:
     specifiers:
-      '@arco-cli/cli': ^0.1.0
+      '@arco-cli/aspect': ^0.1.0
+      '@arco-cli/core': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
+      '@arco-cli/service': ^0.1.0
       '@arco-cli/stone': ^0.1.0
-      chalk: ^4.1.2
-      pretty-time: ^1.1.0
-    dependencies:
-      '@arco-cli/cli': link:../cli
-      '@arco-cli/legacy': link:../legacy
-      '@arco-cli/stone': link:../stone
-      chalk: 4.1.2
-      pretty-time: 1.1.0
-
-  packages/core/pubsub:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/preview': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/ui': ^0.1.0
-      '@babel/runtime': ^7.20.6
-      eventemitter2: ^6.4.9
-      penpal: ^6.2.2
-    dependencies:
-      '@arco-cli/cli': link:../cli
-      '@arco-cli/preview': link:../../service/preview
-      '@arco-cli/stone': link:../stone
-      '@arco-cli/ui': link:../../service/ui
-      '@babel/runtime': 7.20.6
-      eventemitter2: 6.4.9
-      penpal: 6.2.2
-
-  packages/core/stone:
-    specifiers:
-      cleargraph: ^5.8.0
-      comment-json: ^4.2.3
-      fs-extra: ^10.1.0
-    dependencies:
-      cleargraph: 5.8.0
-      comment-json: 4.2.3
-      fs-extra: 10.1.0
-
-  packages/env/react:
-    specifiers:
-      '@arco-cli/builder': ^0.1.0
-      '@arco-cli/bundler': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/compiler': ^0.1.0
-      '@arco-cli/docs': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
-      '@arco-cli/jest': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/less': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/mdx': ^0.1.0
-      '@arco-cli/multi-compiler': ^0.1.0
-      '@arco-cli/preview': ^0.1.0
-      '@arco-cli/sass': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/tester': ^0.1.0
-      '@arco-cli/typescript': ^0.1.0
       '@arco-cli/ui-foundation-react': ^0.1.0
-      '@arco-cli/webpack': ^0.1.0
-      '@arco-cli/workspace': ^0.1.0
       '@babel/core': ^7.20.5
       '@babel/plugin-proposal-class-properties': ^7.18.6
       '@babel/plugin-proposal-decorators': ^7.20.5
@@ -794,26 +436,12 @@ importers:
       typescript: ^4.9.3
       webpack: ^5.75.0
     dependencies:
-      '@arco-cli/builder': link:../../service/builder
-      '@arco-cli/bundler': link:../../aspect/bundler
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/compiler': link:../../service/compiler
-      '@arco-cli/docs': link:../../aspect/docs
-      '@arco-cli/envs': link:../../aspect/envs
-      '@arco-cli/jest': link:../../aspect/jest
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/less': link:../../aspect/less
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/mdx': link:../../aspect/mdx
-      '@arco-cli/multi-compiler': link:../../service/multi-compiler
-      '@arco-cli/preview': link:../../service/preview
-      '@arco-cli/sass': link:../../aspect/sass
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/tester': link:../../service/tester
-      '@arco-cli/typescript': link:../../aspect/typescript
-      '@arco-cli/ui-foundation-react': link:../../ui-foundation/react
-      '@arco-cli/webpack': link:../../aspect/webpack
-      '@arco-cli/workspace': link:../../aspect/workspace
+      '@arco-cli/aspect': link:../aspect
+      '@arco-cli/core': link:../core
+      '@arco-cli/legacy': link:../legacy
+      '@arco-cli/service': link:../service
+      '@arco-cli/stone': link:../stone
+      '@arco-cli/ui-foundation-react': link:../ui-foundation-react
       '@babel/core': 7.20.5
       '@babel/plugin-proposal-class-properties': 7.18.6_@babel+core@7.20.5
       '@babel/plugin-proposal-decorators': 7.20.5_@babel+core@7.20.5
@@ -863,169 +491,20 @@ importers:
       typescript: 4.9.3
       webpack: 5.75.0
 
-  packages/service/builder:
+  packages/service:
     specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
+      '@arco-cli/aspect': ^0.1.0
+      '@arco-cli/core': ^0.1.0
       '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/tester': ^0.1.0
-      '@arco-cli/workspace': ^0.1.0
-      chalk: ^4.1.2
-      cleargraph: ^5.8.0
-      ink: ^3.2.0
-      lodash: ^4.17.21
-      p-map-series: ^2.1.0
-      pretty-time: ^1.1.0
-    dependencies:
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/component': link:../../aspect/component
-      '@arco-cli/envs': link:../../aspect/envs
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/tester': link:../tester
-      '@arco-cli/workspace': link:../../aspect/workspace
-      chalk: 4.1.2
-      cleargraph: 5.8.0
-      ink: 3.2.0
-      lodash: 4.17.21
-      p-map-series: 2.1.0
-      pretty-time: 1.1.0
-
-  packages/service/compiler:
-    specifiers:
-      '@arco-cli/builder': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/pubsub': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/workspace': ^0.1.0
-      chalk: ^4.1.2
-      fs-extra: ^10.1.0
-      p-map-series: ^2.1.0
-      pretty-time: ^1.1.0
-    dependencies:
-      '@arco-cli/builder': link:../builder
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/component': link:../../aspect/component
-      '@arco-cli/envs': link:../../aspect/envs
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/pubsub': link:../../core/pubsub
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/workspace': link:../../aspect/workspace
-      chalk: 4.1.2
-      fs-extra: 10.1.0
-      p-map-series: 2.1.0
-      pretty-time: 1.1.0
-
-  packages/service/multi-compiler:
-    specifiers:
-      '@arco-cli/builder': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/compiler': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      chalk: ^4.1.2
-      p-map-series: ^2.1.0
-    dependencies:
-      '@arco-cli/builder': link:../builder
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/compiler': link:../compiler
-      '@arco-cli/component': link:../../aspect/component
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/stone': link:../../core/stone
-      chalk: 4.1.2
-      p-map-series: 2.1.0
-
-  packages/service/preview:
-    specifiers:
-      '@arco-cli/aspect-loader': ^0.1.0
-      '@arco-cli/builder': ^0.1.0
-      '@arco-cli/bundler': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/compiler': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/pubsub': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/ui': ^0.1.0
-      '@arco-cli/webpack': ^0.1.0
-      '@arco-cli/workspace': ^0.1.0
-      '@babel/runtime': ^7.20.6
-      fs-extra: ^10.1.0
-      ink: ^3.2.0
-      lodash: ^4.17.21
-      penpal: ^6.2.2
-    dependencies:
-      '@arco-cli/aspect-loader': link:../../core/aspect-loader
-      '@arco-cli/builder': link:../builder
-      '@arco-cli/bundler': link:../../aspect/bundler
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/compiler': link:../compiler
-      '@arco-cli/component': link:../../aspect/component
-      '@arco-cli/envs': link:../../aspect/envs
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/pubsub': link:../../core/pubsub
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/ui': link:../ui
-      '@arco-cli/webpack': link:../../aspect/webpack
-      '@arco-cli/workspace': link:../../aspect/workspace
-      '@babel/runtime': 7.20.6
-      fs-extra: 10.1.0
-      ink: 3.2.0
-      lodash: 4.17.21
-      penpal: 6.2.2
-
-  packages/service/tester:
-    specifiers:
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/envs': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/stone': ^0.1.0
-      '@arco-cli/workspace': ^0.1.0
-      chalk: ^4.1.2
-      ink: ^3.2.0
-    dependencies:
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/component': link:../../aspect/component
-      '@arco-cli/envs': link:../../aspect/envs
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/workspace': link:../../aspect/workspace
-      chalk: 4.1.2
-      ink: 3.2.0
-
-  packages/service/ui:
-    specifiers:
-      '@arco-cli/aspect-loader': ^0.1.0
-      '@arco-cli/cli': ^0.1.0
-      '@arco-cli/express': ^0.1.0
-      '@arco-cli/graphql': ^0.1.0
-      '@arco-cli/legacy': ^0.1.0
-      '@arco-cli/logger': ^0.1.0
-      '@arco-cli/react-router': ^0.1.0
       '@arco-cli/stone': ^0.1.0
       '@arco-cli/ui-foundation-react': ^0.1.0
-      '@arco-cli/webpack': ^0.1.0
       '@babel/runtime': ^7.20.6
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.10
       '@svgr/webpack': ^6.5.1
       babel-loader: ^9.1.0
       babel-preset-react-app: ^10.0.1
+      chalk: ^4.1.2
+      cleargraph: ^5.8.0
       css-loader: ^6.7.2
       express: ^4.18.2
       fs-extra: ^10.1.0
@@ -1036,6 +515,8 @@ importers:
       less-loader: ^11.1.0
       lodash: ^4.17.21
       p-map-series: ^2.1.0
+      penpal: ^6.2.2
+      pretty-time: ^1.1.0
       react-dev-utils: ^12.0.1
       react-refresh: ^0.14.0
       sass-loader: ^13.2.0
@@ -1044,21 +525,18 @@ importers:
       webpack: ^5.75.0
       webpack-dev-server: ^4.11.1
     dependencies:
-      '@arco-cli/aspect-loader': link:../../core/aspect-loader
-      '@arco-cli/cli': link:../../core/cli
-      '@arco-cli/express': link:../../core/express
-      '@arco-cli/graphql': link:../../core/graphql
-      '@arco-cli/legacy': link:../../core/legacy
-      '@arco-cli/logger': link:../../core/logger
-      '@arco-cli/react-router': link:../../aspect/react-router
-      '@arco-cli/stone': link:../../core/stone
-      '@arco-cli/ui-foundation-react': link:../../ui-foundation/react
-      '@arco-cli/webpack': link:../../aspect/webpack
+      '@arco-cli/aspect': link:../aspect
+      '@arco-cli/core': link:../core
+      '@arco-cli/legacy': link:../legacy
+      '@arco-cli/stone': link:../stone
+      '@arco-cli/ui-foundation-react': link:../ui-foundation-react
       '@babel/runtime': 7.20.6
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.10_e764yt37rymiplqgpb7fiwcihu
       '@svgr/webpack': 6.5.1
       babel-loader: 9.1.0_webpack@5.75.0
       babel-preset-react-app: 10.0.1
+      chalk: 4.1.2
+      cleargraph: 5.8.0
       css-loader: 6.7.2_webpack@5.75.0
       express: 4.18.2
       fs-extra: 10.1.0
@@ -1069,6 +547,8 @@ importers:
       less-loader: 11.1.0_webpack@5.75.0
       lodash: 4.17.21
       p-map-series: 2.1.0
+      penpal: 6.2.2
+      pretty-time: 1.1.0
       react-dev-utils: 12.0.1_webpack@5.75.0
       react-refresh: 0.14.0
       sass-loader: 13.2.0_webpack@5.75.0
@@ -1077,11 +557,20 @@ importers:
       webpack: 5.75.0
       webpack-dev-server: 4.11.1_webpack@5.75.0
 
-  packages/ui-foundation/react:
+  packages/stone:
+    specifiers:
+      cleargraph: ^5.8.0
+      comment-json: ^4.2.3
+      fs-extra: ^10.1.0
+    dependencies:
+      cleargraph: 5.8.0
+      comment-json: 4.2.3
+      fs-extra: 10.1.0
+
+  packages/ui-foundation-react:
     specifiers:
       '@apollo/client': ^3.7.2
-      '@arco-cli/component': ^0.1.0
-      '@arco-cli/react-router': ^0.1.0
+      '@arco-cli/aspect': ^0.1.0
       '@arco-design/web-react': ^2.42.2
       '@babel/runtime': ^7.20.6
       '@mdx-js/react': ^1.6.22
@@ -1093,8 +582,7 @@ importers:
       uuid: ^9.0.0
     dependencies:
       '@apollo/client': 3.7.2
-      '@arco-cli/component': link:../../aspect/component
-      '@arco-cli/react-router': link:../../aspect/react-router
+      '@arco-cli/aspect': link:../aspect
       '@arco-design/web-react': 2.42.2
       '@babel/runtime': 7.20.6
       '@mdx-js/react': 1.6.22
@@ -1152,13 +640,13 @@ packages:
     dev: false
 
   /@arco-design/color/0.4.0:
-    resolution: {integrity: sha512-s7p9MSwJgHeL8DwcATaXvWT3m2SigKpxx4JA1BGPHL4gfvaQsmQfrLBDpjOJFJuJ2jG2dMt3R3P8Pm9E65q18g==}
+    resolution: {integrity: sha1-b7RqMzpqHF5MVjL3WPGAeZAYKAw=}
     dependencies:
       color: 3.2.1
     dev: false
 
   /@arco-design/web-react/2.42.2:
-    resolution: {integrity: sha512-7oygHLUYCZSefWgevnXvZV1qoziWGEyc8PIPDaxLsjsb6g68gaLllQ/hZOx4rPzVEeULEKD5JsnFEk5eXItbhw==}
+    resolution: {integrity: sha512-3QdtZoDCA5VJcDJbiijYAXwzZQz3YDGlh4EbWA5yJBFlRjX1JNLGBIGLUTxDE1LioLHv89XA6RS9I5JRc5DDnA==}
     peerDependencies:
       react: '>=16'
       react-dom: '>=16'
@@ -4796,7 +4284,6 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
-    dev: true
 
   /@types/lodash/4.14.191:
     resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
@@ -5834,6 +5321,17 @@ packages:
       resolve: 1.22.1
     dev: false
 
+  /babel-plugin-module-resolver/4.1.0:
+    resolution: {integrity: sha512-MlX10UDheRr3lb3P0WcaIdtCSRlxdQsB1sBqL7W0raF070bGl1HQQq5K3T2vf2XAYie+ww+5AKC/WrkjRO2knA==}
+    engines: {node: '>= 8.0.0'}
+    dependencies:
+      find-babel-config: 1.2.0
+      glob: 7.2.3
+      pkg-up: 3.1.0
+      reselect: 4.1.7
+      resolve: 1.22.1
+    dev: false
+
   /babel-plugin-polyfill-corejs2/0.3.3_@babel+core@7.20.5:
     resolution: {integrity: sha512-8hOdmFYFSZhqg2C/JgLUQ+t52o5nirNwaWM2B9LWteozwIvM14VSwdsCAUET10qT+kmySAlseadmfeeSWFCy+Q==}
     peerDependencies:
@@ -5878,6 +5376,13 @@ packages:
     resolution: {integrity: sha512-mWEvCQTgXQf48yDqgN7CH50waTyYBeP2Lpqx4nNWab9sxEpdXVeKgfj1qYI2/TgUPQtNFZ85i3PemRtnXVYYJg==}
     dependencies:
       '@babel/helper-plugin-utils': 7.20.2
+    dev: false
+
+  /babel-plugin-tsconfig-paths-module-resolver/1.0.4:
+    resolution: {integrity: sha512-XnIYjL6J2l8mt3oO+mXGkuLRCBhhNlS+LlCqmjTZfXpQCJod8dLETKrJA2wPRbQi8YAKqjfFxc7PhklTGcJ9hQ==}
+    dependencies:
+      babel-plugin-module-resolver: 4.1.0
+      tsconfig-paths: 3.14.1
     dev: false
 
   /babel-preset-current-node-syntax/1.0.1_@babel+core@7.20.5:
@@ -7002,7 +6507,7 @@ packages:
         optional: true
     dependencies:
       cssnano: 5.1.14_postcss@8.4.20
-      jest-worker: 29.2.1
+      jest-worker: 29.3.1
       postcss: 8.4.20
       schema-utils: 4.0.0
       serialize-javascript: 6.0.0
@@ -8332,6 +7837,14 @@ packages:
       unpipe: 1.0.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /find-babel-config/1.2.0:
+    resolution: {integrity: sha512-jB2CHJeqy6a820ssiqwrKMeyC6nNdmrcgkKWJWmpoxpE8RKciYJXCcXRq1h2AzCo5I5BJeN2tkGEO3hLTuePRA==}
+    engines: {node: '>=4.0.0'}
+    dependencies:
+      json5: 0.5.1
+      path-exists: 3.0.0
     dev: false
 
   /find-cache-dir/3.3.2:
@@ -10363,16 +9876,6 @@ packages:
       supports-color: 8.1.1
     dev: false
 
-  /jest-worker/29.2.1:
-    resolution: {integrity: sha512-ROHTZ+oj7sBrgtv46zZ84uWky71AoYi0vEV9CdEtc1FQunsoAGe5HbQmW76nI5QWdvECVPrSi1MCVUmizSavMg==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@types/node': 15.14.9
-      jest-util: 29.3.1
-      merge-stream: 2.0.0
-      supports-color: 8.1.1
-    dev: false
-
   /jest-worker/29.3.1:
     resolution: {integrity: sha512-lY4AnnmsEWeiXirAIA0c9SDPbuCBq8IYuDVL8PMm0MZ2PEs2yPvRA/J64QBXuZp7CYKrDM/rmNrc9/i3KJQncw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -10523,12 +10026,16 @@ packages:
     resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
     dev: true
 
+  /json5/0.5.1:
+    resolution: {integrity: sha512-4xrs1aW+6N5DalkqSVA8fxh458CXvR99WU8WLKmq4v8eWAL86Xo3BVqyd3SkA9wEVjCMqyvvRRkshAdOnBp5rw==}
+    hasBin: true
+    dev: false
+
   /json5/1.0.1:
     resolution: {integrity: sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==}
     hasBin: true
     dependencies:
       minimist: 1.2.7
-    dev: true
 
   /json5/2.2.1:
     resolution: {integrity: sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==}
@@ -13723,6 +13230,10 @@ packages:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
     dev: false
 
+  /reselect/4.1.7:
+    resolution: {integrity: sha512-Zu1xbUt3/OPwsXL46hvOOoQrap2azE7ZQbokq61BQfiXvhewsKDwhMeZjTX9sX0nvw1t/U5Audyn1I9P/m9z0A==}
+    dev: false
+
   /reset-css/5.0.1:
     resolution: {integrity: sha512-VyuJdNFfp5x/W6e5wauJM59C02Vs0P22sxzZGhQMPaqu/NGTeFxlBFOOw3eq9vQd19gIDdZp7zi89ylyKOJ33Q==}
     dev: false
@@ -14473,7 +13984,6 @@ packages:
   /strip-bom/3.0.0:
     resolution: {integrity: sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==}
     engines: {node: '>=4'}
-    dev: true
 
   /strip-bom/4.0.0:
     resolution: {integrity: sha512-3xurFv5tEgii33Zi8Jtp55wEIILR9eh34FAW00PZf+JnSsTmV/ioewSgQl97JHvgjoRGwPShsWm+IdrxB35d0w==}
@@ -14981,7 +14491,6 @@ packages:
       json5: 1.0.1
       minimist: 1.2.7
       strip-bom: 3.0.0
-    dev: true
 
   /tslib/1.11.1:
     resolution: {integrity: sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==}

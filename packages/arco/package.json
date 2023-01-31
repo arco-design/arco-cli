@@ -1,0 +1,35 @@
+{
+  "name": "@arco-cli/arco",
+  "version": "0.1.0",
+  "description": "Main entry for arco cli",
+  "main": "./dist/index.js",
+  "bin": {
+    "arco": "bin/arco"
+  },
+  "scripts": {
+    "dev": "sh ../../scripts/build.sh dev",
+    "build": "sh ../../scripts/build.sh",
+    "build-type": "sh ../../scripts/build-type.sh",
+    "clean": "rm -rf dist",
+    "clean-type": "find dist -name *.d.ts |xargs rm -rf",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@arco-cli/aspect": "^0.1.0",
+    "@arco-cli/core": "^0.1.0",
+    "@arco-cli/legacy": "^0.1.0",
+    "@arco-cli/react": "^0.1.0",
+    "@arco-cli/service": "^0.1.0",
+    "@arco-cli/stone": "^0.1.0",
+    "fs-extra": "^10.1.0",
+    "graphql": "^14.7.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.5.0"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "license": "MIT"
+}
