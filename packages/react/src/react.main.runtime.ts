@@ -83,10 +83,7 @@ export class ReactMain {
     envs.registerEnv(reactEnv);
 
     const transformer: TsConfigTransformer = (config) => {
-      config
-        .mergeTsConfig(tsconfig)
-        .setArtifactName('declaration')
-        .setShouldCopyNonSupportedFiles(false);
+      config.mergeTsConfig(tsconfig).setArtifactName('declaration');
       return config;
     };
 

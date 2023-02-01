@@ -109,7 +109,7 @@ ${this.compileErrors.map(formatError).join('\n')}`);
               })
           )
         );
-      } else if (this.compilerInstance.shouldCopyNonSupportedFiles) {
+      } else {
         // compiler doesn't support this file type. copy the file as is to the dist dir.
         this.dists.push(
           new Dist({ base, path: join(base, file.relative), contents: file.contents })
@@ -188,14 +188,24 @@ export class WorkspaceCompiler {
     noThrow?: boolean
   ): Promise<BuildResult[]> {
     if (!this.workspace) throw new WorkspaceNotFoundError();
+
+    const componentCompilers: ComponentCompiler[] = [];
     const components: Component[] = componentNames.length
       ? await this.workspace.getMany(componentNames)
       : options?.changed
       ? await this.workspace.getNewAndModified()
       : await this.workspace.list();
-    const componentCompilers: ComponentCompiler[] = [];
 
-    components.forEach((component) => {
+    // we reduce the list size of components need to compile according to componentDir
+    // no need to repeat the compile process multiple times if the components have the same root directory
+    const uniqueComponents: Component[] = [];
+    for (const component of components) {
+      if (!uniqueComponents.find((com) => com.componentDir === component.componentDir)) {
+        uniqueComponents.push(component);
+      }
+    }
+
+    uniqueComponents.forEach((component) => {
       const environment = this.envs.getEnv(component).env;
       const compilerInstance = environment.getCompiler?.();
       if (compilerInstance) {

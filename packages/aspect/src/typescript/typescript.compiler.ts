@@ -30,8 +30,6 @@ export class TypescriptCompiler implements Compiler {
 
   distDir: string;
 
-  shouldCopyNonSupportedFiles: boolean;
-
   artifactName: string;
 
   private componentTsConfigMap: Record<string, string> = {};
@@ -43,10 +41,6 @@ export class TypescriptCompiler implements Compiler {
     private logger: Logger
   ) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
-    this.shouldCopyNonSupportedFiles =
-      typeof options.shouldCopyNonSupportedFiles === 'boolean'
-        ? options.shouldCopyNonSupportedFiles
-        : true;
     this.artifactName = options.artifactName || DEFAULT_DIST_DIRNAME;
     this.options.tsconfig ||= {};
     this.options.tsconfig.compilerOptions ||= {};

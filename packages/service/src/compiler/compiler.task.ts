@@ -47,7 +47,7 @@ export class CompilerTask implements BuildTask {
       }
     }
 
-    // we reduce the list size of components that need to be built according to componentDir
+    // we reduce the list size of components that need to build according to componentDir
     // no need to repeat the build process multiple times if the components have the same root directory
     // but do NOT change buildContext directly
     const buildResults = await this.compilerInstance.build({

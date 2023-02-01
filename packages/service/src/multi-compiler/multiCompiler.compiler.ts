@@ -21,11 +21,6 @@ export class MultiCompiler implements Compiler {
 
   distDir: string;
 
-  shouldCopyNonSupportedFiles =
-    typeof this.compilerOptions.shouldCopyNonSupportedFiles === 'boolean'
-      ? this.compilerOptions.shouldCopyNonSupportedFiles
-      : true;
-
   constructor(
     readonly id: string,
     readonly compilers: Compiler[],

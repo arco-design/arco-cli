@@ -56,11 +56,6 @@ export interface CompilerOptions {
   shouldCopySourceFiles?: boolean;
 
   /**
-   * whether unsupported files (such as assets) should be copied into the dist directory
-   */
-  shouldCopyNonSupportedFiles?: boolean;
-
-  /**
    * optional. default to "dist".
    * useful when the build pipeline has multiple compiler tasks of the same compiler.
    * e.g. using the same Babel compiler for two different tasks, one for creating "es5" files, and

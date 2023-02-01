@@ -15,8 +15,6 @@ export class SassCompiler implements Compiler {
 
   distDir: string;
 
-  shouldCopyNonSupportedFiles = false;
-
   constructor(readonly id: string, options: Partial<CompilerOptions>) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
   }
