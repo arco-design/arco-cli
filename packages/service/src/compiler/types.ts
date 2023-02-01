@@ -3,8 +3,10 @@ import type { Component } from '@arco-cli/aspect/dist/component';
 import { BuildContext, BuildTaskResult, TaskResultsList } from '@service/builder';
 
 export type TranspileFileParams = {
-  componentDir: string; // absolute path of the component's root directory
-  filePath: string; // relative path of the file inside the component directory
+  // absolute path of the component's root directory
+  componentDir: string;
+  // relative path of the file inside the component directory
+  filePath: string;
 };
 
 export type CompileError = { path: string; error: Error };
@@ -47,6 +49,11 @@ export interface CompilerOptions {
    * see https://github.com/mrmlnc/fast-glob for the supported glob patters syntax.
    */
   distGlobPatterns?: string[];
+
+  /**
+   * whether source files (such as .less/.scss) should be copied into the dist directory
+   */
+  shouldCopySourceFiles?: boolean;
 
   /**
    * whether unsupported files (such as assets) should be copied into the dist directory

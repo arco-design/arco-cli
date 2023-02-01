@@ -74,15 +74,6 @@ export class TypescriptCompiler implements Compiler {
     return context.workspace.getCacheDir(TypescriptAspect.id);
   }
 
-  private async clearDistDir(context: BuildContext) {
-    return Promise.all(
-      context.components.map(async (component) => {
-        const distDirAbs = path.resolve(component.packageDirAbs, this.distDir);
-        return fs.remove(distDirAbs);
-      })
-    );
-  }
-
   private async writeComponentTsConfig(context: BuildContext) {
     const workspacePath = context.workspace.path;
     await Promise.all(
@@ -297,7 +288,6 @@ export class TypescriptCompiler implements Compiler {
   }
 
   async preBuild(context: BuildContext) {
-    await this.clearDistDir(context);
     await this.writeComponentTsConfig(context);
   }
 

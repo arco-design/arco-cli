@@ -22,6 +22,23 @@ export class CompilerTask implements BuildTask {
     private compilerInstance: Compiler
   ) {}
 
+  private async clearDistDir(component: Component, compiler: Compiler) {
+    const distDirAbs = path.resolve(component.packageDirAbs, compiler.distDir);
+    return fs.remove(distDirAbs);
+  }
+
+  private async copyNonSupportedFiles(component: Component, compiler: Compiler) {
+    await Promise.all(
+      component.files.map(async (file) => {
+        if (compiler.isFileSupported(file.path)) return;
+        const content = file.contents;
+        const filePath = path.join(component.packageDirAbs, compiler.distDir, file.relative);
+        await fs.ensureFileSync(filePath);
+        await fs.outputFile(filePath, content);
+      })
+    );
+  }
+
   async execute(context: BuildContext): Promise<BuildTaskResult> {
     const uniqueComponents: Component[] = [];
     for (const component of context.components) {
@@ -30,7 +47,7 @@ export class CompilerTask implements BuildTask {
       }
     }
 
-    // we condense the list of components that need to be built according to componentDir
+    // we reduce the list size of components that need to be built according to componentDir
     // no need to repeat the build process multiple times if the components have the same root directory
     // but do NOT change buildContext directly
     const buildResults = await this.compilerInstance.build({
@@ -43,27 +60,16 @@ export class CompilerTask implements BuildTask {
 
   async preBuild(context: BuildContext) {
     await Promise.all(
-      context.components.map((component) =>
-        this.copyNonSupportedFiles(component, this.compilerInstance)
-      )
+      context.components.map(async (component) => {
+        // should clear dist dir at first, then do other operations
+        await this.clearDistDir(component, this.compilerInstance);
+        await this.copyNonSupportedFiles(component, this.compilerInstance);
+      })
     );
     await this.compilerInstance.preBuild?.(context);
   }
 
   async postBuild?(context: BuildContext, tasksResults: TaskResultsList): Promise<void> {
     await this.compilerInstance.postBuild?.(context, tasksResults);
-  }
-
-  async copyNonSupportedFiles(component: Component, compiler: Compiler) {
-    await Promise.all(
-      component.files.map(async (file) => {
-        if (compiler.isFileSupported(file.path)) return;
-        const content = file.contents;
-        await fs.outputFile(
-          path.join(component.packageDirAbs, compiler.distDir, file.relative),
-          content
-        );
-      })
-    );
   }
 }

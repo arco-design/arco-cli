@@ -9,6 +9,7 @@
   "dependencies": {
     "@babel/runtime": "^7.20.6",
     "@arco-cli/arco": "^0.1.0",
+    "@arco-design/web-react": "~2",
     "@testing-library/dom": "^8.19.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5"

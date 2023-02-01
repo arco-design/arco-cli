@@ -11,24 +11,18 @@ type ComponentIndex = {
 export function mergeComponentResults(resultMatrix: ComponentResult[][]) {
   if (!resultMatrix.length) return [];
 
-  const srcResults = resultMatrix[0];
-  const index = srcResults.reduce<ComponentIndex>((acc, result) => {
-    acc[result.component.toString()] = result;
-    return acc;
-  }, {});
+  const index: ComponentIndex = {};
 
   resultMatrix.forEach((results) => {
     results.forEach((result) => {
-      const id = result.component.id.toString();
-      let existing = index[id];
-      if (!existing) index[result.component.id.toString()] = result;
-      existing = result;
+      const id = result.component.id;
+      const existing = index[id] || { warnings: [], errors: [], metadata: {} };
 
       index[id] = {
-        warnings: existing.warnings?.concat(result.warnings || []) || [],
-        errors: existing.errors?.concat(result.errors || []) || [],
-        metadata: merge(existing.metadata || {}, result.metadata || {}),
         component: result.component,
+        warnings: existing.warnings.concat(result.warnings || []),
+        errors: existing.errors.concat(result.errors || []),
+        metadata: merge(existing.metadata, result.metadata || {}),
       };
     });
   });

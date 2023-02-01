@@ -74,5 +74,8 @@
     "webpack-dev-server": "^4.11.1",
     "webpack-merge": "^5.8.0",
     "yaml": "^1.10.2"
+  },
+  "devDependencies": {
+    "@types/less": "^3.0.3"
   }
 }

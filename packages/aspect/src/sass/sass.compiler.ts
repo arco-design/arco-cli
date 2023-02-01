@@ -1,6 +1,6 @@
-import { compileString } from 'sass';
 import path from 'path';
 import fs from 'fs-extra';
+import { compile } from 'sass';
 import {
   Compiler,
   CompilerOptions,
@@ -37,8 +37,9 @@ export class SassCompiler implements Compiler {
     return this.distDir;
   }
 
-  transpileFile(fileContent: string, options: TranspileFileParams): TranspileFileOutput {
-    const cssContent = compileString(fileContent).css;
+  transpileFile(_fileContent: string, options: TranspileFileParams): TranspileFileOutput {
+    const filePath = path.resolve(options.componentDir, options.filePath);
+    const cssContent = compile(filePath).css;
 
     return [
       {
@@ -49,31 +50,37 @@ export class SassCompiler implements Compiler {
   }
 
   async build(context: BuildContext): Promise<BuildTaskResult> {
-    const result = context.components.flatMap((component) => {
-      return component.files
-        .filter((file) => {
-          return this.isFileSupported(file.path);
-        })
-        .map((file) => {
-          try {
-            const cssFile = compileString(file.contents.toString()).css;
-            const targetPath = path.join(
-              component.packageDirAbs,
-              this.distDir,
-              this.getDistPathBySrcPath(file.relative)
-            );
-            fs.writeFileSync(targetPath, cssFile);
-            return {
-              component,
-            };
-          } catch (err) {
-            return {
-              component,
-              errors: [err],
-            };
-          }
-        });
-    });
+    const result = await Promise.all(
+      context.components.map(async (component) => {
+        const componentResult = {
+          component,
+          errors: [],
+        };
+
+        await Promise.all(
+          component.files
+            .filter((file) => {
+              return this.isFileSupported(file.path);
+            })
+            .map(async (file) => {
+              try {
+                const cssFile = compile(file.path).css;
+                const targetPath = path.join(
+                  component.packageDirAbs,
+                  this.distDir,
+                  this.getDistPathBySrcPath(file.relative)
+                );
+                await fs.ensureFileSync(targetPath);
+                await fs.writeFile(targetPath, cssFile);
+              } catch (err) {
+                componentResult.errors.push(err);
+              }
+            })
+        );
+
+        return componentResult;
+      })
+    );
 
     return {
       componentsResults: result,

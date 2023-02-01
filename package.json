@@ -3,7 +3,7 @@
   "description": "Arco CLI & Arco Scripts",
   "private": true,
   "scripts": {
-    "init": "pnpm i && npm run build && npm run link",
+    "init": "pnpm i && npm run build",
     "build": "lerna run build --parallel",
     "link": "node ./scripts/linkLocalPackages.js",
     "format": "prettier --config --write \"packages/**/*.{js,jsx,ts,tsx}\"",

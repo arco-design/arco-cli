@@ -62,12 +62,17 @@ export class LessCompiler implements Compiler {
             })
             .map(async (file) => {
               try {
-                const { css } = await render(file.contents.toString());
+                const fileDirPath = path.dirname(file.path);
+                const { css } = await render(file.contents.toString(), {
+                  paths: [fileDirPath],
+                  javascriptEnabled: true,
+                });
                 const targetPath = path.join(
                   component.packageDirAbs,
                   this.distDir,
                   this.getDistPathBySrcPath(file.relative)
                 );
+                await fs.ensureFileSync(targetPath);
                 await fs.writeFile(targetPath, css);
               } catch (err) {
                 componentResult.errors.push(err);

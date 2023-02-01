@@ -108,12 +108,14 @@ importers:
   fixtures/workspace:
     specifiers:
       '@arco-cli/arco': ^0.1.0
+      '@arco-design/web-react': ~2
       '@babel/runtime': ^7.20.6
       '@testing-library/dom': ^8.19.1
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^12.1.5
     dependencies:
       '@arco-cli/arco': link:../../packages/arco
+      '@arco-design/web-react': 2.42.2
       '@babel/runtime': 7.20.6
       '@testing-library/dom': 8.19.1
       '@testing-library/jest-dom': 5.16.5
@@ -154,6 +156,7 @@ importers:
       '@arco-design/web-react': ^2.42.2
       '@babel/runtime': ^7.20.6
       '@mdx-js/mdx': ^1.6.22
+      '@types/less': ^3.0.3
       assert: ^2.0.0
       browserify-zlib: ^0.2.0
       buffer: ^6.0.3
@@ -260,6 +263,8 @@ importers:
       webpack-dev-server: 4.11.1_webpack@5.75.0
       webpack-merge: 5.8.0
       yaml: 1.10.2
+    devDependencies:
+      '@types/less': 3.0.3
 
   packages/core:
     specifiers:
@@ -4287,6 +4292,10 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+
+  /@types/less/3.0.3:
+    resolution: {integrity: sha512-1YXyYH83h6We1djyoUEqTlVyQtCfJAFXELSKW2ZRtjHD4hQ82CC4lvrv5D0l0FLcKBaiPbXyi3MpMsI9ZRgKsw==}
+    dev: true
 
   /@types/lodash/4.14.191:
     resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
