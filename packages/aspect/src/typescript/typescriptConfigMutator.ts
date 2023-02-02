@@ -20,29 +20,17 @@ export class TypescriptConfigMutator {
     return new TypescriptConfigMutator(cloneDeep(this.raw));
   }
 
+  artifactName?: string;
+
   setName(name: string) {
     this.raw.name = name;
     return this;
   }
 
-  /**
-   * optional. default to "dist".
-   * useful when the build pipeline has multiple compiler tasks of the same compiler.
-   * e.g. using the same Babel compiler for two different tasks, one for creating "es5" files, and
-   * the second for creating "esm". the artifact names would be "es5" and "esm" accordingly.
-   */
   setArtifactName(artifactName: string) {
     this.raw.artifactName = artifactName;
     return this;
   }
-
-  /**
-   * optional. default to "dist".
-   * useful when the build pipeline has multiple compiler tasks of the same compiler.
-   * e.g. using the same Babel compiler for two different tasks, one for creating "es5" files, and
-   * the second for creating "esm". the artifact names would be "es5" and "esm" accordingly.
-   */
-  artifactName?: string;
 
   addTypes(typesPaths: string[]): TypescriptConfigMutator {
     this.raw.types.push(...typesPaths);
@@ -75,8 +63,6 @@ export class TypescriptConfigMutator {
    * 1. the dist dir of the compiler instance
    * 2. add exclude for the dist dir in the tsconfig
    * 3. set the outDir of the tsconfig
-   * @param distDir
-   * @returns
    */
   setDistDir(distDir: string): TypescriptConfigMutator {
     this.raw.distDir = distDir;

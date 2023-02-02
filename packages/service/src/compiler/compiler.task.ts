@@ -1,17 +1,11 @@
 import path from 'path';
 import fs from 'fs-extra';
+import minimatch from 'minimatch';
 import { Component } from '@arco-cli/aspect/dist/component';
 
 import { BuildContext, BuildTask, BuildTaskResult, TaskResultsList } from '@service/builder';
 
 import { Compiler } from './types';
-
-export type CompilerTaskOptions = {
-  /**
-   * name of compiler task
-   */
-  name?: string;
-};
 
 export class CompilerTask implements BuildTask {
   readonly description = 'compile components';
@@ -29,13 +23,21 @@ export class CompilerTask implements BuildTask {
 
   private async copyNonSupportedFiles(component: Component, compiler: Compiler) {
     await Promise.all(
-      component.files.map(async (file) => {
-        if (compiler.isFileSupported(file.path)) return;
-        const content = file.contents;
-        const filePath = path.join(component.packageDirAbs, compiler.distDir, file.relative);
-        await fs.ensureFileSync(filePath);
-        await fs.outputFile(filePath, content);
-      })
+      component.files
+        .filter(({ path: filePath }) => {
+          for (const pattern of compiler.ignorePatterns) {
+            if (minimatch(filePath, pattern)) {
+              return false;
+            }
+          }
+          return !compiler.isFileSupported(filePath);
+        })
+        .map(async (file) => {
+          const content = file.contents;
+          const filePath = path.join(component.packageDirAbs, compiler.distDir, file.relative);
+          await fs.ensureFileSync(filePath);
+          await fs.outputFile(filePath, content);
+        })
     );
   }
 

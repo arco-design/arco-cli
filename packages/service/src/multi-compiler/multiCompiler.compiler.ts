@@ -1,7 +1,10 @@
 import { join } from 'path';
 import pMapSeries from 'p-map-series';
 import { Component } from '@arco-cli/aspect/dist/component';
-import { DEFAULT_DIST_DIRNAME } from '@arco-cli/legacy/dist/constants';
+import {
+  DEFAULT_DIST_DIRNAME,
+  DEFAULT_BUILD_IGNORE_PATTERNS,
+} from '@arco-cli/legacy/dist/constants';
 
 import {
   BuildContext,
@@ -20,6 +23,8 @@ export class MultiCompiler implements Compiler {
   displayName = 'Multi compiler';
 
   distDir: string;
+
+  ignorePatterns = DEFAULT_BUILD_IGNORE_PATTERNS;
 
   constructor(
     readonly id: string,

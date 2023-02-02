@@ -35,6 +35,7 @@
     "ink-spinner": "^4.0.3",
     "less-loader": "^11.1.0",
     "lodash": "^4.17.21",
+    "minimatch": "^6.1.6",
     "p-map-series": "^2.1.0",
     "penpal": "^6.2.2",
     "pretty-time": "^1.1.0",

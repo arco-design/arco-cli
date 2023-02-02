@@ -12,8 +12,7 @@ import { BuildContext, BuildTaskResult, ComponentResult } from '@arco-cli/servic
 import ArcoError from '@arco-cli/legacy/dist/error/arcoError';
 import {
   DEFAULT_DIST_DIRNAME,
-  DEFAULT_TEST_CASE_DIRNAME,
-  DEFAULT_COMPONENT_DOCS_DIRNAME,
+  DEFAULT_BUILD_IGNORE_PATTERNS,
 } from '@arco-cli/legacy/dist/constants';
 import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 
@@ -31,6 +30,8 @@ export class TypescriptCompiler implements Compiler {
   distDir: string;
 
   artifactName: string;
+
+  ignorePatterns = DEFAULT_BUILD_IGNORE_PATTERNS;
 
   private componentTsConfigMap: Record<string, string> = {};
 
@@ -87,10 +88,7 @@ export class TypescriptCompiler implements Compiler {
         // different components might have different ts configs
         merge(tsconfig, {
           include: [componentDirAbs],
-          exclude: [
-            path.join(componentDirAbs, '**', DEFAULT_TEST_CASE_DIRNAME),
-            path.join(componentDirAbs, '**', DEFAULT_COMPONENT_DOCS_DIRNAME),
-          ],
+          exclude: this.ignorePatterns.map((pattern) => path.join(componentDirAbs, '**', pattern)),
           compilerOptions: {
             outDir: outDirAbs,
             rootDir: componentDirAbs,

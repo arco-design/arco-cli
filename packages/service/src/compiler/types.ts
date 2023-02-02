@@ -51,9 +51,10 @@ export interface CompilerOptions {
   distGlobPatterns?: string[];
 
   /**
-   * whether source files (such as .less/.scss) should be copied into the dist directory
+   * determines which files will be ignored while building
+   * e.g. ignorePatterns = ['__docs__', '__test__'];
    */
-  shouldCopySourceFiles?: boolean;
+  ignorePatterns?: string[];
 
   /**
    * optional. default to "dist".
@@ -84,6 +85,11 @@ export interface Compiler extends CompilerOptions {
    * Delete dist folder before writing the new compiled files
    */
   deleteDistDir?: boolean;
+
+  /**
+   * whether source files (such as .less/.scss) should be copied into the dist directory
+   */
+  shouldCopySourceFiles?: boolean;
 
   /**
    * serialized config of the compiler.
