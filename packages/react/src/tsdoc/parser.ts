@@ -10,6 +10,7 @@ export function parser(file: SourceFile): Doclet[] {
   let doclets: Doclet[] = [];
 
   try {
+    // TODO: @PJY please speed up it
     const componentsInfo = generate(file.path, {
       sourceFilesPaths: [file.path],
       strictDeclarationOrder: true,

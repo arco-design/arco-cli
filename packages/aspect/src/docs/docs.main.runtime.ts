@@ -86,7 +86,7 @@ export class DocsMain {
   /**
    * return any component metadata generate by env, like component property tables
    */
-  getDocMetadata(components: Component[], env: Environment) {
+  getMetadata(components: Component[], env: Environment) {
     return ComponentMap.as<Record<string, any>>(components, (component) => {
       return env.getDocsMetadata?.(
         component.files.find((file) => file.relative === component.entries.jsdoc)

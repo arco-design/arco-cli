@@ -1,5 +1,5 @@
+import fs from 'fs-extra';
 import { join, resolve, basename, dirname } from 'path';
-import { existsSync, ensureDirSync, copyFileSync, removeSync } from 'fs-extra';
 import { Component } from '@arco-cli/aspect/dist/component';
 import { flatten, isEmpty, chunk } from 'lodash';
 import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
@@ -52,8 +52,8 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     const cacheDir = this.getCacheDir(context);
     const outputPath = this.getOutputPath(context);
 
-    removeSync(cacheDir);
-    ensureDirSync(outputPath);
+    fs.removeSync(cacheDir);
+    fs.ensureDirSync(outputPath);
 
     const entriesArr = await Promise.all(
       context.components.map((component) => {
@@ -104,14 +104,15 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     context: ComputeTargetsContext
   ): Promise<ComponentEntry> {
     const componentPreviewPath = await this.computePaths(previewDefs, context, component);
-    const componentPath = resolve(
-      context.workspace.path,
-      component.componentDir,
-      component.entries.main
-    );
+    // const componentPath = resolve(
+    //   context.workspace.path,
+    //   component.componentDir,
+    //   component.entries.main
+    // );
     const chunks = {
       componentPreview: this.getComponentChunkId(component.id, 'preview'),
-      component: context.splitComponentBundle ? component.id : undefined,
+      // TODO build component UMD dist files
+      // component: context.splitComponentBundle ? component.id : undefined,
     };
     const fsCompatibleId = toFsCompatible(component.id);
 
@@ -123,13 +124,13 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
       },
     };
 
-    if (chunks.component) {
-      entries[chunks.component] = {
-        filename: this.getComponentChunkFileName(fsCompatibleId, 'component'),
-        import: componentPath,
-        library: { name: chunks.component, type: 'umd' },
-      };
-    }
+    // if (chunks.component) {
+    //   entries[chunks.component] = {
+    //     filename: this.getComponentChunkFileName(fsCompatibleId, 'component'),
+    //     import: componentPath,
+    //     library: { name: chunks.component, type: 'umd' },
+    //   };
+    // }
 
     return { component, entries };
   }
@@ -165,29 +166,40 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     return name;
   }
 
-  private copyAssetsToCapsules(context: BundlerContext, result: BundlerResult) {
-    context.components.forEach((component) => {
-      const files = this.findAssetsForComponent(
-        component,
-        result.assets,
-        result.entriesAssetsMap || {}
-      );
+  private async copyAssetsToCapsules(context: BundlerContext, result: BundlerResult) {
+    // components may share the same artifact dir
+    // old artifacts should be cleaned up before copy task starting
+    await Promise.all(
+      context.components.map(async (component) => {
+        await fs.remove(join(component.packageDirAbs, this.artifactDir));
+      })
+    );
 
-      if (!files) return;
+    return Promise.all(
+      context.components.map(async (component) => {
+        const files = this.findAssetsForComponent(
+          component,
+          result.assets,
+          result.entriesAssetsMap || {}
+        );
 
-      const artifactDirFullPath = join(component.packageDirAbs, this.artifactDir);
-      ensureDirSync(artifactDirFullPath);
+        if (!files) return;
 
-      files.forEach((asset) => {
-        const filePath = this.getAssetAbsolutePath(context, asset);
-        if (!existsSync(filePath)) {
-          throw new PreviewOutputFileNotFoundError(component.id, filePath);
-        }
-        const destFilePath = join(artifactDirFullPath, this.getAssetFilename(asset));
-        ensureDirSync(dirname(destFilePath));
-        copyFileSync(filePath, destFilePath);
-      });
-    });
+        const artifactDirFullPath = join(component.packageDirAbs, this.artifactDir);
+
+        await Promise.all(
+          files.map(async (asset) => {
+            const filePath = this.getAssetAbsolutePath(context, asset);
+            if (!fs.existsSync(filePath)) {
+              throw new PreviewOutputFileNotFoundError(component.id, filePath);
+            }
+            const destFilePath = join(artifactDirFullPath, this.getAssetFilename(asset));
+            await fs.ensureDir(dirname(destFilePath));
+            await fs.copyFile(filePath, destFilePath);
+          })
+        );
+      })
+    );
   }
 
   private findAssetsForComponent(
@@ -263,7 +275,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
   private async computeTargetResult(context: BundlerContext, result: BundlerResult) {
     if (isEmpty(result.errors)) {
       // In case there are errors files will not be emitted so trying to copy them will fail anyway
-      this.copyAssetsToCapsules(context, result);
+      await this.copyAssetsToCapsules(context, result);
     }
 
     const componentsResults: ComponentResult[] = result.components.map((component) => {

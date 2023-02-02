@@ -274,7 +274,7 @@ export class PreviewMain {
     const hash = sha1(contents);
     const targetPath = join(targetDir, `${prefix}-${this.timestamp}.js`);
 
-    // TODO clear cache before preview
+    // TODO clear cache before build-task
     // write only if link has changed (prevents triggering fs watches)
     if (this.writeHash.get(targetPath) !== hash) {
       fs.writeFileSync(targetPath, contents);

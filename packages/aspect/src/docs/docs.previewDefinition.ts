@@ -37,6 +37,6 @@ export class DocsPreviewDefinition implements PreviewDefinition {
    * metadata to collect
    */
   async getMetadataMap(components: Component[], env: Environment) {
-    return this.docs.getDocMetadata(components, env);
+    return this.docs.getMetadata(components, env);
   }
 }
