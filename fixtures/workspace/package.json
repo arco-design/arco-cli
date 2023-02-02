@@ -1,6 +1,6 @@
 {
   "name": "my-workspace",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "scripts": {
     "start": "arco start",
     "test": "arco test",
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.20.6",
-    "@arco-cli/arco": "^0.1.0",
+    "@arco-cli/arco": "^1.0.0",
     "@arco-design/web-react": "~2",
     "@testing-library/dom": "^8.19.1",
     "@testing-library/jest-dom": "^5.16.5",

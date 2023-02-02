@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/aspect",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "scripts": {
     "dev": "sh ../../scripts/build.sh dev",
     "build": "sh ../../scripts/build.sh",
@@ -18,11 +18,11 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.2",
-    "@arco-cli/core": "^0.1.0",
-    "@arco-cli/service": "^0.1.0",
-    "@arco-cli/legacy": "^0.1.0",
-    "@arco-cli/stone": "^0.1.0",
-    "@arco-cli/ui-foundation-react": "^0.1.0",
+    "@arco-cli/core": "^1.0.0",
+    "@arco-cli/service": "^1.0.0",
+    "@arco-cli/legacy": "^1.0.0",
+    "@arco-cli/stone": "^1.0.0",
+    "@arco-cli/ui-foundation-react": "^1.0.0",
     "@arco-design/web-react": "^2.42.2",
     "@babel/runtime": "^7.20.6",
     "@mdx-js/mdx": "^1.6.22",
