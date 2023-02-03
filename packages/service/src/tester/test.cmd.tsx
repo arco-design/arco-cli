@@ -52,9 +52,9 @@ export class TestCmd implements Command {
       code,
       data: (
         <Box>
-          <Text>Test has been completed in</Text>
+          <Text>Test has been completed in </Text>
           <Text color="cyan">{seconds}</Text>
-          <Text>seconds.</Text>
+          <Text> seconds.</Text>
         </Box>
       ),
     };

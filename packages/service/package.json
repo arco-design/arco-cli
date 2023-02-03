@@ -37,7 +37,6 @@
     "lodash": "^4.17.21",
     "minimatch": "^6.1.6",
     "p-map-series": "^2.1.0",
-    "penpal": "^6.2.2",
     "pretty-time": "^1.1.0",
     "react-dev-utils": "^12.0.1",
     "react-refresh": "^0.14.0",

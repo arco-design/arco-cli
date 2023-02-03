@@ -8,8 +8,9 @@ import {
   TranspileFileOutput,
   TranspileFileParams,
 } from '@arco-cli/service/dist/compiler';
-import { BuildContext, BuildTaskResult, ComponentResult } from '@arco-cli/service/dist/builder';
 import ArcoError from '@arco-cli/legacy/dist/error/arcoError';
+import { BuildContext, BuildTaskResult } from '@arco-cli/service/dist/builder';
+import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
 import {
   DEFAULT_DIST_DIRNAME,
   DEFAULT_BUILD_IGNORE_PATTERNS,
@@ -147,7 +148,7 @@ export class TypescriptCompiler implements Compiler {
         throw new ArcoError(errorStr);
       }
       this.logger.consoleFailure(errorStr);
-      if (!currentComponentResult.component || !currentComponentResult.errors) {
+      if (!currentComponentResult.id || !currentComponentResult.errors) {
         throw new Error(`currentComponentResult is not defined yet for ${diagnostic.file}`);
       }
       currentComponentResult.errors.push(errorStr);
@@ -191,7 +192,7 @@ export class TypescriptCompiler implements Compiler {
       if (!component) throw new Error(`unable to find component for ${projectPath}`);
 
       longProcessLogger.logProgress(component.id);
-      currentComponentResult.component = component;
+      currentComponentResult.id = component.id;
       currentComponentResult.startTime = Date.now();
       nextProject.done();
       currentComponentResult.endTime = Date.now();

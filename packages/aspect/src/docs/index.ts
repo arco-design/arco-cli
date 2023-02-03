@@ -4,4 +4,4 @@ export default DocsAspect;
 export { DocsAspect };
 export type { DocsMain } from './docs.main.runtime';
 export { Doc } from './doc';
-export type { DocReader } from './type';
+export type { DocReader, DocOutline } from './type';

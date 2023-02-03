@@ -26,7 +26,6 @@ const request = (
   option.headers = {
     ...option.headers,
     [ARCO_TOKEN]: (option.headers && option.headers[ARCO_TOKEN]) || userToken || '',
-    'x-arco-dev': '1',
   };
 
   const req =

@@ -3,7 +3,7 @@ import pMap from 'p-map';
 import mapSeries from 'p-map-series';
 import * as path from 'path';
 import logger from '../../logger/logger';
-import removeEmptyDir from './remove-empty-dir';
+import removeEmptyDir from './removeEmptyDir';
 import { concurrentIOLimit } from '../concurrency';
 
 /**

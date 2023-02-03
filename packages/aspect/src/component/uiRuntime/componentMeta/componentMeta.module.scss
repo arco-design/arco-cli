@@ -1,38 +1,48 @@
 .metadata {
+  padding: 20px 0 8px 0;
+
   .flexBetween {
     display: flex;
     justify-content: space-between;
   }
 
   .title {
-    font-size: 48px;
-    font-weight: 600;
-    margin: 12px 0;
+    margin: 0 0 20px 0;
     padding: 0;
+    font-size: var(--preview-font-size-display-1);
+    font-weight: 700;
+    line-height: 1;
     color: var(--preview-color-text-1);
   }
 
   .descriptions {
-
+    margin: 0 0 16px 0;
+    font-size: var(--preview-font-size-title-2);
+    line-height: 1;
+    color: var(--preview-color-text-2);
   }
 
   .labels {
     display: flex;
     margin: 0;
     padding: 0;
+    font-size: var(--preview-font-size-body-1);
+    line-height: 1;
     list-style: none;
 
     .label {
-      margin-right: 8px;
-      padding: 1px 6px;
-      border: 1px solid var(--preview-color-border);
-      border-radius: 2px;
-      font-size: 12px;
+      margin-right: 1em;
+      margin-bottom: 1em;
+      padding: 4px 8px;
+      border-radius: 6px;
       color: var(--preview-color-text-2);
+      font-weight: 600;
+      background: #dde6fc;
     }
   }
 
   .usage {
-    color: var(--preview-color-text-2);
+    display: flex;
+    justify-content: flex-end;
   }
 }

@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
+import { Typography } from '@arco-design/web-react';
 import { ComponentModel } from '../componentModel';
 
 import styles from './componentMeta.module.scss';
@@ -12,6 +13,7 @@ export function ComponentMeta({ component }: ComponentMetaProps) {
   return (
     <div className={styles.metadata}>
       <h1 className={styles.title}>{component.name}</h1>
+      <p className={styles.descriptions}>{component.description}</p>
       <div>
         <ul className={styles.labels}>
           {component.labels.map((label, index) => (
@@ -20,7 +22,9 @@ export function ComponentMeta({ component }: ComponentMetaProps) {
             </li>
           ))}
         </ul>
-        <pre className={styles.usage}>npm i {component.packageName}</pre>
+        <Typography.Text className={styles.usage} code copyable>
+          npm install {component.packageName}
+        </Typography.Text>
       </div>
     </div>
   );

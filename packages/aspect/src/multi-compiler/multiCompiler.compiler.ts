@@ -5,19 +5,18 @@ import {
   DEFAULT_DIST_DIRNAME,
   DEFAULT_BUILD_IGNORE_PATTERNS,
 } from '@arco-cli/legacy/dist/constants';
-
 import {
   BuildContext,
   BuildTaskResult,
   mergeComponentResults,
   TaskResultsList,
-} from '@service/builder';
+} from '@arco-cli/service/dist/builder';
 import {
   Compiler,
   CompilerOptions,
   TranspileFileOutput,
   TranspileFileParams,
-} from '@service/compiler';
+} from '@arco-cli/service/dist/compiler';
 
 export class MultiCompiler implements Compiler {
   displayName = 'Multi compiler';

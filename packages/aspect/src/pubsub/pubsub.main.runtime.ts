@@ -1,6 +1,6 @@
 import { MainRuntime } from '@arco-cli/core/dist/cli';
 
-import { ArcoBaseEvent } from './arcoBaseEvent';
+import { ArcoBaseEvent } from './events';
 import { PubsubAspect } from './pubsub.aspect';
 
 export class PubsubMain {

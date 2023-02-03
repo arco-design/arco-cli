@@ -1,4 +1,3 @@
-import { debounce } from 'lodash';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
 import { PubsubAspect, PubsubPreview } from '@arco-cli/aspect/dist/pubsub/previewRuntime';
 
@@ -12,7 +11,6 @@ import {
   RenderingContextSlot,
   RenderingContextProvider,
 } from '../types';
-import { SizeEvent } from './sizeEvent';
 
 // forward linkModules for generate-link.ts
 export { linkModules } from './previewModules';
@@ -83,32 +81,6 @@ export class PreviewPreview {
     return new RenderingContext(this.renderingContextSlot);
   }
 
-  private reportSize() {
-    if (!window?.parent || !window?.document) return;
-
-    const sendPubsubEvent = () => {
-      this.pubsub.pub(
-        PreviewAspect.id,
-        new SizeEvent({
-          width: window.document.body.offsetWidth,
-          height: window.document.body.offsetHeight,
-        })
-      );
-    };
-
-    window.document.body.addEventListener('resize', debounce(sendPubsubEvent, 300));
-
-    let counter = 0;
-    const interval = setInterval(() => {
-      counter += 1;
-      if (counter > 5) {
-        clearInterval(interval);
-        return;
-      }
-      sendPubsubEvent();
-    }, 200);
-  }
-
   registerPreview(preview: PreviewType) {
     this.previewSlot.register(preview);
     return this;
@@ -156,8 +128,8 @@ export class PreviewPreview {
     const previewModule = await this.getPreviewModule(name);
     preview.render(componentId, previewModule, includes, this.getRenderingContext());
 
-    this.reportSize();
     this.setViewport();
+    this.pubsub.reportSize(PreviewAspect.id);
   }
 }
 

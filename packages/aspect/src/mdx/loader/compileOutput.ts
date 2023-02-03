@@ -1,4 +1,7 @@
 import { VFile } from 'vfile';
+
+import type { DocOutline } from '@aspect/docs';
+
 import { ImportSpecifier } from './importSpecifier';
 
 export class CompileOutput {
@@ -15,14 +18,14 @@ export class CompileOutput {
   /**
    * get the mdx file metadata.
    */
-  getMetadata() {
+  getMetadata(): Record<string, any> {
     return (this.file.data as any).frontmatter;
   }
 
   /**
    * get headings of markdown.
    */
-  getOutline() {
+  getOutline(): DocOutline {
     return (this.file.data as any).headings;
   }
 

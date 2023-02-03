@@ -19,7 +19,7 @@ import {
   TypescriptCompilerOptions,
 } from '@arco-cli/aspect/dist/typescript';
 import { WebpackConfigTransformer, WebpackMain } from '@arco-cli/aspect/dist/webpack';
-import { MultiCompilerMain } from '@arco-cli/service/dist/multi-compiler';
+import { MultiCompilerMain } from '@arco-cli/aspect/dist/multi-compiler';
 import { SassMain } from '@arco-cli/aspect/dist/sass';
 import { LessMain } from '@arco-cli/aspect/dist/less';
 import {

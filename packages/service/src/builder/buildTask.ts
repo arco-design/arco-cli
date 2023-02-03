@@ -1,7 +1,8 @@
 import type { Component } from '@arco-cli/aspect/dist/component';
 import { ExecutionContext } from '@arco-cli/aspect/dist/envs';
 import { Workspace } from '@arco-cli/aspect/dist/workspace';
-import type { ComponentResult } from './types';
+import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
+
 import { TaskResultsList } from './taskResultsList';
 import { TaskResults } from './buildPipe';
 

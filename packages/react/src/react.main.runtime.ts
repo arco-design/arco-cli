@@ -4,7 +4,7 @@ import { JestAspect, JestMain } from '@arco-cli/aspect/dist/jest';
 import { BuilderAspect, BuilderMain } from '@arco-cli/service/dist/builder';
 import { WebpackAspect, WebpackMain } from '@arco-cli/aspect/dist/webpack';
 import { CompilerAspect, CompilerMain } from '@arco-cli/service/dist/compiler';
-import { MultiCompilerAspect, MultiCompilerMain } from '@arco-cli/service/dist/multi-compiler';
+import { MultiCompilerAspect, MultiCompilerMain } from '@arco-cli/aspect/dist/multi-compiler';
 import {
   TsConfigTransformer,
   TypescriptAspect,
