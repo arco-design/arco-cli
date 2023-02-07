@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/service",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "scripts": {
     "dev": "sh ../../scripts/build.sh dev",
     "build": "sh ../../scripts/build.sh",
@@ -14,11 +14,11 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@arco-cli/aspect": "^2.0.0-alpha.0",
-    "@arco-cli/core": "^2.0.0-alpha.0",
+    "@arco-cli/aspect": "^2.0.0-alpha.1",
+    "@arco-cli/core": "^2.0.0-alpha.1",
     "@arco-cli/legacy": "^2.0.0-alpha.0",
     "@arco-cli/stone": "^2.0.0-alpha.0",
-    "@arco-cli/ui-foundation-react": "^2.0.0-alpha.0",
+    "@arco-cli/ui-foundation-react": "^2.0.0-alpha.1",
     "@babel/runtime": "^7.20.6",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@svgr/webpack": "^6.5.1",
