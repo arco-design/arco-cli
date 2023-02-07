@@ -1,4 +1,4 @@
-import { ArcoBaseEvent } from '@arco-cli/core/dist/pubsub';
+import { ArcoBaseEvent } from '@aspect/pubsub';
 
 class OnComponentRemovedEventData {
   constructor(readonly idStr) {}

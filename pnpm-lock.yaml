@@ -152,6 +152,7 @@ importers:
       crypto-browserify: ^3.12.0
       domain-browser: ^4.22.0
       enhanced-resolve: ^4.5.0
+      eventemitter2: ^6.4.9
       fs-extra: ^10.1.0
       glob: ^8.0.3
       graphql-tag: ^2.12.6
@@ -165,6 +166,7 @@ importers:
       p-map-series: ^2.1.0
       p-queue: ^6.6.2
       path-browserify: ^1.0.1
+      penpal: ^6.2.2
       process: ^0.11.10
       punycode: ^2.1.1
       querystring-es3: ^0.2.1
@@ -211,6 +213,7 @@ importers:
       crypto-browserify: 3.12.0
       domain-browser: 4.22.0
       enhanced-resolve: 4.5.0
+      eventemitter2: 6.4.9
       fs-extra: 10.1.0
       glob: 8.0.3
       graphql-tag: 2.12.6
@@ -224,6 +227,7 @@ importers:
       p-map-series: 2.1.0
       p-queue: 6.6.2
       path-browserify: 1.0.1
+      penpal: 6.2.2
       process: 0.11.10
       punycode: 2.1.1
       querystring-es3: 0.2.1
@@ -257,7 +261,6 @@ importers:
   packages/core:
     specifiers:
       '@arco-cli/legacy': ^2.0.0-alpha.0
-      '@arco-cli/service': ^2.0.0-alpha.0
       '@arco-cli/stone': ^2.0.0-alpha.0
       '@babel/runtime': ^7.20.6
       '@graphql-modules/core': ^0.7.17
@@ -266,7 +269,6 @@ importers:
       chalk: ^4.1.2
       cors: ^2.8.5
       didyoumean: ^1.2.2
-      eventemitter2: ^6.4.9
       express: ^4.18.2
       express-graphql: ^0.12.0
       fs-extra: ^10.1.0
@@ -277,12 +279,10 @@ importers:
       lodash: ^4.17.21
       node-fetch: ^3.3.0
       pad-right: ^0.2.2
-      penpal: ^6.2.2
       pretty-time: ^1.1.0
       yargs: ^17.6.2
     dependencies:
       '@arco-cli/legacy': link:../legacy
-      '@arco-cli/service': link:../service
       '@arco-cli/stone': link:../stone
       '@babel/runtime': 7.20.6
       '@graphql-modules/core': 0.7.17_graphql@14.7.0
@@ -290,7 +290,6 @@ importers:
       chalk: 4.1.2
       cors: 2.8.5
       didyoumean: 1.2.2
-      eventemitter2: 6.4.9
       express: 4.18.2
       express-graphql: 0.12.0_graphql@14.7.0
       fs-extra: 10.1.0
@@ -301,7 +300,6 @@ importers:
       lodash: 4.17.21
       node-fetch: 3.3.0
       pad-right: 0.2.2
-      penpal: 6.2.2
       pretty-time: 1.1.0
       yargs: 17.6.2
     devDependencies:

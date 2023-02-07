@@ -3,7 +3,7 @@ import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { flatten } from 'lodash';
 import { Workspace } from '@arco-cli/aspect/dist/workspace';
 import { BundlerMain } from '@arco-cli/aspect/dist/bundler';
-import { PubsubMain } from '@arco-cli/core/dist/pubsub';
+import { PubsubMain } from '@arco-cli/aspect/dist/pubsub';
 import { ComponentServer } from '@arco-cli/aspect/dist/bundler/componentServer';
 import { Logger } from '@arco-cli/core/dist/logger';
 

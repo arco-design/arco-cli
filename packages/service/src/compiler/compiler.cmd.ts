@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import prettyTime from 'pretty-time';
 import { Logger } from '@arco-cli/core/dist/logger';
-import type { PubsubMain, ArcoBaseEvent } from '@arco-cli/core/dist/pubsub';
+import type { PubsubMain, ArcoBaseEvent } from '@arco-cli/aspect/dist/pubsub';
 import { Command, CommandOptions } from '@arco-cli/legacy/dist/cli/command';
 import { Component } from '@arco-cli/aspect/dist/component';
 import { CompilerAspect } from './compiler.aspect';

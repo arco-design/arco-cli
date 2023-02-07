@@ -3,12 +3,12 @@ import fs from 'fs-extra';
 import { uniqBy } from 'lodash';
 import mapSeries from 'p-map-series';
 import { SlotRegistry } from '@arco-cli/stone';
-import { PubsubMain } from '@arco-cli/core/dist/pubsub';
 import { AspectLoaderMain, getAspectDef } from '@arco-cli/core/dist/aspect-loader';
 import { ComponentInfo, ComponentConfig } from '@arco-cli/legacy/dist/workspace/componentInfo';
 import { getFilesByDir } from '@arco-cli/legacy/dist/workspace/componentOps/addComponents';
 import { getGitIgnoreForArco } from '@arco-cli/legacy/dist/utils/ignore';
 
+import { PubsubMain } from '@aspect/pubsub';
 import { ComponentFactory, Component } from '@aspect/component';
 
 import { WorkspaceConfig } from './type';

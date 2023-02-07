@@ -5,8 +5,8 @@ import { MainRuntime } from '@arco-cli/core/dist/cli';
 import { AspectLoaderAspect, AspectLoaderMain } from '@arco-cli/core/dist/aspect-loader';
 import { getWorkspaceInfo } from '@arco-cli/legacy/dist/workspace/workspaceLocator';
 import { GraphqlAspect, GraphqlMain } from '@arco-cli/core/dist/graphql';
-import { PubsubAspect, PubsubMain } from '@arco-cli/core/dist/pubsub';
 
+import { PubsubAspect, PubsubMain } from '@aspect/pubsub';
 import { ComponentAspect, ComponentMain } from '@aspect/component';
 
 import { WorkspaceAspect } from './workspace.aspect';

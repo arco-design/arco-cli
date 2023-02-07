@@ -3,7 +3,7 @@ import {
   WebpackCompilationDoneEvent,
   WebpackCompilationStartedEvent,
 } from '@arco-cli/aspect/dist/webpack';
-import { PubsubMain, ArcoBaseEvent } from '@arco-cli/core/dist/pubsub';
+import { PubsubMain, ArcoBaseEvent } from '@arco-cli/aspect/dist/pubsub';
 
 export type CompilationResult = {
   errors?: Error[];

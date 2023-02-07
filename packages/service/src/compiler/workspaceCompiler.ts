@@ -1,6 +1,6 @@
 import { join } from 'path';
 import mapSeries from 'p-map-series';
-import { PubsubMain } from '@arco-cli/core/dist/pubsub';
+import { PubsubMain } from '@arco-cli/aspect/dist/pubsub';
 import { Workspace } from '@arco-cli/aspect/dist/workspace';
 import { EnvsMain } from '@arco-cli/aspect/dist/envs';
 import { WorkspaceNotFoundError } from '@arco-cli/aspect/dist/workspace/exceptions';

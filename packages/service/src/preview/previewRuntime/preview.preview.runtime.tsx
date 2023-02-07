@@ -1,6 +1,6 @@
 import { debounce } from 'lodash';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
-import { PubsubAspect, PubsubPreview } from '@arco-cli/core/dist/pubsub/previewRuntime';
+import { PubsubAspect, PubsubPreview } from '@arco-cli/aspect/dist/pubsub/previewRuntime';
 
 import { PREVIEW_MODULES } from './previewModules';
 import { PreviewNotFoundError } from '../exceptions';

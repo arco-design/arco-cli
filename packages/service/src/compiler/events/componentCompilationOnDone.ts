@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { ArcoBaseEvent } from '@arco-cli/core/dist/pubsub';
+import { ArcoBaseEvent } from '@arco-cli/aspect/dist/pubsub';
 import { Component } from '@arco-cli/aspect/dist/component';
 import { CompileError } from '../types';
 

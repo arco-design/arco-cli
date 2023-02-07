@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "@arco-cli/legacy": "^2.0.0-alpha.0",
-    "@arco-cli/service": "^2.0.0-alpha.0",
     "@arco-cli/stone": "^2.0.0-alpha.0",
     "@babel/runtime": "^7.20.6",
     "@graphql-modules/core": "^0.7.17",
@@ -26,7 +25,6 @@
     "chalk": "^4.1.2",
     "cors": "^2.8.5",
     "didyoumean": "^1.2.2",
-    "eventemitter2": "^6.4.9",
     "express": "^4.18.2",
     "express-graphql": "^0.12.0",
     "fs-extra": "^10.1.0",
@@ -37,7 +35,6 @@
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.0",
     "pad-right": "^0.2.2",
-    "penpal": "^6.2.2",
     "pretty-time": "^1.1.0",
     "yargs": "^17.6.2"
   },

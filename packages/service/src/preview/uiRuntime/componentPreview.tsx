@@ -2,7 +2,7 @@
 import React, { IframeHTMLAttributes, useRef, useEffect, useState } from 'react';
 import { compact } from 'lodash';
 import { connectToChild } from 'penpal';
-import { usePubsubIframe } from '@arco-cli/core/dist/pubsub';
+import { usePubsubIframe } from '@arco-cli/aspect/dist/pubsub';
 import { ComponentModel } from '@arco-cli/aspect/dist/component/uiRuntime';
 import { toPreviewUrl } from './urls';
 

@@ -3,11 +3,12 @@ import { difference } from 'lodash';
 import chalk from 'chalk';
 import mapSeries from 'p-map-series';
 import chokidar, { FSWatcher } from 'chokidar';
-import { PubsubMain } from '@arco-cli/core/dist/pubsub';
 import loader from '@arco-cli/legacy/dist/cli/loader';
 import logger from '@arco-cli/legacy/dist/logger/logger';
 import { pathNormalizeToLinux } from '@arco-cli/legacy/dist/utils/path';
 import { FILE_WORKSPACE_JSONC } from '@arco-cli/legacy/dist/constants';
+
+import { PubsubMain } from '@aspect/pubsub';
 
 import { WorkspaceAspect } from '../workspace.aspect';
 import { OnComponentChangeEvent, OnComponentAddEvent, OnComponentRemovedEvent } from '../events';

@@ -7,7 +7,7 @@ import { BundlerAspect, BundlerMain, Asset } from '@arco-cli/aspect/dist/bundler
 import { EnvsAspect, EnvsMain, ExecutionContext, PreviewEnv } from '@arco-cli/aspect/dist/envs';
 import { AspectDefinition } from '@arco-cli/core/dist/aspect-loader';
 import { Workspace, WorkspaceAspect } from '@arco-cli/aspect/dist/workspace';
-import { PubsubAspect, PubsubMain } from '@arco-cli/core/dist/pubsub';
+import { PubsubAspect, PubsubMain } from '@arco-cli/aspect/dist/pubsub';
 import { Component } from '@arco-cli/aspect/dist/component';
 import { sha1 } from '@arco-cli/legacy/dist/utils';
 import { Logger, LoggerAspect, LoggerMain } from '@arco-cli/core/dist/logger';

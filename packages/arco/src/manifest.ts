@@ -1,6 +1,6 @@
 import { AspectLoaderAspect } from '@arco-cli/core/dist/aspect-loader';
 import { LoggerAspect } from '@arco-cli/core/dist/logger';
-import { PubsubAspect } from '@arco-cli/core/dist/pubsub';
+import { PubsubAspect } from '@arco-cli/aspect/dist/pubsub';
 import { ExpressAspect } from '@arco-cli/core/dist/express';
 import { GraphqlAspect } from '@arco-cli/core/dist/graphql';
 import { ComponentAspect } from '@arco-cli/aspect/dist/component';

@@ -1,7 +1,7 @@
 import { CLIAspect, CLIMain, MainRuntime } from '@arco-cli/core/dist/cli';
 import { Workspace, WorkspaceAspect } from '@arco-cli/aspect/dist/workspace';
 import { EnvsAspect, EnvsMain } from '@arco-cli/aspect/dist/envs';
-import { PubsubAspect, PubsubMain } from '@arco-cli/core/dist/pubsub';
+import { PubsubAspect, PubsubMain } from '@arco-cli/aspect/dist/pubsub';
 import { LoggerAspect, LoggerMain } from '@arco-cli/core/dist/logger';
 import { CompileCmd } from './compiler.cmd';
 import { CompilerAspect } from './compiler.aspect';

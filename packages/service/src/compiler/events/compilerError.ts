@@ -1,4 +1,4 @@
-import { ArcoBaseEvent } from '@arco-cli/core/dist/pubsub';
+import { ArcoBaseEvent } from '@arco-cli/aspect/dist/pubsub';
 
 class CompilerErrorEventData {
   constructor(readonly error: any) {}

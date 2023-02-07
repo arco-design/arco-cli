@@ -1,5 +1,5 @@
 import type { Stats } from 'webpack';
-import { ArcoBaseEvent } from '@arco-cli/core/dist/pubsub';
+import { ArcoBaseEvent } from '@aspect/pubsub';
 
 class WebpackCompilationDoneEventData {
   constructor(readonly stats: Stats, readonly devServerID: string) {}
