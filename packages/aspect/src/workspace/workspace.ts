@@ -7,6 +7,7 @@ import { AspectLoaderMain, getAspectDef } from '@arco-cli/core/dist/aspect-loade
 import { ComponentInfo, ComponentConfig } from '@arco-cli/legacy/dist/workspace/componentInfo';
 import { getFilesByDir } from '@arco-cli/legacy/dist/workspace/componentOps/addComponents';
 import { getGitIgnoreForArco } from '@arco-cli/legacy/dist/utils/ignore';
+import minimatch from 'minimatch';
 
 import { PubsubMain } from '@aspect/pubsub';
 import { ComponentFactory, Component } from '@aspect/component';
@@ -218,7 +219,7 @@ export class Workspace implements ComponentFactory {
     return component;
   }
 
-  async getMany(ids: string[]) {
+  getMany(ids: string[]) {
     return Promise.all(
       ids.map((id) => {
         return this.get(id);
@@ -226,9 +227,22 @@ export class Workspace implements ComponentFactory {
     );
   }
 
-  async getManyByPattern(_pattern: string, _throwForNoMatch?: boolean) {
-    // TODO pattern
-    return this.list();
+  getManyByPattern(_pattern: string, _throwForNoMatch?: boolean) {
+    if (!_pattern.includes('*') && !_pattern.includes(',')) {
+      const exists = this.componentInfoList.find(info => info.id.includes(_pattern));
+      if (exists) {
+        return this.getMany([exists.id]);
+      }
+    }
+    const patternList = _pattern.split(',');
+    const ids = this.componentInfoList
+      .filter((info) => {
+        const { rootDir, entries: { main } } = info;
+        return ~patternList.findIndex(p => minimatch(path.dirname(`${rootDir}/${main}`), p.trim()));
+      })
+      .map(({ id }) => id);
+
+    return this.getMany(ids);
   }
 
   async getNewAndModified() {
