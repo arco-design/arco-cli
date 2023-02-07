@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { useMemo, memo } from 'react';
+import React, { useMemo, memo, useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import copy from 'copy-to-clipboard';
 import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
@@ -8,6 +8,10 @@ import tsxSyntax from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
 import defaultTheme from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus';
 
 import styles from './codeSnippet.module.scss';
+import IconCopy from '../asset/icon-copy.svg';
+import IconCheck from '../asset/icon-check.svg';
+import IconShrink from '../asset/icon-shrink.svg';
+import IconExpand from '../asset/icon-expand.svg';
 
 SyntaxHighlighter.registerLanguage('tsx', tsxSyntax);
 
@@ -43,13 +47,30 @@ export function CodeSnippet({
   children,
   ...rest
 }: CodeSnippetProps) {
+  const [codeCopied, setCodeCopied] = useState(false);
+  const [codeExpanded, setCodeExpanded] = useState(false);
+
+  const refResetCopyStatusTimer = useRef<any>(null);
   const trimmedChildren = useMemo(() => children.trim(), [children]);
+
+  useEffect(() => {
+    clearTimeout(refResetCopyStatusTimer.current);
+    refResetCopyStatusTimer.current = setTimeout(() => {
+      setCodeCopied(false);
+    }, 1000);
+  }, [codeCopied]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(refResetCopyStatusTimer.current);
+    };
+  }, []);
 
   return (
     <div className={classNames(styles.snippetWrapper, className)}>
       <Highlighter
         {...rest}
-        className={classNames(styles.codeSnippet, frameClass)}
+        className={classNames(styles.codeSnippet, frameClass, { [styles.expanded]: codeExpanded })}
         language={language}
         style={theme}
         customStyle={customStyles}
@@ -57,7 +78,19 @@ export function CodeSnippet({
         {trimmedChildren}
       </Highlighter>
 
-      <div className={styles.copy} onClick={() => copy(children.toString())} />
+      <div className={styles.operationButtons}>
+        <button
+          onClick={() => {
+            const result = copy(children.toString());
+            setCodeCopied(result);
+          }}
+        >
+          {codeCopied ? <IconCheck /> : <IconCopy />}
+        </button>
+        <button onClick={() => setCodeExpanded(!codeExpanded)}>
+          {codeExpanded ? <IconShrink /> : <IconExpand />}
+        </button>
+      </div>
     </div>
   );
 }

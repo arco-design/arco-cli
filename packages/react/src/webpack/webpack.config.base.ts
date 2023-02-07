@@ -262,19 +262,10 @@ export default function (isEnvProduction = false): Configuration {
               // import starUrl, { ReactComponent as StarIcon } from './star.svg';
               // (remove when there is native support for both options from webpack5 / svgr)
               test: /\.svg$/,
-              oneOf: [
+              use: [
                 {
-                  dependency: { not: ['url'] }, // exclude new URL calls
-                  use: [
-                    {
-                      loader: require.resolve('@svgr/webpack'),
-                      options: { titleProp: true, ref: true },
-                    },
-                    require.resolve('new-url-loader'),
-                  ],
-                },
-                {
-                  type: 'asset', // export a data URI or emit a separate file
+                  loader: require.resolve('@svgr/webpack'),
+                  options: { titleProp: true, ref: true },
                 },
               ],
             },

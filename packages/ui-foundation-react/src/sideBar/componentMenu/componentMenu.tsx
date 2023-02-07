@@ -9,12 +9,13 @@ import { WorkspaceContext } from '../../workspaceContext';
 import styles from './componentMenu.module.scss';
 
 export interface ComponentMenuProps {
+  componentId?: string;
   onComponentChange?: (componentId: string) => void;
 }
 
 const MENU_ITEM_OVERVIEW = '__overview';
 
-export function ComponentMenu({ onComponentChange }: ComponentMenuProps) {
+export function ComponentMenu({ componentId, onComponentChange }: ComponentMenuProps) {
   const { components } = useContext(WorkspaceContext);
 
   const routeInfo = useMemo(() => {
@@ -60,6 +61,7 @@ export function ComponentMenu({ onComponentChange }: ComponentMenuProps) {
       className={styles.componentMenu}
       autoOpen
       mode="vertical"
+      selectedKeys={[componentId]}
       onClickMenuItem={onComponentChange}
     >
       <Menu.Item key={MENU_ITEM_OVERVIEW}>

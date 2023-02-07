@@ -10,6 +10,7 @@ import {
 } from '@arco-cli/ui-foundation-react';
 
 import { SlotRouter } from '@aspect/react-router/uiRuntime';
+import { getIdFromLocation } from '@aspect/component/uiRuntime/utils/getIdFromLocation';
 
 import { useWorkspace } from './hooks/useWorkspace';
 
@@ -20,7 +21,7 @@ interface WorkspaceProps {
 }
 
 export function Workspace({ routes }: WorkspaceProps) {
-  const [componentId, setComponentId] = useState(null);
+  const [componentId, setComponentId] = useState(getIdFromLocation());
   const { workspace } = useWorkspace();
 
   if (!workspace) {
@@ -33,7 +34,10 @@ export function Workspace({ routes }: WorkspaceProps) {
         <Navbar title={workspace.name} />
         <main className={styles.main}>
           <SideBar
-            componentMenuProps={{ onComponentChange: (componentId) => setComponentId(componentId) }}
+            componentMenuProps={{
+              componentId,
+              onComponentChange: (componentId) => setComponentId(componentId),
+            }}
           />
           <div className={styles.overview}>
             <SlotRouter key={componentId} routes={routes}>

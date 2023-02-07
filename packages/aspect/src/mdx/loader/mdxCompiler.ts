@@ -180,6 +180,7 @@ function extractHeadings() {
   };
 }
 
+// TODO try to solve it: demo file content updating won't trigger mdx compiling, then code-text won't update
 function extractComponentDemos() {
   return function transformer(tree, file) {
     const imports = file.data.imports || [];
@@ -213,7 +214,10 @@ function extractComponentDemos() {
         }
 
         if (metadata.demo) {
-          node.value = `<${COMPONENT_NAME_DEMO_VIEW} code={\`${demoCode}\`} children={${node.value}} />`;
+          const encoder = new TextEncoder();
+          node.value = `<${COMPONENT_NAME_DEMO_VIEW} children={${
+            node.value
+          }}  code={{ needDecode: true, value: '${encoder.encode(demoCode)}' }} />`;
         }
       }
     });

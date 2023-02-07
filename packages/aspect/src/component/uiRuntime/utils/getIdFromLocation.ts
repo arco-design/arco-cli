@@ -4,7 +4,7 @@
  */
 const componentRegex = /^@?[\w/-]*[\w-]/;
 
-export function useIdFromLocation(): string | undefined {
+export function getIdFromLocation(): string | undefined {
   const splat = window.location.pathname.replace(/^\//, '');
   const match = componentRegex.exec(splat);
   return match?.[0];

@@ -1,42 +1,64 @@
 .snippetWrapper {
   position: relative;
 
+  code {
+    font-family: inherit !important;
+  }
+
+  .codeSnippet {
+    max-height: 200px;
+    padding: 16px !important;
+    border-radius: 10px;
+    background-color: white;
+    font-size: var(--preview-font-size-body-1);
+    // this is so that the copy icon will consistently sit at the corner of the snippet
+    margin: 0 !important;
+
+    &.expanded {
+      max-height: unset;
+    }
+  }
+
   &:hover {
-    .copyIcon {
+    .operationButtons {
       opacity: 1;
     }
   }
 
-  .codeSnippet {
-    padding: 16px !important;
-    border-radius: 10px;
-    background-color: white;
-    font-size: var(--bit-p-xs);
-    margin: 0 !important; // this is so that the copy icon will consistantly sit at the corner of the snippet
-  }
-
-  .copyIcon {
-    margin-left: 8px;
-    padding: 2px;
-    border-radius: 8px;
-    background-color: white;
+  .operationButtons {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    color: white;
     opacity: 0;
-    color: #414141;
-    cursor: pointer;
-    transition: opacity 300ms ease-in-out;
-    box-sizing: border-box;
-    width: 24px;
-  }
+    transition: opacity 150ms ease-in-out;
 
-  code {
-    font-family: inherit !important;
-  }
-}
+    button {
+      margin-left: 8px;
+      padding: 4px;
+      border: none;
+      border-radius: 4px;
+      line-height: 0;
+      background: rgba(255, 255, 255, .95);
+      color: var(--preview-color-text-1);
+      cursor: pointer;
 
-.copy {
-  display: flex;
-  align-items: center;
-  position: absolute;
-  top: 6px;
-  right: 6px;
+      &:hover {
+        background: rgba(255, 255, 255, .9);
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, .85);
+      }
+
+      svg {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        color: inherit;
+      }
+    }
+  }
 }

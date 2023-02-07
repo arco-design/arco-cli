@@ -10,7 +10,7 @@ import { SlotRouter } from '@aspect/react-router/uiRuntime';
 import { ComponentProvider } from './componentContext';
 import { ComponentModel } from './componentModel';
 import { useComponentQuery } from './hooks/useComponentQuery';
-import { useIdFromLocation } from './hooks/useIdFromLocation';
+import { getIdFromLocation } from './utils/getIdFromLocation';
 
 import styles from './component.module.scss';
 
@@ -38,7 +38,7 @@ export function Component({
   componentId,
   onComponentChange,
 }: ComponentProps) {
-  const idFromLocation = useIdFromLocation();
+  const idFromLocation = getIdFromLocation();
   const resolvedComponentIdStr = path || idFromLocation;
   const { component, error } = useComponentQuery(componentId || idFromLocation, host);
 
