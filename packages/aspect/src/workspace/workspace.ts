@@ -7,6 +7,8 @@ import { AspectLoaderMain, getAspectDef } from '@arco-cli/core/dist/aspect-loade
 import { ComponentInfo, ComponentConfig } from '@arco-cli/legacy/dist/workspace/componentInfo';
 import { getFilesByDir } from '@arco-cli/legacy/dist/workspace/componentOps/addComponents';
 import { getGitIgnoreForArco } from '@arco-cli/legacy/dist/utils/ignore';
+import minimatch from 'minimatch';
+import { NoIdMatchPatternError } from './exceptions';
 
 import { PubsubMain } from '@aspect/pubsub';
 import { ComponentFactory, Component } from '@aspect/component';
@@ -218,7 +220,7 @@ export class Workspace implements ComponentFactory {
     return component;
   }
 
-  async getMany(ids: string[]) {
+  getMany(ids: string[] = []) {
     return Promise.all(
       ids.map((id) => {
         return this.get(id);
@@ -226,20 +228,41 @@ export class Workspace implements ComponentFactory {
     );
   }
 
-  async getManyByPattern(_pattern: string, _throwForNoMatch?: boolean) {
-    // TODO pattern
-    return this.list();
+  getManyByPattern(_pattern: string, _throwForNoMatch?: boolean) {
+    if (!_pattern) {
+      return this.list();
+    }
+    if (!_pattern.includes('*') && !_pattern.includes(',')) {
+      const exists = this.componentInfoList.filter(info => info.id.includes(_pattern.trim()));
+      if (exists.length) {
+        return this.getMany(exists.map(info => info.id));
+      }
+      if (_throwForNoMatch) {
+        throw new NoIdMatchPatternError(_pattern);
+      }
+    }
+    const patternList = _pattern.split(',');
+    const exists = this.componentInfoList.filter(info => (
+      ~patternList.findIndex(p => minimatch(info.id, p.trim()))
+    ));
+    if (exists.length) {
+      return this.getMany(exists.map(info => info.id));
+    }
+    if (_throwForNoMatch) {
+      throw new NoIdMatchPatternError(_pattern);
+    } else {
+      return this.getMany();
+    }
   }
 
-  async getNewAndModified() {
+  getNewAndModified() {
     // TODO modified components
     return this.list();
   }
 
-  async list() {
+  list() {
     const ids = this.componentInfoList.map((info) => info.id);
-    const components = await this.getMany(ids);
-    return components;
+    return this.getMany(ids);
   }
 
   async resolveAspects(runtimeName: string) {
