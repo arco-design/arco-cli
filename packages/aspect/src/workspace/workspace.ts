@@ -8,7 +8,6 @@ import { ComponentInfo, ComponentConfig } from '@arco-cli/legacy/dist/workspace/
 import { getFilesByDir } from '@arco-cli/legacy/dist/workspace/componentOps/addComponents';
 import { getGitIgnoreForArco } from '@arco-cli/legacy/dist/utils/ignore';
 import minimatch from 'minimatch';
-import { NoIdMatchPatternError } from './exceptions';
 
 import { PubsubMain } from '@aspect/pubsub';
 import { ComponentFactory, Component } from '@aspect/component';
@@ -23,6 +22,7 @@ import {
   OnComponentRemove,
 } from './type/onComponentEvents';
 import { Watcher } from './watch/watcher';
+import { NoIdMatchPatternError } from './exceptions';
 
 export type OnComponentAddSlot = SlotRegistry<OnComponentAdd>;
 
@@ -228,30 +228,35 @@ export class Workspace implements ComponentFactory {
     );
   }
 
-  getManyByPattern(_pattern: string, _throwForNoMatch?: boolean) {
-    if (!_pattern) {
+  getManyByPattern(pattern: string, throwForNoMatch?: boolean) {
+    if (!pattern) {
       return this.list();
     }
-    if (!_pattern.includes('*') && !_pattern.includes(',')) {
-      const exists = this.componentInfoList.filter(info => info.id.includes(_pattern.trim()));
+
+    // if there is no "*" or ",", treat it as a component id
+    if (!pattern.includes('*') && !pattern.includes(',')) {
+      const exists = this.componentInfoList.filter((info) => info.id.includes(pattern.trim()));
       if (exists.length) {
-        return this.getMany(exists.map(info => info.id));
+        return this.getMany(exists.map((info) => info.id));
       }
-      if (_throwForNoMatch) {
-        throw new NoIdMatchPatternError(_pattern);
+      if (throwForNoMatch) {
+        throw new NoIdMatchPatternError(pattern);
       }
     }
-    const patternList = _pattern.split(',');
-    const exists = this.componentInfoList.filter(info => (
-      ~patternList.findIndex(p => minimatch(info.id, p.trim()))
-    ));
+
+    const patternList = pattern.split(',');
+    const exists = this.componentInfoList.filter(
+      (info) => patternList.findIndex((p) => minimatch(info.id, p.trim())) > -1
+    );
+
     if (exists.length) {
-      return this.getMany(exists.map(info => info.id));
+      return this.getMany(exists.map((info) => info.id));
     }
-    if (_throwForNoMatch) {
-      throw new NoIdMatchPatternError(_pattern);
+
+    if (throwForNoMatch) {
+      throw new NoIdMatchPatternError(pattern);
     } else {
-      return this.getMany();
+      return this.list();
     }
   }
 

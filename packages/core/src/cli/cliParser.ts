@@ -24,6 +24,7 @@ export class CLIParser {
     logger.debug(`[+] CLI-INPUT: ${args.join(' ')}`);
     yargs(args);
     yargs.help(false);
+
     this.configureParser();
     this.commands.forEach((command: Command) => {
       if (command.commands && command.commands.length) {
