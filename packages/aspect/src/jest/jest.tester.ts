@@ -1,4 +1,5 @@
 import type jest from 'jest';
+import path from 'path';
 import { Tester, TesterContext, Tests } from '@arco-cli/service/dist/tester';
 import { CallbackFn } from '@arco-cli/service/dist/tester/tester';
 import { readFileSync } from 'fs-extra';
@@ -50,6 +51,14 @@ export class JestTester implements Tester {
       config.noCache = true;
     }
 
+    if (context.components) {
+      config.testMatch = context.components.map(item => {
+        const { componentDir, entries: { main } } = item;
+        const componentPath = path.dirname(`${componentDir}/${main}`);
+        return `**/${componentPath}/**/*.test.[jt]s?(x)`;
+      });
+    }
+    
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const jestConfig = require(this.jestConfigPath);
     const withEnv = Object.assign(jestConfig, config);
