@@ -1,4 +1,4 @@
-import ArcoError from '@arco-cli/legacy/dist/error/ArcoError';
+import ArcoError from '@arco-cli/legacy/dist/error/arcoError';
 
 export class PreviewOutputFileNotFoundError extends ArcoError {
   constructor(componentId: string, filePath: string) {
