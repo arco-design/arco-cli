@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 12px;
-    font-size: 28px;
+    font-size: var(--preview-font-size-title-3);
     font-weight: 600;
 
     :global(.arco-icon) {
@@ -36,7 +36,7 @@
 
       .title {
         margin-bottom: 6px;
-        font-size: 16px;
+        font-size: var(--preview-font-size-title-1);
         font-weight: 600;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -44,7 +44,7 @@
       }
 
       .packageName {
-        font-size: 12px;
+        font-size: var(--preview-font-size-body-1);
         color: var(--preview-color-text-2);
       }
     }

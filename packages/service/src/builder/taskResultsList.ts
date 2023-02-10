@@ -1,9 +1,10 @@
 import chalk from 'chalk';
 import ArcoError from '@arco-cli/legacy/dist/error/arcoError';
+import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
+
 import { BuildTaskHelper } from './buildTask';
 import { TasksQueue } from './tasksQueue';
 import { TaskResults } from './buildPipe';
-import { ComponentResult } from './types';
 
 export class TaskResultsList {
   constructor(
@@ -30,7 +31,7 @@ export class TaskResultsList {
   /**
    * group errors from all tasks and show them nicely to the user
    */
-  public getErrorMessageFormatted(): string | null {
+  private getErrorMessageFormatted(): string | null {
     const tasksErrors: string[] = [];
     let totalErrors = 0;
     this.tasksResults.forEach((taskResult) => {
@@ -66,6 +67,6 @@ export class TaskResultsList {
   private aggregateTaskErrorsToOneString(componentResult: ComponentResult) {
     const rawErrors = componentResult.errors || [];
     const errors = rawErrors.map((e) => (typeof e === 'string' ? e : e.toString()));
-    return `component: ${componentResult.component.id.toString()}\n${errors.join('\n')}`;
+    return `component: ${componentResult.id}\n${errors.join('\n')}`;
   }
 }

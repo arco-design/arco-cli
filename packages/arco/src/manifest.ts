@@ -8,17 +8,18 @@ import { EnvsAspect } from '@arco-cli/aspect/dist/envs';
 import { ReactAspect } from '@arco-cli/react';
 import { ReactRouterAspect } from '@arco-cli/aspect/dist/react-router';
 import { BundlerAspect } from '@arco-cli/aspect/dist/bundler';
-import { PreviewAspect } from '@arco-cli/service/dist/preview';
-import { TesterAspect } from '@arco-cli/service/dist/tester';
-import { CompilerAspect } from '@arco-cli/service/dist/compiler';
-import { BuilderAspect } from '@arco-cli/service/dist/builder';
 import { JestAspect } from '@arco-cli/aspect/dist/jest';
 import { DocsAspect } from '@arco-cli/aspect/dist/docs';
-import { UIAspect } from '@arco-cli/service/dist/ui';
 import { WorkspaceAspect } from '@arco-cli/aspect/dist/workspace';
 import { LessAspect } from '@arco-cli/aspect/dist/less';
 import { SassAspect } from '@arco-cli/aspect/dist/sass';
 import { MDXAspect } from '@arco-cli/aspect/dist/mdx';
+import { UIAspect } from '@arco-cli/service/dist/ui';
+import { PreviewAspect } from '@arco-cli/service/dist/preview';
+import { TesterAspect } from '@arco-cli/service/dist/tester';
+import { CompilerAspect } from '@arco-cli/service/dist/compiler';
+import { BuilderAspect } from '@arco-cli/service/dist/builder';
+import { SyncerAspect } from '@arco-cli/service/dist/syncer';
 import { ArcoAspect } from './arco.aspect';
 
 export const manifestMap = {
@@ -32,17 +33,18 @@ export const manifestMap = {
   [ReactAspect.id]: ReactAspect,
   [ReactRouterAspect.id]: ReactRouterAspect,
   [BundlerAspect.id]: BundlerAspect,
-  [PreviewAspect.id]: PreviewAspect,
-  [TesterAspect.id]: TesterAspect,
-  [BuilderAspect.id]: BuilderAspect,
-  [CompilerAspect.id]: CompilerAspect,
   [JestAspect.id]: JestAspect,
   [DocsAspect.id]: DocsAspect,
-  [UIAspect.id]: UIAspect,
   [LessAspect.id]: LessAspect,
   [SassAspect.id]: SassAspect,
   [WorkspaceAspect.id]: WorkspaceAspect,
   [MDXAspect.id]: MDXAspect,
+  [UIAspect.id]: UIAspect,
+  [PreviewAspect.id]: PreviewAspect,
+  [CompilerAspect.id]: CompilerAspect,
+  [TesterAspect.id]: TesterAspect,
+  [BuilderAspect.id]: BuilderAspect,
+  [SyncerAspect.id]: SyncerAspect,
 };
 
 export function isCoreAspect(id: string) {

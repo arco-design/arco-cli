@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import type { ComponentResult } from './types';
+import type { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
 
 type ComponentIndex = {
   [id: string]: ComponentResult;
@@ -15,11 +15,11 @@ export function mergeComponentResults(resultMatrix: ComponentResult[][]) {
 
   resultMatrix.forEach((results) => {
     results.forEach((result) => {
-      const id = result.component.id;
+      const id = result.id;
       const existing = index[id] || { warnings: [], errors: [], metadata: {} };
 
       index[id] = {
-        component: result.component,
+        id,
         warnings: existing.warnings.concat(result.warnings || []),
         errors: existing.errors.concat(result.errors || []),
         metadata: merge(existing.metadata, result.metadata || {}),

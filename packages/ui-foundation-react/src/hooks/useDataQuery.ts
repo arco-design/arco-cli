@@ -10,11 +10,6 @@ import {
 import { Message } from '@arco-design/web-react';
 import { useLoader } from '../globalLoader';
 
-export type DataQueryResult<TData = any, TVariables = OperationVariables> = QueryResult<
-  TData,
-  TVariables
->;
-
 export function useDataQuery<TData = any, TVariables = OperationVariables>(
   query: DocumentNode,
   options?: QueryHookOptions<TData, TVariables>

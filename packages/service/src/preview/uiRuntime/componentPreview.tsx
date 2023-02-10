@@ -1,9 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { IframeHTMLAttributes, useRef, useEffect, useState } from 'react';
+import React, { IframeHTMLAttributes, useRef } from 'react';
 import { compact } from 'lodash';
-import { connectToChild } from 'penpal';
 import { usePubsubIframe } from '@arco-cli/aspect/dist/pubsub';
 import { ComponentModel } from '@arco-cli/aspect/dist/component/uiRuntime';
+import { useIframeHeight } from '@arco-cli/aspect/dist/pubsub/previewRuntime';
+
 import { toPreviewUrl } from './urls';
 
 import styles from './componentPreview.module.scss';
@@ -51,25 +52,10 @@ export function ComponentPreview({
   style,
   ...rest
 }: ComponentPreviewProps) {
-  const [height, setHeight] = useState(0);
-
   const refIframe = useRef<HTMLIFrameElement>(null);
+  const height = useIframeHeight(refIframe);
 
   usePubsubIframe(pubsub ? refIframe : undefined);
-
-  useEffect(() => {
-    if (!refIframe.current) return;
-    connectToChild({
-      iframe: refIframe.current,
-      methods: {
-        pub: (_event, message) => {
-          if (message.type === 'preview-size') {
-            setHeight(message.data.height);
-          }
-        },
-      },
-    });
-  }, [refIframe?.current]);
 
   const params = Array.isArray(queryParams)
     ? queryParams.concat(`viewport=${viewport}`)

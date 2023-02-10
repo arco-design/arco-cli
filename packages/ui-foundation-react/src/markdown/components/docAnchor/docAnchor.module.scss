@@ -21,7 +21,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-decoration: none;
-    font-size: 14px;
+    font-size: var(--preview-font-size-body-3);
     color: var(--preview-color-text-2);
 
     &:hover {

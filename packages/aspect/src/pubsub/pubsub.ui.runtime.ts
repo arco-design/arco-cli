@@ -3,7 +3,7 @@ import { connectToChild } from 'penpal';
 import type { AsyncMethodReturns } from 'penpal/lib/types';
 import { UIRuntime } from '@arco-cli/service/dist/ui/ui.aspect';
 
-import { ArcoBaseEvent } from './arcoBaseEvent';
+import { ArcoBaseEvent } from './events';
 import { PubsubAspect } from './pubsub.aspect';
 import { createProvider } from './pubsubContext';
 

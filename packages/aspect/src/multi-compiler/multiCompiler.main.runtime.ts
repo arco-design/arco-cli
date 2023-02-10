@@ -1,6 +1,5 @@
 import { MainRuntime } from '@arco-cli/core/dist/cli';
-
-import { Compiler, CompilerOptions } from '@service/compiler';
+import { Compiler, CompilerOptions } from '@arco-cli/service/dist/compiler';
 
 import { MultiCompilerAspect } from './multiCompiler.aspect';
 import { MultiCompiler } from './multiCompiler.compiler';

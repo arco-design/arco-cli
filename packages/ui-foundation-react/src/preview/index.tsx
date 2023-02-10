@@ -6,10 +6,22 @@
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ReactDOM from 'react-dom';
+import { Pubsub } from '@arco-cli/aspect/dist/pubsub/previewRuntime';
+import { DocsRootProps } from '@arco-cli/aspect/dist/docs/previewRuntime';
 import { App } from './app';
 
-const MOUNT_ROOT_ID = 'root';
+const MOUNT_ROOT_SELECTOR = '#root';
 
-export default function (props) {
-  ReactDOM.render(<App {...props} />, document.querySelector(`#${MOUNT_ROOT_ID}`));
+export default function ({
+  mountRoot = MOUNT_ROOT_SELECTOR,
+  ...rest
+}: DocsRootProps & { mountRoot: string | HTMLElement }) {
+  const pubsub = new Pubsub();
+
+  pubsub.reportSize('preview');
+
+  ReactDOM.render(
+    <App {...rest} />,
+    typeof mountRoot === 'string' ? document.querySelector(mountRoot) : mountRoot
+  );
 }

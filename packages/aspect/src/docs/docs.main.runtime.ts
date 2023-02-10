@@ -84,7 +84,8 @@ export class DocsMain {
   }
 
   /**
-   * return any component metadata generate by env, like component property tables
+   * return any component metadata generate by env
+   * like component property tables
    */
   getMetadata(components: Component[], env: Environment) {
     return ComponentMap.as<Record<string, any>>(components, (component) => {
@@ -95,7 +96,8 @@ export class DocsMain {
   }
 
   /**
-   * return the metadata parsed from raw document file
+   * return the doc properties parsed from raw document file
+   * like description / labels
    */
   getDoc(component: Component) {
     const docData = component.extensions.findExtension(DocsAspect.id)?.data?.doc;

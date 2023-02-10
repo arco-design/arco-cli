@@ -1,4 +1,4 @@
-import { ArcoBaseEvent } from '@arco-cli/aspect/dist/pubsub/previewRuntime';
+import { ArcoBaseEvent } from './arcoBaseEvent';
 
 export type SizeEventType = {
   height: number;

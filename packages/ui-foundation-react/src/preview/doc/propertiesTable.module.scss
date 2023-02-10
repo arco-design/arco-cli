@@ -1,0 +1,9 @@
+.propertiesTable {
+  .table:not(:last-child) {
+    margin-bottom: 36px;
+  }
+
+  .tableTitle {
+    margin: 0 0 12px 0;
+  }
+}

@@ -11,19 +11,19 @@ import type {
   EntriesAssetsMap,
   Target,
 } from '@arco-cli/aspect/dist/bundler';
+import type { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
+import {
+  toComponentChunkId,
+  toComponentChunkFileName,
+} from '@arco-cli/legacy/dist/workspace/componentIdTo';
 
-import { ARTIFACTS_DIR, ComponentResult } from '@service/builder';
+import { ARTIFACTS_DIR } from '@service/builder';
 
 import { BundlingStrategy, ComputeTargetsContext } from '../bundlingStrategy';
 import type { PreviewDefinition } from '../types';
 import type { ComponentPreviewMetaData, PreviewMain } from '../preview.main.runtime';
 import { generatePreviewBundleEntry } from './generatePreviewBundleEntry';
 import { PreviewOutputFileNotFoundError } from '../exceptions';
-
-export const PREVIEW_CHUNK_SUFFIX = 'preview';
-export const COMPONENT_CHUNK_SUFFIX = 'component';
-export const PREVIEW_CHUNK_FILENAME_SUFFIX = `${PREVIEW_CHUNK_SUFFIX}.js`;
-export const COMPONENT_CHUNK_FILENAME_SUFFIX = `${COMPONENT_CHUNK_SUFFIX}.js`;
 
 export const COMPONENT_STRATEGY_SIZE_KEY_NAME = 'size';
 export const COMPONENT_STRATEGY_ARTIFACT_NAME = 'preview-component';
@@ -110,15 +110,13 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     //   component.entries.main
     // );
     const chunks = {
-      componentPreview: this.getComponentChunkId(component.id, 'preview'),
+      componentPreview: toComponentChunkId(component.id, 'preview'),
       // TODO build component UMD dist files
       // component: context.splitComponentBundle ? component.id : undefined,
     };
-    const fsCompatibleId = toFsCompatible(component.id);
-
     const entries = {
       [chunks.componentPreview]: {
-        filename: this.getComponentChunkFileName(fsCompatibleId, 'preview'),
+        filename: toComponentChunkFileName(component.id, 'preview'),
         import: componentPreviewPath,
         library: { name: chunks.componentPreview, type: 'umd' },
       },
@@ -126,23 +124,13 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
 
     // if (chunks.component) {
     //   entries[chunks.component] = {
-    //     filename: this.getComponentChunkFileName(fsCompatibleId, 'component'),
+    //     filename: this.getComponentChunkFileName(component.id, 'component'),
     //     import: componentPath,
     //     library: { name: chunks.component, type: 'umd' },
     //   };
     // }
 
     return { component, entries };
-  }
-
-  private getComponentChunkId(componentId: string, type: 'component' | 'preview') {
-    return type === 'component' ? componentId : `${componentId}-${PREVIEW_CHUNK_SUFFIX}`;
-  }
-
-  private getComponentChunkFileName(idstr: string, type: 'component' | 'preview') {
-    const suffix =
-      type === 'component' ? COMPONENT_CHUNK_FILENAME_SUFFIX : PREVIEW_CHUNK_FILENAME_SUFFIX;
-    return `${idstr}-${suffix}`;
   }
 
   private getCacheDir(context: ComputeTargetsContext) {
@@ -210,7 +198,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     if (!assets) return undefined;
 
     const componentEntryId = component.id;
-    const componentPreviewEntryId = this.getComponentChunkId(component.id, 'preview');
+    const componentPreviewEntryId = toComponentChunkId(component.id, 'preview');
     const componentFiles = entriesAssetsMap[componentEntryId]?.assets || [];
     const componentAuxiliaryFiles = entriesAssetsMap[componentEntryId]?.auxiliaryAssets || [];
     const componentPreviewFiles = entriesAssetsMap[componentPreviewEntryId]?.assets || [];
@@ -281,7 +269,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     const componentsResults: ComponentResult[] = result.components.map((component) => {
       const metadata = this.computeComponentMetadata(result, component);
       return {
-        component,
+        id: component.id,
         metadata,
         errors: result.errors.map((err) => (typeof err === 'string' ? err : err.message)),
         warning: result.warnings,

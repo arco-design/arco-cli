@@ -1,4 +1,13 @@
 {
-  "name": "@library/my-library",
-  "version": "1.0.0"
+  "name": "@byted/hello-world",
+  "version": "1.2.1",
+  "peerDependencies": {
+    "react": "~17",
+    "@arco-design/web-react": "~2"
+  },
+  "files": [
+    "es",
+    "lib",
+    "artifacts"
+  ]
 }

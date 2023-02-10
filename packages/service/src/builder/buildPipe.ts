@@ -1,9 +1,10 @@
-import { EnvDefinition } from '@arco-cli/aspect/dist/envs';
-import { Logger, LongProcessLogger } from '@arco-cli/core/dist/logger';
 import mapSeries from 'p-map-series';
 import prettyTime from 'pretty-time';
+import { EnvDefinition } from '@arco-cli/aspect/dist/envs';
+import { Logger, LongProcessLogger } from '@arco-cli/core/dist/logger';
+import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
+
 import { BuildContext, BuildTask, BuildTaskHelper, BuildTaskResult } from './buildTask';
-import { ComponentResult } from './types';
 import { TasksQueue } from './tasksQueue';
 import { TaskResultsList } from './taskResultsList';
 import { EnvsBuildContext } from './builder.service';
@@ -15,7 +16,7 @@ export type TaskResults = {
   task: BuildTask;
 
   /**
-   * environment were the task was running
+   * environment where the task was running
    */
   env: EnvDefinition;
 

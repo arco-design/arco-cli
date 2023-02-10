@@ -1,5 +1,6 @@
 .table {
-  font-size: 12px;
+  color: var(--preview-color-text-2);
+  font-size: var(--preview-font-size-body-1);
 
   > div {
     grid-gap: 16px 24px;
