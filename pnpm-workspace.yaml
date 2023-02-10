@@ -1,4 +1,3 @@
 packages:
-  - 'fixtures/workspace'
   - 'packages/*'
   - '!**/test/**'

@@ -12,5 +12,5 @@ export type SyncParams = {
     peerDependencies: string[];
   };
   outline?: Array<{ depth: number; text: string }>;
-  __v2: true;
+  _generation: 2;
 };

@@ -48,7 +48,7 @@ export class SyncerMain {
             peerDependencies: Object.keys(component.peerDependencies),
           },
           outline: doc.outline as any,
-          __v2: true,
+          _generation: 2,
         };
 
         let error = null;

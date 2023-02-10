@@ -15,7 +15,7 @@ export function App({ doc, metadata }: DocsRootProps) {
     <Theme>
       <MDXLayout>
         <DocContent doc={doc} />
-        <PropertiesTable schema={metadata as any} />
+        <PropertiesTable doclet={metadata as any} />
       </MDXLayout>
     </Theme>
   );

@@ -1,4 +1,8 @@
 .tableColumn {
   display: flex;
   align-items: center;
+
+  code {
+    white-space: normal !important;
+  }
 }

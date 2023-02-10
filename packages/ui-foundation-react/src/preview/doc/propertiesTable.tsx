@@ -1,9 +1,14 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
+import xcode from 'react-syntax-highlighter/dist/esm/styles/hljs/xcode';
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight';
+
 import { Table } from '../../baseUI/table';
 
+import styles from './propertiesTable.module.scss';
+
 // Type from @arco-cli/react/dist/tsdoc/types
-type DocProp = {
+export type DocProp = {
   name: string;
   description: string;
   required: boolean;
@@ -12,27 +17,43 @@ type DocProp = {
   version?: string;
 };
 
-type PropertySchema = {
+// Type from @arco-cli/react/dist/tsdoc/types
+export type Doclet = {
+  filePath: string;
   name: string;
-  description: string;
-  properties: Array<DocProp>;
+  description?: string;
+  type?: string;
+  args?: Record<string, any>[];
+  returns?: Record<string, any>;
+  properties?: DocProp[];
 };
 
 interface PropertiesTableProps {
-  schema: PropertySchema[];
+  doclet: Doclet[];
 }
 
-export function PropertiesTable({ schema }: PropertiesTableProps) {
-  if (!schema || !schema.length) return null;
+export function PropertiesTable({ doclet }: PropertiesTableProps) {
+  if (!doclet?.length) return null;
 
   return (
-    <div>
+    <div className={styles.propertiesTable}>
       <h1 id="API">API</h1>
-      {schema.map(({ name, properties }, index) => {
+      {doclet.map(({ name, type, properties }, index) => {
         return (
-          <div key={index}>
-            <h2>{name}</h2>
-            <Table headings={['name', 'type', 'default', 'description']} rows={properties} />
+          <div key={index} className={styles.table}>
+            <h2 id={name} className={styles.tableTitle}>
+              {name}
+            </h2>
+
+            {type ? (
+              <SyntaxHighlighter theme={xcode} language="javascript">
+                {type}
+              </SyntaxHighlighter>
+            ) : null}
+
+            {properties.length ? (
+              <Table headings={['name', 'type', 'default', 'description']} rows={properties} />
+            ) : null}
           </div>
         );
       })}

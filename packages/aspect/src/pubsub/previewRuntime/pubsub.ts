@@ -81,8 +81,6 @@ export class Pubsub {
     if (!this.inIframe()) return;
 
     const sendPubsubEvent = () => {
-      console.log('_________ report window size');
-
       this.pub(
         topic,
         new SizeEvent({
