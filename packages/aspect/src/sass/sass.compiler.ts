@@ -2,12 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import minimatch from 'minimatch';
 import { compile } from 'sass';
-import {
-  Compiler,
-  CompilerOptions,
-  TranspileFileParams,
-  TranspileFileOutput,
-} from '@arco-cli/service/dist/compiler';
+import { Compiler, CompilerOptions } from '@arco-cli/service/dist/compiler';
 import { BuildContext, BuildTaskResult } from '@arco-cli/service/dist/builder';
 import {
   DEFAULT_BUILD_IGNORE_PATTERNS,
@@ -43,23 +38,11 @@ export class SassCompiler implements Compiler {
     return this.distDir;
   }
 
-  transpileFile(_fileContent: string, options: TranspileFileParams): TranspileFileOutput {
-    const filePath = path.resolve(options.componentDir, options.filePath);
-    const cssContent = compile(filePath).css;
-
-    return [
-      {
-        outputText: cssContent,
-        outputPath: this.getDistPathBySrcPath(options.filePath),
-      },
-    ];
-  }
-
   async build(context: BuildContext): Promise<BuildTaskResult> {
     const result = await Promise.all(
       context.components.map(async (component) => {
         const componentResult = {
-          component,
+          id: component.id,
           errors: [],
         };
 

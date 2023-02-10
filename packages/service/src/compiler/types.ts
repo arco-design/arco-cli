@@ -2,36 +2,6 @@ import type { Component } from '@arco-cli/aspect/dist/component';
 
 import { BuildContext, BuildTaskResult, TaskResultsList } from '@service/builder';
 
-export type TranspileFileParams = {
-  // absolute path of the component's root directory
-  componentDir: string;
-  // relative path of the file inside the component directory
-  filePath: string;
-};
-
-export type CompileError = { path: string; error: Error };
-
-export enum CompilationInitiator {
-  // eslint-disable-next-line no-unused-vars
-  CmdReport,
-  // eslint-disable-next-line no-unused-vars
-  CmdJson,
-}
-
-export type TranspileComponentParams = {
-  component: Component;
-  componentDir: string; // absolute path of the component's root directory
-  outputDir: string; // absolute path of the component's output directory
-  initiator: CompilationInitiator; // origin of the compilation's request
-};
-
-export type TranspileFileOutput =
-  | {
-      outputText: string;
-      outputPath: string;
-    }[]
-  | null;
-
 export interface CompilerOptions {
   /**
    * name of the compiler.
@@ -117,17 +87,6 @@ export interface Compiler extends CompilerOptions {
    * in node_modules by default
    */
   getPreviewComponentRootPath?(component: Component): string;
-
-  /**
-   * transpile a single file that gets saved into the workspace, used by `arco compile` and during
-   * development
-   */
-  transpileFile?: (fileContent: string, params: TranspileFileParams) => TranspileFileOutput;
-
-  /**
-   * transpile all the files of a component, use this when you can't use `transpileFile`
-   */
-  transpileComponent?: (params: TranspileComponentParams) => Promise<void>;
 
   /**
    * compile components inside isolated capsules. this being used during tag for the release.

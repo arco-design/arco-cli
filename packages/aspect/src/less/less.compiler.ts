@@ -3,12 +3,7 @@ import fs from 'fs-extra';
 import minimatch from 'minimatch';
 import { render, version } from 'less';
 import { BuildContext, BuildTaskResult } from '@arco-cli/service/dist/builder';
-import {
-  Compiler,
-  TranspileFileParams,
-  TranspileFileOutput,
-  CompilerOptions,
-} from '@arco-cli/service/dist/compiler';
+import { Compiler, CompilerOptions } from '@arco-cli/service/dist/compiler';
 import {
   DEFAULT_DIST_DIRNAME,
   DEFAULT_BUILD_IGNORE_PATTERNS,
@@ -43,21 +38,11 @@ export class LessCompiler implements Compiler {
     return this.distDir;
   }
 
-  transpileFile(fileContent: string, options: TranspileFileParams): TranspileFileOutput {
-    // TODO we may don't need compile cmd, then transpileFile method can be removed
-    return [
-      {
-        outputText: fileContent.toString(),
-        outputPath: this.getDistPathBySrcPath(options.filePath),
-      },
-    ];
-  }
-
   async build(context: BuildContext): Promise<BuildTaskResult> {
     const results = await Promise.all(
       context.components.map(async (component) => {
         const componentResult = {
-          component,
+          id: component.id,
           errors: [],
         };
 

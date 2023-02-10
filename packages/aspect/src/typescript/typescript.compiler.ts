@@ -3,11 +3,7 @@ import fs from 'fs-extra';
 import ts from 'typescript';
 import { merge, cloneDeep } from 'lodash';
 import { Logger } from '@arco-cli/core/dist/logger';
-import {
-  Compiler,
-  TranspileFileOutput,
-  TranspileFileParams,
-} from '@arco-cli/service/dist/compiler';
+import { Compiler } from '@arco-cli/service/dist/compiler';
 import ArcoError from '@arco-cli/legacy/dist/error/arcoError';
 import { BuildContext, BuildTaskResult } from '@arco-cli/service/dist/builder';
 import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
@@ -18,7 +14,6 @@ import {
 import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 
 import { TypescriptCompilerOptions } from './compilerOptions';
-import { TsConfigPareFailedError } from './exceptions';
 import TypescriptAspect from './typescript.aspect';
 
 const FILENAME_TSCONFIG = 'tsconfig.json';
@@ -56,14 +51,6 @@ export class TypescriptCompiler implements Compiler {
     if (!this.isFileSupported(filePath)) return filePath;
     const fileExtension = path.extname(filePath);
     return filePath.replace(new RegExp(`${fileExtension}$`), '.js');
-  }
-
-  private getFormatDiagnosticsHost(): ts.FormatDiagnosticsHost {
-    return {
-      getCanonicalFileName: (p) => p,
-      getCurrentDirectory: this.tsModule.sys.getCurrentDirectory,
-      getNewLine: () => this.tsModule.sys.newLine,
-    };
   }
 
   private getCacheDir(context: BuildContext) {
@@ -231,53 +218,6 @@ export class TypescriptCompiler implements Compiler {
         isJsxAndCompile) &&
       !filePath.endsWith('.d.ts')
     );
-  }
-
-  transpileFile(fileContent: string, options: TranspileFileParams): TranspileFileOutput {
-    if (!this.isFileSupported(options.filePath)) {
-      return null;
-    }
-
-    const compilerOptionsFromTsconfig = this.tsModule.convertCompilerOptionsFromJson(
-      this.options.tsconfig.compilerOptions,
-      '.'
-    );
-
-    if (compilerOptionsFromTsconfig.errors.length) {
-      const formattedErrors = this.tsModule.formatDiagnosticsWithColorAndContext(
-        compilerOptionsFromTsconfig.errors,
-        this.getFormatDiagnosticsHost()
-      );
-      throw new TsConfigPareFailedError(`failed parsing the tsconfig.json.\n${formattedErrors}`);
-    }
-
-    const compilerOptions = compilerOptionsFromTsconfig.options;
-    compilerOptions.sourceRoot = options.componentDir;
-    compilerOptions.rootDir = '.';
-    const result = this.tsModule.transpileModule(fileContent, {
-      compilerOptions,
-      fileName: options.filePath,
-      reportDiagnostics: true,
-    });
-
-    if (result.diagnostics && result.diagnostics.length) {
-      const formatHost = this.getFormatDiagnosticsHost();
-      const error = this.tsModule.formatDiagnosticsWithColorAndContext(
-        result.diagnostics,
-        formatHost
-      );
-      throw new Error(error);
-    }
-
-    const outputPath = this.replaceFileExtToJs(options.filePath);
-    const outputFiles = [{ outputText: result.outputText, outputPath }];
-    if (result.sourceMapText) {
-      outputFiles.push({
-        outputText: result.sourceMapText,
-        outputPath: `${outputPath}.map`,
-      });
-    }
-    return outputFiles;
   }
 
   async preBuild(context: BuildContext) {

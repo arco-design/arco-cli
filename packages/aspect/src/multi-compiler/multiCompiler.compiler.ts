@@ -11,12 +11,7 @@ import {
   mergeComponentResults,
   TaskResultsList,
 } from '@arco-cli/service/dist/builder';
-import {
-  Compiler,
-  CompilerOptions,
-  TranspileFileOutput,
-  TranspileFileParams,
-} from '@arco-cli/service/dist/compiler';
+import { Compiler, CompilerOptions } from '@arco-cli/service/dist/compiler';
 
 export class MultiCompiler implements Compiler {
   displayName = 'Multi compiler';
@@ -79,30 +74,6 @@ export class MultiCompiler implements Compiler {
     }
 
     return matchedCompiler.getDistPathBySrcPath(srcPath);
-  }
-
-  /**
-   * the multi-compiler applies all applicable defined compilers on given content.
-   */
-  transpileFile(fileContent: string, options: TranspileFileParams): TranspileFileOutput {
-    const outputs = this.compilers.reduce<any>(
-      (files, compiler) => {
-        if (!compiler.transpileFile) {
-          return files;
-        }
-        return files?.flatMap((file) => {
-          if (!compiler.isFileSupported(file?.outputPath)) return [file];
-          const params = { ...options, filePath: file.outputPath };
-          const compiledContent = compiler.transpileFile?.(file.outputText, params);
-          if (!compiledContent) return null;
-
-          return compiledContent;
-        });
-      },
-      [{ outputText: fileContent, outputPath: options.filePath }]
-    );
-
-    return outputs;
   }
 
   async preBuild(context: BuildContext) {

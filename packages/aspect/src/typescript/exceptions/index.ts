@@ -1,1 +1,0 @@
-export { TsConfigPareFailedError } from './tsConfigPareFailedError';
