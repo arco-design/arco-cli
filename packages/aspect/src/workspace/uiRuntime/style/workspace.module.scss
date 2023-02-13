@@ -1,6 +1,6 @@
-@import '~@arco-cli/ui-foundation-react/dist/style/z-indexes.scss';
+@import '~@arco-cli/ui-foundation-react/dist/style/z-indexes';
 
-$navbarHeight: 60px;
+$navbar-height: 60px;
 
 .emptyContainer {
   height: 100vh;
@@ -22,7 +22,7 @@ $navbarHeight: 60px;
 
 .overview {
   flex: 1;
-  height: calc(100vh - $navbarHeight);
+  height: calc(100vh - $navbar-height);
   padding: 16px 20px;
   overflow-y: scroll;
 

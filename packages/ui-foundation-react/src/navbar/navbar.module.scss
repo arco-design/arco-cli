@@ -1,17 +1,17 @@
 @import '../style/z-indexes';
 
-$navbarHeight: 60px;
+$navbar-height: 60px;
 
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: $navbarHeight;
+  height: $navbar-height;
   padding: 0 12px;
   box-sizing: border-box;
   border-bottom: 1px solid var(--preview-color-border);
   font-size: var(--preview-font-size-title-1);
-  z-index: $navbar-zIndex;
+  z-index: $navbar-z-index;
 
   .title {
     display: flex;

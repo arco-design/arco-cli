@@ -52,13 +52,16 @@ export class JestTester implements Tester {
     }
 
     if (context.components) {
-      config.testMatch = context.components.map(item => {
-        const { componentDir, entries: { main } } = item;
+      config.testMatch = context.components.map((item) => {
+        const {
+          componentDir,
+          entries: { main },
+        } = item;
         const componentPath = path.dirname(`${componentDir}/${main}`);
         return `**/${componentPath}/**/*.test.[jt]s?(x)`;
       });
     }
-    
+
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const jestConfig = require(this.jestConfigPath);
     const withEnv = Object.assign(jestConfig, config);

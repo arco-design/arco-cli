@@ -1,21 +1,10 @@
 .componentMenu {
-  :global(.arco-tree-node-title) {
-    width: 100%;
-
-    a {
-      color: inherit !important;
-      text-decoration: none;
-    }
-  }
-
-  .menuItemLink {
-    &:global(::before) {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-    }
+  .menuItemLink::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
   }
 }

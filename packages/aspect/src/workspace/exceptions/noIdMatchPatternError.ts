@@ -1,4 +1,3 @@
-
 export class NoIdMatchPatternError extends Error {
   isUserError = true;
 

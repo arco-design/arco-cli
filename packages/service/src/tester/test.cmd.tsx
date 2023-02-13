@@ -37,9 +37,7 @@ export class TestCmd implements Command {
     if (!components.length) {
       return {
         code: 1,
-        data: (
-          <Text color="yellow">no components found to test</Text>
-        ),
+        data: <Text color="yellow">no components found to test</Text>,
       };
     }
 

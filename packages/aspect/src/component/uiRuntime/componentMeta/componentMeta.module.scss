@@ -1,5 +1,5 @@
 .metadata {
-  padding: 20px 0 8px 0;
+  padding: 20px 0 8px;
 
   .flexBetween {
     display: flex;
@@ -7,7 +7,7 @@
   }
 
   .title {
-    margin: 0 0 20px 0;
+    margin: 0 0 20px;
     padding: 0;
     font-size: var(--preview-font-size-display-1);
     font-weight: 700;
@@ -16,7 +16,7 @@
   }
 
   .descriptions {
-    margin: 0 0 16px 0;
+    margin: 0 0 16px;
     font-size: var(--preview-font-size-title-1);
     line-height: 1;
     color: var(--preview-color-text-2);

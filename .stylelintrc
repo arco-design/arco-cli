@@ -1,8 +1,21 @@
 {
-  "extends": "stylelint-config-standard",
+  "extends": "stylelint-config-standard-scss",
   "rules": {
+    "block-no-empty": null,
     "block-opening-brace-space-before": "always",
     "declaration-block-trailing-semicolon": "always",
-    "font-family-no-missing-generic-family-keyword": null
+    "font-family-no-missing-generic-family-keyword": null,
+    "import-notation": null,
+    "no-invalid-double-slash-comments": null,
+    "no-duplicate-selectors": null,
+    "selector-class-pattern": null,
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ],
+    "string-quotes": "single",
+    "scss/no-global-function-names": null
   }
 }

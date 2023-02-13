@@ -1,22 +1,26 @@
 $br-xs: 360px;
-$br-sm: 480px; //mobile
+
+// mobile
+$br-sm: 480px;
 $br-md: 768px;
-$br-l: 920px; //tablet
+
+// tablet
+$br-l: 920px;
 $br-lg: 1200px;
 $br-xl: 1440px;
 $br-xxl: 1920px;
 
-$breakpoints: //name val
-  xs $br-xs, sm $br-sm, md $br-md, l $br-l, lg $br-lg, xl $br-xl;
+// name val
+$breakpoints: xs $br-xs, sm $br-sm, md $br-md, l $br-l, lg $br-lg, xl $br-xl;
 
 @for $i from 1 through 12 {
   @each $breakpoint in $breakpoints {
-    $brName: nth($breakpoint, 1);
-    $brVal: nth($breakpoint, 2);
+    $br-name: nth($breakpoint, 1);
+    $br-val: nth($breakpoint, 2);
 
-    @media only screen and (min-width: $brVal) {
+    @media only screen and (min-width: $br-val) {
       .colTemplate {
-        &--#{$brName}-#{$i} {
+        &--#{$br-name}-#{$i} {
           grid-template-columns: repeat($i, 1fr);
         }
       }

@@ -1,5 +1,5 @@
 .workspaceOverview {
-  $componentCardMargin: 12px;
+  $component-card-margin: 12px;
 
   .workspaceTitle {
     display: flex;
@@ -15,14 +15,14 @@
 
   .gallery {
     display: flex;
-    margin: 0 (-$componentCardMargin);
+    margin: 0 (-$component-card-margin);
 
     .componentCard {
       display: flex;
       flex-direction: column;
-      width: calc(20% - $componentCardMargin);
+      width: calc(20% - $component-card-margin);
       height: 120px;
-      margin: $componentCardMargin;
+      margin: $component-card-margin;
       padding: 8px;
       border: 1px solid var(--preview-color-border);
       border-radius: 4px;
@@ -30,7 +30,7 @@
       color: var(--preview-color-text-1);
       text-decoration: none;
 
-      &:global(:hover) {
+      &:hover {
         box-shadow: 0 0 6px var(--preview-color-fill-2);
       }
 

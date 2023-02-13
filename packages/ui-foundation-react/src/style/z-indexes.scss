@@ -4,10 +4,7 @@
 
 // 100 < z < 1000 - navigation / hud
 $nav-z-index: 100;
-
-$pane-splitter-zIndex: 101;
-
-$navbar-zIndex: 102;
+$navbar-z-index: 102;
 
 // 5000 < z < 6000 - modals and overlays
 $modal-z-index: 5000;
