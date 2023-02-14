@@ -79,6 +79,8 @@ export default async function ({
     process.exit(1);
   }
 
+
+
   if (!(await isGitStatusClean())) {
     print.error(`\n${locale.ERROR_GIT_DIRTY}\n`);
     process.exit(1);
