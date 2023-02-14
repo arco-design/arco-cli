@@ -46,8 +46,12 @@ export class Component {
     return this.info.peerDependencies;
   }
 
-  get componentDir() {
+  get rootDir() {
     return this.info.rootDir;
+  }
+
+  get componentDir() {
+    return path.join(this.info.rootDir, this.entries.base);
   }
 
   get packageDir() {
@@ -74,12 +78,12 @@ export class Component {
   }
 
   static async loadFromFileSystem(info: ComponentInfo, projectPath: string) {
-    const componentDirAbs = path.join(projectPath, info.rootDir);
-    if (!fs.existsSync(componentDirAbs)) throw new ComponentNotFoundInPathError(componentDirAbs);
+    const rootDirAbs = path.join(projectPath, info.rootDir);
+    if (!fs.existsSync(rootDirAbs)) throw new ComponentNotFoundInPathError(rootDirAbs);
 
     const files = info.files.map((file) => {
-      const filePath = path.join(componentDirAbs, file.relativePath);
-      return SourceFile.load(filePath, componentDirAbs, projectPath, {
+      const filePath = path.join(rootDirAbs, file.relativePath);
+      return SourceFile.load(filePath, rootDirAbs, projectPath, {
         test: file.test,
       });
     });

@@ -44,12 +44,12 @@ export class CompilerTask implements BuildTask {
   async execute(context: BuildContext): Promise<BuildTaskResult> {
     const uniqueComponents: Component[] = [];
     for (const component of context.components) {
-      if (!uniqueComponents.find((com) => com.componentDir === component.componentDir)) {
+      if (!uniqueComponents.find((com) => com.rootDir === component.rootDir)) {
         uniqueComponents.push(component);
       }
     }
 
-    // we reduce the list size of components that need to build according to componentDir
+    // we reduce the list size of components that need to build according to rootDir
     // no need to repeat the build process multiple times if the components have the same root directory
     // but do NOT change buildContext directly
     const buildResults = await this.compilerInstance.build({

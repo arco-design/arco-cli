@@ -6,19 +6,22 @@ import { PACKAGE_JSON } from '../constants';
 export type ComponentAspectConfig = { [aspectId: string]: Record<string, any> | '-' };
 
 export type ComponentConfig = {
-  // root dir of component, relative path to workspace
+  // root dir of package source code, relative path to workspace
   rootDir: string;
   // name of component
   name: string;
   // entry file info of component
-  entries?: {
-    // component entry, relative path to root dir
+  entries: {
+    // component dir
+    // "./" by default, but in library-project this path will be "./ComponentName"
+    base?: string;
+    // component entry, will be path.join(rootDir, entries.base, entries.main)
     main: string;
-    // style entry, relative path to root dir
+    // style entry
     style?: string;
-    // preview entry, relative path to root dir
+    // preview entry
     preview?: string;
-    // jsdoc parse entry, relative path to root dir
+    // jsdoc parse entry
     jsdoc?: string;
   };
   config: ComponentAspectConfig;
@@ -54,6 +57,8 @@ export class ComponentInfo {
     workspacePath: string,
     files?: ComponentInfoFiles[]
   ) {
+    entries.base ||= './';
+
     this.entries = entries;
     this.rootDir = rootDir;
     this.config = config;

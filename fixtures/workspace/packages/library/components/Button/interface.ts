@@ -12,7 +12,7 @@ export interface ButtonProps {
    */
   size?: 'large' | 'small' | 'mini';
   /**
-   * @zh 按钮装填
+   * @zh 按钮状态
    * @en Status of Button
    */
   status?: 'success' | 'warning' | 'danger';

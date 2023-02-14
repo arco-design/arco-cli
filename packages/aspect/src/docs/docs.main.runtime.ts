@@ -1,3 +1,4 @@
+import path from 'path';
 import { MainRuntime } from '@arco-cli/core/dist/cli';
 import { LoggerAspect, LoggerMain, Logger } from '@arco-cli/core/dist/logger';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
@@ -51,7 +52,7 @@ export class DocsMain {
   constructor(private logger: Logger, private docReaderSlot: DocReaderSlot) {}
 
   private getDocFiles(component: Component): AbstractVinyl[] {
-    const previewEntry = component.entries.preview;
+    const previewEntry = path.join(component.entries.base, component.entries.preview);
     return component.files.filter((file) =>
       (Array.isArray(previewEntry) ? previewEntry : [previewEntry]).includes(file.relative)
     );
@@ -90,7 +91,9 @@ export class DocsMain {
   getMetadata(components: Component[], env: Environment) {
     return ComponentMap.as<Record<string, any>>(components, (component) => {
       return env.getDocsMetadata?.(
-        component.files.find((file) => file.relative === component.entries.jsdoc)
+        component.files.find(
+          (file) => file.relative === path.join(component.entries.base, component.entries.jsdoc)
+        )
       );
     });
   }

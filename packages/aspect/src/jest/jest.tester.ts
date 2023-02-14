@@ -1,5 +1,5 @@
-import type jest from 'jest';
 import path from 'path';
+import type jest from 'jest';
 import { Tester, TesterContext, Tests } from '@arco-cli/service/dist/tester';
 import { CallbackFn } from '@arco-cli/service/dist/tester/tester';
 import { readFileSync } from 'fs-extra';
@@ -52,13 +52,8 @@ export class JestTester implements Tester {
     }
 
     if (context.components) {
-      config.testMatch = context.components.map((item) => {
-        const {
-          componentDir,
-          entries: { main },
-        } = item;
-        const componentPath = path.dirname(`${componentDir}/${main}`);
-        return `**/${componentPath}/**/*.test.[jt]s?(x)`;
+      config.testMatch = context.components.map(({ componentDir }) => {
+        return path.join(`**/${componentDir}`, '**/*.test.[jt]s?(x)');
       });
     }
 

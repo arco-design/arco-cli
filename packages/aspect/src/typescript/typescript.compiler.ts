@@ -60,8 +60,8 @@ export class TypescriptCompiler implements Compiler {
   private async writeComponentTsConfig(context: BuildContext) {
     const workspacePath = context.workspace.path;
     await Promise.all(
-      context.components.map(async ({ id: componentId, componentDir, packageDirAbs }) => {
-        const componentDirAbs = path.join(workspacePath, componentDir);
+      context.components.map(async ({ id: componentId, rootDir, packageDirAbs }) => {
+        const rootDirAbs = path.join(workspacePath, rootDir);
         const outDirAbs = path.join(packageDirAbs, this.distDir);
 
         let tsconfig: Record<string, any>;
@@ -75,11 +75,11 @@ export class TypescriptCompiler implements Compiler {
         // avoid change this.options.config directly
         // different components might have different ts configs
         merge(tsconfig, {
-          include: [componentDirAbs],
-          exclude: this.ignorePatterns.map((pattern) => path.join(componentDirAbs, '**', pattern)),
+          include: [rootDirAbs],
+          exclude: this.ignorePatterns.map((pattern) => path.join(rootDirAbs, '**', pattern)),
           compilerOptions: {
             outDir: outDirAbs,
-            rootDir: componentDirAbs,
+            rootDir: rootDirAbs,
           },
         });
 
