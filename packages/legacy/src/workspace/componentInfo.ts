@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { buildPropagationPaths } from '../utils/path';
-import { PACKAGE_JSON } from '../constants';
+import { DEFAULT_MATERIAL_GROUP_ID, PACKAGE_JSON } from '../constants';
 
 export type ComponentAspectConfig = { [aspectId: string]: Record<string, any> | '-' };
 
@@ -10,6 +10,10 @@ export type ComponentConfig = {
   rootDir: string;
   // name of component
   name: string;
+  // author of component
+  author?: string;
+  // material group id of component
+  group?: number;
   // entry file info of component
   entries: {
     // component dir
@@ -36,6 +40,10 @@ export type ComponentInfoFiles = {
 export class ComponentInfo {
   name: string;
 
+  group: number;
+
+  author: string;
+
   files: ComponentInfoFiles[];
 
   entries: ComponentConfig['entries'];
@@ -53,7 +61,7 @@ export class ComponentInfo {
   readonly packageDirAbs: string;
 
   constructor(
-    { name, entries, rootDir, config }: ComponentConfig,
+    { name, group, author, entries, rootDir, config }: ComponentConfig,
     workspacePath: string,
     files?: ComponentInfoFiles[]
   ) {
@@ -64,6 +72,8 @@ export class ComponentInfo {
     this.config = config;
     this.name = name || '';
     this.files = files || [];
+    this.group = group || DEFAULT_MATERIAL_GROUP_ID;
+    this.author = author;
 
     const dirsToSearchPkgJson = buildPropagationPaths(
       path.resolve(workspacePath, rootDir),

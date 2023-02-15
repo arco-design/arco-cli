@@ -18,6 +18,14 @@ export class Component {
     return this.info.name;
   }
 
+  get group() {
+    return this.info.group;
+  }
+
+  get author() {
+    return this.info.author;
+  }
+
   get env() {
     return 'arco.env/react';
   }

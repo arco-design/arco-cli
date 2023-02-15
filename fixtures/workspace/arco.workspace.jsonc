@@ -3,17 +3,23 @@
     "components": [
       {
         "name": "StandaloneButton",
+        "author": "zuozhiheng",
+        "group": 0,
         "rootDir": "packages/button/src"
       },
       {
         "name": "LibraryButton",
+        "author": "zuozhiheng",
+        "group": 0,
         "rootDir": "packages/library/components",
         "entries": {
-          "base": "Button"
+          "base": "./Button"
         }
       },
       {
         "name": "LibraryTag",
+        "author": "zuozhiheng",
+        "group": 0,
         "rootDir": "packages/library/components",
         "entries": {
           "base": "./Tag"

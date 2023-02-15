@@ -29,6 +29,8 @@ function getCacheDirectory(): string {
 
 export const ENV_VARIABLE_CONFIG_PREFIX = 'ARCO_CONFIG_';
 
+export const MATERIAL_GENERATION = 2;
+
 /**
  * Dir or file path
  */
@@ -62,8 +64,6 @@ export const CFG_USER_NAME_KEY = 'user.name';
 export const CFG_USER_ACCOUNT_TYPE_KET = 'user.accountType';
 
 export const CFG_HOST_NPM_KEY = 'host.npm';
-
-export const CFG_HOST_UNPKG_KEY = 'host.unpkg';
 
 export const CFG_HOST_ARCO_KEY = 'host.arco';
 
@@ -101,6 +101,10 @@ export const DEFAULT_BUILD_IGNORE_PATTERNS = ['**/__test__/**/*', '**/__docs__/*
 
 export const DEFAULT_LANGUAGE = 'javascript';
 
+export const DEFAULT_HOST_ARCO = 'arco.design';
+
+export const DEFAULT_MATERIAL_GROUP_ID = 0;
+
 /**
  * Others
  */
@@ -130,3 +134,5 @@ export const CLI_USAGE = '[--version] [--help] <command> [<args>]';
 export const CLI_COMPONENT_PATTERN_HELP = `component name, package name, or component pattern. use component pattern to select multiple components.
 use comma to separate patterns and "!" to exclude. e.g. "ui/**, !ui/button"
 wrap the pattern with quotes`;
+
+export const CLI_LOGIN_FIRST_TIP = `please use 'arco login' to login in first`;

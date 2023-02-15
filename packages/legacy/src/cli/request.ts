@@ -16,7 +16,9 @@ const request = (
 ) => {
   const hostArco = getSync(CFG_HOST_ARCO_KEY);
   const userToken = getSync(CFG_USER_TOKEN_KEY);
-  const baseURL = `${hostArco}/material/api/`;
+  const baseURL = `http${
+    hostArco.indexOf('localhost') > -1 ? 's' : ''
+  }://${hostArco}/material/api/`;
 
   const instance = axios.create({
     baseURL,

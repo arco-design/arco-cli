@@ -8,8 +8,9 @@ import logger from '../../../logger';
 import request from '../../request';
 import { LegacyCommand } from '../../legacyCommand';
 import { Group } from '../../commandGroups';
-import { getSync, setSync } from '../../../globalConfig';
+import { setSync } from '../../../globalConfig';
 import { loginSuccessPage } from './loginSuccessPage';
+import { checkUserLogin, getUserInfoFromAPI, UserFromAPI } from '../../user';
 import {
   CFG_USER_NAME_KEY,
   CFG_USER_TOKEN_KEY,
@@ -44,48 +45,30 @@ export class Login implements LegacyCommand {
 
   options = [];
 
-  private async getUserInfo(): Promise<any> {
-    const userInfo = await request.get('userInfo');
-    return userInfo;
-  }
-
-  private async isLoggedIn(): Promise<boolean> {
-    if (!getSync(CFG_USER_TOKEN_KEY)) {
-      return false;
-    }
-
-    try {
-      await this.getUserInfo();
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
-
   async action(): Promise<LoginActionResult> {
     if (Login.isWaiting) return { isWaiting: true };
 
-    const isLoggedIn = await this.isLoggedIn();
-    if (isLoggedIn) {
+    const { loggedIn, user } = await checkUserLogin();
+    if (loggedIn) {
       return {
-        isLoggedIn,
-        username: getSync(CFG_USER_NAME_KEY),
+        isLoggedIn: true,
+        username: user.username,
       };
     }
 
     Login.isWaiting = true;
 
     let httpServer;
-    const userInfo: any = await new Promise((resolve, reject) => {
+    const userInfo: UserFromAPI = await new Promise((resolve, reject) => {
       const app = connect();
       const token = uniqid();
 
       app.use(LOCAL_LISTEN_SERVER_PATH, async (_, res, next) => {
         try {
           setSync({ [CFG_USER_TOKEN_KEY]: token });
-          const { result } = await this.getUserInfo();
+          const { user } = await getUserInfoFromAPI();
           res.end(this.successHTMLString);
-          resolve(result);
+          resolve(user);
         } catch (err) {
           next(err);
         }

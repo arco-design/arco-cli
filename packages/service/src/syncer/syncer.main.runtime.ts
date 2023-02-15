@@ -5,6 +5,7 @@ import { DocsAspect, DocsMain } from '@arco-cli/aspect/dist/docs';
 import { Component } from '@arco-cli/aspect/dist/component';
 import request from '@arco-cli/legacy/dist/cli/request';
 import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
+import { MATERIAL_GENERATION } from '@arco-cli/legacy/dist/constants';
 
 import { SyncerAspect } from './syncer.aspect';
 import { SyncCmd } from './sync.cmd';
@@ -24,7 +25,7 @@ export class SyncerMain {
 
   constructor(private logger: Logger, private docs: DocsMain) {}
 
-  async sync(components: Component[]): Promise<ComponentResult[]> {
+  async sync(components: Component[], currentUserName: string): Promise<ComponentResult[]> {
     const results: ComponentResult[] = [];
     await Promise.all(
       components.map(async (component) => {
@@ -40,15 +41,15 @@ export class SyncerMain {
           category: doc.labels,
           repository: doc.repository,
           // TODO group and author
-          group: 0,
-          author: '',
+          group: component.group,
+          author: component.author || currentUserName,
           package: {
             name: component.packageName,
             version: component.version,
             peerDependencies: Object.keys(component.peerDependencies),
           },
           outline: doc.outline as any,
-          _generation: 2,
+          _generation: MATERIAL_GENERATION,
         };
 
         let error = null;
@@ -57,7 +58,10 @@ export class SyncerMain {
         );
 
         try {
-          const { ok, msg } = await request.post('material/create', { meta });
+          const { ok, msg } = await request.post('material/update', {
+            meta,
+            createIfNotExists: true,
+          });
           if (!ok) {
             error = msg;
           }
