@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/legacy",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "main": "./dist/index.js",
   "scripts": {
     "dev": "sh ../../scripts/build.sh dev",
