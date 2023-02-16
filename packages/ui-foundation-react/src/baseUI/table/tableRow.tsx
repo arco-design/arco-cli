@@ -1,11 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { ReactElement } from 'react';
 import classNames from 'classnames';
-import xcode from 'react-syntax-highlighter/dist/esm/styles/hljs/xcode';
-import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight';
 
 import { Grid, GridProps } from '../grid';
 import { TableColumn } from './tableColumn';
+import { CodeHighlighter } from '../../baseUI/highlighter';
 
 import styles from './tableRow.module.scss';
 
@@ -117,13 +116,9 @@ export function TableRow({
                 {title}
               </div>
               {!customRow?.type && (
-                <SyntaxHighlighter
-                  theme={xcode}
-                  language="javascript"
-                  className={styles.highlighted}
-                >
+                <CodeHighlighter language="typescript" className={styles.highlighted}>
                   {row[title]}
-                </SyntaxHighlighter>
+                </CodeHighlighter>
               )}
               {customRow?.type}
             </TableColumn>

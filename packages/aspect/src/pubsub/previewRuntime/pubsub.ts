@@ -1,11 +1,10 @@
-import { debounce } from 'lodash';
+// import debounce from lodash-es/debounce to enable tree-shaking
+import debounce from 'lodash-es/debounce';
 import { EventEmitter2 } from 'eventemitter2';
 import { connectToParent, ErrorCode } from 'penpal';
 
-import { ArcoBaseEvent } from '@aspect/pubsub';
-import { PubsubNoParentError } from '@aspect/pubsub/exceptions';
-
-import { SizeEvent } from '../events';
+import { PubsubNoParentError } from '../exceptions';
+import { ArcoBaseEvent, SizeEvent } from '../events';
 
 type Callback = (event: ArcoBaseEvent<any>) => void;
 

@@ -6,8 +6,8 @@
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ReactDOM from 'react-dom';
-import { Pubsub } from '@arco-cli/aspect/dist/pubsub/previewRuntime';
-import { DocsRootProps } from '@arco-cli/aspect/dist/docs/previewRuntime';
+import { Pubsub } from '@arco-cli/aspect/dist/pubsub/previewRuntime/pubsub';
+import type { DocsRootProps } from '@arco-cli/aspect/dist/docs/previewRuntime';
 import { App } from './app';
 
 const MOUNT_ROOT_SELECTOR = '#root';

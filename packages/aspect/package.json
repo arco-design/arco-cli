@@ -45,6 +45,7 @@
     "less": "^4.1.3",
     "loader-utils": "^3.2.1",
     "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "minimatch": "^6.1.6",
     "os-browserify": "^0.3.0",
     "p-map-series": "^2.1.0",

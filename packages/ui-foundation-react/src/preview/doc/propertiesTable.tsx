@@ -1,9 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
-import xcode from 'react-syntax-highlighter/dist/esm/styles/hljs/xcode';
-import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight';
 
 import { Table } from '../../baseUI/table';
+import { CodeHighlighter } from '../../baseUI/highlighter';
 
 import styles from './propertiesTable.module.scss';
 
@@ -45,11 +44,7 @@ export function PropertiesTable({ doclet }: PropertiesTableProps) {
               {name}
             </h2>
 
-            {type ? (
-              <SyntaxHighlighter theme={xcode} language="javascript">
-                {type}
-              </SyntaxHighlighter>
-            ) : null}
+            {type ? <CodeHighlighter language="typescript">{type}</CodeHighlighter> : null}
 
             {properties.length ? (
               <Table headings={['name', 'type', 'default', 'description']} rows={properties} />

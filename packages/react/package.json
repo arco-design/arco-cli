@@ -71,6 +71,7 @@
     "terser-webpack-plugin": "^5.3.6",
     "ts-document": "~0",
     "typescript": "^4.9.3",
-    "webpack": "^5.75.0"
+    "webpack": "^5.75.0",
+    "webpack-bundle-analyzer": "^4.8.0"
   }
 }

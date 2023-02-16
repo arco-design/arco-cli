@@ -40,7 +40,6 @@ export class SyncerMain {
           description: doc.description,
           category: doc.labels,
           repository: doc.repository,
-          // TODO group and author
           group: component.group,
           author: component.author || currentUserName,
           package: {
@@ -48,7 +47,7 @@ export class SyncerMain {
             version: component.version,
             peerDependencies: Object.keys(component.peerDependencies),
           },
-          outline: doc.outline as any,
+          outline: doc.outline,
           _generation: MATERIAL_GENERATION,
         };
 

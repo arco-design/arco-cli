@@ -1,19 +1,15 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { useMemo, memo, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import copy from 'copy-to-clipboard';
-import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
-import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism-light';
-import tsxSyntax from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
-import defaultTheme from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus';
+
+import { SyntaxHighlighter, SyntaxHighlighterProps } from '../../../baseUI/highlighter';
 
 import styles from './codeSnippet.module.scss';
 import IconCopy from '../asset/icon-copy.svg';
 import IconCheck from '../asset/icon-check.svg';
 import IconShrink from '../asset/icon-shrink.svg';
 import IconExpand from '../asset/icon-expand.svg';
-
-SyntaxHighlighter.registerLanguage('tsx', tsxSyntax);
 
 const customStyles = { fontSize: 12 };
 
@@ -32,17 +28,13 @@ export type CodeSnippetProps = {
   theme?: any;
 } & SyntaxHighlighterProps;
 
-const Highlighter = memo(function SnippetWrapper(props: SyntaxHighlighterProps) {
-  return <SyntaxHighlighter {...props} />;
-});
-
 /**
  * A code snippet component
  */
 export function CodeSnippet({
   className,
   frameClass,
-  theme = defaultTheme,
+  theme,
   language = 'tsx',
   children,
   ...rest
@@ -68,7 +60,7 @@ export function CodeSnippet({
 
   return (
     <div className={classNames(styles.snippetWrapper, className)}>
-      <Highlighter
+      <SyntaxHighlighter
         {...rest}
         className={classNames(styles.codeSnippet, frameClass, { [styles.expanded]: codeExpanded })}
         language={language}
@@ -76,7 +68,7 @@ export function CodeSnippet({
         customStyle={customStyles}
       >
         {trimmedChildren}
-      </Highlighter>
+      </SyntaxHighlighter>
 
       <div className={styles.operationButtons}>
         <button
