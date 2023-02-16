@@ -7,8 +7,8 @@ import defaultTheme from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dar
 
 PrismHighlighter.registerLanguage('tsx', tsxSyntax);
 
-export const SyntaxHighlighter = memo(function SnippetWrapper(props: SyntaxHighlighterProps) {
-  return <PrismHighlighter theme={defaultTheme} {...props} />;
+export const SyntaxHighlighter = memo((props: SyntaxHighlighterProps) => {
+  return <PrismHighlighter style={defaultTheme} {...props} />;
 });
 
 export { SyntaxHighlighterProps };

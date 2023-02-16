@@ -7,6 +7,6 @@ import defaultTheme from 'react-syntax-highlighter/dist/esm/styles/hljs/xcode';
 
 Highlighter.registerLanguage('typescript', ts);
 
-export const CodeHighlighter = memo(function SnippetWrapper(props: SyntaxHighlighterProps) {
-  return <Highlighter theme={defaultTheme} {...props} />;
+export const CodeHighlighter = memo((props: SyntaxHighlighterProps) => {
+  return <Highlighter style={defaultTheme} {...props} />;
 });

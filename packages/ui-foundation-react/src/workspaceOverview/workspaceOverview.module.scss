@@ -15,12 +15,13 @@
 
   .gallery {
     display: flex;
+    flex-wrap: wrap;
     margin: 0 (-$component-card-margin);
 
     .componentCard {
       display: flex;
       flex-direction: column;
-      width: calc(20% - $component-card-margin);
+      width: calc(20% - $component-card-margin * 2);
       height: 120px;
       margin: $component-card-margin;
       padding: 8px;

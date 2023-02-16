@@ -22,10 +22,6 @@ export type CodeSnippetProps = {
    * a class to override the highlighter class
    */
   frameClass?: string;
-  /**
-   * the theme to be used in the highlighter
-   */
-  theme?: any;
 } & SyntaxHighlighterProps;
 
 /**
@@ -34,7 +30,6 @@ export type CodeSnippetProps = {
 export function CodeSnippet({
   className,
   frameClass,
-  theme,
   language = 'tsx',
   children,
   ...rest
@@ -64,7 +59,6 @@ export function CodeSnippet({
         {...rest}
         className={classNames(styles.codeSnippet, frameClass, { [styles.expanded]: codeExpanded })}
         language={language}
-        style={theme}
         customStyle={customStyles}
       >
         {trimmedChildren}
