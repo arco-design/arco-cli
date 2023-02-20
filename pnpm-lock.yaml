@@ -108,11 +108,11 @@ importers:
 
   packages/arco:
     specifiers:
-      '@arco-cli/aspect': ^2.0.0-alpha.4
-      '@arco-cli/core': ^2.0.0-alpha.3
-      '@arco-cli/legacy': ^2.0.0-alpha.2
-      '@arco-cli/react': ^2.0.0-alpha.4
-      '@arco-cli/service': ^2.0.0-alpha.4
+      '@arco-cli/aspect': ^2.0.0-alpha.6
+      '@arco-cli/core': ^2.0.0-alpha.4
+      '@arco-cli/legacy': ^2.0.0-alpha.3
+      '@arco-cli/react': ^2.0.0-alpha.6
+      '@arco-cli/service': ^2.0.0-alpha.6
       '@arco-cli/stone': ^2.0.0-alpha.0
       fs-extra: ^10.1.0
       react: ^17.0.2
@@ -133,11 +133,11 @@ importers:
   packages/aspect:
     specifiers:
       '@apollo/client': ^3.7.2
-      '@arco-cli/core': ^2.0.0-alpha.3
-      '@arco-cli/legacy': ^2.0.0-alpha.2
-      '@arco-cli/service': ^2.0.0-alpha.5
+      '@arco-cli/core': ^2.0.0-alpha.4
+      '@arco-cli/legacy': ^2.0.0-alpha.3
+      '@arco-cli/service': ^2.0.0-alpha.6
       '@arco-cli/stone': ^2.0.0-alpha.0
-      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.5
+      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.6
       '@arco-design/web-react': ^2.42.2
       '@babel/runtime': ^7.20.6
       '@mdx-js/mdx': ^1.6.22
@@ -263,7 +263,7 @@ importers:
 
   packages/core:
     specifiers:
-      '@arco-cli/legacy': ^2.0.0-alpha.2
+      '@arco-cli/legacy': ^2.0.0-alpha.3
       '@arco-cli/stone': ^2.0.0-alpha.0
       '@babel/runtime': ^7.20.6
       '@graphql-modules/core': ^0.7.17
@@ -375,12 +375,12 @@ importers:
 
   packages/react:
     specifiers:
-      '@arco-cli/aspect': ^2.0.0-alpha.5
-      '@arco-cli/core': ^2.0.0-alpha.3
-      '@arco-cli/legacy': ^2.0.0-alpha.2
-      '@arco-cli/service': ^2.0.0-alpha.5
+      '@arco-cli/aspect': ^2.0.0-alpha.6
+      '@arco-cli/core': ^2.0.0-alpha.4
+      '@arco-cli/legacy': ^2.0.0-alpha.3
+      '@arco-cli/service': ^2.0.0-alpha.6
       '@arco-cli/stone': ^2.0.0-alpha.0
-      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.5
+      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.6
       '@babel/core': ^7.20.5
       '@babel/plugin-proposal-class-properties': ^7.18.6
       '@babel/plugin-proposal-decorators': ^7.20.5
@@ -487,11 +487,11 @@ importers:
 
   packages/service:
     specifiers:
-      '@arco-cli/aspect': ^2.0.0-alpha.5
-      '@arco-cli/core': ^2.0.0-alpha.3
-      '@arco-cli/legacy': ^2.0.0-alpha.2
+      '@arco-cli/aspect': ^2.0.0-alpha.6
+      '@arco-cli/core': ^2.0.0-alpha.4
+      '@arco-cli/legacy': ^2.0.0-alpha.3
       '@arco-cli/stone': ^2.0.0-alpha.0
-      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.5
+      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.6
       '@babel/runtime': ^7.20.6
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.10
       '@svgr/webpack': ^6.5.1
@@ -564,7 +564,7 @@ importers:
   packages/ui-foundation-react:
     specifiers:
       '@apollo/client': ^3.7.2
-      '@arco-cli/aspect': ^2.0.0-alpha.5
+      '@arco-cli/aspect': ^2.0.0-alpha.6
       '@arco-design/web-react': ^2.42.2
       '@babel/runtime': ^7.20.6
       '@mdx-js/react': ^1.6.22
