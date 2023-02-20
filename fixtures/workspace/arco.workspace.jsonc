@@ -33,5 +33,10 @@
       "jsdoc": "./interface.ts",
       "preview": "./__docs__/index.mdx"
     }
+  },
+  "arco.service/syncer": {
+    "defaultMaterialMeta": {
+      "group": 1
+    }
   }
 }

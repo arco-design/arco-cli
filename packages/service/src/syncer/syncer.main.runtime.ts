@@ -11,19 +11,30 @@ import { SyncerAspect } from './syncer.aspect';
 import { SyncCmd } from './sync.cmd';
 import { SyncParams } from './type/syncParams';
 
+type SyncerConfig = {
+  defaultMaterialMeta: {
+    group?: number;
+    author?: string;
+    repository?: string;
+  };
+};
+
 export class SyncerMain {
   static runtime = MainRuntime;
 
   static dependencies = [LoggerAspect, CLIAspect, WorkspaceAspect, DocsAspect];
 
-  static provider([loggerMain, cli, workspace, docs]: [LoggerMain, CLIMain, Workspace, DocsMain]) {
+  static provider(
+    [loggerMain, cli, workspace, docs]: [LoggerMain, CLIMain, Workspace, DocsMain],
+    config
+  ) {
     const logger = loggerMain.createLogger(SyncerAspect.id);
-    const syncer = new SyncerMain(logger, docs);
+    const syncer = new SyncerMain(config, logger, docs);
     cli.register(new SyncCmd(logger, syncer, workspace));
     return syncer;
   }
 
-  constructor(private logger: Logger, private docs: DocsMain) {}
+  constructor(private config: SyncerConfig, private logger: Logger, private docs: DocsMain) {}
 
   async sync(components: Component[], currentUserName: string): Promise<ComponentResult[]> {
     const results: ComponentResult[] = [];
@@ -35,6 +46,7 @@ export class SyncerMain {
         };
         const doc = this.docs.getDoc(component);
         const meta: SyncParams = {
+          ...this.config.defaultMaterialMeta,
           name: component.id,
           title: doc.title || component.name,
           description: doc.description,
