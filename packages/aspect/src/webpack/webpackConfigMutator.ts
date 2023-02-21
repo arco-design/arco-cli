@@ -1,7 +1,7 @@
 import { isObject, omit } from 'lodash';
-import { Configuration, ResolveOptions, RuleSetRule } from 'webpack';
 import { merge, mergeWithCustomize, mergeWithRules, CustomizeRule } from 'webpack-merge';
-import { ICustomizeOptions } from 'webpack-merge/dist/types';
+import type { Configuration, ResolveOptions, RuleSetRule } from 'webpack';
+import type { ICustomizeOptions } from 'webpack-merge/dist/types';
 
 export * from 'webpack-merge';
 
@@ -37,10 +37,10 @@ const DEFAULT_MERGE_OPTS: MergeOpts = {
 };
 
 export class WebpackConfigMutator {
-  constructor(public raw: Configuration) {}
+  constructor(public raw: Configuration, public webpack: any) {}
 
   clone(): WebpackConfigMutator {
-    return new WebpackConfigMutator(merge({}, this.raw));
+    return new WebpackConfigMutator(merge({}, this.raw), this.webpack);
   }
 
   /**

@@ -131,8 +131,8 @@ export function devConfig(
     },
     resolve: {
       modules: [
-        path.resolve(__dirname, '../../../../arco/node_modules'),
         path.resolve(__dirname, '../../../node_modules'),
+        path.resolve(__dirname, '../../../../arco/node_modules'),
         'node_modules',
       ],
       // These are the reasonable defaults supported by the Node ecosystem.

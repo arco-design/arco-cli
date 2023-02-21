@@ -6,8 +6,6 @@ const matchNothingRegex = 'a^';
 export default function (envId: string): Configuration {
   return {
     plugins: [
-      // No need here as we have `hot: true` in the dev server
-      // new webpack.HotModuleReplacementPlugin({}),
       new ReactRefreshWebpackPlugin({
         overlay: {
           sockPath: `_hmr/${envId}`,

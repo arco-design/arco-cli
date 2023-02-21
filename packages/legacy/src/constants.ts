@@ -93,6 +93,8 @@ export const BASE_DOCS_DOMAIN = `${BASE_WEB_DOMAIN}/material`;
  */
 export const DEFAULT_ENV = 'arco.env/react';
 
+export const DEFAULT_ENV_CONFIG_PATH = 'arco.env.config.js';
+
 export const DEFAULT_ANALYTICS_DOMAIN = `TODO: date analytics`;
 
 export const DEFAULT_DIST_DIRNAME = 'dist';
