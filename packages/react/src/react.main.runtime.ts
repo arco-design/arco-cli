@@ -116,9 +116,12 @@ export class ReactMain {
 
   private extendEnvConfigFromUser(): Environment {
     let defineConfig = null;
+    const envConfigPath = path.resolve(this.workspace.path, DEFAULT_ENV_CONFIG_PATH);
     try {
-      defineConfig = require(path.resolve(this.workspace.path, DEFAULT_ENV_CONFIG_PATH));
-    } catch (e) {}
+      defineConfig = require(envConfigPath);
+    } catch (error) {
+      this.logger.error(`failed to extend ${ReactAspect.id} config from ${envConfigPath}`, error);
+    }
 
     if (typeof defineConfig === 'function') {
       try {

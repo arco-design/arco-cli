@@ -1,6 +1,6 @@
 type PreProcessOptions = {
-  resolveUrlLoaderPath: string;
-  preProcessorPath: string;
+  resolveUrlLoaderPath: string | { path: string; options: Record<string, any> };
+  preProcessorPath: string | { path: string; options: Record<string, any> };
 };
 
 export type GenerateStyleLoadersOptions = {
@@ -37,17 +37,23 @@ export function generateStyleLoaders(options: GenerateStyleLoadersOptions) {
   ].filter(Boolean);
 
   if (options.preProcessOptions) {
+    const { resolveUrlLoaderPath, preProcessorPath } = options.preProcessOptions;
     loaders.push(
       {
-        loader: options.preProcessOptions.resolveUrlLoaderPath,
+        loader:
+          typeof resolveUrlLoaderPath === 'object'
+            ? resolveUrlLoaderPath.path
+            : resolveUrlLoaderPath,
         options: {
           sourceMap: options.shouldUseSourceMap,
+          ...(typeof resolveUrlLoaderPath === 'object' ? resolveUrlLoaderPath.options : undefined),
         },
       },
       {
-        loader: options.preProcessOptions.preProcessorPath,
+        loader: typeof preProcessorPath === 'object' ? preProcessorPath.path : preProcessorPath,
         options: {
-          sourceMap: true,
+          sourceMap: options.shouldUseSourceMap,
+          ...(typeof preProcessorPath === 'object' ? preProcessorPath.options : undefined),
         },
       }
     );

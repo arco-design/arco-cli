@@ -1,4 +1,3 @@
-import path from 'path';
 import type jest from 'jest';
 import { Tester, TesterContext, Tests } from '@arco-cli/service/dist/tester';
 import { CallbackFn } from '@arco-cli/service/dist/tester/tester';
@@ -55,15 +54,19 @@ export class JestTester implements Tester {
       config.testMatch = [];
       config.collectCoverageFrom = [];
       context.components.forEach(({ componentDir }) => {
-        config.testMatch.push(...[
-          `**/${componentDir}/**/*.test.[jt]s?(x)`,
-          `**/${componentDir}/**/__test__/**/*.[jt]s?(x)`
-        ]);
-        config.collectCoverageFrom.push(...[
-          `**/${componentDir}/**/*.[jt]s?(x)`,
-          `!**/${componentDir}/**/style/*`,
-          `!**/${componentDir}/**/__docs__/*`,
-        ]);
+        config.testMatch.push(
+          ...[
+            `**/${componentDir}/**/*.test.[jt]s?(x)`,
+            `**/${componentDir}/**/__test__/**/*.[jt]s?(x)`,
+          ]
+        );
+        config.collectCoverageFrom.push(
+          ...[
+            `**/${componentDir}/**/*.[jt]s?(x)`,
+            `!**/${componentDir}/**/style/*`,
+            `!**/${componentDir}/**/__docs__/*`,
+          ]
+        );
       });
     }
 

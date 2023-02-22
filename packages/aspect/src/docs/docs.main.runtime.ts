@@ -90,11 +90,12 @@ export class DocsMain {
    */
   getMetadata(components: Component[], env: Environment) {
     return ComponentMap.as<Record<string, any>>(components, (component) => {
-      return env.getDocsMetadata?.(
-        component.files.find(
-          (file) => file.relative === path.join(component.entries.base, component.entries.jsdoc)
-        )
-      );
+      const jsdocEntries = component.entries.jsdoc
+        ? component.files.find(
+            (file) => file.relative === path.join(component.entries.base, component.entries.jsdoc)
+          )
+        : [];
+      return env.getDocsMetadata?.(jsdocEntries);
     });
   }
 

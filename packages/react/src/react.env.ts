@@ -37,7 +37,6 @@ import { sha1 } from '@arco-cli/legacy/dist/utils';
 
 import { ReactAspect } from './react.aspect';
 import basePreviewConfigFactory from './webpack/webpack.config.base';
-import basePreviewProdConfigFactory from './webpack/webpack.config.base.prod';
 import componentPreviewDevConfigFactory from './webpack/webpack.config.component.dev';
 import componentPreviewProdConfigFactory from './webpack/webpack.config.component.prod';
 import { Doclet, parser } from './tsdoc';
@@ -93,11 +92,10 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     transformers: WebpackConfigTransformer[] = []
   ): Promise<Bundler> {
     const baseConfig = basePreviewConfigFactory(!context.development);
-    const baseProdConfig = basePreviewProdConfigFactory(context.development);
     const componentProdConfig = componentPreviewProdConfigFactory();
 
     const defaultTransformer: WebpackConfigTransformer = (configMutator) => {
-      const merged = configMutator.merge([baseConfig, baseProdConfig, componentProdConfig]);
+      const merged = configMutator.merge([baseConfig, componentProdConfig]);
       return merged;
     };
     const mergedTransformers = [defaultTransformer, ...transformers];
@@ -197,7 +195,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   }
 
   getDocsMetadata(file: SourceFile) {
-    if (!file) return [];
+    if (!file?.contents) return [];
 
     const hash = sha1(file.contents);
     if (this.docMetadataCache[file.path]?.hash !== hash) {
