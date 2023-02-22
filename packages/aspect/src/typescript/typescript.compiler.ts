@@ -63,14 +63,14 @@ export class TypescriptCompiler implements Compiler {
       context.components.map(async ({ id: componentId, rootDir, packageDirAbs }) => {
         const rootDirAbs = path.join(workspacePath, rootDir);
         const outDirAbs = path.join(packageDirAbs, this.distDir);
+        const tsconfig: Record<string, any> = cloneDeep(this.options.tsconfig);
 
-        let tsconfig: Record<string, any>;
+        // try to merge tsconfig.json from component package
         try {
           // eslint-disable-next-line @typescript-eslint/no-var-requires
-          tsconfig = require(`${packageDirAbs}/tsconfig.json`);
-        } catch (e) {
-          tsconfig = cloneDeep(this.options.tsconfig);
-        }
+          const tsconfigFromPackage = require(`${packageDirAbs}/tsconfig.json`);
+          merge(tsconfig, tsconfigFromPackage);
+        } catch (e) {}
 
         // avoid change this.options.config directly
         // different components might have different ts configs
@@ -84,7 +84,7 @@ export class TypescriptCompiler implements Compiler {
         });
 
         // convert tsconfig.extends to absolute path
-        if (tsconfig.extends) {
+        if (tsconfig.extends && !path.isAbsolute(tsconfig.extends)) {
           tsconfig.extends = path.resolve(packageDirAbs, tsconfig.extends);
         }
 

@@ -14,18 +14,30 @@ module.exports = function defineConfig(envId) {
               new ArcoWebpackPlugin({
                 theme: '@arco-design/theme-line',
                 webpackImplementation: config.webpack,
-                include: 'packages'
+                include: 'packages',
               }),
             ],
             resolve: {
               alias: {
                 react: require.resolve('react'),
-              }
-            }
+              },
+            },
           });
         },
       ],
     },
-    typescript: {},
+    typescript: {
+      buildConfig: [
+        (config) => {
+          console.log(config);
+          config.mergeTsConfig({
+            compilerOptions: {
+              allowJs: false,
+            }
+          });
+          return config;
+        },
+      ],
+    },
   };
 };
