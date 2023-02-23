@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { buildPropagationPaths } from '../utils/path';
-import { DEFAULT_MATERIAL_GROUP_ID, PACKAGE_JSON } from '../constants';
+import { PACKAGE_JSON } from '../constants';
 
 export type ComponentAspectConfig = { [aspectId: string]: Record<string, any> | '-' };
 
@@ -72,7 +72,7 @@ export class ComponentInfo {
     this.config = config;
     this.name = name || '';
     this.files = files || [];
-    this.group = group || DEFAULT_MATERIAL_GROUP_ID;
+    this.group = group;
     this.author = author;
 
     const dirsToSearchPkgJson = buildPropagationPaths(
