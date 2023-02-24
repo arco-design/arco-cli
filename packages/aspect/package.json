@@ -14,9 +14,6 @@
     "dist"
   ],
   "license": "MIT",
-  "peerDependencies": {
-    "jest": "~29"
-  },
   "dependencies": {
     "@apollo/client": "^3.7.2",
     "@arco-cli/core": "^2.0.0-alpha.6",

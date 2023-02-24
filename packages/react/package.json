@@ -14,10 +14,6 @@
     "dist"
   ],
   "license": "MIT",
-  "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0",
-    "react-dom": "^16.8.0 || ^17.0.0"
-  },
   "dependencies": {
     "@arco-cli/aspect": "^2.0.0-alpha.8",
     "@arco-cli/core": "^2.0.0-alpha.6",

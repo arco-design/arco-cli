@@ -14,9 +14,6 @@
     "dist"
   ],
   "license": "MIT",
-  "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0"
-  },
   "dependencies": {
     "@arco-cli/legacy": "^2.0.0-alpha.5",
     "@arco-cli/stone": "^2.0.0-alpha.0",
