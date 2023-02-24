@@ -1,7 +1,9 @@
 import glob from 'glob';
 import { join, resolve } from 'path';
 import { existsSync } from 'fs-extra';
+import { CORE_ASPECT_ID_MAP, CORE_ASPECT_PACKAGE_NAME_MAP } from '@arco-cli/legacy/dist/constants';
 
+const RESOLVE_MODULE_PATHS = [];
 const CLI_NPM_PACKAGE_SCOPE = '@arco-cli';
 
 function getCoreAspectName(id: string): string {
@@ -10,17 +12,38 @@ function getCoreAspectName(id: string): string {
 }
 
 function getCoreAspectPackageName(id: string): string {
-  return `${CLI_NPM_PACKAGE_SCOPE}/${id.split('/')[0].split('.').pop()}`;
+  switch (id) {
+    case CORE_ASPECT_ID_MAP.APP_ARCO:
+      return CORE_ASPECT_PACKAGE_NAME_MAP.APP_ARCO;
+
+    case CORE_ASPECT_ID_MAP.ENV_REACT:
+      return CORE_ASPECT_PACKAGE_NAME_MAP.ENV_REACT;
+
+    default:
+      return `${CLI_NPM_PACKAGE_SCOPE}/${id.split('/')[0].split('.').pop()}`;
+  }
 }
 
-export function getAspectDir(id: string): string {
+function getAspectDir(id: string): string {
   const aspectName = getCoreAspectName(id);
   const packageName = getCoreAspectPackageName(id);
 
   let dirPath = '';
   try {
-    // to remove the "index.js" at the end
-    dirPath = join(require.resolve(packageName), '../..');
+    // it will be like packageName/dist/index.js
+    const packageEntryFilePath = require.resolve(packageName, {
+      paths: RESOLVE_MODULE_PATHS,
+    });
+
+    // remove the "index.js" at the end, it will be like packageName/dist
+    dirPath = join(packageEntryFilePath, '..');
+
+    // if several aspects share the same package, locate the aspect dir
+    // it will be like packageName/dist/aspectName
+    const _aspectDirPath = join(dirPath, aspectName);
+    if (existsSync(_aspectDirPath)) {
+      dirPath = _aspectDirPath;
+    }
   } catch (e) {
     // __dirname is node_modules/@arco-cli/core/dist/aspect-loader
     const arcoCliNodeModulesHome = resolve(__dirname, '../../..');
@@ -43,9 +66,12 @@ export function getAspectDir(id: string): string {
   return dirPath;
 }
 
-export async function getAspectDef(aspectName: string, runtime?: string) {
-  const dirPath = getAspectDir(aspectName);
+export async function getAspectDef(aspectId: string, runtime: string, resolveModuleFrom?: string) {
+  if (resolveModuleFrom && RESOLVE_MODULE_PATHS.indexOf(resolveModuleFrom) === -1) {
+    RESOLVE_MODULE_PATHS.push(resolveModuleFrom);
+  }
 
+  const dirPath = getAspectDir(aspectId);
   const files = glob.sync(`${dirPath}/**/**.js`);
   const aspectPath = files.find((file) => file.includes('.aspect.js')) || join(dirPath, '..');
   const runtimePath = runtime
@@ -53,7 +79,7 @@ export async function getAspectDef(aspectName: string, runtime?: string) {
     : null;
 
   return {
-    id: aspectName,
+    id: aspectId,
     aspectPath,
     runtimePath,
   };

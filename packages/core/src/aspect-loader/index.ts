@@ -5,4 +5,4 @@ export { AspectLoaderAspect };
 export { PluginDefinition } from './pluginDefinition';
 export { AspectDefinition } from './aspectDefinition';
 export { AspectLoaderMain } from './aspectLoader.main.runtime';
-export { getAspectDef, getAspectDir } from './coreAspect';
+export { getAspectDef } from './coreAspect';

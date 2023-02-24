@@ -1,12 +1,11 @@
-import { resolve } from 'path';
-import { readdir } from 'fs-extra';
+import path from 'path';
 import logger from '@arco-cli/legacy/dist/logger';
 import { Stone, Extension, RuntimeDefinition } from '@arco-cli/stone';
 import { ConfigOptions, StoneConfig as Config } from '@arco-cli/stone/dist/stoneConfig';
 import {
   AspectLoaderAspect,
   AspectLoaderMain,
-  getAspectDir,
+  getAspectDef,
 } from '@arco-cli/core/dist/aspect-loader';
 import { CLIAspect, MainRuntime, CLIMain } from '@arco-cli/core/dist/cli';
 import { getWorkspaceInfo } from '@arco-cli/legacy/dist/workspace/workspaceLocator';
@@ -22,12 +21,14 @@ ArcoAspect.addRuntime(ArcoMain);
 export async function requireAspects(aspect: Extension, runtime: RuntimeDefinition) {
   const id = aspect.name;
   if (!id) throw new Error('could not retrieve aspect id');
-  const dirPath = getAspectDir(id);
-  const files = await readdir(dirPath);
-  const runtimeFile = files.find((file) => file.includes(`.${runtime.name}.runtime.js`));
-  if (!runtimeFile) return;
+
+  // resolve aspect packages from the dir where @arco-cli/arco located
+  // otherwise resolve.resolve can't find these packages
+  const resolveModuleFrom = path.resolve(__dirname, '../../..');
+  const { runtimePath } = await getAspectDef(id, runtime.name, resolveModuleFrom);
+
   // eslint-disable-next-line
-  require(resolve(`${dirPath}/${runtimeFile}`));
+  return runtimePath ? require(runtimePath) : null;
 }
 
 async function getConfig(cwd = process.cwd()): Promise<Config> {

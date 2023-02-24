@@ -1,4 +1,5 @@
 import { Aspect } from '@arco-cli/stone';
+import { CORE_ASPECT_ID_MAP } from '@arco-cli/legacy/dist/constants';
 
 import { MainRuntime } from '@core/cli';
 
@@ -18,7 +19,7 @@ export class AspectLoaderMain {
 
   constructor() {}
 
-  private _reserved = ['arco.app/arco'];
+  private _reserved = [CORE_ASPECT_ID_MAP.APP_ARCO];
 
   private _coreAspects: Aspect[];
 
