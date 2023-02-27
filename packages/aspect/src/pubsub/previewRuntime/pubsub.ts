@@ -17,7 +17,7 @@ export class Pubsub {
 
   private parentPubsub?: ParentMethods;
 
-  private windowResizeListener: () => any;
+  private resizeObserver: ResizeObserver;
 
   constructor() {
     if (this.inIframe()) {
@@ -79,31 +79,18 @@ export class Pubsub {
   reportSize(topic: string) {
     if (!this.inIframe()) return;
 
-    const sendPubsubEvent = () => {
-      this.pub(
-        topic,
-        new SizeEvent({
-          width: window.document.body.offsetWidth,
-          height: window.document.body.offsetHeight,
-        })
-      );
-    };
+    this.resizeObserver ||= new ResizeObserver(
+      debounce(() => {
+        this.pub(
+          topic,
+          new SizeEvent({
+            width: window.document.body.offsetWidth,
+            height: window.document.body.offsetHeight,
+          })
+        );
+      }, 300)
+    );
 
-    if (this.windowResizeListener) {
-      window.document.body.removeEventListener('resize', this.windowResizeListener);
-    } else {
-      this.windowResizeListener = debounce(sendPubsubEvent, 300);
-      window.document.body.addEventListener('resize', this.windowResizeListener);
-    }
-
-    let counter = 0;
-    const interval = setInterval(() => {
-      counter += 1;
-      if (counter > 5) {
-        clearInterval(interval);
-        return;
-      }
-      sendPubsubEvent();
-    }, 200);
+    this.resizeObserver.observe(document.body);
   }
 }
