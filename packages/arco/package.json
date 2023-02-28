@@ -21,10 +21,7 @@
     "@arco-cli/react": "^2.0.0-alpha.9",
     "@arco-cli/service": "^2.0.0-alpha.9",
     "@arco-cli/stone": "^2.0.0-alpha.0",
-    "fs-extra": "^10.1.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^6.5.0"
+    "fs-extra": "^10.1.0"
   },
   "files": [
     "dist",

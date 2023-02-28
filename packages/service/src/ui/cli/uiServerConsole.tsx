@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { ComponentType, useEffect, useState } from 'react';
 import { Text, Newline } from 'ink';
 import { UIServerLoader } from './uiServerLoader';

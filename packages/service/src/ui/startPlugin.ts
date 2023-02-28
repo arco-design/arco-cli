@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentType } from 'react';
 import { ProxyEntry } from './uiRoot';
 

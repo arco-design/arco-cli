@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { IframeHTMLAttributes, useRef } from 'react';
 import { compact } from 'lodash';
 import { usePubsubIframe } from '@arco-cli/aspect/dist/pubsub';

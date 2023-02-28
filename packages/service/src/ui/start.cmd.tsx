@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import { Logger } from '@arco-cli/core/dist/logger';
 import { Command, CommandOptions } from '@arco-cli/legacy/dist/cli/command';

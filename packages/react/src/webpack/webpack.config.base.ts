@@ -56,7 +56,6 @@ export default function (isEnvProduction = false): Configuration {
       alias: {
         'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime.js'),
         'react/jsx-runtime': require.resolve('react/jsx-runtime.js'),
-        'react-dom/server': require.resolve('react-dom/server'),
         '@mdx-js/react': require.resolve('@mdx-js/react'),
       },
     },

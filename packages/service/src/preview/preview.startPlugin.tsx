@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { flatten } from 'lodash';
 import { Workspace } from '@arco-cli/aspect/dist/workspace';

@@ -34,6 +34,7 @@
     "node-fetch": "^3.3.0",
     "pad-right": "^0.2.2",
     "pretty-time": "^1.1.0",
+    "react": "~17",
     "yargs": "^17.6.2"
   },
   "devDependencies": {
