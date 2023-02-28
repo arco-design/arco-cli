@@ -1,5 +1,6 @@
 import path, { sep } from 'path';
 import { ProvidePlugin } from 'webpack';
+import openBrowser from 'react-dev-utils/openBrowser';
 import * as stylesRegexps from '@arco-cli/legacy/dist/utils/regexp/style';
 import { pathNormalizeToLinux } from '@arco-cli/legacy/dist/utils/path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -79,9 +80,15 @@ export function devConfig(
     devServer: {
       host,
       hot: true,
-      open: true,
       compress: true,
       allowedHosts: 'all',
+      onListening: (devServer) => {
+        if (!devServer) {
+          throw new Error('webpack-dev-server is not defined');
+        }
+        const addr = devServer.server.address();
+        openBrowser(typeof addr === 'string' ? addr : `http://${addr.address}:${addr.port}`);
+      },
       static: [
         {
           directory: resolveWorkspacePath(publicUrlOrPath),
@@ -106,27 +113,29 @@ export function devConfig(
         // forward static files
         publicPath: publicUrlOrPath.slice(0, -1),
       },
-      onBeforeSetupMiddleware(wds) {
-        const { app } = wds;
-        // Keep `evalSourceMapMiddleware` and `errorOverlayMiddleware`
-        // middlewares before `redirectServedPath` otherwise will not have any effect
-        // This lets us fetch source contents from webpack for the error overlay
-        // @ts-ignore @types/wds mismatch
-        app.use(evalSourceMapMiddleware(wds));
+      setupMiddlewares: (middlewares, devServer) => {
+        middlewares.unshift(
+          // Keep `evalSourceMapMiddleware` and `errorOverlayMiddleware`
+          // middlewares before `redirectServedPath` otherwise will not have any effect
+          // This lets us fetch source contents from webpack for the error overlay
+          // @ts-ignore @types/wds mismatch
+          evalSourceMapMiddleware(devServer),
+          // This lets us open files from the runtime error overlay.
+          errorOverlayMiddleware()
+        );
 
-        // This lets us open files from the runtime error overlay.
-        app.use(errorOverlayMiddleware());
-      },
-      onAfterSetupMiddleware({ app }) {
-        // Redirect to `PUBLIC_URL` or `homepage` from `package.json` if url not match
-        app.use(redirectServedPath(publicUrlOrPath));
+        middlewares.push(
+          // Redirect to `PUBLIC_URL` or `homepage` from `package.json` if url not match
+          redirectServedPath(publicUrlOrPath),
+          // This service worker file is effectively a 'no-op' that will reset any
+          // previous service worker registered for the same host:port combination.
+          // We do this in development to avoid hitting the production cache if
+          // it used the same host and port.
+          // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
+          noopServiceWorkerMiddleware(publicUrlOrPath)
+        );
 
-        // This service worker file is effectively a 'no-op' that will reset any
-        // previous service worker registered for the same host:port combination.
-        // We do this in development to avoid hitting the production cache if
-        // it used the same host and port.
-        // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
-        app.use(noopServiceWorkerMiddleware(publicUrlOrPath));
+        return middlewares;
       },
     },
     resolve: {

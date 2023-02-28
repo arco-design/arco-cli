@@ -52,7 +52,8 @@ export function generateStyleLoaders(options: GenerateStyleLoadersOptions) {
       {
         loader: typeof preProcessorPath === 'object' ? preProcessorPath.path : preProcessorPath,
         options: {
-          sourceMap: options.shouldUseSourceMap,
+          // resolve-url-loader will report an error if pre-processor doesn't enable sourcemap
+          sourceMap: true,
           ...(typeof preProcessorPath === 'object' ? preProcessorPath.options : undefined),
         },
       }
