@@ -20,7 +20,7 @@ export type ComponentConfig = {
     // "./" by default, but in library-project this path will be "./ComponentName"
     base?: string;
     // component entry, will be path.join(rootDir, entries.base, entries.main)
-    main: string;
+    main?: string;
     // style entry
     style?: string;
     // preview entry
@@ -65,7 +65,12 @@ export class ComponentInfo {
     workspacePath: string,
     files?: ComponentInfoFiles[]
   ) {
+    // set entry to empty string to avoid path.resolve errors
     entries.base ||= './';
+    entries.main ||= '';
+    entries.style ||= '';
+    entries.preview ||= '';
+    entries.jsdoc ||= '';
 
     this.entries = entries;
     this.rootDir = rootDir;
