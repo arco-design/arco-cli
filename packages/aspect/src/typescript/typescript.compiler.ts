@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import ts from 'typescript';
-import { merge, cloneDeep } from 'lodash';
+import { mergeWith, cloneDeep } from 'lodash';
 import { Logger } from '@arco-cli/core/dist/logger';
 import { Compiler } from '@arco-cli/service/dist/compiler';
 import ArcoError from '@arco-cli/legacy/dist/error/arcoError';
@@ -15,6 +15,7 @@ import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 
 import { TypescriptCompilerOptions } from './compilerOptions';
 import TypescriptAspect from './typescript.aspect';
+import { tsconfigMergeCustomizer } from './typescriptConfigMutator';
 
 const FILENAME_TSCONFIG = 'tsconfig.json';
 
@@ -69,23 +70,36 @@ export class TypescriptCompiler implements Compiler {
         try {
           // eslint-disable-next-line @typescript-eslint/no-var-requires
           const tsconfigFromPackage = require(`${packageDirAbs}/tsconfig.json`);
-          merge(tsconfig, tsconfigFromPackage);
+          mergeWith(tsconfig, tsconfigFromPackage, tsconfigMergeCustomizer);
         } catch (e) {}
 
         // avoid change this.options.config directly
         // different components might have different ts configs
-        merge(tsconfig, {
-          include: [rootDirAbs],
-          exclude: this.ignorePatterns.map((pattern) => path.join(rootDirAbs, '**', pattern)),
-          compilerOptions: {
-            outDir: outDirAbs,
-            rootDir: rootDirAbs,
+        mergeWith(
+          tsconfig,
+          {
+            include: [rootDirAbs],
+            exclude: this.ignorePatterns,
+            compilerOptions: {
+              outDir: outDirAbs,
+              rootDir: rootDirAbs,
+            },
           },
-        });
+          tsconfigMergeCustomizer
+        );
 
         // convert tsconfig.extends to absolute path
         if (tsconfig.extends && !path.isAbsolute(tsconfig.extends)) {
           tsconfig.extends = path.resolve(packageDirAbs, tsconfig.extends);
+        }
+
+        // convert tsconfig.exclude to absolute path
+        if (Array.isArray(tsconfig.exclude)) {
+          tsconfig.exclude = tsconfig.exclude.map((excludePath) => {
+            return path.isAbsolute(excludePath)
+              ? excludePath
+              : path.resolve(packageDirAbs, excludePath);
+          });
         }
 
         const tsconfigPath = path.join(

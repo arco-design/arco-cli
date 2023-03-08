@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs-extra';
 import ts from 'typescript';
 import { MainRuntime } from '@arco-cli/core/dist/cli';
 import { Logger, LoggerMain, LoggerAspect } from '@arco-cli/core/dist/logger';
@@ -117,10 +118,14 @@ export class ReactMain {
   private extendEnvConfigFromUser(): Environment {
     let defineConfig = null;
     const envConfigPath = path.resolve(this.workspace.path, DEFAULT_ENV_CONFIG_PATH);
-    try {
-      defineConfig = require(envConfigPath);
-    } catch (error) {
-      this.logger.error(`failed to extend ${ReactAspect.id} config from ${envConfigPath}`, error);
+
+    if (fs.existsSync(envConfigPath)) {
+      try {
+        defineConfig = require(envConfigPath);
+      } catch (error) {
+        this.logger.error(`failed to extend ${ReactAspect.id} config from ${envConfigPath}`, error);
+        throw new Error(`Failed to extend ${ReactAspect.id} config. Details:\n${error}`);
+      }
     }
 
     if (typeof defineConfig === 'function') {

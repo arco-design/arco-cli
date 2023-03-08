@@ -1,4 +1,4 @@
-import { cloneDeep, merge } from 'lodash';
+import { cloneDeep, mergeWith, isArray } from 'lodash';
 import { CompilerOptions } from 'typescript';
 import { TypescriptCompilerOptions } from './compilerOptions';
 
@@ -12,6 +12,14 @@ export type Target =
   | 'ES2019'
   | 'ES2020'
   | 'ESNext';
+
+// eslint-disable-next-line consistent-return
+export function tsconfigMergeCustomizer(objValue, extendValue, key) {
+  // only concat array for tsconfig.include/exclude
+  if (['include', 'exclude'].indexOf(key) > -1 && isArray(objValue)) {
+    return objValue.concat(extendValue);
+  }
+}
 
 export class TypescriptConfigMutator {
   constructor(public raw: TypescriptCompilerOptions) {}
@@ -87,7 +95,7 @@ export class TypescriptConfigMutator {
   }
 
   mergeTsConfig(config: Record<string, any>): TypescriptConfigMutator {
-    this.raw.tsconfig = merge({}, this.raw.tsconfig, config);
+    this.raw.tsconfig = mergeWith({}, this.raw.tsconfig, config, tsconfigMergeCustomizer);
     return this;
   }
 
