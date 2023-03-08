@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useRef, useState, useEffect } from 'react';
 
 export function useIframeContentHeight({

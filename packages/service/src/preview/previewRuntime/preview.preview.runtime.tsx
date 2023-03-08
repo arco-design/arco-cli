@@ -1,5 +1,4 @@
 import { Slot, SlotRegistry } from '@arco-cli/stone';
-import { PubsubAspect, PubsubPreview } from '@arco-cli/aspect/dist/pubsub/previewRuntime';
 
 import { PREVIEW_MODULES } from './previewModules';
 import { PreviewNotFoundError } from '../exceptions';
@@ -18,23 +17,22 @@ export { linkModules } from './previewModules';
 type PreviewSlot = SlotRegistry<PreviewType>;
 
 export class PreviewPreview {
-  static dependencies = [PubsubAspect];
+  static dependencies = [];
 
   static slots = [Slot.withType<PreviewType>(), Slot.withType<RenderingContextProvider>()];
 
   static runtime = PreviewRuntime;
 
   static provider(
-    [pubsub]: [PubsubPreview],
+    _deps,
     _config,
     [previewSlot, renderingContextSlot]: [PreviewSlot, RenderingContextSlot]
   ) {
-    const previewPreview = new PreviewPreview(pubsub, previewSlot, renderingContextSlot);
+    const previewPreview = new PreviewPreview(previewSlot, renderingContextSlot);
     return previewPreview;
   }
 
   constructor(
-    private pubsub: PubsubPreview,
     private previewSlot: PreviewSlot,
     private renderingContextSlot: RenderingContextSlot
   ) {}
@@ -129,7 +127,6 @@ export class PreviewPreview {
     preview.render(componentId, previewModule, includes, this.getRenderingContext());
 
     this.setViewport();
-    this.pubsub.reportSize(PreviewAspect.id);
   }
 }
 

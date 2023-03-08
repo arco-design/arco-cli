@@ -2,7 +2,9 @@ import fs from 'fs-extra';
 import path from 'path';
 import { SourceFile } from '@arco-cli/legacy/dist/workspace/component/sources';
 import { ComponentInfo } from '@arco-cli/legacy/dist/workspace/componentInfo';
+import { DEFAULT_ENV } from '@arco-cli/legacy/dist/constants';
 import { ComponentNotFoundInPathError } from '@arco-cli/legacy/dist/workspace/component/exceptions';
+
 import { ExtensionDataEntry, ExtensionDataList } from './extensionData';
 
 export class Component {
@@ -27,7 +29,7 @@ export class Component {
   }
 
   get env() {
-    return 'arco.env/react';
+    return DEFAULT_ENV;
   }
 
   get language() {

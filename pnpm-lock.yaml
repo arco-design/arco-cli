@@ -108,16 +108,13 @@ importers:
 
   packages/arco:
     specifiers:
-      '@arco-cli/aspect': ^2.0.0-alpha.6
-      '@arco-cli/core': ^2.0.0-alpha.4
-      '@arco-cli/legacy': ^2.0.0-alpha.3
-      '@arco-cli/react': ^2.0.0-alpha.6
-      '@arco-cli/service': ^2.0.0-alpha.6
+      '@arco-cli/aspect': ^2.0.0-alpha.11
+      '@arco-cli/core': ^2.0.0-alpha.8
+      '@arco-cli/legacy': ^2.0.0-alpha.6
+      '@arco-cli/react': ^2.0.0-alpha.11
+      '@arco-cli/service': ^2.0.0-alpha.11
       '@arco-cli/stone': ^2.0.0-alpha.0
       fs-extra: ^10.1.0
-      react: ^17.0.2
-      react-dom: ^17.0.2
-      react-router-dom: ^6.5.0
     dependencies:
       '@arco-cli/aspect': link:../aspect
       '@arco-cli/core': link:../core
@@ -126,18 +123,15 @@ importers:
       '@arco-cli/service': link:../service
       '@arco-cli/stone': link:../stone
       fs-extra: 10.1.0
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      react-router-dom: 6.5.0_sfoxds7t5ydpegc3knd667wn6m
 
   packages/aspect:
     specifiers:
       '@apollo/client': ^3.7.2
-      '@arco-cli/core': ^2.0.0-alpha.4
-      '@arco-cli/legacy': ^2.0.0-alpha.3
-      '@arco-cli/service': ^2.0.0-alpha.6
+      '@arco-cli/core': ^2.0.0-alpha.8
+      '@arco-cli/legacy': ^2.0.0-alpha.6
+      '@arco-cli/service': ^2.0.0-alpha.11
       '@arco-cli/stone': ^2.0.0-alpha.0
-      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.6
+      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.11
       '@arco-design/web-react': ^2.42.2
       '@babel/runtime': ^7.20.6
       '@mdx-js/mdx': ^1.6.22
@@ -263,7 +257,7 @@ importers:
 
   packages/core:
     specifiers:
-      '@arco-cli/legacy': ^2.0.0-alpha.3
+      '@arco-cli/legacy': ^2.0.0-alpha.6
       '@arco-cli/stone': ^2.0.0-alpha.0
       '@babel/runtime': ^7.20.6
       '@graphql-modules/core': ^0.7.17
@@ -283,6 +277,7 @@ importers:
       node-fetch: ^3.3.0
       pad-right: ^0.2.2
       pretty-time: ^1.1.0
+      react: ~17
       yargs: ^17.6.2
     dependencies:
       '@arco-cli/legacy': link:../legacy
@@ -299,11 +294,12 @@ importers:
       glob: 8.0.3
       graphql: 14.7.0
       graphql-subscriptions: 1.2.1_graphql@14.7.0
-      ink: 3.2.0
+      ink: 3.2.0_react@17.0.2
       lodash: 4.17.21
       node-fetch: 3.3.0
       pad-right: 0.2.2
       pretty-time: 1.1.0
+      react: 17.0.2
       yargs: 17.6.2
     devDependencies:
       '@types/yargs': 17.0.13
@@ -375,12 +371,12 @@ importers:
 
   packages/react:
     specifiers:
-      '@arco-cli/aspect': ^2.0.0-alpha.6
-      '@arco-cli/core': ^2.0.0-alpha.4
-      '@arco-cli/legacy': ^2.0.0-alpha.3
-      '@arco-cli/service': ^2.0.0-alpha.6
+      '@arco-cli/aspect': ^2.0.0-alpha.11
+      '@arco-cli/core': ^2.0.0-alpha.8
+      '@arco-cli/legacy': ^2.0.0-alpha.6
+      '@arco-cli/service': ^2.0.0-alpha.11
       '@arco-cli/stone': ^2.0.0-alpha.0
-      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.6
+      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.11
       '@babel/core': ^7.20.5
       '@babel/plugin-proposal-class-properties': ^7.18.6
       '@babel/plugin-proposal-decorators': ^7.20.5
@@ -487,11 +483,11 @@ importers:
 
   packages/service:
     specifiers:
-      '@arco-cli/aspect': ^2.0.0-alpha.6
-      '@arco-cli/core': ^2.0.0-alpha.4
-      '@arco-cli/legacy': ^2.0.0-alpha.3
+      '@arco-cli/aspect': ^2.0.0-alpha.11
+      '@arco-cli/core': ^2.0.0-alpha.8
+      '@arco-cli/legacy': ^2.0.0-alpha.6
       '@arco-cli/stone': ^2.0.0-alpha.0
-      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.6
+      '@arco-cli/ui-foundation-react': ^2.0.0-alpha.11
       '@babel/runtime': ^7.20.6
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.10
       '@svgr/webpack': ^6.5.1
@@ -511,8 +507,11 @@ importers:
       minimatch: ^6.1.6
       p-map-series: ^2.1.0
       pretty-time: ^1.1.0
+      react: ~17
       react-dev-utils: ^12.0.1
+      react-dom: ~17
       react-refresh: ^0.14.0
+      react-router-dom: ^6.5.0
       sass-loader: ^13.2.0
       source-map-loader: ^4.0.1
       style-loader: ^3.3.1
@@ -536,15 +535,18 @@ importers:
       fs-extra: 10.1.0
       html-webpack-plugin: 5.5.0_webpack@5.75.0
       http-proxy: 1.18.1
-      ink: 3.2.0
-      ink-spinner: 4.0.3_ink@3.2.0
+      ink: 3.2.0_react@17.0.2
+      ink-spinner: 4.0.3_ink@3.2.0+react@17.0.2
       less-loader: 11.1.0_webpack@5.75.0
       lodash: 4.17.21
       minimatch: 6.1.6
       p-map-series: 2.1.0
       pretty-time: 1.1.0
+      react: 17.0.2
       react-dev-utils: 12.0.1_webpack@5.75.0
+      react-dom: 17.0.2_react@17.0.2
       react-refresh: 0.14.0
+      react-router-dom: 6.5.0_sfoxds7t5ydpegc3knd667wn6m
       sass-loader: 13.2.0_webpack@5.75.0
       source-map-loader: 4.0.1_webpack@5.75.0
       style-loader: 3.3.1_webpack@5.75.0
@@ -564,7 +566,7 @@ importers:
   packages/ui-foundation-react:
     specifiers:
       '@apollo/client': ^3.7.2
-      '@arco-cli/aspect': ^2.0.0-alpha.6
+      '@arco-cli/aspect': ^2.0.0-alpha.11
       '@arco-design/web-react': ^2.42.2
       '@babel/runtime': ^7.20.6
       '@mdx-js/react': ^1.6.22
@@ -11909,7 +11911,7 @@ packages:
       validate-npm-package-name: 4.0.0
     dev: true
 
-  /ink-spinner/4.0.3_ink@3.2.0:
+  /ink-spinner/4.0.3_ink@3.2.0+react@17.0.2:
     resolution:
       {
         integrity: sha512-uJ4nbH00MM9fjTJ5xdw0zzvtXMkeGb0WV6dzSWvFv2/+ks6FIhpkt+Ge/eLdh0Ah6Vjw5pLMyNfoHQpRDRVFbQ==,
@@ -11920,7 +11922,8 @@ packages:
       react: '>=16.8.2'
     dependencies:
       cli-spinners: 2.7.0
-      ink: 3.2.0
+      ink: 3.2.0_react@17.0.2
+      react: 17.0.2
     dev: false
 
   /ink/3.2.0:
@@ -11949,6 +11952,48 @@ packages:
       patch-console: 1.0.0
       react-devtools-core: 4.26.1
       react-reconciler: 0.26.2
+      scheduler: 0.20.2
+      signal-exit: 3.0.7
+      slice-ansi: 3.0.0
+      stack-utils: 2.0.5
+      string-width: 4.2.3
+      type-fest: 0.12.0
+      widest-line: 3.1.0
+      wrap-ansi: 6.2.0
+      ws: 7.5.9
+      yoga-layout-prebuilt: 1.10.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
+
+  /ink/3.2.0_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-firNp1q3xxTzoItj/eOOSZQnYSlyrWks5llCTVX37nJ59K3eXbQ8PtzCguqo8YI19EELo5QxaKnJd4VxzhU8tg==,
+      }
+    engines: { node: '>=10' }
+    peerDependencies:
+      '@types/react': '>=16.8.0'
+      react: '>=16.8.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      ansi-escapes: 4.3.2
+      auto-bind: 4.0.0
+      chalk: 4.1.2
+      cli-boxes: 2.2.1
+      cli-cursor: 3.1.0
+      cli-truncate: 2.1.0
+      code-excerpt: 3.0.0
+      indent-string: 4.0.0
+      is-ci: 2.0.0
+      lodash: 4.17.21
+      patch-console: 1.0.0
+      react: 17.0.2
+      react-devtools-core: 4.26.1
+      react-reconciler: 0.26.2_react@17.0.2
       scheduler: 0.20.2
       signal-exit: 3.0.7
       slice-ansi: 3.0.0
@@ -17499,6 +17544,21 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
+      scheduler: 0.20.2
+    dev: false
+
+  /react-reconciler/0.26.2_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-nK6kgY28HwrMNwDnMui3dvm3rCFjZrcGiuwLc5COUipBK5hWHLOxMJhSnSomirqWwjPBJKV1QcbkI0VJr7Gl1Q==,
+      }
+    engines: { node: '>=0.10.0' }
+    peerDependencies:
+      react: ^17.0.2
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      react: 17.0.2
       scheduler: 0.20.2
     dev: false
 

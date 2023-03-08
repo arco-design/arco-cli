@@ -2,10 +2,15 @@ import { EnvPreviewConfig } from '@arco-cli/service/dist/preview';
 
 import { Bundler, BundlerContext } from '@aspect/bundler';
 
+export type PipeServiceModifier = {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  transformers?: Array<(...args: any) => any>;
+  module?: any;
+};
+
 /**
  * add a custom type and include all properties from within the environment.
  */
-
 export interface Environment {
   // :TODO need to define an abstract type for service handlers (now using any)
   [key: string]: any;

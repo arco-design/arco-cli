@@ -5,10 +5,7 @@ import { Workspace } from './workspace';
 export class WorkspaceUiRoot implements UIRoot {
   constructor(private workspace: Workspace) {}
 
-  buildOptions = {
-    ssr: false,
-    launchBrowserOnStart: true,
-  };
+  buildOptions = {};
 
   get name() {
     return this.workspace.name;

@@ -1,8 +1,20 @@
+import path from 'path';
+import ts from 'typescript';
 import { MainRuntime } from '@arco-cli/core/dist/cli';
-import { EnvsAspect, EnvsMain } from '@arco-cli/aspect/dist/envs';
+import { Logger, LoggerMain, LoggerAspect } from '@arco-cli/core/dist/logger';
+import {
+  EnvsAspect,
+  EnvsMain,
+  ExecutionContext,
+  EnvTransformer,
+  Environment,
+} from '@arco-cli/aspect/dist/envs';
 import { JestAspect, JestMain } from '@arco-cli/aspect/dist/jest';
-import { BuilderAspect, BuilderMain } from '@arco-cli/service/dist/builder';
-import { WebpackAspect, WebpackMain } from '@arco-cli/aspect/dist/webpack';
+import {
+  WebpackAspect,
+  WebpackMain,
+  WebpackConfigTransformer,
+} from '@arco-cli/aspect/dist/webpack';
 import { CompilerAspect, CompilerMain } from '@arco-cli/service/dist/compiler';
 import { MultiCompilerAspect, MultiCompilerMain } from '@arco-cli/aspect/dist/multi-compiler';
 import {
@@ -13,23 +25,34 @@ import {
 import { SassAspect, SassMain } from '@arco-cli/aspect/dist/sass';
 import { LessAspect, LessMain } from '@arco-cli/aspect/dist/less';
 import { WorkspaceAspect, Workspace } from '@arco-cli/aspect/dist/workspace';
+import type { BundlerContext, DevServerContext } from '@arco-cli/aspect/dist/bundler';
+import { DEFAULT_ENV_CONFIG_PATH } from '@arco-cli/legacy/dist/constants';
 
 import { ReactAspect } from './react.aspect';
 import { ReactEnv } from './react.env';
-import { ReactConfig } from './types/reactConfig';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const tsconfig = require('./typescript/tsconfig.json');
+type UseWebpackModifiers = {
+  previewConfig?: WebpackConfigTransformer[];
+  devServerConfig?: WebpackConfigTransformer[];
+};
 
-const DEFAULT_ESM_DIR = 'es';
-const DEFAULT_CJS_DIR = 'lib';
+type UseTypescriptModifiers = {
+  buildConfig?: TsConfigTransformer[];
+  devConfig?: TsConfigTransformer[];
+  tsModule?: any;
+};
+
+type UseJestModifiers = {
+  jestConfigPath?: string;
+  jestModulePath?: string;
+};
 
 export class ReactMain {
   static runtime = MainRuntime;
 
   static dependencies = [
+    LoggerAspect,
     WorkspaceAspect,
-    BuilderAspect,
     CompilerAspect,
     MultiCompilerAspect,
     EnvsAspect,
@@ -42,36 +65,30 @@ export class ReactMain {
 
   static slots = [];
 
-  static provider(
-    [
-      workspace,
-      builder,
-      compiler,
-      multiCompiler,
-      envs,
-      jestMain,
-      tsMain,
-      webpackMain,
-      lessMain,
-      sassMain,
-    ]: [
-      Workspace,
-      BuilderMain,
-      CompilerMain,
-      MultiCompilerMain,
-      EnvsMain,
-      JestMain,
-      TypescriptMain,
-      WebpackMain,
-      LessMain,
-      SassMain
-    ],
-    config: ReactConfig
-  ) {
-    const reactMain = new ReactMain();
-    const reactEnv = new ReactEnv(
-      config,
-      workspace,
+  static provider([
+    loggerMain,
+    workspace,
+    compiler,
+    multiCompiler,
+    envs,
+    jestMain,
+    tsMain,
+    webpackMain,
+    lessMain,
+    sassMain,
+  ]: [
+    LoggerMain,
+    Workspace,
+    CompilerMain,
+    MultiCompilerMain,
+    EnvsMain,
+    JestMain,
+    TypescriptMain,
+    WebpackMain,
+    LessMain,
+    SassMain
+  ]) {
+    const defaultReactEnv = new ReactEnv(
       compiler,
       multiCompiler,
       jestMain,
@@ -80,28 +97,115 @@ export class ReactMain {
       lessMain,
       sassMain
     );
-    envs.registerEnv(reactEnv);
 
-    const transformer: TsConfigTransformer = (config) => {
-      config.mergeTsConfig(tsconfig).setArtifactName('declaration');
-      return config;
-    };
+    const logger = loggerMain.createLogger(ReactAspect.id);
+    const reactMain = new ReactMain(defaultReactEnv, workspace, logger, envs);
+    const extendedReactEnv = reactMain.extendEnvConfigFromUser();
 
-    builder.registerBuildTasks([
-      reactEnv.createEsmCompilerTask({
-        transformers: [transformer],
-        compilerOptions: { distDir: DEFAULT_ESM_DIR },
-      }),
-      reactEnv.createCjsCompilerTask({
-        transformers: [transformer],
-        compilerOptions: { distDir: DEFAULT_CJS_DIR },
-      }),
-    ]);
+    envs.registerEnv(extendedReactEnv);
 
     return reactMain;
   }
 
-  constructor() {}
+  constructor(
+    private defaultReactEnv: ReactEnv,
+    private workspace: Workspace,
+    private logger: Logger,
+    private envs: EnvsMain
+  ) {}
+
+  private extendEnvConfigFromUser(): Environment {
+    let defineConfig = null;
+    const envConfigPath = path.resolve(this.workspace.path, DEFAULT_ENV_CONFIG_PATH);
+    try {
+      defineConfig = require(envConfigPath);
+    } catch (error) {
+      this.logger.error(`failed to extend ${ReactAspect.id} config from ${envConfigPath}`, error);
+    }
+
+    if (typeof defineConfig === 'function') {
+      try {
+        const userConfig = defineConfig();
+        const envTransformers: EnvTransformer[] = [];
+
+        userConfig.jest && envTransformers.push(this.useJest(userConfig.jest));
+        userConfig.webpack && envTransformers.push(this.useWebpack(userConfig.webpack));
+        userConfig.typescript && envTransformers.push(this.useTypescript(userConfig.typescript));
+
+        if (envTransformers.length) {
+          return this.compose(envTransformers);
+        }
+      } catch (error) {
+        this.logger.error(`${ReactAspect.id} failed to extend env config from user`, error);
+      }
+    }
+
+    return this.defaultReactEnv;
+  }
+
+  /**
+   * override the env's typescript config for both dev and build time.
+   * Replaces both overrideTsConfig (devConfig) and overrideBuildTsConfig (buildConfig)
+   */
+  useTypescript(modifiers: UseTypescriptModifiers = {}) {
+    const overrides: any = {};
+    const tsModule = modifiers.tsModule || ts;
+    const { devConfig: devTransformers, buildConfig: buildTransformers } = modifiers;
+
+    if (devTransformers) {
+      overrides.getCompiler = () => this.defaultReactEnv.getCompiler(devTransformers, tsModule);
+    }
+
+    if (buildTransformers) {
+      const buildPipeModifiers = {
+        tsModifier: {
+          transformers: buildTransformers,
+          module: tsModule,
+        },
+      };
+      overrides.getBuildPipe = () => this.defaultReactEnv.getBuildPipe(buildPipeModifiers);
+    }
+
+    return this.envs.override(overrides);
+  }
+
+  /**
+   * override the env's dev server and preview webpack configurations.
+   * Replaces both overrideDevServerConfig and overridePreviewConfig
+   */
+  useWebpack(modifiers: UseWebpackModifiers = {}) {
+    const overrides: any = {};
+    const devServerTransformers = modifiers.devServerConfig;
+    if (devServerTransformers) {
+      overrides.getDevServer = (context: DevServerContext) =>
+        this.defaultReactEnv.getDevServer(context, devServerTransformers);
+      overrides.getDevEnvId = (context: DevServerContext) =>
+        this.defaultReactEnv.getDevEnvId((context as unknown as ExecutionContext).envDefinition.id);
+    }
+    const previewTransformers = modifiers.previewConfig;
+    if (previewTransformers) {
+      overrides.getBundler = (context: BundlerContext) =>
+        this.defaultReactEnv.getBundler(context, previewTransformers);
+    }
+    return this.envs.override(overrides);
+  }
+
+  /**
+   * override the jest configuration.
+   */
+  useJest(modifiers: UseJestModifiers = {}) {
+    const { jestConfigPath, jestModulePath } = modifiers;
+    return this.envs.override({
+      getTester: () => this.defaultReactEnv.getTester(jestConfigPath, jestModulePath),
+    });
+  }
+
+  /**
+   * create a new composition of the react environment.
+   */
+  compose(transformers: EnvTransformer[]) {
+    return this.envs.compose(this.defaultReactEnv, transformers);
+  }
 }
 
 ReactAspect.addRuntime(ReactMain);

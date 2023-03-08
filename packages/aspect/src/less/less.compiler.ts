@@ -39,8 +39,10 @@ export class LessCompiler implements Compiler {
   }
 
   async build(context: BuildContext): Promise<BuildTaskResult> {
+    const workspaceNodeModulePath = path.resolve(context.workspace.path, 'node_modules');
     const results = await Promise.all(
       context.components.map(async (component) => {
+        const packageNodeModulePath = path.resolve(component.packageDirAbs, 'node_modules');
         const componentResult = {
           id: component.id,
           errors: [],
@@ -60,7 +62,7 @@ export class LessCompiler implements Compiler {
               try {
                 const fileDirPath = path.dirname(file.path);
                 const { css } = await render(file.contents.toString(), {
-                  paths: [fileDirPath],
+                  paths: [fileDirPath, packageNodeModulePath, workspaceNodeModulePath],
                   javascriptEnabled: true,
                 });
                 const targetPath = path.join(

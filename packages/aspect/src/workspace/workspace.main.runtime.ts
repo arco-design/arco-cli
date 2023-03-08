@@ -5,6 +5,7 @@ import { MainRuntime } from '@arco-cli/core/dist/cli';
 import { AspectLoaderAspect, AspectLoaderMain } from '@arco-cli/core/dist/aspect-loader';
 import { getWorkspaceInfo } from '@arco-cli/legacy/dist/workspace/workspaceLocator';
 import { GraphqlAspect, GraphqlMain } from '@arco-cli/core/dist/graphql';
+import { CORE_ASPECT_ID_MAP } from '@arco-cli/legacy/dist/constants';
 
 import { PubsubAspect, PubsubMain } from '@aspect/pubsub';
 import { ComponentAspect, ComponentMain } from '@aspect/component';
@@ -63,7 +64,7 @@ export const WorkspaceMain = {
     ],
     stone
   ) => {
-    const arcoConfig = stone.config.get('arco.app/arco');
+    const arcoConfig = stone.config.get(CORE_ASPECT_ID_MAP.APP_ARCO);
 
     const workspaceInfo = await getWorkspaceInfo(arcoConfig.cwd);
     if (!workspaceInfo) {

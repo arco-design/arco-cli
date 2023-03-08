@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useMemo } from 'react';
 import { Text, Box } from 'ink';
 import { head, flatten } from 'lodash';

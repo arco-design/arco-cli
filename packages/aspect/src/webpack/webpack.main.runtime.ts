@@ -76,7 +76,7 @@ export class WebpackMain {
 
     return targets.map((target) => {
       const baseConfig = factory(target, bundlerContext);
-      const configMutator = new WebpackConfigMutator(baseConfig);
+      const configMutator = new WebpackConfigMutator(baseConfig, webpack);
       const context = { ...transformerContext, target };
       const afterMutation = runTransformersWithContext(
         configMutator.clone(),
@@ -102,7 +102,7 @@ export class WebpackMain {
       context.publicPath,
       context.title
     );
-    const configMutator = new WebpackConfigMutator(config);
+    const configMutator = new WebpackConfigMutator(config, webpack);
     const transformerContext: WebpackConfigDevServerTransformContext = Object.assign(context, {
       mode: 'dev' as const,
     });

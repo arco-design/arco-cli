@@ -26,14 +26,9 @@ const MODULE_FILE_EXTENSIONS = [
   'md',
 ];
 
-// Source maps are resource heavy and can cause out of memory issue for large source files.
-const GENERATE_SOURCEMAP = process.env.GENERATE_SOURCEMAP !== 'false';
-
 const IMAGE_INLINE_SIZE_LIMIT = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000');
 
 export default function (isEnvProduction = false): Configuration {
-  const mergedShouldUseSourceMap = isEnvProduction || GENERATE_SOURCEMAP;
-
   // "postcss" loader applies autoprefixer to our CSS.
   // "css" loader resolves paths in CSS and adds assets as dependencies.
   // "style" loader turns CSS into JS modules that inject <style> tags.
@@ -47,7 +42,7 @@ export default function (isEnvProduction = false): Configuration {
   };
 
   return {
-    devtool: mergedShouldUseSourceMap ? 'inline-source-map' : false,
+    devtool: false,
 
     resolve: {
       // These are the reasonable defaults supported by the Node ecosystem.
@@ -61,7 +56,6 @@ export default function (isEnvProduction = false): Configuration {
       alias: {
         'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime.js'),
         'react/jsx-runtime': require.resolve('react/jsx-runtime.js'),
-        'react-dom/server': require.resolve('react-dom/server'),
         '@mdx-js/react': require.resolve('@mdx-js/react'),
       },
     },
@@ -133,7 +127,6 @@ export default function (isEnvProduction = false): Configuration {
                 merge({}, baseStyleLoadersOptions, {
                   cssLoaderOpts: {
                     importLoaders: 1,
-                    sourceMap: mergedShouldUseSourceMap,
                   },
                 })
               ),
@@ -152,12 +145,10 @@ export default function (isEnvProduction = false): Configuration {
                 merge({}, baseStyleLoadersOptions, {
                   cssLoaderOpts: {
                     importLoaders: 1,
-                    sourceMap: mergedShouldUseSourceMap,
                     modules: {
                       getLocalIdent: getCSSModuleLocalIdent,
                     },
                   },
-                  shouldUseSourceMap: mergedShouldUseSourceMap,
                 })
               ),
             },
@@ -169,9 +160,7 @@ export default function (isEnvProduction = false): Configuration {
                 merge({}, baseStyleLoadersOptions, {
                   cssLoaderOpts: {
                     importLoaders: 3,
-                    sourceMap: mergedShouldUseSourceMap,
                   },
-                  shouldUseSourceMap: mergedShouldUseSourceMap,
                   preProcessOptions: {
                     resolveUrlLoaderPath: require.resolve('resolve-url-loader'),
                     preProcessorPath: require.resolve('sass-loader'),
@@ -189,12 +178,10 @@ export default function (isEnvProduction = false): Configuration {
                 merge({}, baseStyleLoadersOptions, {
                   cssLoaderOpts: {
                     importLoaders: 3,
-                    sourceMap: mergedShouldUseSourceMap,
                     modules: {
                       getLocalIdent: getCSSModuleLocalIdent,
                     },
                   },
-                  shouldUseSourceMap: mergedShouldUseSourceMap,
                   preProcessOptions: {
                     resolveUrlLoaderPath: require.resolve('resolve-url-loader'),
                     preProcessorPath: require.resolve('sass-loader'),
@@ -210,12 +197,15 @@ export default function (isEnvProduction = false): Configuration {
                 merge({}, baseStyleLoadersOptions, {
                   cssLoaderOpts: {
                     importLoaders: 1,
-                    sourceMap: mergedShouldUseSourceMap,
                   },
-                  shouldUseSourceMap: mergedShouldUseSourceMap,
                   preProcessOptions: {
                     resolveUrlLoaderPath: require.resolve('resolve-url-loader'),
-                    preProcessorPath: require.resolve('less-loader'),
+                    preProcessorPath: {
+                      path: require.resolve('less-loader'),
+                      options: {
+                        lessOptions: {},
+                      },
+                    },
                   },
                 })
               ),
@@ -230,15 +220,18 @@ export default function (isEnvProduction = false): Configuration {
                 merge({}, baseStyleLoadersOptions, {
                   cssLoaderOpts: {
                     importLoaders: 1,
-                    sourceMap: mergedShouldUseSourceMap,
                     modules: {
                       getLocalIdent: getCSSModuleLocalIdent,
                     },
                   },
-                  shouldUseSourceMap: mergedShouldUseSourceMap,
                   preProcessOptions: {
                     resolveUrlLoaderPath: require.resolve('resolve-url-loader'),
-                    preProcessorPath: require.resolve('less-loader'),
+                    preProcessorPath: {
+                      path: require.resolve('less-loader'),
+                      options: {
+                        lessOptions: {},
+                      },
+                    },
                   },
                 })
               ),

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import { Text, Box } from 'ink';
 import type { ComponentServer } from '@arco-cli/aspect/dist/bundler';

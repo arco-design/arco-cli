@@ -1,3 +1,4 @@
+import { mergeWith } from 'lodash';
 import { CLIAspect, CLIMain, MainRuntime } from '@arco-cli/core/dist/cli';
 import { LoggerAspect, LoggerMain, Logger } from '@arco-cli/core/dist/logger';
 import { WorkspaceAspect, Workspace } from '@arco-cli/aspect/dist/workspace';
@@ -5,7 +6,7 @@ import { DocsAspect, DocsMain } from '@arco-cli/aspect/dist/docs';
 import { Component } from '@arco-cli/aspect/dist/component';
 import request from '@arco-cli/legacy/dist/cli/request';
 import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
-import { MATERIAL_GENERATION } from '@arco-cli/legacy/dist/constants';
+import { DEFAULT_MATERIAL_GROUP_ID, MATERIAL_GENERATION } from '@arco-cli/legacy/dist/constants';
 
 import { SyncerAspect } from './syncer.aspect';
 import { SyncCmd } from './sync.cmd';
@@ -36,6 +37,14 @@ export class SyncerMain {
 
   constructor(private config: SyncerConfig, private logger: Logger, private docs: DocsMain) {}
 
+  private extendSyncParamsWithDefaultMaterialMeta(params: SyncParams) {
+    const { defaultMaterialMeta = {} } = this.config;
+    defaultMaterialMeta.group ||= DEFAULT_MATERIAL_GROUP_ID;
+    mergeWith(params, defaultMaterialMeta, (paramValue, defaultValue) => {
+      return paramValue === undefined ? defaultValue : paramValue;
+    });
+  }
+
   async sync(components: Component[], currentUserName: string): Promise<ComponentResult[]> {
     const results: ComponentResult[] = [];
     await Promise.all(
@@ -46,7 +55,6 @@ export class SyncerMain {
         };
         const doc = this.docs.getDoc(component);
         const meta: SyncParams = {
-          ...this.config.defaultMaterialMeta,
           name: component.id,
           title: doc.title || component.name,
           description: doc.description,
@@ -62,6 +70,8 @@ export class SyncerMain {
           outline: doc.outline,
           _generation: MATERIAL_GENERATION,
         };
+
+        this.extendSyncParamsWithDefaultMaterialMeta(meta);
 
         let error = null;
         const longProcessLogger = this.logger.createLongProcessLogger(

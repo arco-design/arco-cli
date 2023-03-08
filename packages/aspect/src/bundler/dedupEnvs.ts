@@ -10,7 +10,7 @@ export function dedupEnvs(contexts: ExecutionContext[]) {
   const groupedEnvs: GroupIdContextMap = {};
 
   contexts.forEach((context) => {
-    const envId = context.env?.getDevEnvId();
+    const envId = context.env?.getDevEnvId(context);
     if (!envId) return;
     if (!(envId in groupedEnvs)) groupedEnvs[envId] = [];
     groupedEnvs[envId].push(context);

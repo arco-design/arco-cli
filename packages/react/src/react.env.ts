@@ -1,11 +1,18 @@
 import { join, resolve } from 'path';
 import { cloneDeep } from 'lodash';
 import ts from 'typescript';
-import { CompilerEnv, PreviewEnv, TesterEnv } from '@arco-cli/aspect/dist/envs';
+import {
+  CompilerEnv,
+  PreviewEnv,
+  TesterEnv,
+  PipeServiceModifier,
+  ExecutionContext,
+} from '@arco-cli/aspect/dist/envs';
+import { BuildTask } from '@arco-cli/service/dist/builder';
 import { JestMain } from '@arco-cli/aspect/dist/jest';
 import { Tester } from '@arco-cli/service/dist/tester';
 import { CompilerMain, Compiler, CompilerOptions } from '@arco-cli/service/dist/compiler';
-import {
+import type {
   Bundler,
   BundlerContext,
   DevServer,
@@ -27,15 +34,12 @@ import {
   COMPONENT_PREVIEW_STRATEGY_NAME,
 } from '@arco-cli/service/dist/preview';
 import { sha1 } from '@arco-cli/legacy/dist/utils';
-import { Workspace } from '@arco-cli/aspect/dist/workspace';
 
 import { ReactAspect } from './react.aspect';
 import basePreviewConfigFactory from './webpack/webpack.config.base';
-import basePreviewProdConfigFactory from './webpack/webpack.config.base.prod';
 import componentPreviewDevConfigFactory from './webpack/webpack.config.component.dev';
 import componentPreviewProdConfigFactory from './webpack/webpack.config.component.prod';
 import { Doclet, parser } from './tsdoc';
-import { ReactConfig } from './types/reactConfig';
 
 type CreateTsCompilerTaskOptions = {
   tsModule?: typeof ts;
@@ -43,13 +47,18 @@ type CreateTsCompilerTaskOptions = {
   compilerOptions?: CompilerOptions;
 };
 
+type GetBuildPipeModifiers = {
+  tsModifier?: PipeServiceModifier;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const defaultTsConfig = require('./typescript/tsconfig.json');
 
+const DEFAULT_ESM_DIR = 'es';
+const DEFAULT_CJS_DIR = 'lib';
+
 export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, PreviewEnv {
   constructor(
-    private config: ReactConfig,
-    private workspace: Workspace,
     private compiler: CompilerMain,
     private multiCompiler: MultiCompilerMain,
     private jest: JestMain,
@@ -78,33 +87,23 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     };
   }
 
-  private async createWebpackBundler(
-    context: BundlerContext,
-    transformers: WebpackConfigTransformer[] = []
-  ): Promise<Bundler> {
-    return this.webpack.createBundler(context, transformers);
-  }
-
   private async createComponentsWebpackBundler(
     context: BundlerContext,
     transformers: WebpackConfigTransformer[] = []
   ): Promise<Bundler> {
     const baseConfig = basePreviewConfigFactory(!context.development);
-    const baseProdConfig = basePreviewProdConfigFactory(context.development);
     const componentProdConfig = componentPreviewProdConfigFactory();
 
     const defaultTransformer: WebpackConfigTransformer = (configMutator) => {
-      const merged = configMutator.merge([baseConfig, baseProdConfig, componentProdConfig]);
+      const merged = configMutator.merge([baseConfig, componentProdConfig]);
       return merged;
     };
     const mergedTransformers = [defaultTransformer, ...transformers];
-    return this.createWebpackBundler(context, mergedTransformers);
+    return this.webpack.createBundler(context, mergedTransformers);
   }
 
   private createCjsJestTester(jestConfigPath?: string, jestModulePath?: string): Tester {
-    const defaultConfigPath = this.config.jestConfigPath
-      ? join(this.workspace.path, this.config.jestConfigPath)
-      : join(__dirname, './jest/jest.cjs.config.js');
+    const defaultConfigPath = join(__dirname, './jest/jest.cjs.config.js');
     const config = jestConfigPath || defaultConfigPath;
     return this.jest.createTester(config, jestModulePath || require.resolve('jest'));
   }
@@ -119,26 +118,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     return this.tsAspect.createCjsCompiler(tsCompileOptions, transformers, tsModule);
   }
 
-  /**
-   * required for `arco start`
-   */
-  getDevEnvId() {
-    return ReactAspect.id;
-  }
-
-  getTester(jestConfigPath: string, jestModulePath?: string): Tester {
-    return this.createCjsJestTester(jestConfigPath, jestModulePath);
-  }
-
-  getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
-    return this.multiCompiler.createCompiler([
-      this.createCjsCompiler(transformers, tsModule),
-      this.less.createCompiler(),
-      this.sass.createCompiler(),
-    ]);
-  }
-
-  createEsmCompilerTask({
+  private createEsmCompilerTask({
     transformers,
     tsModule,
     compilerOptions,
@@ -156,7 +136,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     );
   }
 
-  createCjsCompilerTask({
+  private createCjsCompilerTask({
     transformers,
     tsModule,
     compilerOptions,
@@ -174,12 +154,33 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     );
   }
 
+  /**
+   * required for `arco start`
+   */
+  getDevEnvId(id?: string) {
+    return typeof id === 'string' ? id : ReactAspect.id;
+  }
+
+  getTester(jestConfigPath: string, jestModulePath?: string): Tester {
+    return this.createCjsJestTester(jestConfigPath, jestModulePath);
+  }
+
+  getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
+    return this.multiCompiler.createCompiler([
+      this.createCjsCompiler(transformers, tsModule),
+      this.less.createCompiler(),
+      this.sass.createCompiler(),
+    ]);
+  }
+
   getDevServer(
     context: DevServerContext,
     transformers: WebpackConfigTransformer[] = []
   ): DevServer {
     const baseConfig = basePreviewConfigFactory(false);
-    const componentDevConfig = componentPreviewDevConfigFactory(context.id);
+    const componentDevConfig = componentPreviewDevConfigFactory(
+      (context as any as ExecutionContext).id
+    );
 
     const defaultTransformer: WebpackConfigTransformer = (configMutator) => {
       const merged = configMutator.merge([baseConfig, componentDevConfig]);
@@ -194,7 +195,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
   }
 
   getDocsMetadata(file: SourceFile) {
-    if (!file) return [];
+    if (!file?.contents) return [];
 
     const hash = sha1(file.contents);
     if (this.docMetadataCache[file.path]?.hash !== hash) {
@@ -221,5 +222,19 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     transformers: WebpackConfigTransformer[] = []
   ): Promise<Bundler> {
     return this.createComponentsWebpackBundler(context, transformers);
+  }
+
+  getBuildPipe(modifiers: GetBuildPipeModifiers = {}): BuildTask[] {
+    const transformers: TsConfigTransformer[] = modifiers?.tsModifier?.transformers || [];
+    return [
+      this.createEsmCompilerTask({
+        transformers,
+        compilerOptions: { distDir: DEFAULT_ESM_DIR },
+      }),
+      this.createCjsCompilerTask({
+        transformers,
+        compilerOptions: { distDir: DEFAULT_CJS_DIR },
+      }),
+    ];
   }
 }

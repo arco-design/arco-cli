@@ -82,6 +82,19 @@ export const CFG_ANALYTICS_ENVIRONMENT_KEY = 'arco_environment';
 export const CFG_ANALYTICS_USERID_KEY = 'analytics_id';
 
 /**
+ * Aspect info
+ */
+export const CORE_ASPECT_PACKAGE_NAME_MAP = {
+  APP_ARCO: '@arco-cli/arco',
+  ENV_REACT: '@arco-cli/react',
+};
+
+export const CORE_ASPECT_ID_MAP = {
+  APP_ARCO: 'arco.app/arco',
+  ENV_REACT: 'arco.env/react',
+};
+
+/**
  * Domain info
  */
 export const BASE_WEB_DOMAIN = 'arco.design';
@@ -91,7 +104,9 @@ export const BASE_DOCS_DOMAIN = `${BASE_WEB_DOMAIN}/material`;
 /**
  * Default values
  */
-export const DEFAULT_ENV = 'arco.env/react';
+export const DEFAULT_ENV = CORE_ASPECT_ID_MAP.ENV_REACT;
+
+export const DEFAULT_ENV_CONFIG_PATH = 'arco.env.config.js';
 
 export const DEFAULT_ANALYTICS_DOMAIN = `TODO: date analytics`;
 
@@ -125,6 +140,9 @@ export const IGNORE_LIST = [
   '*/tsconfig.json',
 ];
 
+/**
+ * CLI help infos
+ */
 export const CLI_VERSION = packageFile.version;
 
 export const CLI_DESCRIPTION = '';
