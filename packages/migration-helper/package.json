@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/migration-helper",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "main": "./dist/index.js",
   "scripts": {
     "dev": "sh ../../scripts/build.sh dev",
