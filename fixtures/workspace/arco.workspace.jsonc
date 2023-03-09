@@ -1,42 +1,36 @@
 {
   "arco.aspect/workspace": {
-    "components": [
-      {
-        "name": "StandaloneButton",
-        "author": "zuozhiheng",
-        "group": 0,
-        "rootDir": "packages/button/src"
-      },
-      {
-        "name": "LibraryButton",
-        "author": "zuozhiheng",
-        "group": 0,
+    "components": {
+      "extends": {
         "rootDir": "packages/library/components",
+        "author": "zuozhiheng",
+        "group": 0,
         "entries": {
-          "base": "./Button"
+          "base": ".",
+          "main": "./index.ts",
+          "style": "./style/index.less",
+          "jsdoc": "./interface.ts",
+          "preview": "./__docs__/index.mdx"
         }
       },
-      {
-        "name": "LibraryTag",
-        "author": "zuozhiheng",
-        "group": 0,
-        "rootDir": "packages/library/components",
-        "entries": {
-          "base": "./Tag"
+      "members": [
+        {
+          "name": "StandaloneButton",
+          "rootDir": "packages/button/src"
+        },
+        {
+          "name": "LibraryButton",
+          "entries": {
+            "base": "./Button"
+          }
+        },
+        {
+          "name": "LibraryTag",
+          "entries": {
+            "base": "./Tag"
+          }
         }
-      }
-    ],
-    "defaultComponentEntries": {
-      "base": ".",
-      "main": "./index.ts",
-      "style": "./style/index.less",
-      "jsdoc": "./interface.ts",
-      "preview": "./__docs__/index.mdx"
-    }
-  },
-  "arco.service/syncer": {
-    "defaultMaterialMeta": {
-      "group": 1
+      ]
     }
   }
 }
