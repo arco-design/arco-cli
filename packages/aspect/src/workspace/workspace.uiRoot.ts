@@ -1,5 +1,5 @@
 import { UIRoot } from '@arco-cli/service/dist/ui';
-import { FILE_WORKSPACE_JSONC } from '@arco-cli/legacy/dist/constants';
+// import { FILE_WORKSPACE_JSONC } from '@arco-cli/legacy/dist/constants';
 import { Workspace } from './workspace';
 
 export class WorkspaceUiRoot implements UIRoot {
@@ -15,9 +15,9 @@ export class WorkspaceUiRoot implements UIRoot {
     return this.workspace.path;
   }
 
-  get configFile() {
-    return FILE_WORKSPACE_JSONC;
-  }
+  // get configFile() {
+  //   return FILE_WORKSPACE_JSONC;
+  // }
 
   getConfig() {
     return {};

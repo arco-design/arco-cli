@@ -1,15 +1,20 @@
+import path from 'path';
 import { parse } from 'comment-json';
 import { readFileSync, existsSync } from 'fs-extra';
 import { ReadConfigError } from '../exception';
 
-export function readConfigFile(path: string, mustExist = true) {
-  if (!mustExist && !existsSync(path)) {
+export function readConfigFile(filePath: string, mustExist = true) {
+  if (!mustExist && !existsSync(filePath)) {
     return {};
+  }
+  if (path.extname(filePath) === '.js') {
+    const config = require(filePath);
+    return config;
   }
 
   try {
-    return parse(readFileSync(path, 'utf8'));
+    return parse(readFileSync(filePath, 'utf8'));
   } catch (err) {
-    throw new ReadConfigError(path, err);
+    throw new ReadConfigError(filePath, err);
   }
 }
