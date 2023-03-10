@@ -22,7 +22,7 @@ export function buildPropagationPaths(absPath: string, endPath?: string): string
   const pathParts = absPath.split(pathSep);
 
   pathParts.forEach((_, index) => {
-    const part = pathParts.slice(0, index).join('/');
+    const part = pathParts.slice(0, index + 1).join('/');
     if (!part || isParentDir(part, endPath)) return;
     paths.push(part);
   });

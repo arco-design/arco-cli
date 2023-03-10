@@ -15,6 +15,5 @@
     "resolveJsonModule": true,
     "experimentalDecorators": true
   },
-  "exclude": ["dist"],
-  "include": ["**/*"]
+  "exclude": ["dist"]
 }

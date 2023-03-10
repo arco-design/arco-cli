@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { uniqBy } from 'lodash';
+import { uniqBy, merge } from 'lodash';
 import mapSeries from 'p-map-series';
 import { SlotRegistry } from '@arco-cli/stone';
 import { AspectLoaderMain, getAspectDef } from '@arco-cli/core/dist/aspect-loader';
@@ -79,14 +79,14 @@ export class Workspace implements ComponentFactory {
     private onComponentChangeSlot: OnComponentChangeSlot,
     private onComponentRemoveSlot: OnComponentRemoveSlot
   ) {
-    const componentConfigs = this.config.components;
-    for (const c of componentConfigs) {
-      c.entries = {
-        ...this.config.defaultComponentEntries,
-        ...c.entries,
-      };
+    const rawComponentsConfig = this.config.components;
+    if (Array.isArray(rawComponentsConfig)) {
+      this.componentConfigList = rawComponentsConfig;
+    } else {
+      this.componentConfigList = rawComponentsConfig.members.map((rawConfig) =>
+        merge({}, rawComponentsConfig.extends, rawConfig)
+      );
     }
-    this.componentConfigList = componentConfigs;
   }
 
   readonly watcher = new Watcher(this, this.pubsub);

@@ -1,0 +1,24 @@
+{
+  "name": "@arco-cli/migration-helper",
+  "version": "2.0.0-alpha.1",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "sh ../../scripts/build.sh dev",
+    "build": "sh ../../scripts/build.sh",
+    "build-type": "sh ../../scripts/build-type.sh",
+    "clean": "rm -rf dist",
+    "clean-type": "find dist -name *.d.ts |xargs rm -rf",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "comment-json": "^4.2.3",
+    "doctrine": "^3.0.0",
+    "fs-extra": "^11.1.0",
+    "glob": "^8.0.3",
+    "parse-es-import": "^0.5.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

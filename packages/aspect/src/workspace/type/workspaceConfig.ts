@@ -9,10 +9,7 @@ export interface WorkspaceConfig {
   /**
    * components map of the workspace
    */
-  components: ComponentConfig[];
-
-  /**
-   * default component entry setting
-   */
-  defaultComponentEntries?: ComponentConfig['entries'];
+  components:
+    | ComponentConfig[]
+    | { extends?: Partial<ComponentConfig>; members: ComponentConfig[] };
 }

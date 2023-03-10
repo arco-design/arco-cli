@@ -1,8 +1,8 @@
 /**
- * component url comprises letters, numbers, "_", "-", "/"
- * but should not include trailing "/", and should not include "~"
+ * this can match component is like package-name/component-name
+ * or @scope/package-name/component-name
  */
-const componentRegex = /^@?[\w/-]*[\w-]/;
+const componentRegex = /^(@([^/]+)\/)?([^/]+)\/([^/]+)/;
 
 export function getIdFromLocation(): string | undefined {
   const splat = window.location.pathname.replace(/^\//, '');
