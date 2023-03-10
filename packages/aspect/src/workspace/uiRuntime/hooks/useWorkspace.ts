@@ -8,6 +8,7 @@ const wcComponentFields = gql`
   fragment wcComponentFields on Component {
     id
     name
+    labels
     packageName
     version
   }

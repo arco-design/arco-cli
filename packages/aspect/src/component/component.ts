@@ -28,6 +28,10 @@ export class Component {
     return this.info.author;
   }
 
+  get labels() {
+    return this.info.labels;
+  }
+
   get env() {
     return DEFAULT_ENV;
   }

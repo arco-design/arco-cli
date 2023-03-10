@@ -144,7 +144,7 @@ export class Workspace implements ComponentFactory {
         }
 
         const index = componentId && infoList.findIndex((info) => info.id === componentId);
-        if (index) {
+        if (index !== -1) {
           infoList[index] = componentInfo;
         } else {
           infoList.push(componentInfo);

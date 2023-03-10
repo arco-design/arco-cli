@@ -12,6 +12,8 @@ export type ComponentConfig = {
   name: string;
   // author of component
   author?: string;
+  // labels of component
+  labels?: string[];
   // material group id of component
   group?: number;
   // entry file info of component
@@ -44,6 +46,8 @@ export class ComponentInfo {
 
   author: string;
 
+  labels: string[];
+
   files: ComponentInfoFiles[];
 
   entries: ComponentConfig['entries'];
@@ -61,7 +65,7 @@ export class ComponentInfo {
   readonly packageDirAbs: string;
 
   constructor(
-    { name, group, author, entries, rootDir, config }: ComponentConfig,
+    { name, group, author, labels, entries, rootDir, config }: ComponentConfig,
     workspacePath: string,
     files?: ComponentInfoFiles[]
   ) {
@@ -76,6 +80,7 @@ export class ComponentInfo {
     this.rootDir = rootDir;
     this.config = config;
     this.name = name || '';
+    this.labels = labels || [];
     this.files = files || [];
     this.group = group;
     this.author = author;

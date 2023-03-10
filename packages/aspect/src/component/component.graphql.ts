@@ -13,6 +13,9 @@ export default function (componentExtension: ComponentMain) {
         # display name of the component
         name: String!
 
+        # labels of the component
+        labels: [String]!
+
         # package name of the component
         packageName: String!
 
@@ -39,6 +42,7 @@ export default function (componentExtension: ComponentMain) {
       Component: {
         id: (component: Component) => component.id,
         name: (component: Component) => component.name,
+        labels: (component: Component) => component.labels,
         version: (component: Component) => component.version,
         packageName: (component: Component) => component.packageName,
       },
