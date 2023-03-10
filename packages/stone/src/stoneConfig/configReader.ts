@@ -9,6 +9,9 @@ export function readConfigFile(filePath: string, mustExist = true) {
   }
   if (path.extname(filePath) === '.js') {
     const config = require(filePath);
+    if (typeof config === 'function') {
+      return config();
+    }
     return config;
   }
 
