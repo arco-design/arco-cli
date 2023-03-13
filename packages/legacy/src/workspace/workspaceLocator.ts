@@ -5,8 +5,7 @@ import { buildPropagationPaths } from '../utils/path';
 
 export type WorkspaceInfo = {
   path: string;
-  hasWorkspaceConfig: boolean;
-  fileName: string;
+  configFileName: string;
 };
 
 /**
@@ -22,28 +21,16 @@ export async function getWorkspaceInfo(absPath: string): Promise<WorkspaceInfo |
     const jsFilePath = join(path, FILE_WORKSPACE_JS);
     const jsonFilePath = join(path, FILE_WORKSPACE_JSONC);
 
-    let fileName = '';
-  
-    const hasWorkspaceConfig = await Promise.all([
-      fs.pathExists(jsFilePath),
-      fs.pathExists(jsonFilePath),
-    ]).then(([hasJsConfig, hasJsonConfig]) => {
-      if (hasJsConfig) {
-        fileName = FILE_WORKSPACE_JS;
-        return true;
-      }
-      if (hasJsonConfig) {
-        fileName = FILE_WORKSPACE_JSONC;
-        return true;
-      }
-      return false;
-    });
+    const configFileName = fs.existsSync(jsFilePath)
+      ? FILE_WORKSPACE_JS
+      : fs.existsSync(jsonFilePath)
+      ? FILE_WORKSPACE_JSONC
+      : null;
 
-    if (hasWorkspaceConfig) {
+    if (configFileName) {
       return {
         path,
-        hasWorkspaceConfig,
-        fileName,
+        configFileName,
       };
     }
   }

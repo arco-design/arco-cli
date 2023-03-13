@@ -8,6 +8,7 @@ export function readConfigFile(filePath: string, mustExist = true) {
     return {};
   }
   if (path.extname(filePath) === '.js') {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const config = require(filePath);
     if (typeof config === 'function') {
       return config();

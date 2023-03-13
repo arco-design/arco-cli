@@ -54,11 +54,7 @@ export class JestTester implements Tester {
       config.testMatch = [];
       config.collectCoverageFrom = [];
       context.components.forEach(({ componentDir }) => {
-        config.testMatch.push(
-          ...[
-            `**/${componentDir}/**/*.test.[jt]s?(x)`,
-          ]
-        );
+        config.testMatch.push(...[`**/${componentDir}/**/*.test.[jt]s?(x)`]);
         config.collectCoverageFrom.push(
           ...[
             `**/${componentDir}/**/*.[jt]s?(x)`,

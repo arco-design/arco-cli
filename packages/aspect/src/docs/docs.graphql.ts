@@ -30,10 +30,7 @@ export default function (docs: DocsMain) {
           const doc = docs.getDoc(component);
           const docLabels = doc?.labels || [];
 
-          return [
-            ...labels,
-            ...docLabels,
-          ];
+          return [...labels, ...docLabels];
         },
 
         outline: (component: Component) => {

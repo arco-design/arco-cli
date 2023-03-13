@@ -209,7 +209,6 @@ export class Watcher {
    * if workspace.json changed, it's possible that a new component has been added. trigger onComponentAdd.
    */
   private async handleWorkspaceJsonChanges(): Promise<OnComponentEventResult[]> {
-    
     const previousTrackDirs = { ...this.trackDirs };
     await this.setTrackDirs();
     const newDirs: string[] = difference(
