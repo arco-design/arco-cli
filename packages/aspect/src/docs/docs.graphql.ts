@@ -26,8 +26,14 @@ export default function (docs: DocsMain) {
         },
 
         labels: (component: Component) => {
+          const labels = component.labels || [];
           const doc = docs.getDoc(component);
-          return doc?.labels || [];
+          const docLabels = doc?.labels || [];
+
+          return [
+            ...labels,
+            ...docLabels,
+          ];
         },
 
         outline: (component: Component) => {

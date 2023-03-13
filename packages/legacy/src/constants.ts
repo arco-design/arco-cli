@@ -44,6 +44,8 @@ export const FILE_GLOBAL_CONFIG = 'config.json';
 
 export const FILE_WORKSPACE_JSONC = 'arco.workspace.jsonc';
 
+export const FILE_WORKSPACE_JS = 'arco.workspace.js';
+
 export const PATH_DEBUG_LOGS = path.join(DIR_CACHE_ROOT, 'debug.log');
 
 /**

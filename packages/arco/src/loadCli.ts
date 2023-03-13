@@ -9,7 +9,6 @@ import {
 } from '@arco-cli/core/dist/aspect-loader';
 import { CLIAspect, MainRuntime, CLIMain } from '@arco-cli/core/dist/cli';
 import { getWorkspaceInfo } from '@arco-cli/legacy/dist/workspace/workspaceLocator';
-import { FILE_WORKSPACE_JSONC } from '@arco-cli/legacy/dist/constants';
 
 import { ArcoAspect } from './arco.aspect';
 import { ArcoMain } from './arco.main.runtime';
@@ -38,7 +37,7 @@ async function getConfig(cwd = process.cwd()): Promise<Config> {
       shouldThrow: false,
       cwd: workspaceInfo?.path,
     };
-    return Config.load(FILE_WORKSPACE_JSONC, configOpts);
+    return Config.load(workspaceInfo.fileName, configOpts);
   }
   return null;
 }

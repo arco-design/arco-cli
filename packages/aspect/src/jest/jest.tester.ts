@@ -57,7 +57,6 @@ export class JestTester implements Tester {
         config.testMatch.push(
           ...[
             `**/${componentDir}/**/*.test.[jt]s?(x)`,
-            `**/${componentDir}/**/__test__/**/*.[jt]s?(x)`,
           ]
         );
         config.collectCoverageFrom.push(

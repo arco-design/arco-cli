@@ -6,7 +6,7 @@ import chokidar, { FSWatcher } from 'chokidar';
 import loader from '@arco-cli/legacy/dist/cli/loader';
 import logger from '@arco-cli/legacy/dist/logger/logger';
 import { pathNormalizeToLinux } from '@arco-cli/legacy/dist/utils/path';
-import { FILE_WORKSPACE_JSONC } from '@arco-cli/legacy/dist/constants';
+import { FILE_WORKSPACE_JSONC, FILE_WORKSPACE_JS } from '@arco-cli/legacy/dist/constants';
 
 import { PubsubMain } from '@aspect/pubsub';
 
@@ -128,7 +128,7 @@ export class Watcher {
     debounced?: boolean;
   }> {
     try {
-      if (filePath.endsWith(FILE_WORKSPACE_JSONC)) {
+      if (filePath.endsWith(FILE_WORKSPACE_JSONC) || filePath.endsWith(FILE_WORKSPACE_JS)) {
         this.workspaceJsonChangesInProgress = true;
         const buildResults = await this.watchQueue.add(() => this.handleWorkspaceJsonChanges());
         this.workspaceJsonChangesInProgress = false;
@@ -209,6 +209,7 @@ export class Watcher {
    * if workspace.json changed, it's possible that a new component has been added. trigger onComponentAdd.
    */
   private async handleWorkspaceJsonChanges(): Promise<OnComponentEventResult[]> {
+    
     const previousTrackDirs = { ...this.trackDirs };
     await this.setTrackDirs();
     const newDirs: string[] = difference(

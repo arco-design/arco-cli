@@ -19,7 +19,7 @@ export interface UIRoot {
   /**
    * name of the UI root config file.
    */
-  configFile: string;
+  // configFile: string;
 
   /**
    * option for build
