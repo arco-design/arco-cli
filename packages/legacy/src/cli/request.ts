@@ -1,9 +1,8 @@
 import axios from 'axios';
 import logger from '../logger';
 import { getSync } from '../globalConfig';
-import { CFG_HOST_ARCO_KEY, CFG_USER_TOKEN_KEY } from '../constants';
+import { CFG_HOST_ARCO_KEY, CFG_ACCESS_TOKEN_KEY, CFG_USER_TOKEN_KEY } from '../constants';
 
-const ARCO_TOKEN = 'x-arco-token';
 const TIMEOUT_REQUEST = 1000 * 15;
 
 const request = (
@@ -16,6 +15,7 @@ const request = (
 ) => {
   const hostArco = getSync(CFG_HOST_ARCO_KEY);
   const userToken = getSync(CFG_USER_TOKEN_KEY);
+  const accessToken = getSync(CFG_ACCESS_TOKEN_KEY);
   const baseURL = `http${
     hostArco.indexOf('localhost') > -1 ? '' : 's'
   }://${hostArco}/material/api/`;
@@ -27,7 +27,8 @@ const request = (
 
   option.headers = {
     ...option.headers,
-    [ARCO_TOKEN]: (option.headers && option.headers[ARCO_TOKEN]) || userToken || '',
+    [CFG_USER_TOKEN_KEY]: option.headers?.[CFG_USER_TOKEN_KEY] || userToken || '',
+    [CFG_ACCESS_TOKEN_KEY]: accessToken,
   };
 
   const req =

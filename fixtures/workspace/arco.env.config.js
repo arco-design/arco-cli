@@ -1,5 +1,5 @@
 const path = require('path');
-const ArcoWebpackPlugin = require('@arco-plugins/webpack-react');
+// const ArcoWebpackPlugin = require('@arco-plugins/webpack-react');
 
 module.exports = function defineConfig(envId) {
   return {
@@ -11,11 +11,11 @@ module.exports = function defineConfig(envId) {
         (config) => {
           return config.merge({
             plugins: [
-              new ArcoWebpackPlugin({
-                theme: '@arco-design/theme-line',
-                webpackImplementation: config.webpack,
-                include: 'packages',
-              }),
+              // new ArcoWebpackPlugin({
+              //   theme: '@arco-design/theme-line',
+              //   webpackImplementation: config.webpack,
+              //   include: 'packages',
+              // }),
             ],
             resolve: {
               alias: {

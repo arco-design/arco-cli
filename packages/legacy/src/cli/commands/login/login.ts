@@ -79,7 +79,7 @@ export class Login implements LegacyCommand {
       request
         .get('login', {
           headers: {
-            'x-arco-token': token,
+            [CFG_USER_TOKEN_KEY]: token,
             referer: `http://localhost:${LOCAL_LISTEN_SERVER_PORT}${LOCAL_LISTEN_SERVER_PATH}`,
           },
         })

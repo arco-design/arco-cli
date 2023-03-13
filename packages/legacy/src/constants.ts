@@ -61,6 +61,8 @@ export const CFG_USER_EMAIL_KEY = 'user.email';
 
 export const CFG_USER_TOKEN_KEY = 'x-arco-token';
 
+export const CFG_ACCESS_TOKEN_KEY = 'x-arco-access-token';
+
 export const CFG_USER_NAME_KEY = 'user.name';
 
 export const CFG_USER_ACCOUNT_TYPE_KET = 'user.accountType';

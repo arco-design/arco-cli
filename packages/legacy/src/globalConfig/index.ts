@@ -102,5 +102,5 @@ function invalidateCache() {
 }
 
 function toEnvVariableName(configName: string): string {
-  return `${ENV_VARIABLE_CONFIG_PREFIX}${configName.replace(/\./g, '_').toUpperCase()}`;
+  return `${ENV_VARIABLE_CONFIG_PREFIX}${configName.replace(/[.-]/g, '_').toUpperCase()}`;
 }
