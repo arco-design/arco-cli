@@ -40,14 +40,14 @@ export class JestTester implements Tester {
   }
 
   async test(context: TesterContext): Promise<Tests> {
-    const config: any = {
+    const config: jest.Config = {
       rootDir: context.rootPath,
       roots: [context.rootPath],
     };
 
     if (context.watch) {
       config.watchAll = true;
-      config.noCache = true;
+      config.cache = false;
     }
 
     if (context.components) {

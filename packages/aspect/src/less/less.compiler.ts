@@ -3,11 +3,13 @@ import fs from 'fs-extra';
 import minimatch from 'minimatch';
 import { render, version } from 'less';
 import { BuildContext, BuildTaskResult } from '@arco-cli/service/dist/builder';
-import { Compiler, CompilerOptions } from '@arco-cli/service/dist/compiler';
+import { Compiler } from '@arco-cli/service/dist/compiler';
 import {
   DEFAULT_DIST_DIRNAME,
   DEFAULT_BUILD_IGNORE_PATTERNS,
 } from '@arco-cli/legacy/dist/constants';
+
+import type { LessCompilerOptions } from './compilerOptions';
 
 export class LessCompiler implements Compiler {
   readonly displayName = 'Less';
@@ -18,8 +20,11 @@ export class LessCompiler implements Compiler {
 
   ignorePatterns = DEFAULT_BUILD_IGNORE_PATTERNS;
 
-  constructor(readonly id: string, options: Partial<CompilerOptions>) {
+  lessRenderOption: LessCompilerOptions['lessRenderOptions'] = {};
+
+  constructor(readonly id: string, options: LessCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
+    this.lessRenderOption ||= options.lessRenderOptions;
   }
 
   getDistPathBySrcPath(srcPath: string): string {
@@ -64,6 +69,7 @@ export class LessCompiler implements Compiler {
                 const { css } = await render(file.contents.toString(), {
                   paths: [fileDirPath, packageNodeModulePath, workspaceNodeModulePath],
                   javascriptEnabled: true,
+                  ...this.lessRenderOption,
                 });
                 const targetPath = path.join(
                   component.packageDirAbs,

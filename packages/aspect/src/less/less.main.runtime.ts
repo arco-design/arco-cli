@@ -1,8 +1,8 @@
 import { MainRuntime } from '@arco-cli/core/dist/cli';
-import { CompilerOptions } from '@arco-cli/service/dist/compiler';
 
 import { LessAspect } from './less.aspect';
 import { LessCompiler } from './less.compiler';
+import type { LessCompilerOptions } from './compilerOptions';
 
 export class LessMain {
   static runtime = MainRuntime;
@@ -17,7 +17,7 @@ export class LessMain {
 
   constructor() {}
 
-  createCompiler(options: Partial<CompilerOptions> = {}) {
+  createCompiler(options: LessCompilerOptions = {}) {
     return new LessCompiler(LessAspect.id, options);
   }
 }

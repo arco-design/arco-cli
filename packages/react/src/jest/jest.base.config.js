@@ -4,8 +4,8 @@ module.exports = {
   testEnvironment: require.resolve('jest-environment-jsdom'),
   testPathIgnorePatterns: ['/node_modules/'],
   transform: {
-    '^.+\\.css$': require.resolve('./transformers/css-transform.js'),
-    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': require.resolve('./transformers/file-transform.js'),
+    '^.+\\.(less|scss|sass|css)$': require.resolve('./transformers/style-transformer.js'),
+    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': require.resolve('./transformers/file-transformer.js'),
   },
   transformIgnorePatterns: [
     '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx|cjs)$',

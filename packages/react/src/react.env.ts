@@ -165,6 +165,7 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
     return this.createCjsJestTester(jestConfigPath, jestModulePath);
   }
 
+  // this is used by compile cmd before, we don't use it for now
   getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
     return this.multiCompiler.createCompiler([
       this.createCjsCompiler(transformers, tsModule),
