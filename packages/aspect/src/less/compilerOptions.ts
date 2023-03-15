@@ -4,5 +4,5 @@ export type LessCompilerOptions = {
   /**
    * option for less.render function
    */
-  lessRenderOptions?: Record<string, any>;
+  lessOptions?: Record<string, any>;
 } & Partial<CompilerOptions>;

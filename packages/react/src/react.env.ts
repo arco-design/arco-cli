@@ -1,12 +1,7 @@
 import { join, resolve } from 'path';
 import { cloneDeep } from 'lodash';
 import ts from 'typescript';
-import {
-  PreviewEnv,
-  TesterEnv,
-  PipeServiceModifier,
-  ExecutionContext,
-} from '@arco-cli/aspect/dist/envs';
+import { PreviewEnv, TesterEnv, ExecutionContext } from '@arco-cli/aspect/dist/envs';
 import { BuildTask } from '@arco-cli/service/dist/builder';
 import { JestMain } from '@arco-cli/aspect/dist/jest';
 import { Tester } from '@arco-cli/service/dist/tester';
@@ -26,8 +21,8 @@ import {
 } from '@arco-cli/aspect/dist/typescript';
 import { WebpackConfigTransformer, WebpackMain } from '@arco-cli/aspect/dist/webpack';
 import { MultiCompilerMain } from '@arco-cli/aspect/dist/multi-compiler';
-import { SassMain } from '@arco-cli/aspect/dist/sass';
-import { LessMain } from '@arco-cli/aspect/dist/less';
+import { SassMain, SassCompilerOptions } from '@arco-cli/aspect/dist/sass';
+import { LessMain, LessCompilerOptions } from '@arco-cli/aspect/dist/less';
 import {
   PreviewStrategyName,
   COMPONENT_PREVIEW_STRATEGY_NAME,
@@ -40,14 +35,12 @@ import componentPreviewDevConfigFactory from './webpack/webpack.config.component
 import componentPreviewProdConfigFactory from './webpack/webpack.config.component.prod';
 import { Doclet, parser } from './tsdoc';
 
-type CreateTsCompilerTaskOptions = {
+type CreateCompilerTaskOptions = {
   tsModule?: typeof ts;
-  transformers?: TsConfigTransformer[];
-  compilerOptions?: CompilerOptions;
-};
-
-type GetBuildPipeModifiers = {
-  tsModifier?: PipeServiceModifier;
+  tsConfigTransformers?: TsConfigTransformer[];
+  multiCompilerOptions?: CompilerOptions;
+  lessCompilerOptions?: LessCompilerOptions;
+  sassCompilerOptions?: SassCompilerOptions;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -118,37 +111,41 @@ export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
   }
 
   private createEsmCompilerTask({
-    transformers,
     tsModule,
-    compilerOptions,
-  }: CreateTsCompilerTaskOptions = {}) {
+    tsConfigTransformers,
+    multiCompilerOptions,
+    lessCompilerOptions,
+    sassCompilerOptions,
+  }: CreateCompilerTaskOptions = {}) {
     return this.compiler.createTask(
       'TSCompilerESM',
       this.multiCompiler.createCompiler(
         [
-          this.createEsmCompiler(transformers, tsModule),
-          this.less.createCompiler(),
-          this.sass.createCompiler(),
+          this.createEsmCompiler(tsConfigTransformers, tsModule),
+          this.less.createCompiler(lessCompilerOptions),
+          this.sass.createCompiler(sassCompilerOptions),
         ],
-        compilerOptions
+        multiCompilerOptions
       )
     );
   }
 
   private createCjsCompilerTask({
-    transformers,
     tsModule,
-    compilerOptions,
-  }: CreateTsCompilerTaskOptions = {}) {
+    tsConfigTransformers,
+    multiCompilerOptions,
+    lessCompilerOptions,
+    sassCompilerOptions,
+  }: CreateCompilerTaskOptions = {}) {
     return this.compiler.createTask(
       'TSCompilerCJS',
       this.multiCompiler.createCompiler(
         [
-          this.createCjsCompiler(transformers, tsModule),
-          this.less.createCompiler(),
-          this.sass.createCompiler(),
+          this.createCjsCompiler(tsConfigTransformers, tsModule),
+          this.less.createCompiler(lessCompilerOptions),
+          this.sass.createCompiler(sassCompilerOptions),
         ],
-        compilerOptions
+        multiCompilerOptions
       )
     );
   }
@@ -215,16 +212,15 @@ export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
     return this.createComponentsWebpackBundler(context, transformers);
   }
 
-  getBuildPipe(modifiers: GetBuildPipeModifiers = {}): BuildTask[] {
-    const transformers: TsConfigTransformer[] = modifiers?.tsModifier?.transformers || [];
+  getBuildPipe(modifiers: CreateCompilerTaskOptions): BuildTask[] {
     return [
       this.createEsmCompilerTask({
-        transformers,
-        compilerOptions: { distDir: DEFAULT_ESM_DIR },
+        ...modifiers,
+        multiCompilerOptions: { distDir: DEFAULT_ESM_DIR },
       }),
       this.createCjsCompilerTask({
-        transformers,
-        compilerOptions: { distDir: DEFAULT_CJS_DIR },
+        ...modifiers,
+        multiCompilerOptions: { distDir: DEFAULT_CJS_DIR },
       }),
     ];
   }

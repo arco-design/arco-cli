@@ -1,4 +1,5 @@
 const path = require('path');
+const NpmPluginImport = require('less-plugin-npm-import');
 // const ArcoWebpackPlugin = require('@arco-plugins/webpack-react');
 
 module.exports = function defineConfig(envId) {
@@ -29,15 +30,22 @@ module.exports = function defineConfig(envId) {
     typescript: {
       buildConfig: [
         (config) => {
-          console.log(config);
           config.mergeTsConfig({
             compilerOptions: {
               allowJs: false,
-            }
+            },
           });
           return config;
         },
       ],
     },
+    less: {
+      lessOptions: {
+        plugins: [new NpmPluginImport({ prefix: '~' })],
+      },
+    },
+    sass: {
+      sassOptions: {}
+    }
   };
 };

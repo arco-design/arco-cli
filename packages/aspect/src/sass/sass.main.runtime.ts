@@ -1,8 +1,8 @@
 import { MainRuntime } from '@arco-cli/core/dist/cli';
-import { CompilerOptions } from '@arco-cli/service/dist/compiler';
 
 import { SassAspect } from './sass.aspect';
 import { SassCompiler } from './sass.compiler';
+import { SassCompilerOptions } from './compilerOptions';
 
 export class SassMain {
   static runtime = MainRuntime;
@@ -17,7 +17,7 @@ export class SassMain {
 
   constructor() {}
 
-  createCompiler(option: Partial<CompilerOptions> = {}) {
+  createCompiler(option: SassCompilerOptions = {}) {
     return new SassCompiler(SassAspect.id, option);
   }
 }

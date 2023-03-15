@@ -20,11 +20,11 @@ export class LessCompiler implements Compiler {
 
   ignorePatterns = DEFAULT_BUILD_IGNORE_PATTERNS;
 
-  lessRenderOption: LessCompilerOptions['lessRenderOptions'] = {};
+  lessOptions: LessCompilerOptions['lessOptions'];
 
   constructor(readonly id: string, options: LessCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
-    this.lessRenderOption ||= options.lessRenderOptions;
+    this.lessOptions = options.lessOptions || {};
   }
 
   getDistPathBySrcPath(srcPath: string): string {
@@ -69,7 +69,7 @@ export class LessCompiler implements Compiler {
                 const { css } = await render(file.contents.toString(), {
                   paths: [fileDirPath, packageNodeModulePath, workspaceNodeModulePath],
                   javascriptEnabled: true,
-                  ...this.lessRenderOption,
+                  ...this.lessOptions,
                 });
                 const targetPath = path.join(
                   component.packageDirAbs,

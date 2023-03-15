@@ -98,13 +98,13 @@ export class EnvsMain {
     }
 
     allNames.forEach((key: string) => {
-      const fn = sourceEnv[key];
+      const sourceFn = sourceEnv[key];
       if (targetEnv[key]) return;
 
       if (keys.includes(key)) {
-        targetEnv[key] = fn;
-      } else if (fn?.bind) {
-        targetEnv[key] = fn.bind(sourceEnv);
+        targetEnv[key] = sourceFn;
+      } else if (sourceFn?.bind) {
+        targetEnv[key] = sourceFn.bind(sourceEnv);
       }
     });
 

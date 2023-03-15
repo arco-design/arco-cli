@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs-extra';
-import ts from 'typescript';
 import { MainRuntime } from '@arco-cli/core/dist/cli';
 import { Logger, LoggerMain, LoggerAspect } from '@arco-cli/core/dist/logger';
 import {
@@ -37,9 +36,17 @@ type UseWebpackModifiers = {
   devServerConfig?: WebpackConfigTransformer[];
 };
 
-type UseTypescriptModifiers = {
-  buildConfig?: TsConfigTransformer[];
-  tsModule?: any;
+type UseBuildPileModifiers = {
+  typescript?: {
+    tsModule?: any;
+    buildConfig?: TsConfigTransformer[];
+  };
+  less?: {
+    lessOptions?: Record<string, any>;
+  };
+  sass?: {
+    sassOptions?: Record<string, any>;
+  };
 };
 
 type UseJestModifiers = {
@@ -129,12 +136,21 @@ export class ReactMain {
 
     if (typeof defineConfig === 'function') {
       try {
-        const userConfig = defineConfig();
+        const userConfig = defineConfig(ReactAspect.id);
         const envTransformers: EnvTransformer[] = [];
 
         userConfig.jest && envTransformers.push(this.useJest(userConfig.jest));
         userConfig.webpack && envTransformers.push(this.useWebpack(userConfig.webpack));
-        userConfig.typescript && envTransformers.push(this.useTypescript(userConfig.typescript));
+
+        if (userConfig.typescript || userConfig.less || userConfig.sass) {
+          envTransformers.push(
+            this.useBuildPipe({
+              typescript: userConfig.typescript,
+              less: userConfig.less,
+              sass: userConfig.sass,
+            })
+          );
+        }
 
         if (envTransformers.length) {
           return this.compose(envTransformers);
@@ -148,22 +164,24 @@ export class ReactMain {
   }
 
   /**
-   * override the env's typescript config for both dev and build time.
-   * Replaces both overrideTsConfig (devConfig) and overrideBuildTsConfig (buildConfig)
+   * override the env's build pile config for build time.
+   * include typescript / less / sass options
    */
-  useTypescript(modifiers: UseTypescriptModifiers = {}) {
+  useBuildPipe(modifiers: UseBuildPileModifiers = {}) {
     const overrides: any = {};
-    const tsModule = modifiers.tsModule || ts;
-    const { buildConfig: buildTransformers } = modifiers;
+    const { tsModule, buildConfig: tsConfigTransformers } = modifiers.typescript || {};
+    const { lessOptions } = modifiers.less || {};
+    const { sassOptions } = modifiers.sass || {};
 
-    if (buildTransformers) {
-      const buildPipeModifiers = {
-        tsModifier: {
-          transformers: buildTransformers,
-          module: tsModule,
-        },
+    if (tsModule || tsConfigTransformers || lessOptions || sassOptions) {
+      overrides.getBuildPipe = () => {
+        return this.defaultReactEnv.getBuildPipe({
+          tsModule,
+          tsConfigTransformers,
+          lessCompilerOptions: { lessOptions },
+          sassCompilerOptions: { sassOptions },
+        });
       };
-      overrides.getBuildPipe = () => this.defaultReactEnv.getBuildPipe(buildPipeModifiers);
     }
 
     return this.envs.override(overrides);

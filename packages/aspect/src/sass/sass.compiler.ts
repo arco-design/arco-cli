@@ -2,12 +2,14 @@ import path from 'path';
 import fs from 'fs-extra';
 import minimatch from 'minimatch';
 import { compile } from 'sass';
-import { Compiler, CompilerOptions } from '@arco-cli/service/dist/compiler';
+import { Compiler } from '@arco-cli/service/dist/compiler';
 import { BuildContext, BuildTaskResult } from '@arco-cli/service/dist/builder';
 import {
   DEFAULT_BUILD_IGNORE_PATTERNS,
   DEFAULT_DIST_DIRNAME,
 } from '@arco-cli/legacy/dist/constants';
+
+import { SassCompilerOptions } from './compilerOptions';
 
 export class SassCompiler implements Compiler {
   readonly displayName = 'Sass';
@@ -18,8 +20,11 @@ export class SassCompiler implements Compiler {
 
   ignorePatterns = DEFAULT_BUILD_IGNORE_PATTERNS;
 
-  constructor(readonly id: string, options: Partial<CompilerOptions>) {
+  sassOptions: SassCompilerOptions['sassOptions'];
+
+  constructor(readonly id: string, options: SassCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
+    this.sassOptions = options.sassOptions || {};
   }
 
   getDistPathBySrcPath(srcPath: string): string {
@@ -58,7 +63,7 @@ export class SassCompiler implements Compiler {
             })
             .map(async (file) => {
               try {
-                const cssFile = compile(file.path).css;
+                const cssFile = compile(file.path, this.sassOptions).css;
                 const targetPath = path.join(
                   component.packageDirAbs,
                   this.distDir,
