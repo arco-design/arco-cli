@@ -2,7 +2,6 @@ import { join, resolve } from 'path';
 import { cloneDeep } from 'lodash';
 import ts from 'typescript';
 import {
-  CompilerEnv,
   PreviewEnv,
   TesterEnv,
   PipeServiceModifier,
@@ -11,7 +10,7 @@ import {
 import { BuildTask } from '@arco-cli/service/dist/builder';
 import { JestMain } from '@arco-cli/aspect/dist/jest';
 import { Tester } from '@arco-cli/service/dist/tester';
-import { CompilerMain, Compiler, CompilerOptions } from '@arco-cli/service/dist/compiler';
+import { CompilerMain, CompilerOptions } from '@arco-cli/service/dist/compiler';
 import type {
   Bundler,
   BundlerContext,
@@ -57,7 +56,7 @@ const defaultTsConfig = require('./typescript/tsconfig.json');
 const DEFAULT_ESM_DIR = 'es';
 const DEFAULT_CJS_DIR = 'lib';
 
-export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, PreviewEnv {
+export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
   constructor(
     private compiler: CompilerMain,
     private multiCompiler: MultiCompilerMain,
@@ -163,15 +162,6 @@ export class ReactEnv implements TesterEnv<Tester>, CompilerEnv<Compiler>, Previ
 
   getTester(jestConfigPath: string, jestModulePath?: string): Tester {
     return this.createCjsJestTester(jestConfigPath, jestModulePath);
-  }
-
-  // this is used by compile cmd before, we don't use it for now
-  getCompiler(transformers: TsConfigTransformer[] = [], tsModule = ts): Compiler {
-    return this.multiCompiler.createCompiler([
-      this.createCjsCompiler(transformers, tsModule),
-      this.less.createCompiler(),
-      this.sass.createCompiler(),
-    ]);
   }
 
   getDevServer(

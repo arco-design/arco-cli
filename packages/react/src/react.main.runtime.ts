@@ -39,7 +39,6 @@ type UseWebpackModifiers = {
 
 type UseTypescriptModifiers = {
   buildConfig?: TsConfigTransformer[];
-  devConfig?: TsConfigTransformer[];
   tsModule?: any;
 };
 
@@ -155,11 +154,7 @@ export class ReactMain {
   useTypescript(modifiers: UseTypescriptModifiers = {}) {
     const overrides: any = {};
     const tsModule = modifiers.tsModule || ts;
-    const { devConfig: devTransformers, buildConfig: buildTransformers } = modifiers;
-
-    if (devTransformers) {
-      overrides.getCompiler = () => this.defaultReactEnv.getCompiler(devTransformers, tsModule);
-    }
+    const { buildConfig: buildTransformers } = modifiers;
 
     if (buildTransformers) {
       const buildPipeModifiers = {

@@ -55,13 +55,6 @@ export interface TesterEnv<T = any> extends Environment {
   getTestsDevPatterns?: () => string[];
 }
 
-export interface CompilerEnv<T = any> extends Environment {
-  /**
-   * Returns a compiler
-   */
-  getCompiler: () => T;
-}
-
 export interface PreviewEnv extends Environment {
   /**
    * Returns a path to a docs template.
