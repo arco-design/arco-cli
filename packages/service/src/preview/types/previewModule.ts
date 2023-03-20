@@ -1,7 +1,7 @@
 /**
  * single preview module, e.g. compositions file
  */
-export type ModuleFile<T = any> = Record<string, T>;
+export type ModuleImportFunction<T = any> = () => Promise<Record<string, T>>;
 
 /**
  * A full index of the preview data
@@ -10,7 +10,7 @@ export type PreviewModule<T = any> = {
   /**
    * Dictionary mapping components to their module files.
    */
-  componentMap: Record<string, ModuleFile<T>[]>;
+  componentMap: Record<string, ModuleImportFunction<T>[]>;
 
   /**
    * Dictionary mapping components to their preview metadata

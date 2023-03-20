@@ -15,7 +15,7 @@ export interface PreviewType {
     linkedModules: PreviewModule<any>,
     includedPreviews: string[],
     renderingContext: RenderingContext
-  ): void;
+  ): Promise<void>;
 
   /**
    * determine if this will be the default preview to render.

@@ -124,7 +124,7 @@ export class PreviewPreview {
     ).filter((module) => !!module);
 
     const previewModule = await this.getPreviewModule(name);
-    preview.render(componentId, previewModule, includes, this.getRenderingContext());
+    await preview.render(componentId, previewModule, includes, this.getRenderingContext());
 
     this.setViewport();
   }

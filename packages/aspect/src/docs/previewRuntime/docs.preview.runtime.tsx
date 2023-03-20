@@ -41,12 +41,23 @@ export class DocsPreview {
     return relevant?.[0];
   }
 
-  render = (componentId: string, modules: PreviewModule, _include, context: RenderingContext) => {
-    const docsModule = this.selectPreviewModel(componentId, modules);
+  render = async (
+    componentId: string,
+    modules: PreviewModule,
+    _include,
+    context: RenderingContext
+  ) => {
+    let doc = null;
+
+    const dynamicImportModule = this.selectPreviewModel(componentId, modules);
+    if (typeof dynamicImportModule === 'function') {
+      doc = (await dynamicImportModule()).default;
+    }
+
     const docsProps: DocsRootProps = {
       context,
       componentId,
-      doc: docsModule?.default,
+      doc,
       metadata: modules.componentMetadataMap[componentId],
     };
 

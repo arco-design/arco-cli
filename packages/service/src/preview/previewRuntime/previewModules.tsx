@@ -1,4 +1,4 @@
-import type { PreviewModule, ModuleFile } from '../types';
+import type { PreviewModule, ModuleImportFunction } from '../types';
 
 type ModuleId = string;
 
@@ -11,7 +11,7 @@ export class PreviewModules extends Map<ModuleId, PreviewModule> {
     return this;
   }
 
-  loadComponentPreviews(compId: string, previews: Record<string, ModuleFile[]>) {
+  loadComponentPreviews(compId: string, previews: Record<string, ModuleImportFunction[]>) {
     Object.entries(previews).forEach(([previewName, moduleFile]) => {
       const preview = this.get(previewName);
       if (preview) {
