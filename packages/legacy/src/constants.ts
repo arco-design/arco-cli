@@ -60,8 +60,6 @@ export const CFG_USER_TOKEN_KEY = 'x-arco-token';
 
 export const CFG_ACCESS_TOKEN_KEY = 'x-arco-access-token';
 
-export const CFG_CLI_VERSION_KEY = 'cli_version';
-
 export const CFG_USER_NAME_KEY = 'user.name';
 
 export const CFG_USER_ACCOUNT_TYPE_KET = 'user.accountType';

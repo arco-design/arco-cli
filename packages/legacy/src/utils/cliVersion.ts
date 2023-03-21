@@ -1,10 +1,9 @@
-import { setSync, getSync } from '../globalConfig';
-import { CFG_CLI_VERSION_KEY } from '../constants';
+let cliVersion = null;
 
 export function setCliVersion(version) {
-  return setSync({ [CFG_CLI_VERSION_KEY]: version });
+  cliVersion = version;
 }
 
 export function getCliVersion() {
-  return getSync(CFG_CLI_VERSION_KEY);
+  return cliVersion;
 }
