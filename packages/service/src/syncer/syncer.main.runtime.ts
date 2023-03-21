@@ -58,7 +58,7 @@ export class SyncerMain {
           name: component.id,
           title: doc.title || component.name,
           description: doc.description,
-          category: doc.labels,
+          category: Array.isArray(component.labels) ? [...component.labels, ...doc.labels] : doc.labels,
           repository: doc.repository,
           group: component.group,
           author: component.author || currentUserName,
