@@ -80,6 +80,14 @@ export class Component {
     return this.info.entries;
   }
 
+  get repository() {
+    return this.info.repository;
+  }
+
+  get uiResource() {
+    return this.info.uiResource;
+  }
+
   async upsertExtensionData(extension: string, data: Record<string, any>) {
     if (!data) return;
     const existingExtension = this.extensions.findExtension(extension);

@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/arco",
-  "version": "2.0.0-alpha.16",
+  "version": "2.0.0-alpha.13",
   "description": "Main entry for arco cli",
   "main": "./dist/index.js",
   "bin": {

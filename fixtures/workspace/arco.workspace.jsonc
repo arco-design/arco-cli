@@ -4,6 +4,9 @@
       "extends": {
         "rootDir": "packages/library/components",
         "author": "zuozhiheng",
+        "repository": "https://my.repository.com",
+        "uiResource": "https://example.figma.com",
+        "labels": ["ui"],
         "group": 0,
         "entries": {
           "base": ".",

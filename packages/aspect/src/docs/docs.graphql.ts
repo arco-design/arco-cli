@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 
 import { Component } from '@aspect/component';
 
+import { Doc } from './doc';
 import { DocsMain } from './docs.main.runtime';
 
 export default function (docs: DocsMain) {
@@ -26,11 +27,8 @@ export default function (docs: DocsMain) {
         },
 
         labels: (component: Component) => {
-          const labels = component.labels || [];
           const doc = docs.getDoc(component);
-          const docLabels = doc?.labels || [];
-
-          return [...labels, ...docLabels];
+          return Doc.mergeDocProperty(doc?.labels || [], component.labels);
         },
 
         outline: (component: Component) => {
