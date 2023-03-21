@@ -16,12 +16,14 @@ export function UIServerLoader({ name }: UIServerLoaderProps) {
         <Text color="green">
           <Spinner type="dots" />
         </Text>{' '}
-        Starting UI servers{' '}
+        Starting UI servers
         {name && (
           <>
+            {' '}
             for [<Text color="cyan">{name}</Text>]
           </>
         )}
+        ...
       </Text>
     </Box>
   );

@@ -4,8 +4,9 @@ import React, { ReactNode, useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu } from '@arco-design/web-react';
 import { IconApps, IconCode, IconFolder } from '@arco-design/web-react/icon';
-import { WorkspaceContext } from '../../workspaceContext';
+import { ComponentModel } from '@arco-cli/aspect/dist/component/uiRuntime';
 
+import { WorkspaceContext } from '../../workspaceContext';
 import styles from './componentMenu.module.scss';
 
 export interface ComponentMenuProps {
@@ -22,14 +23,38 @@ export function ComponentMenu({ componentId, onComponentChange }: ComponentMenuP
     const results: Array<{
       key: string;
       title: ReactNode;
-      children: Array<{ key: string; title: ReactNode }>;
+      children?: Array<{ key: string; title: ReactNode }>;
     }> = [];
 
-    for (const { id, name, packageName } of components) {
-      let group = results.find((node) => node.key === packageName);
-
+    const groupByPackage: Array<{ package: string; components: ComponentModel[] }> = [];
+    for (const component of components.sort((comA, comB) => (comA.id > comB.id ? 1 : -1))) {
+      let group = groupByPackage.find((node) => node.package === component.packageName);
       if (!group) {
         group = {
+          package: component.packageName,
+          components: [],
+        };
+        groupByPackage.push(group);
+      }
+      group.components.push(component);
+    }
+
+    for (const { package: packageName, components } of groupByPackage) {
+      const getMenuItemProps = (component: ComponentModel) => {
+        const { id, name } = component;
+        return {
+          key: id,
+          title: (
+            <Link to={`/${id}`}>
+              <IconCode />
+              {name}
+            </Link>
+          ),
+        };
+      };
+
+      if (components.length > 1) {
+        results.push({
           key: packageName,
           title: (
             <>
@@ -37,20 +62,11 @@ export function ComponentMenu({ componentId, onComponentChange }: ComponentMenuP
               {packageName}
             </>
           ),
-          children: [],
-        };
-        results.push(group);
+          children: components.map(getMenuItemProps),
+        });
+      } else if (components.length) {
+        results.push(getMenuItemProps(components[0]));
       }
-
-      group.children.push({
-        key: id,
-        title: (
-          <Link to={`/${id}`}>
-            <IconCode />
-            {name}
-          </Link>
-        ),
-      });
     }
 
     return results;
@@ -71,13 +87,17 @@ export function ComponentMenu({ componentId, onComponentChange }: ComponentMenuP
         </Link>
       </Menu.Item>
 
-      {routeInfo.map(({ key, title, children }) => (
-        <Menu.SubMenu key={key} title={title}>
-          {children.map(({ key, title }) => (
-            <Menu.Item key={key}>{title}</Menu.Item>
-          ))}
-        </Menu.SubMenu>
-      ))}
+      {routeInfo.map(({ key, title, children }) => {
+        return children?.length ? (
+          <Menu.SubMenu key={key} title={title}>
+            {children.map(({ key, title }) => (
+              <Menu.Item key={key}>{title}</Menu.Item>
+            ))}
+          </Menu.SubMenu>
+        ) : (
+          <Menu.Item key={key}>{title}</Menu.Item>
+        );
+      })}
     </Menu>
   );
 }
