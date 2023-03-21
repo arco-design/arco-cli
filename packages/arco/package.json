@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/arco",
-  "version": "2.0.0-alpha.13",
+  "version": "2.0.0-alpha.14",
   "description": "Main entry for arco cli",
   "main": "./dist/index.js",
   "bin": {
@@ -15,11 +15,11 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@arco-cli/aspect": "^2.0.0-alpha.14",
-    "@arco-cli/core": "^2.0.0-alpha.11",
-    "@arco-cli/legacy": "2.0.0-alpha.8",
-    "@arco-cli/react": "^2.0.0-alpha.14",
-    "@arco-cli/service": "^2.0.0-alpha.14",
+    "@arco-cli/aspect": "^2.0.0-alpha.15",
+    "@arco-cli/core": "^2.0.0-alpha.12",
+    "@arco-cli/legacy": "^2.0.0-alpha.9",
+    "@arco-cli/react": "^2.0.0-alpha.15",
+    "@arco-cli/service": "^2.0.0-alpha.15",
     "@arco-cli/stone": "2.0.0-alpha.1",
     "fs-extra": "^10.1.0"
   },
