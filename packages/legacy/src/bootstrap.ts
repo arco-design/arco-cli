@@ -1,7 +1,8 @@
 import fs from 'fs-extra';
 import { handleUnhandledRejection } from './cli/handleErrors';
-import { CLI_VERSION, DIR_GLOBAL_CONFIG, DIR_GLOBAL_LOGS } from './constants';
+import { DIR_GLOBAL_CONFIG, DIR_GLOBAL_LOGS } from './constants';
 import { printWarning } from './logger';
+import { getCliVersion } from './utils';
 
 // suppress fs experimental warnings from memfs
 process.env.MEMFS_DONT_WARN = 'true';
@@ -39,7 +40,7 @@ function warnIfRunningAsRoot() {
 
 function printVersionIfAsked() {
   if (['-V', '-v', '--version'].includes(process.argv[2])) {
-    console.log(CLI_VERSION);
+    console.log(getCliVersion());
     process.exit();
   }
 }

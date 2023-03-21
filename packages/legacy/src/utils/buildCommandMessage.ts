@@ -1,4 +1,4 @@
-import { CLI_VERSION } from '../constants';
+import { getCliVersion } from './cliVersion';
 import { PackData } from './packCommand';
 
 export default function buildCommandMessage(
@@ -10,7 +10,7 @@ export default function buildCommandMessage(
   return {
     payload,
     headers: {
-      version: CLI_VERSION,
+      version: getCliVersion(),
       compressed: compress,
       ...extraHeaders,
       context,
