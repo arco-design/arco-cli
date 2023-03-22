@@ -1,6 +1,8 @@
 export * from './constants';
 export { Grid, Table } from './baseUI';
 export type { GridProps, TableProps } from './baseUI';
+export { BackTop } from './backTop';
+export type { BackTopProps } from './backTop';
 export { LoaderContext, useLoader, useLoaderApi } from './globalLoader';
 export { useDataQuery } from './hooks/useDataQuery';
 export { Navbar } from './navbar';

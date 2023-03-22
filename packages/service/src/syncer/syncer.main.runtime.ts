@@ -2,7 +2,7 @@ import { mergeWith } from 'lodash';
 import { CLIAspect, CLIMain, MainRuntime } from '@arco-cli/core/dist/cli';
 import { LoggerAspect, LoggerMain, Logger } from '@arco-cli/core/dist/logger';
 import { WorkspaceAspect, Workspace } from '@arco-cli/aspect/dist/workspace';
-import { DocsAspect, DocsMain } from '@arco-cli/aspect/dist/docs';
+import { Doc, DocsAspect, DocsMain } from '@arco-cli/aspect/dist/docs';
 import { Component } from '@arco-cli/aspect/dist/component';
 import request from '@arco-cli/legacy/dist/cli/request';
 import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
@@ -58,8 +58,9 @@ export class SyncerMain {
           name: component.id,
           title: doc.title || component.name,
           description: doc.description,
-          category: Array.isArray(component.labels) ? [...component.labels, ...doc.labels] : doc.labels,
-          repository: doc.repository,
+          category: Doc.mergeDocProperty(doc?.labels || [], component.labels),
+          repository: component.repository,
+          uiResource: component.uiResource,
           group: component.group,
           author: component.author || currentUserName,
           package: {

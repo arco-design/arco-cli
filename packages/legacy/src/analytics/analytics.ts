@@ -7,10 +7,10 @@ import { serializeError } from 'serialize-error';
 // import path from 'path';
 // import { fork } from 'child_process';
 
+import { getCliVersion } from '../utils';
 import { getSync, setSync } from '../globalConfig';
 import { CLIArgs } from '../cli/command';
 import {
-  CLI_VERSION,
   CFG_ANALYTICS_ANONYMOUS_KEY,
   CFG_ANALYTICS_ENVIRONMENT_KEY,
   CFG_ANALYTICS_ERROR_REPORTS_KEY,
@@ -163,7 +163,7 @@ class Analytics {
     this.anonymous = yn(getSync(CFG_ANALYTICS_ANONYMOUS_KEY), { default: true });
     this.command = command;
     this.flags = this._hashFlags(flags);
-    this.release = CLI_VERSION;
+    this.release = getCliVersion();
     this.args = this._hashArgs(args);
     this.nodeVersion = process.version;
     this.os = process.platform;

@@ -1,6 +1,6 @@
 export { PreviewType } from './previewType';
 export { PreviewDefinition } from './previewDefinition';
-export { PreviewModule, ModuleFile } from './previewModule';
+export { PreviewModule, ModuleImportFunction } from './previewModule';
 export {
   RenderingContextOptions,
   RenderingContextSlot,

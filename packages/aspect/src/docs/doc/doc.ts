@@ -27,16 +27,22 @@ export class Doc {
     return (value as string[]) || [];
   }
 
-  get repository(): string {
-    const value = this.props.get('repository')?.value;
-    return (value as string) || '';
-  }
-
   get outline(): DocOutline {
     return this.props.get('outline')?.value as [];
   }
 
   static from(path: string, propObject: SerializableMap) {
     return new Doc(path, DocPropList.from(propObject));
+  }
+
+  static mergeDocProperty(docProp, extendProp): typeof docProp {
+    if (Array.isArray(docProp) || Array.isArray(extendProp)) {
+      return [
+        ...(Array.isArray(docProp) ? docProp : []),
+        ...(Array.isArray(extendProp) ? extendProp : []),
+      ];
+    }
+
+    return extendProp || docProp;
   }
 }

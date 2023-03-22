@@ -16,6 +16,10 @@ export type ComponentConfig = {
   labels?: string[];
   // material group id of component
   group?: number;
+  // url of code repository
+  repository?: string;
+  // url of ui resource
+  uiResource?: string;
   // entry file info of component
   entries: {
     // component dir
@@ -48,6 +52,10 @@ export class ComponentInfo {
 
   labels: string[];
 
+  repository: string;
+
+  uiResource: string;
+
   files: ComponentInfoFiles[];
 
   entries: ComponentConfig['entries'];
@@ -65,7 +73,17 @@ export class ComponentInfo {
   readonly packageDirAbs: string;
 
   constructor(
-    { name, group, author, labels, entries, rootDir, config }: ComponentConfig,
+    {
+      name,
+      group,
+      author,
+      labels,
+      repository,
+      uiResource,
+      entries,
+      rootDir,
+      config,
+    }: ComponentConfig,
     workspacePath: string,
     files?: ComponentInfoFiles[]
   ) {
@@ -84,6 +102,8 @@ export class ComponentInfo {
     this.files = files || [];
     this.group = group;
     this.author = author;
+    this.repository = repository;
+    this.uiResource = uiResource;
 
     const dirsToSearchPkgJson = buildPropagationPaths(
       path.resolve(workspacePath, rootDir),

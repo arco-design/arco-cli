@@ -36,15 +36,6 @@ ${
     : 'const mainModule = {};'
 }
 
-${links
-  .map((link) =>
-    link.modules
-      .map((module) => `import * as ${module.varName} from "${module.resolveFrom}";`)
-      .join('\n')
-  )
-  .filter((line) => line !== '') // prevent empty lines
-  .join('\n')}
-
 linkModules('${prefix}', {
   mainModule,
   componentMap: {
@@ -53,7 +44,7 @@ ${links
   .map(
     (link) =>
       `    "${link.componentIdentifier}": [${link.modules
-        .map((module) => module.varName)
+        .map((module) => `() => import('${module.resolveFrom}')`)
         .join(', ')}]`
   )
   .join(',\n')}

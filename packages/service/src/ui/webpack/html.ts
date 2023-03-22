@@ -6,9 +6,9 @@ export function html(title: string, withDevTools?: boolean) {
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="shortcut icon" type="image/x-icon" href="//unpkg.byted-static.com/byted/arco-config/1.0.12/assets/arco_material.ico">
       <title>${title}</title>
       <script>
-      // Allow to use react dev-tools inside the examples
       ${
         withDevTools
           ? ''

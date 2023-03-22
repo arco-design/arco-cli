@@ -1,8 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Route, RouteProps } from 'react-router-dom';
 import {
+  BackTop,
   Navbar,
   SideBar,
   WorkspaceContextProvider,
@@ -21,6 +22,7 @@ interface WorkspaceProps {
 }
 
 export function Workspace({ routes }: WorkspaceProps) {
+  const refOverviewContainer = useRef<HTMLDivElement>(null);
   const [componentId, setComponentId] = useState(getIdFromLocation());
   const { workspace } = useWorkspace();
 
@@ -39,10 +41,11 @@ export function Workspace({ routes }: WorkspaceProps) {
               onComponentChange: (componentId) => setComponentId(componentId),
             }}
           />
-          <div className={styles.overview}>
+          <div ref={refOverviewContainer} className={styles.overview}>
             <SlotRouter key={componentId} routes={routes}>
               <Route index element={<WorkspaceOverview />} />
             </SlotRouter>
+            <BackTop target={() => refOverviewContainer.current} />
           </div>
         </main>
       </div>

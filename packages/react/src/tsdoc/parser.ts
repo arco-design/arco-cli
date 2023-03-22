@@ -40,9 +40,9 @@ export function parser(file: SourceFile): Doclet[] {
   let doclets: Doclet[] = [];
 
   try {
-    // TODO: @PJY please speed up it
     const componentsInfo = generate(file.path, {
       sourceFilesPaths: [file.path],
+      escapeChars: false,
       strictDeclarationOrder: true,
       project: new Project({
         compilerOptions: {

@@ -5,6 +5,7 @@ import toFsCompatible from './string/toFsCompatible';
 import buildCommandMessage from './buildCommandMessage';
 import packCommand from './packCommand';
 import sha1 from './encryption/sha1';
+import { getCliVersion, setCliVersion } from './cliVersion';
 import * as eol from './eol';
 
 export {
@@ -16,4 +17,6 @@ export {
   packCommand,
   sha1,
   eol,
+  setCliVersion,
+  getCliVersion,
 };

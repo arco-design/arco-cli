@@ -2,9 +2,6 @@ import os from 'os';
 import path from 'path';
 import cliSpinners from 'cli-spinners';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const packageFile = require('../package.json');
-
 const userHome = os.homedir();
 
 export const ENV_GLOBAL_CACHE_DIR = 'ARCO_GLOBAL_CACHE_DIR';
@@ -74,8 +71,6 @@ export const CFG_HOST_ARCO_KEY = 'host.arco';
 export const CFG_ANALYTICS_DOMAIN_KEY = 'analytics_domain';
 
 export const CFG_ANALYTICS_ANONYMOUS_KEY = 'anonymous_reporting';
-
-export const CFG_REPOSITORY_REPORTING_KEY = 'repository_reporting';
 
 export const CFG_ANALYTICS_REPORTING_KEY = 'analytics_reporting';
 
@@ -147,8 +142,6 @@ export const IGNORE_LIST = [
 /**
  * CLI help infos
  */
-export const CLI_VERSION = packageFile.version;
-
 export const CLI_DESCRIPTION = '';
 
 export const CLI_USAGE = '[--version] [--help] <command> [<args>]';

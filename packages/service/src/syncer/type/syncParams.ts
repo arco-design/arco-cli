@@ -4,6 +4,7 @@ export type SyncParams = {
   description?: string;
   category?: string[];
   repository?: string;
+  uiResource?: string;
   group: number;
   author: string;
   package: {
