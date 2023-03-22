@@ -50,7 +50,7 @@ export class JestTester implements Tester {
       config.cache = false;
     }
 
-    if (context.components) {
+    if (context.pattern && context.components) {
       config.testMatch = [];
       config.collectCoverageFrom = [];
       context.components.forEach(({ componentDir }) => {

@@ -6,6 +6,7 @@ import { Tester, Tests, CallbackFn } from './tester';
 
 export type TesterOptions = {
   watch: boolean;
+  pattern?: string;
   callback?: CallbackFn;
 };
 
@@ -55,6 +56,7 @@ export class TesterService implements EnvService<Tests, TesterDescriptor> {
     const tester: Tester = context.env.getTester();
     const testerContext = Object.assign(context, {
       watch: options.watch,
+      pattern: options.pattern,
       rootPath: this.workspace.path,
     });
     const results = await tester.test(testerContext);

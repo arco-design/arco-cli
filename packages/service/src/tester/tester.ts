@@ -19,6 +19,11 @@ export interface TesterContext extends ExecutionContext {
    * determines whether to start the tester in watch mode.
    */
   watch?: boolean;
+
+  /**
+   * component pattern
+   */
+  pattern?: string;
 }
 
 export type CallbackFn = () => void;

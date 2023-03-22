@@ -41,7 +41,7 @@ export class TestCmd implements Command {
     }
 
     // const components = await this.workspace.list();
-    const testResults = await this.tester.test(components, { watch });
+    const testResults = await this.tester.test(components, { watch, pattern });
     const code = testResults.hasErrors() ? 1 : 0;
     const { seconds } = timer.stop();
 
