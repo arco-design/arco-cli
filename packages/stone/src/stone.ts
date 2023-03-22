@@ -37,7 +37,7 @@ export class Stone {
 
   private async runOne(extension: Extension, runtime: RuntimeDefinition) {
     if (extension.loaded) return null;
-    // create an index of all vertices in dependency graph
+    // create an index of all vertices in a dependency graph
     const deps = this.graph.getRuntimeDependencies(extension, runtime);
     const instances = deps.map((extension) => extension.instance);
 

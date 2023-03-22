@@ -9,12 +9,14 @@ module.exports = function (api) {
   const presets = ['@babel/preset-react', '@babel/typescript'];
 
   const plugins = [
+    'babel-plugin-transform-typescript-metadata',
+    '@babel/plugin-transform-runtime',
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     '@babel/plugin-proposal-export-namespace-from',
-    '@babel/plugin-transform-runtime',
     '@babel/plugin-proposal-object-rest-spread',
+    '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-proposal-class-properties',
-    'babel-plugin-transform-typescript-metadata',
+    '@babel/plugin-proposal-logical-assignment-operators',
     [
       'tsconfig-paths-module-resolver',
       {

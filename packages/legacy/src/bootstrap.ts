@@ -7,7 +7,7 @@ import { getCliVersion } from './utils';
 // suppress fs experimental warnings from memfs
 process.env.MEMFS_DONT_WARN = 'true';
 
-// set max listeners to a more appropriate numbers
+// set max listeners to a more appropriate number
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('events').EventEmitter.defaultMaxListeners = 100;
 
