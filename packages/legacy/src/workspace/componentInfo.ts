@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { buildPropagationPaths } from '../utils/path';
-import { PACKAGE_JSON } from '../constants';
+import { DEFAULT_TEST_FILE_PATTERNS, PACKAGE_JSON } from '../constants';
 
 export type ComponentAspectConfig = { [aspectId: string]: Record<string, any> | '-' };
 
@@ -33,6 +33,8 @@ export type ComponentConfig = {
     preview?: string;
     // jsdoc parse entry
     jsdoc?: string;
+    // file path pattern for unit test
+    testFilePatterns?: string[];
   };
   config: ComponentAspectConfig;
 };
@@ -93,6 +95,7 @@ export class ComponentInfo {
     entries.style ||= '';
     entries.preview ||= '';
     entries.jsdoc ||= '';
+    entries.testFilePatterns ||= DEFAULT_TEST_FILE_PATTERNS;
 
     this.entries = entries;
     this.rootDir = rootDir;

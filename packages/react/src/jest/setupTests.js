@@ -21,3 +21,31 @@ if (typeof window !== 'undefined') {
     })),
   });
 }
+
+Object.defineProperty(global, 'localStorage', {
+  value: {
+    store: {},
+    setItem(key, value) {
+      this.store[key] = value;
+    },
+    getItem(key) {
+      return this.store[key];
+    },
+    removeItem(key) {
+      delete this.store[key];
+    },
+    clear() {
+      this.store = {};
+    },
+  },
+  configurable: true,
+});
+
+Object.defineProperty(global, 'ResizeObserver', {
+  value: jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  })),
+  configurable: true,
+});

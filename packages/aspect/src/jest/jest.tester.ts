@@ -1,14 +1,10 @@
+import path from 'path';
 import type jest from 'jest';
-import { Tester, TesterContext, Tests } from '@arco-cli/service/dist/tester';
-import { CallbackFn } from '@arco-cli/service/dist/tester/tester';
 import { readFileSync } from 'fs-extra';
+import { Tester, TesterContext, Tests } from '@arco-cli/service/dist/tester';
+import { parseCliRawArgs } from '@arco-cli/core/dist/cli/utils';
 
 export type JestTesterOptions = {
-  /**
-   * array of patterns to test. (override the patterns provided by the context)
-   */
-  patterns?: string[];
-
   /**
    * add more root paths to look for tests.
    */
@@ -17,8 +13,6 @@ export type JestTesterOptions = {
 
 export class JestTester implements Tester {
   displayName = 'Jest';
-
-  _callback: CallbackFn | undefined;
 
   private readonly jestModule: typeof jest;
 
@@ -29,6 +23,34 @@ export class JestTester implements Tester {
     _opts: JestTesterOptions = {}
   ) {
     this.jestModule = require(this.jestModulePath);
+  }
+
+  private convertJestCliOptions(optionsWithAlias): typeof optionsWithAlias {
+    // jest cli options with alias
+    // https://jestjs.io/docs/29.3/cli
+    const jestOptionAliasMap = {
+      b: 'bail',
+      c: 'config',
+      collectCoverage: 'coverage',
+      e: 'expand',
+      w: 'maxWorkers',
+      o: 'onlyChanged',
+      i: 'runInBand',
+      t: 'testNamePattern',
+      u: 'updateSnapshot',
+      v: 'version',
+    };
+
+    const result = { ...optionsWithAlias };
+
+    Object.entries(jestOptionAliasMap).forEach(([alias, optionName]) => {
+      if (alias in result) {
+        result[optionName] = result[alias];
+        delete result[alias];
+      }
+    });
+
+    return result;
   }
 
   displayConfig(): string {
@@ -53,14 +75,12 @@ export class JestTester implements Tester {
     if (context.components) {
       config.testMatch = [];
       config.collectCoverageFrom = [];
-      context.components.forEach(({ componentDir }) => {
-        config.testMatch.push(...[`**/${componentDir}/**/*.test.[jt]s?(x)`]);
+      context.components.forEach(({ componentDir, entries }) => {
+        config.testMatch.push(
+          ...entries.testFilePatterns.map((pattern) => path.join('**', componentDir, pattern))
+        );
         config.collectCoverageFrom.push(
-          ...[
-            `**/${componentDir}/**/*.[jt]s?(x)`,
-            `!**/${componentDir}/**/style/*`,
-            `!**/${componentDir}/**/__docs__/*`,
-          ]
+          ...[`**/${componentDir}/**/*.[jt]s?(x)`, `!**/${componentDir}/**/{style,__docs__}/*`]
         );
       });
     }
@@ -68,11 +88,14 @@ export class JestTester implements Tester {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const jestConfig = require(this.jestConfigPath);
     const withEnv = Object.assign(jestConfig, config);
-    const testsOutput = await this.jestModule.runCLI(withEnv, [this.jestConfigPath]);
-    const testResults = testsOutput.results.testResults;
+    const { parsed: jestCliOptions } = parseCliRawArgs('jest', context.rawTesterArgs);
+    const testsOutput = await this.jestModule.runCLI(
+      { ...withEnv, ...this.convertJestCliOptions(jestCliOptions) },
+      [this.jestConfigPath]
+    );
 
     // TODO print test result
-    false && console.log(testResults);
+    false && console.log(testsOutput.results.testResults);
 
     return new Tests();
   }

@@ -119,6 +119,8 @@ export const DEFAULT_HOST_ARCO = 'arco.design';
 
 export const DEFAULT_MATERIAL_GROUP_ID = 0;
 
+export const DEFAULT_TEST_FILE_PATTERNS = ['**/?(*.)+(spec|test).[jt]s?(x)'];
+
 /**
  * Others
  */

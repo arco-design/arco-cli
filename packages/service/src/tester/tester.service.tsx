@@ -2,12 +2,7 @@ import chalk from 'chalk';
 import { Logger } from '@arco-cli/core/dist/logger';
 import { Workspace } from '@arco-cli/aspect/dist/workspace';
 import { EnvService, ExecutionContext, EnvDefinition } from '@arco-cli/aspect/dist/envs';
-import { Tester, Tests, CallbackFn } from './tester';
-
-export type TesterOptions = {
-  watch: boolean;
-  callback?: CallbackFn;
-};
+import { Tester, Tests, TesterOptions } from './tester';
 
 export type TesterDescriptor = {
   /**
@@ -33,8 +28,6 @@ export class TesterService implements EnvService<Tests, TesterDescriptor> {
 
   constructor(private logger: Logger, private workspace: Workspace) {}
 
-  _callback: CallbackFn | undefined;
-
   getDescriptor(environment: EnvDefinition) {
     if (!environment.env.getTester) return null;
     const tester: Tester = environment.env.getTester();
@@ -46,18 +39,15 @@ export class TesterService implements EnvService<Tests, TesterDescriptor> {
     };
   }
 
-  onTestRunComplete(callback: CallbackFn) {
-    this._callback = callback;
-  }
-
   async run(context: ExecutionContext, options: TesterOptions) {
     this.logger.console(`testing components with environment ${chalk.cyan(context.id)}\n`);
     const tester: Tester = context.env.getTester();
-    const testerContext = Object.assign(context, {
-      watch: options.watch,
-      rootPath: this.workspace.path,
-    });
-    const results = await tester.test(testerContext);
+    const results = await tester.test(
+      Object.assign(context, {
+        rootPath: this.workspace.path,
+        ...options,
+      })
+    );
     return results;
   }
 }

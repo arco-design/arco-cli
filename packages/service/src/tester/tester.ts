@@ -9,19 +9,24 @@ export class Tests {
   }
 }
 
-export interface TesterContext extends ExecutionContext {
-  /**
-   * rootPath of the component workspace or the capsule root dir (during build).
-   */
-  rootPath: string;
-
+export interface TesterOptions {
   /**
    * determines whether to start the tester in watch mode.
    */
   watch?: boolean;
+
+  /**
+   * pass the raw tester cli options, e.g. "$jest: -u --testMatch=['test.js']";
+   */
+  rawTesterArgs?: string;
 }
 
-export type CallbackFn = () => void;
+export interface TesterContext extends ExecutionContext, TesterOptions {
+  /**
+   * rootPath of the component workspace
+   */
+  rootPath: string;
+}
 
 /**
  * tester interface allows extensions to implement a component tester
@@ -61,5 +66,5 @@ export interface Tester {
    * on test run complete. (applies only during watch)
    * @param callback
    */
-  onTestRunComplete?(callback: CallbackFn): Promise<void>;
+  onTestRunComplete?(callback: () => void): Promise<void>;
 }

@@ -6,10 +6,9 @@ import { Timer } from '@arco-cli/legacy/dist/utils/timer';
 import { Workspace } from '@arco-cli/aspect/dist/workspace';
 import { CLI_COMPONENT_PATTERN_HELP } from '@arco-cli/legacy/dist/constants';
 import { TesterMain } from './tester.main.runtime';
+import { TesterOptions } from './tester';
 
-type TestFlags = {
-  watch: boolean;
-};
+type TestFlags = Pick<TesterOptions, 'watch' | 'rawTesterArgs'>;
 
 export class TestCmd implements Command {
   name = 'test [component-pattern]';
@@ -22,11 +21,18 @@ export class TestCmd implements Command {
 
   group = 'development';
 
-  options = [['w', 'watch', 'start the tester in watch mode.']] as CommandOptions;
+  options = [
+    ['w', 'watch', 'start the tester in watch mode.'],
+    [
+      '',
+      'rawTesterArgs [args]',
+      'specify the arguments for raw tester, e.g. "jest -u --cache=false"',
+    ],
+  ] as CommandOptions;
 
   constructor(private tester: TesterMain, private logger: Logger, private workspace: Workspace) {}
 
-  async render([pattern]: [string], { watch }: TestFlags) {
+  async render([pattern]: [string], { watch, rawTesterArgs }: TestFlags) {
     this.logger.console(`testing components in workspace in workspace`);
 
     const timer = Timer.create();
@@ -40,8 +46,7 @@ export class TestCmd implements Command {
       };
     }
 
-    // const components = await this.workspace.list();
-    const testResults = await this.tester.test(components, { watch });
+    const testResults = await this.tester.test(components, { watch, rawTesterArgs });
     const code = testResults.hasErrors() ? 1 : 0;
     const { seconds } = timer.stop();
 
