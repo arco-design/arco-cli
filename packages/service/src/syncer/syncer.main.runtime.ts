@@ -58,7 +58,7 @@ export class SyncerMain {
           name: component.id,
           title: doc.title || component.name,
           description: doc.description,
-          category: Doc.mergeDocProperty(doc?.labels || [], component.labels),
+          category: Doc.mergeDocProperty(doc.labels || [], component.labels),
           repository: component.repository,
           uiResource: component.uiResource,
           group: component.group,

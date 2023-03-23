@@ -104,8 +104,11 @@ export class DocsMain {
    * like description / labels
    */
   getDoc(component: Component) {
-    const docData = component.extensions.findExtension(DocsAspect.id)?.data?.doc;
-    return docData ? new Doc(docData.filePath, new DocPropList(docData.props)) : null;
+    const docData = component.extensions.findExtension(DocsAspect.id)?.data?.doc || {
+      filePath: '',
+      props: [],
+    };
+    return new Doc(docData.filePath, new DocPropList(docData.props));
   }
 
   /**

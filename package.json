@@ -3,6 +3,7 @@
   "description": "Arco CLI & Arco Scripts",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "init": "pnpm i && npm run build",
     "build": "lerna run build --parallel",
     "link": "node ./scripts/linkLocalPackages.js",
