@@ -1,8 +1,9 @@
 import { MainRuntime } from '@arco-cli/core/dist/cli';
 import { LoggerAspect, LoggerMain } from '@arco-cli/core/dist/logger';
-
 import webpack, { Configuration } from 'webpack';
 import WsDevServer from 'webpack-dev-server';
+import SpeedMeasurePlugin from 'speed-measure-webpack-plugin';
+import { ENV_BUNDLE_SPEED_ANALYZER } from '@arco-cli/legacy/dist/constants';
 
 import { WorkspaceAspect, Workspace } from '@aspect/workspace';
 import { BundlerContext, BundlerMode, DevServer, DevServerContext, Target } from '@aspect/bundler';
@@ -65,6 +66,15 @@ export class WebpackMain {
 
   constructor(private workspace, private logger) {}
 
+  private useSpeedMeasurePlugin(config) {
+    if (process.env[ENV_BUNDLE_SPEED_ANALYZER]) {
+      const speedMeasurePlugin = new SpeedMeasurePlugin();
+      return speedMeasurePlugin.wrap(config);
+    }
+
+    return config;
+  }
+
   private createConfigs(
     targets: Target[],
     factory: (target: Target, context: BundlerContext) => Configuration,
@@ -109,8 +119,12 @@ export class WebpackMain {
     const afterMutation = runTransformersWithContext(configMutator.clone(), transformerContext, [
       ...transformers,
     ]);
-    // @ts-ignore - fix this
-    return new WebpackDevServer(afterMutation.raw, webpack, WsDevServer);
+
+    return new WebpackDevServer(
+      this.useSpeedMeasurePlugin(afterMutation.raw),
+      webpack,
+      WsDevServer as any
+    );
   }
 
   createBundler(

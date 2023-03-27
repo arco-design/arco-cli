@@ -37,7 +37,7 @@ export default function configFactory(
     // Environment mode
     mode: 'development',
 
-    devtool: 'inline-source-map',
+    devtool: 'cheap-source-map',
 
     // Entry point of app
     entry: entryFiles.map((filePath) => resolveWorkspacePath(filePath)),
@@ -46,7 +46,7 @@ export default function configFactory(
       // Development filename output
       filename: 'static/js/[name].bundle.js',
 
-      pathinfo: true,
+      pathinfo: false,
 
       path: resolveWorkspacePath(publicDirectory),
 

@@ -56,7 +56,7 @@ export function devConfig(
       main: entryFiles,
     },
     output: {
-      pathinfo: true,
+      pathinfo: false,
       path: resolveWorkspacePath('/'),
       // Development filename output
       filename: 'static/js/[name].bundle.js',
@@ -290,9 +290,6 @@ export function devConfig(
           use: [require.resolve('style-loader'), require.resolve('css-loader')],
         },
         {
-          // loads svg as react component, like:
-          // import starUrl, { ReactComponent as StarIcon } from './star.svg';
-          // (remove when there is native support for both options from webpack5 / svgr)
           test: /\.svg$/,
           use: [
             {

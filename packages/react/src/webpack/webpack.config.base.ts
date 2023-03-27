@@ -1,13 +1,8 @@
-import { merge } from 'lodash';
-import { sep } from 'path';
 import 'style-loader';
-import { Configuration, IgnorePlugin } from 'webpack';
+import { Configuration } from 'webpack';
 import getCSSModuleLocalIdent from 'react-dev-utils/getCSSModuleLocalIdent';
 import * as stylesRegexps from '@arco-cli/legacy/dist/utils/regexp/style';
-import { generateStyleLoaders } from '@arco-cli/aspect/dist/webpack';
-import { postCssConfig } from './postcss.config';
-
-const styleLoaderPath = require.resolve('style-loader');
+import { generateStyleLoaders, GenerateStyleLoadersOptions } from '@arco-cli/aspect/dist/webpack';
 
 const MODULE_FILE_EXTENSIONS = [
   'web.mjs',
@@ -34,12 +29,13 @@ export default function (isEnvProduction = false): Configuration {
   // "style" loader turns CSS into JS modules that inject <style> tags.
   // By default, we keep style in the js files, you can use MiniCSSExtractPlugin
   // to extract that CSS to a file in production
-  const baseStyleLoadersOptions = {
-    injectingLoader: styleLoaderPath,
+  const baseStyleLoadersOptions: GenerateStyleLoadersOptions = {
+    injectingLoader: require.resolve('style-loader'),
     cssLoaderPath: require.resolve('css-loader'),
-    postCssLoaderPath: require.resolve('postcss-loader'),
-    postCssConfig,
+    cssLoaderOpts: undefined,
   };
+  const lessLoaderPath = require.resolve('less-loader');
+  const sassLoaderPath = require.resolve('sass-loader');
 
   return {
     devtool: false,
@@ -120,16 +116,11 @@ export default function (isEnvProduction = false): Configuration {
               ],
             },
 
-            // By default, we support CSS Modules with the extension .module.css
             {
               test: stylesRegexps.cssNoModulesRegex,
-              use: generateStyleLoaders(
-                merge({}, baseStyleLoadersOptions, {
-                  cssLoaderOpts: {
-                    importLoaders: 1,
-                  },
-                })
-              ),
+              use: generateStyleLoaders({
+                ...baseStyleLoadersOptions,
+              }),
               // Don't consider CSS imports dead code even if the
               // containing package claims to have no side effects.
               // Remove this when webpack adds a warning or an error for this.
@@ -137,36 +128,30 @@ export default function (isEnvProduction = false): Configuration {
               sideEffects: true,
             },
 
-            // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
+            // By default, we support for CSS Modules (https://github.com/css-modules/css-modules)
             // using the extension .module.css
             {
               test: stylesRegexps.cssModuleRegex,
-              use: generateStyleLoaders(
-                merge({}, baseStyleLoadersOptions, {
-                  cssLoaderOpts: {
-                    importLoaders: 1,
-                    modules: {
-                      getLocalIdent: getCSSModuleLocalIdent,
-                    },
+              use: generateStyleLoaders({
+                ...baseStyleLoadersOptions,
+                cssLoaderOpts: {
+                  modules: {
+                    getLocalIdent: getCSSModuleLocalIdent,
                   },
-                })
-              ),
+                },
+              }),
             },
 
             // Opt-in support for SASS (using .scss or .sass extensions).
             {
               test: stylesRegexps.sassNoModuleRegex,
-              use: generateStyleLoaders(
-                merge({}, baseStyleLoadersOptions, {
-                  cssLoaderOpts: {
-                    importLoaders: 3,
-                  },
-                  preProcessOptions: {
-                    resolveUrlLoaderPath: require.resolve('resolve-url-loader'),
-                    preProcessorPath: require.resolve('sass-loader'),
-                  },
-                })
-              ),
+              use: generateStyleLoaders({
+                ...baseStyleLoadersOptions,
+                cssLoaderOpts: {
+                  importLoaders: 1,
+                },
+                preProcessLoaderPath: sassLoaderPath,
+              }),
               sideEffects: true,
             },
 
@@ -174,67 +159,46 @@ export default function (isEnvProduction = false): Configuration {
             // extensions .module.scss or .module.sass
             {
               test: stylesRegexps.sassModuleRegex,
-              use: generateStyleLoaders(
-                merge({}, baseStyleLoadersOptions, {
-                  cssLoaderOpts: {
-                    importLoaders: 3,
-                    modules: {
-                      getLocalIdent: getCSSModuleLocalIdent,
-                    },
+              use: generateStyleLoaders({
+                ...baseStyleLoadersOptions,
+                cssLoaderOpts: {
+                  importLoaders: 1,
+                  modules: {
+                    getLocalIdent: getCSSModuleLocalIdent,
                   },
-                  preProcessOptions: {
-                    resolveUrlLoaderPath: require.resolve('resolve-url-loader'),
-                    preProcessorPath: require.resolve('sass-loader'),
-                  },
-                })
-              ),
+                },
+                preProcessLoaderPath: sassLoaderPath,
+              }),
             },
 
             // Opt-in support for LESS (using .less extensions).
             {
               test: stylesRegexps.lessNoModuleRegex,
-              use: generateStyleLoaders(
-                merge({}, baseStyleLoadersOptions, {
-                  cssLoaderOpts: {
-                    importLoaders: 1,
-                  },
-                  preProcessOptions: {
-                    resolveUrlLoaderPath: require.resolve('resolve-url-loader'),
-                    preProcessorPath: {
-                      path: require.resolve('less-loader'),
-                      options: {
-                        lessOptions: {},
-                      },
-                    },
-                  },
-                })
-              ),
+              use: generateStyleLoaders({
+                ...baseStyleLoadersOptions,
+                cssLoaderOpts: {
+                  importLoaders: 1,
+                },
+                preProcessLoaderPath: lessLoaderPath,
+                preProcessLoaderOpts: { lessOptions: {} },
+              }),
               sideEffects: true,
             },
 
-            // By default, we support LESS Modules with the
-            // extensions .module.less
+            // By default, we support LESS Modules with the extensions .module.less
             {
               test: stylesRegexps.lessModuleRegex,
-              use: generateStyleLoaders(
-                merge({}, baseStyleLoadersOptions, {
-                  cssLoaderOpts: {
-                    importLoaders: 1,
-                    modules: {
-                      getLocalIdent: getCSSModuleLocalIdent,
-                    },
+              use: generateStyleLoaders({
+                ...baseStyleLoadersOptions,
+                cssLoaderOpts: {
+                  importLoaders: 1,
+                  modules: {
+                    getLocalIdent: getCSSModuleLocalIdent,
                   },
-                  preProcessOptions: {
-                    resolveUrlLoaderPath: require.resolve('resolve-url-loader'),
-                    preProcessorPath: {
-                      path: require.resolve('less-loader'),
-                      options: {
-                        lessOptions: {},
-                      },
-                    },
-                  },
-                })
-              ),
+                },
+                preProcessLoaderPath: lessLoaderPath,
+                preProcessLoaderOpts: { lessOptions: {} },
+              }),
             },
 
             {
@@ -251,9 +215,6 @@ export default function (isEnvProduction = false): Configuration {
             },
 
             {
-              // loads svg as both inlineUrl and react component, like:
-              // import starUrl, { ReactComponent as StarIcon } from './star.svg';
-              // (remove when there is native support for both options from webpack5 / svgr)
               test: /\.svg$/,
               use: [
                 {
@@ -294,17 +255,6 @@ export default function (isEnvProduction = false): Configuration {
       ],
     },
 
-    plugins: [
-      // Moment.js is an extremely popular library that bundles large locale files
-      // by default due to how webpack interprets its code. This is a practical
-      // solution that requires the user to opt into importing specific locales.
-      // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-      // You can remove this if you don't use Moment.js:
-      new IgnorePlugin({
-        resourceRegExp: new RegExp(`^\\.${sep}locale$`),
-        contextRegExp: /moment$/,
-      }),
-    ].filter(Boolean),
     performance: false,
   };
 }

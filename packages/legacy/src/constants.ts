@@ -4,14 +4,14 @@ import cliSpinners from 'cli-spinners';
 
 const userHome = os.homedir();
 
-export const ENV_GLOBAL_CACHE_DIR = 'ARCO_GLOBAL_CACHE_DIR';
-
 function getDirectory(): string {
   if (process.platform === 'win32' && process.env.LOCALAPPDATA) {
     return path.join(process.env.LOCALAPPDATA, 'Arco');
   }
   return path.join(userHome, '.arco');
 }
+
+export const ENV_GLOBAL_CACHE_DIR = 'ARCO_GLOBAL_CACHE_DIR';
 
 function getCacheDirectory(): string {
   const fromEnvVar = process.env[ENV_GLOBAL_CACHE_DIR];
@@ -25,6 +25,10 @@ function getCacheDirectory(): string {
 }
 
 export const ENV_VARIABLE_CONFIG_PREFIX = 'ARCO_CONFIG_';
+
+export const ENV_BUNDLE_SIZE_ANALYZER = 'BUNDLE_SIZE_ANALYZER';
+
+export const ENV_BUNDLE_SPEED_ANALYZER = 'BUNDLE_SPEED_ANALYZER';
 
 export const MATERIAL_GENERATION = 2;
 

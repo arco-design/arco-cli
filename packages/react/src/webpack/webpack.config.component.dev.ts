@@ -19,5 +19,9 @@ export default function (envId: string): Configuration {
         include: matchNothingRegex,
       }),
     ],
+
+    optimization: {
+      runtimeChunk: true,
+    },
   };
 }
