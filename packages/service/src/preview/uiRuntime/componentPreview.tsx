@@ -3,6 +3,7 @@ import { compact } from 'lodash';
 import { usePubsubIframe } from '@arco-cli/aspect/dist/pubsub';
 import { ComponentModel } from '@arco-cli/aspect/dist/component/uiRuntime';
 import { useIframeHeight } from '@arco-cli/aspect/dist/pubsub/previewRuntime';
+import { Spin } from '@arco-cli/ui-foundation-react/dist/spin';
 
 import { toPreviewUrl } from './urls';
 
@@ -62,20 +63,21 @@ export function ComponentPreview({
 
   const targetParams = viewport === null ? queryParams : params;
   const url = toPreviewUrl(component, previewName, targetParams);
-  const targetHeight = height !== 0 ? height : 2000;
+  const isLoading = !height;
 
   return (
-    <div className={styles.preview}>
+    <Spin className={styles.preview} loading={isLoading} tip="preview loading...">
       <iframe
         {...rest}
         ref={refIframe}
         style={{
           ...style,
-          height: targetHeight,
+          opacity: isLoading ? 0 : 1,
+          height: isLoading ? 'calc(100vh - 300px)' : height,
         }}
         title="preview-component"
         src={url}
       />
-    </div>
+    </Spin>
   );
 }
