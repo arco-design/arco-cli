@@ -97,6 +97,8 @@ export class Workspace implements ComponentFactory {
 
   private componentConfigList: ComponentConfig[] = [];
 
+  private componentPattern: string = null;
+
   private get modulesPath() {
     return path.join(this.path, 'node_modules');
   }
@@ -109,8 +111,32 @@ export class Workspace implements ComponentFactory {
     }
   }
 
+  private filterComponentInfoList(pattern = this.componentPattern): ComponentInfo[] {
+    let filterFn: (info: ComponentInfo) => boolean;
+
+    if (!pattern) {
+      filterFn = () => true;
+    } else if (!pattern.includes('*') && !pattern.includes(',')) {
+      // if there is no "*" or ",", treat it as a component id
+      filterFn = (info) => info.id.includes(pattern.trim());
+    } else {
+      const patternList = pattern.split(',');
+      filterFn = (info) => !!patternList.find((p) => minimatch(info.id, p.trim()));
+    }
+
+    return this.componentInfoList.filter(filterFn);
+  }
+
   get name() {
     return this.config.name || this.path.split('/').pop();
+  }
+
+  /**
+   * set component pattern for current workspace
+   * componentPattern will also work for workspace.list()
+   */
+  setComponentPattern(pattern: string) {
+    this.componentPattern = pattern;
   }
 
   async updateComponentInfo(componentId?: string) {
@@ -194,8 +220,8 @@ export class Workspace implements ComponentFactory {
     return cacheDir;
   }
 
-  async get(id: string) {
-    const componentInfo = this.componentInfoList.find((info) => info.id === id);
+  async get(id: string, componentInfoList = this.componentInfoList) {
+    const componentInfo = componentInfoList.find((info) => info.id === id);
 
     if (!componentInfo) {
       this.clearComponentCache(id);
@@ -221,11 +247,8 @@ export class Workspace implements ComponentFactory {
   }
 
   getMany(ids: string[] = []) {
-    return Promise.all(
-      ids.map((id) => {
-        return this.get(id);
-      })
-    );
+    const filteredComponentInfoList = this.filterComponentInfoList();
+    return Promise.all(ids.map((id) => this.get(id, filteredComponentInfoList)));
   }
 
   getManyByPattern(pattern: string, throwForNoMatch?: boolean) {
@@ -233,24 +256,9 @@ export class Workspace implements ComponentFactory {
       return this.list();
     }
 
-    // if there is no "*" or ",", treat it as a component id
-    if (!pattern.includes('*') && !pattern.includes(',')) {
-      const exists = this.componentInfoList.filter((info) => info.id.includes(pattern.trim()));
-      if (exists.length) {
-        return this.getMany(exists.map((info) => info.id));
-      }
-      if (throwForNoMatch) {
-        throw new NoIdMatchPatternError(pattern);
-      }
-    }
-
-    const patternList = pattern.split(',');
-    const exists = this.componentInfoList.filter(
-      (info) => patternList.findIndex((p) => minimatch(info.id, p.trim())) > -1
-    );
-
-    if (exists.length) {
-      return this.getMany(exists.map((info) => info.id));
+    const filteredComponentInfos = this.filterComponentInfoList(pattern);
+    if (filteredComponentInfos.length) {
+      return this.getMany(filteredComponentInfos.map((info) => info.id));
     }
 
     if (throwForNoMatch) {
@@ -260,13 +268,11 @@ export class Workspace implements ComponentFactory {
     }
   }
 
-  getNewAndModified() {
-    // TODO modified components
-    return this.list();
-  }
+  // TODO modified components
+  // getNewAndModified() { }
 
   list() {
-    const ids = this.componentInfoList.map((info) => info.id);
+    const ids = this.filterComponentInfoList().map((info) => info.id);
     return this.getMany(ids);
   }
 

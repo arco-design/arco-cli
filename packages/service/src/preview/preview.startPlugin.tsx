@@ -63,6 +63,9 @@ export class PreviewStartPlugin implements StartPlugin {
   async initiate(options: StartPluginOptions) {
     this.listenToDevServers();
 
+    // set workspace's component pattern
+    this.workspace.setComponentPattern(options.pattern);
+
     const conponents = await this.workspace.getManyByPattern(options.pattern);
     const previewServers = await this.bundler.devServer(conponents);
     previewServers.forEach((server) => server.listen());
