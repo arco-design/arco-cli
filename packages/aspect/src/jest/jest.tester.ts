@@ -25,7 +25,7 @@ export class JestTester implements Tester {
     this.jestModule = require(this.jestModulePath);
   }
 
-  private convertJestCliOptions(optionsWithAlias): typeof optionsWithAlias {
+  private convertJestCliOptions(option): typeof option {
     // jest cli options with alias
     // https://jestjs.io/docs/29.3/cli
     const jestOptionAliasMap = {
@@ -41,7 +41,26 @@ export class JestTester implements Tester {
       v: 'version',
     };
 
+    const { _: args, ...optionsWithAlias } = option;
     const result = { ...optionsWithAlias };
+
+    if (args?.length) {
+      const regexForTestFiles = args[0];
+      if (/\.(js|jsx|ts|tsx)$/.test(regexForTestFiles)) {
+        result.testMatch = [regexForTestFiles];
+      } else {
+        result.testNamePattern = regexForTestFiles;
+      }
+    }
+
+    // convert 'true' | 'false' to boolean
+    Object.entries(result).forEach(([key, value]) => {
+      if (value === 'true') {
+        result[key] = true;
+      } else if (value === 'false') {
+        result[key] = false;
+      }
+    });
 
     Object.entries(jestOptionAliasMap).forEach(([alias, optionName]) => {
       if (alias in result) {
