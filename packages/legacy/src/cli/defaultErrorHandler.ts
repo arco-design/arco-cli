@@ -68,5 +68,8 @@ export default (err: Error): { message: string; error: Error } => {
 
   // sendToAnalyticsAndSentry(err);
   const errorMessage = getErrMsg();
-  return { message: chalk.red(errorMessage), error: err };
+  return {
+    message: chalk.red([errorMessage, `use the '--log' flag for the full error.`].join('\n\n')),
+    error: err,
+  };
 };
