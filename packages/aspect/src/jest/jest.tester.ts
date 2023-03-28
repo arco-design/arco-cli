@@ -92,16 +92,24 @@ export class JestTester implements Tester {
     }
 
     if (context.components) {
-      config.testMatch = [];
-      config.collectCoverageFrom = [];
-      context.components.forEach(({ componentDir, entries }) => {
-        config.testMatch.push(
-          ...entries.testFilePatterns.map((pattern) => path.join('**', componentDir, pattern))
+      const testMatch: string[] = [];
+      const collectCoverageFrom: string[] = [];
+
+      context.components.forEach(({ packageDir, componentDir, entries }) => {
+        const includeDir = context.pattern ? componentDir : packageDir;
+        testMatch.push(
+          ...entries.testFilePatterns.map((testFilePattern) =>
+            path.join('**', includeDir, testFilePattern)
+          )
         );
-        config.collectCoverageFrom.push(
-          ...[`**/${componentDir}/**/*.[jt]s?(x)`, `!**/${componentDir}/**/{style,__docs__}/*`]
+        collectCoverageFrom.push(
+          ...[`**/${includeDir}/**/*.[jt]s?(x)`, `!**/${includeDir}/**/{style,__docs__}/*`]
         );
       });
+
+      // unique pattern strings
+      config.testMatch = [...new Set(testMatch)];
+      config.collectCoverageFrom = [...new Set(collectCoverageFrom)];
     }
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires

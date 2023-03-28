@@ -46,7 +46,7 @@ export class TestCmd implements Command {
       };
     }
 
-    const testResults = await this.tester.test(components, { watch, rawTesterArgs });
+    const testResults = await this.tester.test(components, { watch, rawTesterArgs, pattern });
     const code = testResults.hasErrors() ? 1 : 0;
     const { seconds } = timer.stop();
 

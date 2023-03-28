@@ -19,6 +19,11 @@ export interface TesterOptions {
    * pass the raw tester cli options, e.g. "$jest: -u --testMatch=['test.js']";
    */
   rawTesterArgs?: string;
+
+  /**
+   * component pattern passed via 'arco test component-pattern'
+   */
+  pattern?: string;
 }
 
 export interface TesterContext extends ExecutionContext, TesterOptions {
