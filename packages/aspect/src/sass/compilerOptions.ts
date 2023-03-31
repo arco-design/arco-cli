@@ -6,5 +6,5 @@ export type SassCompilerOptions = {
    */
   sassOptions?: Record<string, any>;
 
-  combine?: boolean | { fileName: string };
+  combine?: boolean | { filename: string };
 } & Partial<CompilerOptions>;

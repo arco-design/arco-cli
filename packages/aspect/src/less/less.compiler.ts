@@ -86,8 +86,8 @@ export class LessCompiler implements Compiler {
 
                 if (this.combine) {
                   const distFile =
-                    typeof this.combine === 'object' && this.combine.fileName
-                      ? this.combine.fileName
+                    typeof this.combine === 'object' && this.combine.filename
+                      ? this.combine.filename
                       : 'style/index.less';
                   const targetLessPath = path.join(component.packageDirAbs, this.distDir, distFile);
                   await fs.ensureFile(targetLessPath);

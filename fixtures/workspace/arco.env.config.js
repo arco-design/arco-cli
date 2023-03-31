@@ -41,7 +41,7 @@ module.exports = function defineConfig(envId) {
     },
     less: {
       combine: {
-        fileName: 'style/dist.less'
+        filename: 'style/dist.less'
       },
       lessOptions: {
         plugins: [new NpmPluginImport({ prefix: '~' })],

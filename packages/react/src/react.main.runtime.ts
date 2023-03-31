@@ -43,11 +43,11 @@ type UseBuildPileModifiers = {
   };
   less?: {
     lessOptions?: Record<string, any>;
-    combine?: boolean | { fileName: string };
+    combine?: boolean | { filename: string };
   };
   sass?: {
     sassOptions?: Record<string, any>;
-    combine?: boolean | { fileName: string };
+    combine?: boolean | { filename: string };
   };
 };
 
