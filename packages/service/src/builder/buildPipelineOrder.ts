@@ -50,13 +50,13 @@ type DataPerLocation = {
 export function calculatePipelineOrder({
   envs,
   taskSlot,
-  tasks = [],
+  tasksInclude = [],
   skipTests = false,
   pipeNameOnEnv = 'getBuildPipe',
 }: {
   envs: EnvDefinition[];
   taskSlot: TaskSlot;
-  tasks?: string[];
+  tasksInclude?: string[];
   skipTests?: boolean;
   pipeNameOnEnv?: string;
 }): TasksQueue {
@@ -85,14 +85,19 @@ export function calculatePipelineOrder({
 
   const tasksQueue = new TasksQueue();
   locations.forEach((location) => addTasksToGraph(tasksQueue, dataPerLocation, location));
-  if (tasks.length) {
+
+  if (tasksInclude?.length) {
     return new TasksQueue(
-      ...tasksQueue.filter(({ task }) => tasks.includes(task.name) || tasks.includes(task.aspectId))
+      ...tasksQueue.filter(
+        ({ task }) => tasksInclude.includes(task.name) || tasksInclude.includes(task.aspectId)
+      )
     );
   }
+
   if (skipTests) {
     return new TasksQueue(...tasksQueue.filter(({ task }) => task.aspectId !== TesterAspect.id));
   }
+
   return tasksQueue;
 }
 

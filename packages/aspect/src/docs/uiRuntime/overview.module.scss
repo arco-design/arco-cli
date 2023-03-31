@@ -3,4 +3,12 @@
     border: none;
     border-bottom: 1px solid var(--preview-color-border);
   }
+
+  :global(.arco-tabs-header-nav-rounded .arco-tabs-header-title) {
+    margin: 12px 0;
+
+    &:not(:first-child) {
+      margin-left: 12px;
+    }
+  }
 }

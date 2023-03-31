@@ -1,8 +1,10 @@
 import path from 'path';
+import fs from 'fs-extra';
 import { MainRuntime } from '@arco-cli/core/dist/cli';
 import { LoggerAspect, LoggerMain, Logger } from '@arco-cli/core/dist/logger';
 import { Slot, SlotRegistry } from '@arco-cli/stone';
 import { PreviewAspect, PreviewMain } from '@arco-cli/service/dist/preview';
+import { BuilderAspect, BuilderMain } from '@arco-cli/service/dist/builder';
 import { GraphqlAspect, GraphqlMain } from '@arco-cli/core/dist/graphql';
 import { AbstractVinyl } from '@arco-cli/legacy/dist/workspace/component/sources';
 
@@ -16,18 +18,36 @@ import { DocsPreviewDefinition } from './docs.previewDefinition';
 import { DocReader } from './type';
 import { FileExtensionNotSupportedError } from './exceptions';
 import { Doc, DocPropList } from './doc';
+import {
+  ComponentManifestMap,
+  DOCS_ARTIFACT_DIR,
+  DOCS_MANIFEST_FILENAME,
+  DocsTask,
+} from './docs.task';
 
 type DocReaderSlot = SlotRegistry<DocReader>;
 
 export class DocsMain {
   static runtime = MainRuntime;
 
-  static dependencies = [PreviewAspect, GraphqlAspect, WorkspaceAspect, LoggerAspect];
+  static dependencies = [
+    PreviewAspect,
+    GraphqlAspect,
+    WorkspaceAspect,
+    LoggerAspect,
+    BuilderAspect,
+  ];
 
   static slots = [Slot.withType<DocReader>()];
 
   static provider(
-    [preview, graphql, workspace, loggerMain]: [PreviewMain, GraphqlMain, Workspace, LoggerMain],
+    [preview, graphql, workspace, loggerMain, builder]: [
+      PreviewMain,
+      GraphqlMain,
+      Workspace,
+      LoggerMain,
+      BuilderMain
+    ],
     _config,
     [docReaderSlot]: [DocReaderSlot]
   ) {
@@ -45,6 +65,8 @@ export class DocsMain {
         };
       });
     }
+
+    builder.registerBuildTasks([new DocsTask()]);
 
     return docsMain;
   }
@@ -133,6 +155,28 @@ export class DocsMain {
     }
 
     return null;
+  }
+
+  /**
+   * get manifest info from doc artifact
+   */
+  async getDocsManifestFromArtifact(
+    component: Component
+  ): Promise<Component['entries']['extraDocs']> {
+    const artifactManifestPathAbs = path.join(
+      component.packageDirAbs,
+      DOCS_ARTIFACT_DIR,
+      DOCS_MANIFEST_FILENAME
+    );
+
+    if (fs.existsSync(artifactManifestPathAbs)) {
+      try {
+        const manifest: ComponentManifestMap = await fs.readJSON(artifactManifestPathAbs);
+        return manifest[component.id] || [];
+      } catch (err) {}
+    }
+
+    return [];
   }
 }
 

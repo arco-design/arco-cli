@@ -156,4 +156,18 @@ export const CLI_COMPONENT_PATTERN_HELP = `component name, package name, or comp
 use comma to separate patterns and "!" to exclude. e.g. "ui/**, !ui/button"
 wrap the pattern with quotes`;
 
+export const CLI_TASK_NAME_HELP = `build the specified task(s) only. for multiple tasks, separate by a comma.
+specify the task-name (e.g. "TSCompilerESM") or the task-aspect-id (e.g. "arco.service/compiler");`;
+
 export const CLI_LOGIN_FIRST_TIP = `please use 'arco login' to login in first`;
+
+/**
+ * Build task names
+ */
+export const BUILD_TASK_NAME_DOCS = 'HandleDocuments';
+
+export const BUILD_TASK_NAME_PREVIEW = 'GeneratePreview';
+
+export const BUILD_TASK_NAME_COMPILER_ESM = 'TSCompilerESM';
+
+export const BUILD_TASK_NAME_COMPILER_CJS = 'TSCompilerCJS';

@@ -54,6 +54,7 @@ export class SyncerMain {
           errors: [],
         };
         const doc = this.docs.getDoc(component);
+        const docManifest = await this.docs.getDocsManifestFromArtifact(component);
         const meta: SyncParams = {
           name: component.id,
           title: doc.title || component.name,
@@ -69,6 +70,9 @@ export class SyncerMain {
             peerDependencies: Object.keys(component.peerDependencies),
           },
           outline: doc.outline,
+          fileManifest: {
+            docs: docManifest,
+          },
           _generation: MATERIAL_GENERATION,
         };
 

@@ -3,12 +3,13 @@ import { Logger } from '@arco-cli/core/dist/logger';
 import { Workspace } from '@arco-cli/aspect/dist/workspace';
 import { WorkspaceNotFoundError } from '@arco-cli/aspect/dist/workspace/exceptions';
 import { Command, CommandOptions } from '@arco-cli/legacy/dist/cli/command';
-import { CLI_COMPONENT_PATTERN_HELP } from '@arco-cli/legacy/dist/constants';
+import { CLI_COMPONENT_PATTERN_HELP, CLI_TASK_NAME_HELP } from '@arco-cli/legacy/dist/constants';
 
 import { BuilderMain } from './builder.main.runtime';
 
 type BuildOpts = {
   skipTests?: boolean;
+  tasks?: string;
 };
 
 export class BuilderCmd implements Command {
@@ -23,12 +24,14 @@ export class BuilderCmd implements Command {
   group = 'development';
 
   options = [
-    ['', 'skip-tests', 'skip running component tests during build process'],
+    // TODO enable test task while building
+    // ['', 'skip-tests', 'skip running component tests during build process'],
+    ['', 'tasks <task-names>', CLI_TASK_NAME_HELP],
   ] as CommandOptions;
 
   constructor(private builder: BuilderMain, private workspace: Workspace, private logger: Logger) {}
 
-  async report([pattern]: [string], { skipTests }: BuildOpts): Promise<string> {
+  async report([pattern]: [string], { skipTests, tasks }: BuildOpts): Promise<string> {
     if (!this.workspace) throw new WorkspaceNotFoundError();
 
     const longProcessLogger = this.logger.createLongProcessLogger('build');
@@ -40,6 +43,7 @@ export class BuilderCmd implements Command {
     this.logger.consoleSuccess(`found ${components.length} components to build`);
     const envsExecutionResults = await this.builder.build(components, {
       skipTests,
+      tasksInclude: typeof tasks === 'string' ? tasks.split(',') : [],
     });
     longProcessLogger.end();
     envsExecutionResults.throwErrorsIfExist();

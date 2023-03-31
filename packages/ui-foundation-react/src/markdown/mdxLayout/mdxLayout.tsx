@@ -2,9 +2,12 @@
 import React, { useMemo, ReactNode } from 'react';
 import { MDXProvider, MDXProviderComponents } from '@mdx-js/react';
 import classNames from 'classnames';
-import { DEFAULT_MDX_COMPONENTS } from './components';
+import { DEFAULT_MDX_COMPONENTS } from '../components';
 
+import '../style/markdown.css';
 import styles from './mdxLayout.module.scss';
+
+const MARKDOWN_BODY_CLASSNAME = 'markdown-body';
 
 export type { MDXProviderComponents } from '@mdx-js/react';
 
@@ -22,7 +25,7 @@ export function MDXLayout({ children, components, className, ...rest }: MDXLayou
 
   return (
     <MDXProvider components={_components}>
-      <div className={classNames(styles.mdxContent, className)} {...rest}>
+      <div className={classNames(MARKDOWN_BODY_CLASSNAME, styles.mdxContent, className)} {...rest}>
         {children}
       </div>
     </MDXProvider>

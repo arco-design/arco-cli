@@ -14,6 +14,7 @@ import { BuildPipe, TaskResults } from './buildPipe';
 export type BuilderServiceOptions = {
   skipTests?: boolean;
   originalSeeders?: string[];
+  tasksInclude?: string[];
   previousTasksResults?: TaskResults[];
 };
 
@@ -39,6 +40,7 @@ export class BuilderService implements EnvService<BuildServiceResults, BuilderDe
       envs,
       taskSlot: this.taskSlot,
       skipTests: options.skipTests,
+      tasksInclude: options.tasksInclude,
     });
     tasksQueue.validate();
 

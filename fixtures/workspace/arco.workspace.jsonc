@@ -13,7 +13,13 @@
           "main": "./index.ts",
           "style": "./style/index.less",
           "jsdoc": "./interface.ts",
-          "preview": "./__docs__/index.mdx"
+          "preview": "./__docs__/index.mdx",
+          "extraDocs": [
+            {
+              "title": "Changelog",
+              "entry": "./__docs__/changelog.md"
+            }
+          ]
         }
       },
       "members": [

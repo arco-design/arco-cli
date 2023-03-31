@@ -1,20 +1,19 @@
 import { resolve } from 'path';
 import { ExecutionContext } from '@arco-cli/aspect/dist/envs';
 import { Bundler, BundlerContext, Target } from '@arco-cli/aspect/dist/bundler';
+import { BUILD_TASK_NAME_PREVIEW } from '@arco-cli/legacy/dist/constants';
 
 import { BuildContext, BuildTask, BuildTaskResult, TaskLocation } from '@service/builder';
 
 import { PreviewMain } from './preview.main.runtime';
 import { PREVIEW_ASPECT_ID } from './preview.aspect';
 
-export const PREVIEW_TASK_NAME = 'GeneratePreview';
-
 export class PreviewTask implements BuildTask {
   constructor(private preview: PreviewMain) {}
 
   aspectId = PREVIEW_ASPECT_ID;
 
-  name = PREVIEW_TASK_NAME;
+  name = BUILD_TASK_NAME_PREVIEW;
 
   location: TaskLocation = 'end';
 
@@ -39,7 +38,7 @@ export class PreviewTask implements BuildTask {
       publicPath: this.getPreviewDirectory(context),
       rootPath: url,
       metaData: {
-        initiator: `${PREVIEW_TASK_NAME} task`,
+        initiator: `${BUILD_TASK_NAME_PREVIEW} task`,
         envId: context.id,
       },
     });

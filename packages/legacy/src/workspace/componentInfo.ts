@@ -35,6 +35,8 @@ export type ComponentConfig = {
     jsdoc?: string;
     // file path pattern for unit test
     testFilePatterns?: string[];
+    // slot for extra document other than component preview
+    extraDocs?: Array<{ title: string; entry: string }>;
   };
   config: ComponentAspectConfig;
 };
@@ -96,6 +98,7 @@ export class ComponentInfo {
     entries.preview ||= '';
     entries.jsdoc ||= '';
     entries.testFilePatterns ||= DEFAULT_TEST_FILE_PATTERNS;
+    entries.extraDocs ||= [];
 
     this.entries = entries;
     this.rootDir = rootDir;
