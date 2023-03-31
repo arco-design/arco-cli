@@ -1,3 +1,4 @@
+import os from 'os';
 import path from 'path';
 import fs from 'fs-extra';
 import minimatch from 'minimatch';
@@ -22,9 +23,12 @@ export class SassCompiler implements Compiler {
 
   sassOptions: SassCompilerOptions['sassOptions'];
 
+  combine: SassCompilerOptions['sassCombine'];
+
   constructor(readonly id: string, options: SassCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
     this.sassOptions = options.sassOptions || {};
+    this.combine = options.sassCombine || false;
   }
 
   getDistPathBySrcPath(srcPath: string): string {
@@ -70,8 +74,20 @@ export class SassCompiler implements Compiler {
                   this.getDistPathBySrcPath(file.relative)
                 );
 
-                await fs.ensureFileSync(targetPath);
+                await fs.ensureFile(targetPath);
                 await fs.writeFile(targetPath, cssFile);
+
+                if (this.combine) {
+                  const distFile = typeof this.combine === 'object' && this.combine.fileName ? this.combine.fileName : 'style/index.scss';
+                  const targetSassPath = path.join(
+                    component.packageDirAbs,
+                    this.distDir,
+                    distFile,
+                  );
+                  console.log(targetSassPath);
+                  await fs.ensureFile(targetSassPath);
+                  await fs.appendFile(targetSassPath, `@import '${path.relative(this.distDir, file.relative)}';${os.EOL}`);
+                }
 
                 if (this.shouldCopySourceFiles) {
                   await fs.copyFile(

@@ -1,3 +1,4 @@
+import os from 'os';
 import path from 'path';
 import fs from 'fs-extra';
 import minimatch from 'minimatch';
@@ -22,9 +23,12 @@ export class LessCompiler implements Compiler {
 
   lessOptions: LessCompilerOptions['lessOptions'];
 
+  combine: LessCompilerOptions['lessCombine'];
+
   constructor(readonly id: string, options: LessCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
     this.lessOptions = options.lessOptions || {};
+    this.combine = options.lessCombine || false;
   }
 
   getDistPathBySrcPath(srcPath: string): string {
@@ -77,8 +81,19 @@ export class LessCompiler implements Compiler {
                   this.getDistPathBySrcPath(file.relative)
                 );
 
-                await fs.ensureFileSync(targetPath);
+                await fs.ensureFile(targetPath);
                 await fs.writeFile(targetPath, css);
+
+                if (this.combine) {
+                  const distFile = typeof this.combine === 'object' && this.combine.fileName ? this.combine.fileName : 'style/index.less';
+                  const targetLessPath = path.join(
+                    component.packageDirAbs,
+                    this.distDir,
+                    distFile,
+                  );
+                  await fs.ensureFile(targetLessPath);
+                  await fs.appendFile(targetLessPath, `@import '${path.relative(this.distDir, file.relative)}';${os.EOL}`);
+                }
 
                 if (this.shouldCopySourceFiles) {
                   await fs.copyFile(
