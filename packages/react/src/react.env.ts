@@ -28,6 +28,10 @@ import {
   COMPONENT_PREVIEW_STRATEGY_NAME,
 } from '@arco-cli/service/dist/preview';
 import { sha1 } from '@arco-cli/legacy/dist/utils';
+import {
+  BUILD_TASK_NAME_COMPILER_ESM,
+  BUILD_TASK_NAME_COMPILER_CJS,
+} from '@arco-cli/legacy/dist/constants';
 
 import { ReactAspect } from './react.aspect';
 import basePreviewConfigFactory from './webpack/webpack.config.base';
@@ -118,7 +122,7 @@ export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
     sassCompilerOptions,
   }: CreateCompilerTaskOptions = {}) {
     return this.compiler.createTask(
-      'TSCompilerESM',
+      BUILD_TASK_NAME_COMPILER_ESM,
       this.multiCompiler.createCompiler(
         [
           this.createEsmCompiler(tsConfigTransformers, tsModule),
@@ -138,7 +142,7 @@ export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
     sassCompilerOptions,
   }: CreateCompilerTaskOptions = {}) {
     return this.compiler.createTask(
-      'TSCompilerCJS',
+      BUILD_TASK_NAME_COMPILER_CJS,
       this.multiCompiler.createCompiler(
         [
           this.createCjsCompiler(tsConfigTransformers, tsModule),

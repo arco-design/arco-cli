@@ -7,6 +7,7 @@ import {
   BuildTask,
   BuildTaskResult,
 } from '@arco-cli/service/dist/builder';
+import { BUILD_TASK_NAME_DOCS } from '@arco-cli/legacy/dist/constants';
 import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
 
 import { Component } from '@aspect/component';
@@ -17,12 +18,11 @@ export type ComponentManifestMap = Record<Component['id'], Component['entries'][
 
 export const DOCS_MANIFEST_FILENAME = 'manifest.json';
 export const DOCS_ARTIFACT_DIR = path.join(ARTIFACTS_DIR, 'docs');
-export const DOCS_TASK_NAME = 'HandleComponentDocuments';
 
 export class DocsTask implements BuildTask {
   readonly aspectId = DocsAspect.id;
 
-  readonly name = DOCS_TASK_NAME;
+  readonly name = BUILD_TASK_NAME_DOCS;
 
   constructor() {}
 
