@@ -85,14 +85,16 @@ export class LessCompiler implements Compiler {
                 await fs.writeFile(targetPath, css);
 
                 if (this.combine) {
-                  const distFile = typeof this.combine === 'object' && this.combine.fileName ? this.combine.fileName : 'style/index.less';
-                  const targetLessPath = path.join(
-                    component.packageDirAbs,
-                    this.distDir,
-                    distFile,
-                  );
+                  const distFile =
+                    typeof this.combine === 'object' && this.combine.fileName
+                      ? this.combine.fileName
+                      : 'style/index.less';
+                  const targetLessPath = path.join(component.packageDirAbs, this.distDir, distFile);
                   await fs.ensureFile(targetLessPath);
-                  await fs.appendFile(targetLessPath, `@import '${path.relative(this.distDir, file.relative)}';${os.EOL}`);
+                  await fs.appendFile(
+                    targetLessPath,
+                    `@import '${path.relative(this.distDir, file.relative)}';${os.EOL}`
+                  );
                 }
 
                 if (this.shouldCopySourceFiles) {
