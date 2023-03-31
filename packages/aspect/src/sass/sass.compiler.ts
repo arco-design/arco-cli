@@ -1,3 +1,4 @@
+import os from 'os';
 import path from 'path';
 import fs from 'fs-extra';
 import minimatch from 'minimatch';
@@ -22,9 +23,12 @@ export class SassCompiler implements Compiler {
 
   sassOptions: SassCompilerOptions['sassOptions'];
 
+  combine: SassCompilerOptions['combine'];
+
   constructor(readonly id: string, options: SassCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
     this.sassOptions = options.sassOptions || {};
+    this.combine = options.combine || false;
   }
 
   getDistPathBySrcPath(srcPath: string): string {
@@ -50,7 +54,8 @@ export class SassCompiler implements Compiler {
           id: component.id,
           errors: [],
         };
-
+        let targetCssPath: string;
+        let targetSassPath: string;
         await Promise.all(
           component.files
             .filter((file) => {
@@ -70,8 +75,24 @@ export class SassCompiler implements Compiler {
                   this.getDistPathBySrcPath(file.relative)
                 );
 
-                await fs.ensureFileSync(targetPath);
+                await fs.ensureFile(targetPath);
                 await fs.writeFile(targetPath, cssFile);
+
+                if (this.combine) {
+                  const distFile =
+                    typeof this.combine === 'object' && this.combine.filename
+                      ? this.combine.filename
+                      : 'style/index.scss';
+                  targetSassPath = path.join(component.packageDirAbs, this.distDir, distFile);
+                  if (!targetCssPath) {
+                    targetCssPath = this.getDistPathBySrcPath(targetSassPath);
+                  }
+                  await fs.ensureFile(targetSassPath);
+                  await fs.appendFile(
+                    targetSassPath,
+                    `@import '${path.relative(this.distDir, file.relative)}';${os.EOL}`
+                  );
+                }
 
                 if (this.shouldCopySourceFiles) {
                   await fs.copyFile(
@@ -84,6 +105,13 @@ export class SassCompiler implements Compiler {
               }
             })
         );
+
+        if (this.combine) {
+          const css = compile(targetSassPath, this.sassOptions).css;
+          await fs.ensureFile(targetCssPath);
+          await fs.writeFile(targetCssPath, css);
+        }
+
 
         return componentResult;
       })

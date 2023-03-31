@@ -1,3 +1,4 @@
+import os from 'os';
 import path from 'path';
 import fs from 'fs-extra';
 import minimatch from 'minimatch';
@@ -22,9 +23,12 @@ export class LessCompiler implements Compiler {
 
   lessOptions: LessCompilerOptions['lessOptions'];
 
+  combine: LessCompilerOptions['combine'];
+
   constructor(readonly id: string, options: LessCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
     this.lessOptions = options.lessOptions || {};
+    this.combine = options.combine || false;
   }
 
   getDistPathBySrcPath(srcPath: string): string {
@@ -52,6 +56,8 @@ export class LessCompiler implements Compiler {
           id: component.id,
           errors: [],
         };
+        let targetCssPath: string;
+        let targetLessPath: string;
 
         await Promise.all(
           component.files
@@ -77,8 +83,24 @@ export class LessCompiler implements Compiler {
                   this.getDistPathBySrcPath(file.relative)
                 );
 
-                await fs.ensureFileSync(targetPath);
+                await fs.ensureFile(targetPath);
                 await fs.writeFile(targetPath, css);
+
+                if (this.combine) {
+                  const distFile =
+                    typeof this.combine === 'object' && this.combine.filename
+                      ? this.combine.filename
+                      : 'style/index.less';
+                  targetLessPath = path.join(component.packageDirAbs, this.distDir, distFile);
+                  if (!targetCssPath) {
+                    targetCssPath = this.getDistPathBySrcPath(targetLessPath);
+                  }
+                  await fs.ensureFile(targetLessPath);
+                  await fs.appendFile(
+                    targetLessPath,
+                    `@import '${path.relative(this.distDir, file.relative)}';${os.EOL}`
+                  );
+                }
 
                 if (this.shouldCopySourceFiles) {
                   await fs.copyFile(
@@ -91,6 +113,17 @@ export class LessCompiler implements Compiler {
               }
             })
         );
+
+        if (this.combine) {
+          const lessContent = await fs.readFile(targetLessPath, { encoding: 'utf8' });
+          const { css } = await render(lessContent, {
+            paths: [path.dirname(targetLessPath), packageNodeModulePath, workspaceNodeModulePath],
+            javascriptEnabled: true,
+            ...this.lessOptions,
+          });
+          await fs.ensureFile(targetCssPath);
+          await fs.writeFile(targetCssPath, css);
+        }
 
         return componentResult;
       })
