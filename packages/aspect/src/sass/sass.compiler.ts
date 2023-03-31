@@ -112,7 +112,6 @@ export class SassCompiler implements Compiler {
           await fs.writeFile(targetCssPath, css);
         }
 
-
         return componentResult;
       })
     );
