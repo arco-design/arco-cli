@@ -54,7 +54,8 @@ export class SassCompiler implements Compiler {
           id: component.id,
           errors: [],
         };
-
+        let targetCssPath: string;
+        let targetSassPath: string;
         await Promise.all(
           component.files
             .filter((file) => {
@@ -82,7 +83,10 @@ export class SassCompiler implements Compiler {
                     typeof this.combine === 'object' && this.combine.filename
                       ? this.combine.filename
                       : 'style/index.scss';
-                  const targetSassPath = path.join(component.packageDirAbs, this.distDir, distFile);
+                  targetSassPath = path.join(component.packageDirAbs, this.distDir, distFile);
+                  if (!targetCssPath) {
+                    targetCssPath = this.getDistPathBySrcPath(targetSassPath);
+                  }
                   await fs.ensureFile(targetSassPath);
                   await fs.appendFile(
                     targetSassPath,
@@ -101,6 +105,13 @@ export class SassCompiler implements Compiler {
               }
             })
         );
+
+        if (this.combine) {
+          const css = compile(targetSassPath, this.sassOptions).css;
+          await fs.ensureFile(targetCssPath);
+          await fs.writeFile(targetCssPath, css);
+        }
+
 
         return componentResult;
       })

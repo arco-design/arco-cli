@@ -56,6 +56,8 @@ export class LessCompiler implements Compiler {
           id: component.id,
           errors: [],
         };
+        let targetCssPath: string;
+        let targetLessPath: string;
 
         await Promise.all(
           component.files
@@ -89,7 +91,10 @@ export class LessCompiler implements Compiler {
                     typeof this.combine === 'object' && this.combine.filename
                       ? this.combine.filename
                       : 'style/index.less';
-                  const targetLessPath = path.join(component.packageDirAbs, this.distDir, distFile);
+                  targetLessPath = path.join(component.packageDirAbs, this.distDir, distFile);
+                  if (!targetCssPath) {
+                    targetCssPath = this.getDistPathBySrcPath(targetLessPath);
+                  }
                   await fs.ensureFile(targetLessPath);
                   await fs.appendFile(
                     targetLessPath,
@@ -108,6 +113,17 @@ export class LessCompiler implements Compiler {
               }
             })
         );
+
+        if (this.combine) {
+          const lessContent = await fs.readFile(targetLessPath, { encoding: 'utf8' });
+          const { css } = await render(lessContent, {
+            paths: [path.dirname(targetLessPath), packageNodeModulePath, workspaceNodeModulePath],
+            javascriptEnabled: true,
+            ...this.lessOptions,
+          });
+          await fs.ensureFile(targetCssPath);
+          await fs.writeFile(targetCssPath, css);
+        }
 
         return componentResult;
       })
