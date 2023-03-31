@@ -23,12 +23,12 @@ export class SassCompiler implements Compiler {
 
   sassOptions: SassCompilerOptions['sassOptions'];
 
-  combine: SassCompilerOptions['sassCombine'];
+  combine: SassCompilerOptions['combine'];
 
   constructor(readonly id: string, options: SassCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
     this.sassOptions = options.sassOptions || {};
-    this.combine = options.sassCombine || false;
+    this.combine = options.combine || false;
   }
 
   getDistPathBySrcPath(srcPath: string): string {

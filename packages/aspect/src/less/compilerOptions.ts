@@ -6,5 +6,5 @@ export type LessCompilerOptions = {
    */
   lessOptions?: Record<string, any>;
 
-  lessCombine?: boolean | { fileName: string };
+  combine?: boolean | { fileName: string };
 } & Partial<CompilerOptions>;

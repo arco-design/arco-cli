@@ -43,11 +43,11 @@ type UseBuildPileModifiers = {
   };
   less?: {
     lessOptions?: Record<string, any>;
-    lessCombine?: boolean | { fileName: string };
+    combine?: boolean | { fileName: string };
   };
   sass?: {
     sassOptions?: Record<string, any>;
-    sassCombine?: boolean | { fileName: string };
+    combine?: boolean | { fileName: string };
   };
 };
 
@@ -172,16 +172,16 @@ export class ReactMain {
   useBuildPipe(modifiers: UseBuildPileModifiers = {}) {
     const overrides: any = {};
     const { tsModule, buildConfig: tsConfigTransformers } = modifiers.typescript || {};
-    const { lessOptions, lessCombine } = modifiers.less || {};
-    const { sassOptions, sassCombine } = modifiers.sass || {};
+    const { lessOptions, combine: lessCombine } = modifiers.less || {};
+    const { sassOptions, combine: sassCombine } = modifiers.sass || {};
 
     if (tsModule || tsConfigTransformers || lessOptions || sassOptions) {
       overrides.getBuildPipe = () => {
         return this.defaultReactEnv.getBuildPipe({
           tsModule,
           tsConfigTransformers,
-          lessCompilerOptions: { lessOptions, lessCombine },
-          sassCompilerOptions: { sassOptions, sassCombine },
+          lessCompilerOptions: { lessOptions, combine: lessCombine },
+          sassCompilerOptions: { sassOptions, combine: sassCombine },
         });
       };
     }

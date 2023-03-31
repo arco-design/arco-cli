@@ -40,7 +40,7 @@ module.exports = function defineConfig(envId) {
       ],
     },
     less: {
-      lessCombine: {
+      combine: {
         fileName: 'style/dist.less'
       },
       lessOptions: {
@@ -48,7 +48,7 @@ module.exports = function defineConfig(envId) {
       },
     },
     sass: {
-      sassCombine: true,
+      combine: true,
       sassOptions: {}
     }
   };

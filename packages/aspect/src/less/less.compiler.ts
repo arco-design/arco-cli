@@ -23,12 +23,12 @@ export class LessCompiler implements Compiler {
 
   lessOptions: LessCompilerOptions['lessOptions'];
 
-  combine: LessCompilerOptions['lessCombine'];
+  combine: LessCompilerOptions['combine'];
 
   constructor(readonly id: string, options: LessCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
     this.lessOptions = options.lessOptions || {};
-    this.combine = options.lessCombine || false;
+    this.combine = options.combine || false;
   }
 
   getDistPathBySrcPath(srcPath: string): string {
