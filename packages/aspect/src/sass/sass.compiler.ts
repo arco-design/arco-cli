@@ -83,7 +83,6 @@ export class SassCompiler implements Compiler {
                       ? this.combine.fileName
                       : 'style/index.scss';
                   const targetSassPath = path.join(component.packageDirAbs, this.distDir, distFile);
-                  console.log(targetSassPath);
                   await fs.ensureFile(targetSassPath);
                   await fs.appendFile(
                     targetSassPath,
