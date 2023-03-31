@@ -8,6 +8,12 @@ export type ComponentOutline = {
   depth: number;
 };
 
+export type ComponentExtraDoc = {
+  title: string;
+  content: string;
+  type?: 'md';
+};
+
 export type ComponentModelProps = {
   id: string;
   name: string;
@@ -18,6 +24,7 @@ export type ComponentModelProps = {
   host?: string;
   server?: ComponentServer;
   outline?: ComponentOutline[];
+  extraDocs?: ComponentExtraDoc[];
 };
 
 export class ComponentModel {
@@ -30,7 +37,8 @@ export class ComponentModel {
     readonly server: ComponentServer | undefined,
     readonly description = '',
     readonly labels: string[] = [],
-    readonly outline: ComponentOutline[] = []
+    readonly outline: ComponentOutline[] = [],
+    readonly extraDocs: ComponentExtraDoc[] = []
   ) {}
 
   static from({
@@ -43,6 +51,7 @@ export class ComponentModel {
     description,
     labels,
     outline,
+    extraDocs,
   }: ComponentModelProps) {
     return new ComponentModel(
       id,
@@ -53,7 +62,8 @@ export class ComponentModel {
       server,
       description,
       labels,
-      outline
+      outline,
+      extraDocs
     );
   }
 

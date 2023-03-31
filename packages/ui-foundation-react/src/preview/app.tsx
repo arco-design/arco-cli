@@ -2,7 +2,7 @@
 import React from 'react';
 import type { DocsRootProps } from '@arco-cli/aspect/dist/docs/previewRuntime';
 
-import { MDXLayout } from '../markdown';
+import { MDXLayout } from '../markdown/mdxLayout';
 import { Theme } from './theme';
 import { Content as DocContent } from './doc/content';
 import { PropertiesTable } from './doc/propertiesTable';

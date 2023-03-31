@@ -154,7 +154,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     return name;
   }
 
-  private async copyAssetsToCapsules(context: BundlerContext, result: BundlerResult) {
+  private async copyAssetsToArtifacts(context: BundlerContext, result: BundlerResult) {
     // components may share the same artifact dir
     // old artifacts should be cleaned up before copy task starting
     await Promise.all(
@@ -263,7 +263,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
   private async computeTargetResult(context: BundlerContext, result: BundlerResult) {
     if (isEmpty(result.errors)) {
       // In case there are errors files will not be emitted so trying to copy them will fail anyway
-      await this.copyAssetsToCapsules(context, result);
+      await this.copyAssetsToArtifacts(context, result);
     }
 
     const componentsResults: ComponentResult[] = result.components.map((component) => {

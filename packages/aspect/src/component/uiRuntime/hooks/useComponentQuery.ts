@@ -20,6 +20,10 @@ const componentOverviewFields = gql`
       env
       url
     }
+    extraDocs {
+      title
+      content
+    }
   }
 `;
 
