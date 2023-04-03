@@ -41,7 +41,7 @@ module.exports = function defineConfig(envId) {
     },
     less: {
       combine: {
-        filename: '../../dist/style/index.less'
+        filename: 'style/dist.less'
       },
       lessOptions: {
         plugins: [new NpmPluginImport({ prefix: '~' })],
@@ -49,7 +49,7 @@ module.exports = function defineConfig(envId) {
     },
     sass: {
       combine: {
-        filename: '../../dist/style/dist.scss'
+        filename: 'style/dist.scss'
       },
       sassOptions: {}
     }

@@ -88,7 +88,9 @@ export class SassCompiler implements Compiler {
                   if (!combineCssPath) {
                     combineCssPath = this.getDistPathBySrcPath(combineSassPath);
                   }
-                  const distPath = path.dirname(path.join(component.packageDirAbs, this.distDir, distFile));
+                  const distPath = path.dirname(
+                    path.join(component.packageDirAbs, this.distDir, distFile)
+                  );
                   deps.push(`@import '${path.relative(distPath, targetPath)}';`);
                 }
 
@@ -109,8 +111,12 @@ export class SassCompiler implements Compiler {
           await fs.ensureFile(combineSassPath);
           await fs.writeFile(combineSassPath, content);
           const { css } = compileString(content, {
-            loadPaths: [path.dirname(combineSassPath), packageNodeModulePath, workspaceNodeModulePath],
-            ...this.sassOptions
+            loadPaths: [
+              path.dirname(combineSassPath),
+              packageNodeModulePath,
+              workspaceNodeModulePath,
+            ],
+            ...this.sassOptions,
           });
           await fs.ensureFile(combineCssPath);
           await fs.writeFile(combineCssPath, css);

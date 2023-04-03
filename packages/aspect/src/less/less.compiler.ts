@@ -93,7 +93,9 @@ export class LessCompiler implements Compiler {
                   if (!combineCssPath) {
                     combineCssPath = this.getDistPathBySrcPath(combineLessPath);
                   }
-                  const distPath = path.dirname(path.join(component.packageDirAbs, this.distDir, distFile));
+                  const distPath = path.dirname(
+                    path.join(component.packageDirAbs, this.distDir, distFile)
+                  );
                   deps.push(`@import '${path.relative(distPath, targetPath)}';`);
                 }
 
