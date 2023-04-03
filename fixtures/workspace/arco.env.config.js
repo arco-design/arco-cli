@@ -41,14 +41,16 @@ module.exports = function defineConfig(envId) {
     },
     less: {
       combine: {
-        filename: 'style/dist.less'
+        filename: '../../dist/style/index.less'
       },
       lessOptions: {
         plugins: [new NpmPluginImport({ prefix: '~' })],
       },
     },
     sass: {
-      combine: true,
+      combine: {
+        filename: '../../dist/style/dist.scss'
+      },
       sassOptions: {}
     }
   };

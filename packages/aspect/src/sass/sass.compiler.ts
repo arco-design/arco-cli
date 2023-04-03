@@ -2,7 +2,7 @@ import os from 'os';
 import path from 'path';
 import fs from 'fs-extra';
 import minimatch from 'minimatch';
-import { compile } from 'sass';
+import { compile, compileString } from 'sass';
 import { Compiler } from '@arco-cli/service/dist/compiler';
 import { BuildContext, BuildTaskResult } from '@arco-cli/service/dist/builder';
 import {
@@ -48,14 +48,18 @@ export class SassCompiler implements Compiler {
   }
 
   async build(context: BuildContext): Promise<BuildTaskResult> {
+    const workspaceNodeModulePath = path.resolve(context.workspace.path, 'node_modules');
     const result = await Promise.all(
       context.components.map(async (component) => {
+        const packageNodeModulePath = path.resolve(component.packageDirAbs, 'node_modules');
         const componentResult = {
           id: component.id,
           errors: [],
         };
-        let targetCssPath: string;
-        let targetSassPath: string;
+        let combineCssPath: string;
+        let combineSassPath: string;
+        const deps: string[] = [];
+
         await Promise.all(
           component.files
             .filter((file) => {
@@ -69,29 +73,23 @@ export class SassCompiler implements Compiler {
             .map(async (file) => {
               try {
                 const cssFile = compile(file.path, this.sassOptions).css;
-                const targetPath = path.join(
-                  component.packageDirAbs,
-                  this.distDir,
-                  this.getDistPathBySrcPath(file.relative)
-                );
+                const targetPath = path.join(component.packageDirAbs, this.distDir, file.relative);
+                const targetCssPath = this.getDistPathBySrcPath(targetPath);
 
-                await fs.ensureFile(targetPath);
-                await fs.writeFile(targetPath, cssFile);
+                await fs.ensureFile(targetCssPath);
+                await fs.writeFile(targetCssPath, cssFile);
 
                 if (this.combine) {
                   const distFile =
                     typeof this.combine === 'object' && this.combine.filename
                       ? this.combine.filename
                       : 'style/index.scss';
-                  targetSassPath = path.join(component.packageDirAbs, this.distDir, distFile);
-                  if (!targetCssPath) {
-                    targetCssPath = this.getDistPathBySrcPath(targetSassPath);
+                  combineSassPath = path.join(component.packageDirAbs, this.distDir, distFile);
+                  if (!combineCssPath) {
+                    combineCssPath = this.getDistPathBySrcPath(combineSassPath);
                   }
-                  await fs.ensureFile(targetSassPath);
-                  await fs.appendFile(
-                    targetSassPath,
-                    `@import '${path.relative(this.distDir, file.relative)}';${os.EOL}`
-                  );
+                  const distPath = path.dirname(path.join(component.packageDirAbs, this.distDir, distFile));
+                  deps.push(`@import '${path.relative(distPath, targetPath)}';`);
                 }
 
                 if (this.shouldCopySourceFiles) {
@@ -107,11 +105,16 @@ export class SassCompiler implements Compiler {
         );
 
         if (this.combine) {
-          const css = compile(targetSassPath, this.sassOptions).css;
-          await fs.ensureFile(targetCssPath);
-          await fs.writeFile(targetCssPath, css);
+          const content = deps.join(os.EOL);
+          await fs.ensureFile(combineSassPath);
+          await fs.writeFile(combineSassPath, content);
+          const { css } = compileString(content, {
+            loadPaths: [path.dirname(combineSassPath), packageNodeModulePath, workspaceNodeModulePath],
+            ...this.sassOptions
+          });
+          await fs.ensureFile(combineCssPath);
+          await fs.writeFile(combineCssPath, css);
         }
-
 
         return componentResult;
       })
