@@ -48,7 +48,9 @@ module.exports = function defineConfig(envId) {
       },
     },
     sass: {
-      combine: true,
+      combine: {
+        filename: 'style/dist.scss'
+      },
       sassOptions: {}
     }
   };
