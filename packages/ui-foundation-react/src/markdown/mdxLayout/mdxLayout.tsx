@@ -4,7 +4,7 @@ import { MDXProvider, MDXProviderComponents } from '@mdx-js/react';
 import classNames from 'classnames';
 import { DEFAULT_MDX_COMPONENTS } from '../components';
 
-import '../style/markdown.css';
+// import '../style/markdown.css';
 import styles from './mdxLayout.module.scss';
 
 const MARKDOWN_BODY_CLASSNAME = 'markdown-body';
