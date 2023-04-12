@@ -1,9 +1,8 @@
-import os from 'os';
 import path from 'path';
-import fs from 'fs-extra';
 import minimatch from 'minimatch';
-import { compile, compileString } from 'sass';
+import { compile } from 'sass';
 import { Compiler } from '@arco-cli/service/dist/compiler';
+import { compileStyle } from '@arco-cli/service/dist/compiler/utils/compileStyle';
 import { BuildContext, BuildTaskResult } from '@arco-cli/service/dist/builder';
 import {
   DEFAULT_BUILD_IGNORE_PATTERNS,
@@ -52,75 +51,27 @@ export class SassCompiler implements Compiler {
     const result = await Promise.all(
       context.components.map(async (component) => {
         const packageNodeModulePath = path.resolve(component.packageDirAbs, 'node_modules');
-        const componentResult = {
-          id: component.id,
-          errors: [],
-        };
-        let combineCssPath: string;
-        let combineSassPath: string;
-        const deps: string[] = [];
-
-        await Promise.all(
-          component.files
-            .filter((file) => {
-              for (const pattern of this.ignorePatterns) {
-                if (minimatch(file.path, pattern)) {
-                  return false;
-                }
+        const componentResult = await compileStyle({
+          component,
+          distDir: this.distDir,
+          shouldCopySourceFiles: this.shouldCopySourceFiles,
+          rawFileExt: 'sass',
+          combine: this.combine,
+          compile: async ({ pathOrigin }) => {
+            return compile(pathOrigin, {
+              loadPaths: [path.dirname(pathOrigin), packageNodeModulePath, workspaceNodeModulePath],
+              ...this.sassOptions,
+            }).css;
+          },
+          filter: (file) => {
+            for (const pattern of this.ignorePatterns) {
+              if (minimatch(file.path, pattern)) {
+                return false;
               }
-              return this.isFileSupported(file.path);
-            })
-            .map(async (file) => {
-              try {
-                const cssFile = compile(file.path, this.sassOptions).css;
-                const targetPath = path.join(component.packageDirAbs, this.distDir, file.relative);
-                const targetCssPath = this.getDistPathBySrcPath(targetPath);
-
-                await fs.ensureFile(targetCssPath);
-                await fs.writeFile(targetCssPath, cssFile);
-
-                if (this.combine) {
-                  const distFile =
-                    typeof this.combine === 'object' && this.combine.filename
-                      ? this.combine.filename
-                      : 'style/index.scss';
-                  combineSassPath = path.join(component.packageDirAbs, this.distDir, distFile);
-                  if (!combineCssPath) {
-                    combineCssPath = this.getDistPathBySrcPath(combineSassPath);
-                  }
-                  const distPath = path.dirname(
-                    path.join(component.packageDirAbs, this.distDir, distFile)
-                  );
-                  deps.push(`@import '${path.relative(distPath, targetPath)}';`);
-                }
-
-                if (this.shouldCopySourceFiles) {
-                  await fs.copyFile(
-                    file.path,
-                    path.join(component.packageDirAbs, this.distDir, file.relative)
-                  );
-                }
-              } catch (err) {
-                componentResult.errors.push(err);
-              }
-            })
-        );
-
-        if (this.combine) {
-          const content = deps.join(os.EOL);
-          await fs.ensureFile(combineSassPath);
-          await fs.writeFile(combineSassPath, content);
-          const { css } = compileString(content, {
-            loadPaths: [
-              path.dirname(combineSassPath),
-              packageNodeModulePath,
-              workspaceNodeModulePath,
-            ],
-            ...this.sassOptions,
-          });
-          await fs.ensureFile(combineCssPath);
-          await fs.writeFile(combineCssPath, css);
-        }
+            }
+            return this.isFileSupported(file.path);
+          },
+        });
 
         return componentResult;
       })

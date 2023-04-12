@@ -35,6 +35,13 @@ export interface CompilerOptions {
   artifactName?: string;
 }
 
+export interface StyleCompilerOptions {
+  /**
+   * whether to combine all raw style files to one
+   */
+  combine?: boolean | { filename: string };
+}
+
 export interface Compiler extends CompilerOptions {
   /**
    * id of the compiler.

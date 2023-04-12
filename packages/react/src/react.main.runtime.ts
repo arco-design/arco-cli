@@ -22,8 +22,8 @@ import {
   TypescriptAspect,
   TypescriptMain,
 } from '@arco-cli/aspect/dist/typescript';
-import { SassAspect, SassMain } from '@arco-cli/aspect/dist/sass';
-import { LessAspect, LessMain } from '@arco-cli/aspect/dist/less';
+import { SassAspect, SassCompilerOptions, SassMain } from '@arco-cli/aspect/dist/sass';
+import { LessAspect, LessCompilerOptions, LessMain } from '@arco-cli/aspect/dist/less';
 import { WorkspaceAspect, Workspace } from '@arco-cli/aspect/dist/workspace';
 import type { BundlerContext, DevServerContext } from '@arco-cli/aspect/dist/bundler';
 import { DEFAULT_ENV_CONFIG_PATH } from '@arco-cli/legacy/dist/constants';
@@ -41,14 +41,8 @@ type UseBuildPileModifiers = {
     tsModule?: any;
     buildConfig?: TsConfigTransformer[];
   };
-  less?: {
-    lessOptions?: Record<string, any>;
-    combine?: boolean | { filename: string };
-  };
-  sass?: {
-    sassOptions?: Record<string, any>;
-    combine?: boolean | { filename: string };
-  };
+  less?: Pick<LessCompilerOptions, 'lessOptions' | 'combine'>;
+  sass?: Pick<SassCompilerOptions, 'sassOptions' | 'combine'>;
 };
 
 type UseJestModifiers = {
