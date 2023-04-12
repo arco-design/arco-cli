@@ -87,7 +87,14 @@ export function devConfig(
           throw new Error('webpack-dev-server is not defined');
         }
         const addr = devServer.server.address();
-        openBrowser(typeof addr === 'string' ? addr : `http://${addr.address}:${addr.port}`);
+        const ipListOfLocalhost = ['::1', '127.0.0.1'];
+        openBrowser(
+          typeof addr === 'string'
+            ? addr
+            : `http://${
+                ipListOfLocalhost.indexOf(addr.address) > -1 ? 'localhost' : ipListOfLocalhost
+              }:${addr.port}`
+        );
       },
       static: [
         {
