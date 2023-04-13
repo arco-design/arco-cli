@@ -7,7 +7,7 @@ import cs from 'classnames';
 import { Heading } from '../components/heading';
 import { CodeSnippet } from '../components/snippet/codeSnippet';
 
-// import '../style/markdown.css';
+import '../style/markdown.css';
 import styles from './markdownLive.module.scss';
 
 const MARKDOWN_BODY_CLASSNAME = 'markdown-body';
