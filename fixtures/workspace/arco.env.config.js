@@ -3,7 +3,10 @@ const NpmPluginImport = require('less-plugin-npm-import');
 // const ArcoWebpackPlugin = require('@arco-plugins/webpack-react');
 
 module.exports = function defineConfig(envId) {
-  return {
+  /**
+   * @type {import('../../packages/arco/src/types').ArcoEnvConfig}
+   */
+  const config = {
     jest: {
       jestConfigPath: path.resolve(__dirname, './jest.config.js'),
     },
@@ -52,4 +55,6 @@ module.exports = function defineConfig(envId) {
       sassOptions: {}
     }
   };
+
+  return config;
 };

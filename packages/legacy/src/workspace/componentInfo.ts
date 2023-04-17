@@ -6,38 +6,70 @@ import { DEFAULT_TEST_FILE_PATTERNS, PACKAGE_JSON } from '../constants';
 export type ComponentAspectConfig = { [aspectId: string]: Record<string, any> | '-' };
 
 export type ComponentConfig = {
-  // root dir of package source code, relative path to workspace
+  /**
+   * root dir of package source code, relative path to workspace
+   */
   rootDir: string;
-  // name of component
+  /**
+   * name of component
+   */
   name: string;
-  // author of component
+  /**
+   * author of component
+   */
   author?: string;
-  // labels of component
+  /**
+   * labels of component
+   */
   labels?: string[];
-  // material group id of component
+  /**
+   * material group id of component
+   */
   group?: number;
-  // url of code repository
+  /**
+   * url of code repository
+   */
   repository?: string;
-  // url of ui resource
+  /**
+   * url of ui resource, like a figma address
+   */
   uiResource?: string;
-  // entry file info of component
+  /**
+   * entry file info of component
+   */
   entries: {
-    // component dir
-    // "./" by default, but in library-project this path will be "./ComponentName"
+    /**
+     * component dir. "./" by default, but in library-project this path should be "./ComponentName"
+     */
     base?: string;
-    // component entry, will be path.join(rootDir, entries.base, entries.main)
+    /**
+     * component main entry, should be path.join(rootDir, entries.base, entries.main)
+     */
     main?: string;
-    // style entry
+    /**
+     * main entry for component style
+     */
     style?: string;
-    // preview entry
+    /**
+     * main entry for component preview
+     */
     preview?: string;
-    // jsdoc parse entry
+    /**
+     * entries for component TS document parsing
+     */
     jsdoc?: string | string[];
-    // file path pattern for unit test
+    /**
+     * file path pattern for unit test
+     */
     testFilePatterns?: string[];
-    // slot for extra document other than component preview
+    /**
+     * slot for extra document other than component preview, like document for changelog or quick-start
+     */
     extraDocs?: Array<{ title: string; entry: string }>;
   };
+  /**
+   * specifies the aspect configuration applied to component
+   */
   config: ComponentAspectConfig;
 };
 
