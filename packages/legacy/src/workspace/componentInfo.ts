@@ -32,7 +32,7 @@ export type ComponentConfig = {
     // preview entry
     preview?: string;
     // jsdoc parse entry
-    jsdoc?: string;
+    jsdoc?: string | string[];
     // file path pattern for unit test
     testFilePatterns?: string[];
     // slot for extra document other than component preview

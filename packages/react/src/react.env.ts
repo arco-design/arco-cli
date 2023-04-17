@@ -186,19 +186,21 @@ export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
     return require.resolve('@arco-cli/ui-foundation-react/dist/preview/index.js');
   }
 
-  getDocsMetadata(file: SourceFile) {
-    if (!file?.contents) return [];
+  getDocsMetadata(files: SourceFile[]) {
+    return files.reduce((acc, file) => {
+      if (!file?.contents) return acc;
 
-    const hash = sha1(file.contents);
-    if (this.docMetadataCache[file.path]?.hash !== hash) {
-      const docletList = parser(file);
-      this.docMetadataCache[file.path] = {
-        hash,
-        docletList,
-      };
-    }
+      const hash = sha1(file.contents);
+      if (this.docMetadataCache[file.path]?.hash !== hash) {
+        const docletList = parser(file);
+        this.docMetadataCache[file.path] = {
+          hash,
+          docletList,
+        };
+      }
 
-    return this.docMetadataCache[file.path].docletList;
+      return acc.concat(this.docMetadataCache[file.path].docletList);
+    }, [] as Doclet[]);
   }
 
   getPreviewConfig() {

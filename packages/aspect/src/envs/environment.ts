@@ -1,4 +1,5 @@
 import { EnvPreviewConfig } from '@arco-cli/service/dist/preview';
+import type { SourceFile } from '@arco-cli/legacy/dist/workspace/component/sources';
 
 import { Bundler, BundlerContext } from '@aspect/bundler';
 
@@ -59,7 +60,7 @@ export interface PreviewEnv extends Environment {
   /**
    * Return metadata of current component document, like properties info
    */
-  getDocsMetadata?: (file: any) => unknown;
+  getDocsMetadata?: (files: SourceFile[]) => unknown;
 
   /**
    * Returns a bundler for the preview.

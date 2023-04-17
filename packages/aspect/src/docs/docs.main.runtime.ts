@@ -112,12 +112,23 @@ export class DocsMain {
    */
   getMetadata(components: Component[], env: Environment) {
     return ComponentMap.as<Record<string, any>>(components, (component) => {
-      const jsdocEntries = component.entries.jsdoc
-        ? component.files.find(
-            (file) => file.relative === path.join(component.entries.base, component.entries.jsdoc)
-          )
-        : [];
-      return env.getDocsMetadata?.(jsdocEntries);
+      let jsdocEntryFiles = [];
+
+      if (component.entries.jsdoc) {
+        jsdocEntryFiles = (
+          Array.isArray(component.entries.jsdoc)
+            ? component.entries.jsdoc
+            : [component.entries.jsdoc]
+        )
+          .map((jsdocEntry) => {
+            return component.files.find(
+              (file) => file.relative === path.join(component.entries.base, jsdocEntry)
+            );
+          })
+          .filter(Boolean);
+      }
+
+      return env.getDocsMetadata?.(jsdocEntryFiles);
     });
   }
 

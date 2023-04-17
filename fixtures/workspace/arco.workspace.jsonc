@@ -12,7 +12,7 @@
           "base": ".",
           "main": "./index.ts",
           "style": "./style/index.less",
-          "jsdoc": "./interface.ts",
+          "jsdoc": ["./interface.ts", "./index.ts"],
           "preview": "./__docs__/index.mdx",
           "extraDocs": [
             {
