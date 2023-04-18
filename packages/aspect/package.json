@@ -23,6 +23,7 @@
     "@arco-cli/ui-foundation-react": "^2.0.0-alpha.21",
     "@arco-design/web-react": "^2.42.2",
     "@babel/runtime": "^7.20.6",
+    "@jest/test-result": "^29.5.0",
     "@mdx-js/mdx": "^1.6.22",
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",

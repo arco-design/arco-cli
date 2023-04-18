@@ -1,11 +1,11 @@
 import { ExecutionContext } from '@arco-cli/aspect/dist/envs';
+import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
 
 export class Tests {
-  constructor() {}
+  constructor(public componentResults: ComponentResult[]) {}
 
-  get errors(): Error[] {
-    // TODO errors
-    return [];
+  get errors(): Array<string | Error> {
+    return this.componentResults.map((comp) => comp.errors).flat(1);
   }
 }
 

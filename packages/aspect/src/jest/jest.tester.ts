@@ -1,8 +1,13 @@
 import path from 'path';
 import type jest from 'jest';
 import { readFileSync } from 'fs-extra';
+import { TestResult as JestTestResult } from '@jest/test-result';
 import { Tester, TesterContext, Tests } from '@arco-cli/service/dist/tester';
 import { parseCliRawArgs } from '@arco-cli/core/dist/cli/utils';
+import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
+import { ComponentMap } from '@aspect/component';
+
+import { JestError } from './exceptions';
 
 export type JestTesterOptions = {
   /**
@@ -80,6 +85,43 @@ export class JestTester implements Tester {
     return this.jestModule.getVersion();
   }
 
+  private getErrors(testResult: JestTestResult[]): JestError[] {
+    return testResult.reduce((errors: JestError[], test) => {
+      if (test.testExecError) {
+        const { message, stack, code, type } = test.testExecError;
+        errors.push(new JestError(message, stack, code, type));
+      } else if (test.failureMessage) {
+        errors.push(new JestError(test.failureMessage));
+      }
+      return errors;
+    }, []);
+  }
+
+  private attachTestsToComponent(testerContext: TesterContext, testResults: JestTestResult[]) {
+    return ComponentMap.as(testerContext.components, (component) => {
+      return testResults.filter((test) => {
+        const componentDirAbs = path.join(testerContext.rootPath, component.componentDir);
+        return test.testFilePath.startsWith(componentDirAbs);
+      });
+    });
+  }
+
+  private buildTestsObj(
+    componentTestMap: ComponentMap<JestTestResult[] | undefined>
+  ): ComponentResult[] {
+    return componentTestMap
+      .toArray()
+      .map(([component, testsFiles]) => {
+        return testsFiles?.length
+          ? {
+              id: component.id,
+              errors: this.getErrors(testsFiles),
+            }
+          : null;
+      })
+      .filter(Boolean);
+  }
+
   async test(context: TesterContext): Promise<Tests> {
     const config: jest.Config = {
       rootDir: context.rootPath,
@@ -114,16 +156,17 @@ export class JestTester implements Tester {
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const jestConfig = require(this.jestConfigPath);
-    const withEnv = Object.assign(jestConfig, config);
+    const jestConfigWithSpecs = Object.assign(jestConfig, config);
     const { parsed: jestCliOptions } = parseCliRawArgs('jest', context.rawTesterArgs);
     const testsOutput = await this.jestModule.runCLI(
-      { ...withEnv, ...this.convertJestCliOptions(jestCliOptions) },
+      { ...jestConfigWithSpecs, ...this.convertJestCliOptions(jestCliOptions) },
       [this.jestConfigPath]
     );
 
-    // TODO print test result
-    false && console.log(testsOutput.results.testResults);
+    const testResults = testsOutput.results.testResults;
+    const componentsWithTests = this.attachTestsToComponent(context, testResults);
+    const componentTestResults = this.buildTestsObj(componentsWithTests);
 
-    return new Tests();
+    return new Tests(componentTestResults);
   }
 }
