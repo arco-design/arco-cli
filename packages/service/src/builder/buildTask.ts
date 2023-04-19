@@ -13,12 +13,6 @@ export type TaskLocation = 'start' | 'end';
  */
 export const TaskIdDelimiter = ':';
 
-/**
- * A folder to write artifacts generated during a build task
- * This folder is used in the core envs and excluded by default from the package tar file
- */
-export const ARTIFACTS_DIR = 'artifacts';
-
 export interface BuildTaskResult {
   /**
    * build results for each of the components in the build context.
