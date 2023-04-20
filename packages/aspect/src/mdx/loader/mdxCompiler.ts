@@ -13,11 +13,11 @@ import { detectiveEs6 } from '@arco-cli/legacy/dist/workspace/component/dependen
 import { CompileOutput } from './compileOutput';
 import { ImportSpecifier } from './importSpecifier';
 
-export type MDXCompileOptions = {
+export type MDXCompilerOptions = {
   remarkPlugins: any[];
   rehypePlugins: any[];
   compilers: any[];
-  filepath?: string;
+  filePath?: string;
   renderer: string;
   arcoFlavour: boolean;
 };
@@ -36,7 +36,7 @@ import { mdx } from '@mdx-js/react'
 /* @jsx mdx */
 `;
 
-const DEFAULT_OPTIONS: Partial<MDXCompileOptions> = {
+const DEFAULT_OPTIONS: Partial<MDXCompilerOptions> = {
   remarkPlugins: [remarkNotes],
   compilers: [],
   renderer: DEFAULT_RENDERER,
@@ -55,9 +55,9 @@ const DEFAULT_OPTIONS: Partial<MDXCompileOptions> = {
  */
 export function compile(
   content: string,
-  options: Partial<MDXCompileOptions> = {}
+  options: Partial<MDXCompilerOptions> = {}
 ): Promise<CompileOutput> {
-  const contentFile = getFile(content, options.filepath);
+  const contentFile = getFile(content, options.filePath);
   return new Promise((resolve, reject) => {
     const mdxCompiler = createCompiler(options);
     mdxCompiler.process(contentFile, (err: Error | undefined, file: any) => {
@@ -73,9 +73,9 @@ export function compile(
  */
 export function compileSync(
   mdxContent: string,
-  options: Partial<MDXCompileOptions> = {}
+  options: Partial<MDXCompilerOptions> = {}
 ): CompileOutput {
-  const contentFile = getFile(mdxContent, options.filepath);
+  const contentFile = getFile(mdxContent, options.filePath);
   const mdxCompiler = createCompiler(options);
   const file = mdxCompiler.processSync(contentFile);
   return new CompileOutput(file, DEFAULT_RENDERER);
@@ -85,7 +85,7 @@ function getFile(contents: string, path?: string) {
   return path ? vfile({ contents, path }) : vfile(contents);
 }
 
-function createCompiler(opts: Partial<MDXCompileOptions>) {
+function createCompiler(opts: Partial<MDXCompilerOptions>) {
   const options = {
     ...DEFAULT_OPTIONS,
     ...opts,

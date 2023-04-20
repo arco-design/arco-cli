@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const NpmPluginImport = require('less-plugin-npm-import');
 // const ArcoWebpackPlugin = require('@arco-plugins/webpack-react');
 
@@ -13,6 +14,20 @@ module.exports = function defineConfig(envId) {
     webpack: {
       devServerConfig: [
         (config) => {
+          const mdxLoader = config.raw.module.rules
+            .find((rule) => rule.oneOf)
+            ?.oneOf?.find((rule) => rule.test.test('.mdx'))
+            ?.use?.find(({ loader }) => loader.indexOf('/mdx/loader') > -1);
+          if (mdxLoader) {
+            mdxLoader.options.preProcessFile = ({ path: filePath, content }) => {
+              const componentStyleEntry = '../style/index.ts';
+              if (fs.existsSync(path.resolve(path.dirname(filePath), componentStyleEntry))) {
+                return `${content}\nimport '${componentStyleEntry}';`;
+              }
+              return content;
+            };
+          }
+
           return config.merge({
             plugins: [
               // new ArcoWebpackPlugin({
@@ -44,7 +59,7 @@ module.exports = function defineConfig(envId) {
     },
     less: {
       combine: {
-        filename: '../dist/style/dist.less'
+        filename: '../dist/style/dist.less',
       },
       lessOptions: {
         plugins: [new NpmPluginImport({ prefix: '~' })],
@@ -52,8 +67,8 @@ module.exports = function defineConfig(envId) {
     },
     sass: {
       combine: true,
-      sassOptions: {}
-    }
+      sassOptions: {},
+    },
   };
 
   return config;

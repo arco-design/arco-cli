@@ -154,11 +154,11 @@ export class UIMain {
       rootExtensionName,
       config,
     });
-    const filepath = resolve(join(path || __dirname, `${runtimeName}.root${sha1(contents)}.js`));
-    if (!fs.existsSync(filepath)) {
-      fs.outputFileSync(filepath, contents);
+    const filePath = resolve(join(path || __dirname, `${runtimeName}.root${sha1(contents)}.js`));
+    if (!fs.existsSync(filePath)) {
+      fs.outputFileSync(filePath, contents);
     }
-    return filepath;
+    return filePath;
   }
 
   async createRuntime({ port, uiRootName, verbose, pattern }: RuntimeOptions) {

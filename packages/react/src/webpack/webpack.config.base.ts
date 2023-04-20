@@ -112,6 +112,8 @@ export default function (isEnvProduction = false): Configuration {
                 },
                 {
                   loader: require.resolve('@arco-cli/aspect/dist/mdx/loader'),
+                  // don't delete this empty options, it allows user to extend directly
+                  options: {},
                 },
               ],
             },
