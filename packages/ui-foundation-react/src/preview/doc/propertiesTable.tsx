@@ -1,8 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React from 'react';
+import React, { ReactNode, useContext, useEffect, useMemo } from 'react';
 
 import { Table } from '../../baseUI/table';
 import { CodeHighlighter } from '../../baseUI/highlighter';
+import { DocAnchorContext } from '../../markdown/components/docAnchor';
 
 import styles from './propertiesTable.module.scss';
 
@@ -27,31 +28,58 @@ export type Doclet = {
   properties?: DocProp[];
 };
 
+type AnchorInfo = { depth: number; text: string };
+
 interface PropertiesTableProps {
   doclet: Doclet[];
 }
 
 export function PropertiesTable({ doclet }: PropertiesTableProps) {
-  if (!doclet?.length) return null;
+  const { updateAnchorList } = useContext(DocAnchorContext);
 
-  return (
-    <div className={styles.propertiesTable}>
-      <h1 id="API">API</h1>
-      {doclet.map(({ name, type, properties }, index) => {
-        return (
-          <div key={index} className={styles.table}>
-            <h2 id={name} className={styles.tableTitle}>
-              {name}
-            </h2>
+  const anchorList = useMemo<Array<AnchorInfo & { content: ReactNode }>>(() => {
+    const list = [];
 
-            {type ? <CodeHighlighter language="typescript">{type}</CodeHighlighter> : null}
+    if (doclet?.length) {
+      const apiTitleText = 'API';
+      list.push({
+        text: apiTitleText,
+        depth: 1,
+        content: (
+          <h1 id={apiTitleText} key={apiTitleText}>
+            {apiTitleText}
+          </h1>
+        ),
+      });
+      list.push(
+        ...doclet.map(({ name, type, properties }, index) => ({
+          text: name,
+          depth: 2,
+          content: (
+            <div key={index} className={styles.table}>
+              <h2 id={name} className={styles.tableTitle}>
+                {name}
+              </h2>
 
-            {properties.length ? (
-              <Table headings={['name', 'type', 'default', 'description']} rows={properties} />
-            ) : null}
-          </div>
-        );
-      })}
-    </div>
-  );
+              {type ? <CodeHighlighter language="typescript">{type}</CodeHighlighter> : null}
+
+              {properties.length ? (
+                <Table headings={['name', 'type', 'default', 'description']} rows={properties} />
+              ) : null}
+            </div>
+          ),
+        }))
+      );
+    }
+
+    return list;
+  }, [doclet]);
+
+  useEffect(() => {
+    updateAnchorList(anchorList.map(({ text, depth }) => ({ text, depth })));
+  }, [doclet]);
+
+  return anchorList.length ? (
+    <div className={styles.propertiesTable}>{anchorList.map(({ content }) => content)}</div>
+  ) : null;
 }
