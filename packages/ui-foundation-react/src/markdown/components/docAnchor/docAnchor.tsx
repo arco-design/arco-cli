@@ -1,61 +1,76 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
 
-import { DocAnchorContext } from './docAnchorContext';
 import { textToHTMLId } from '../heading';
+import { DocAnchorContext } from './docAnchorContext';
+import { CLASSNAME_MARKDOWN_CONTENT } from '../../../constants';
 
 import styles from './docAnchor.module.scss';
-
-interface DocAnchorProps {
-  outlineJsonStr: string;
-}
 
 // only allow to render one anchor in single page
 let pageUniqueAnchorId = null;
 
-export function DocAnchor({ outlineJsonStr }: DocAnchorProps) {
+export function DocAnchor() {
   const { anchorList: anchorListFromContext, updateAnchorList } = useContext(DocAnchorContext);
 
-  const thisAnchorId = useMemo<string>(() => {
-    return Math.random().toFixed(10).slice(2);
+  const refHeadingQueryTimer = useRef(null);
+
+  // only allow to render one anchor in the same page
+  const isTheOnlyAnchorToRender = useMemo<boolean>(() => {
+    const thisId = Math.random().toFixed(10).slice(2);
+    if (!pageUniqueAnchorId) {
+      pageUniqueAnchorId = thisId;
+    }
+    return thisId === pageUniqueAnchorId;
   }, []);
 
   useEffect(() => {
-    try {
-      const anchorListFromProps = JSON.parse(outlineJsonStr);
-      // append all anchor info from mdx contents to context
-      // we will render anchors according to context anchor list info
-      updateAnchorList(anchorListFromProps);
-    } catch (e) {}
-  }, [outlineJsonStr]);
+    if (isTheOnlyAnchorToRender) {
+      refHeadingQueryTimer.current = setInterval(() => {
+        const titles = document
+          .querySelector(`.${CLASSNAME_MARKDOWN_CONTENT}`)
+          ?.querySelectorAll('h1, h2');
+        if (titles?.length) {
+          updateAnchorList(
+            [...titles]
+              .map((title) => {
+                return {
+                  id: title.getAttribute('id'),
+                  text: title.textContent,
+                  depth: +title.tagName.slice(-1),
+                };
+              })
+              .filter(({ id }) => !!id),
+            'prepend'
+          );
+          window.clearInterval(refHeadingQueryTimer.current);
+        }
+      }, 200);
+    }
+
+    return () => {
+      window.clearInterval(refHeadingQueryTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
       // reset page unique anchor id to null after this anchor destroyed
-      if (thisAnchorId === pageUniqueAnchorId) {
+      if (isTheOnlyAnchorToRender) {
         pageUniqueAnchorId = null;
       }
     };
   }, []);
 
-  if (!pageUniqueAnchorId) {
-    pageUniqueAnchorId = thisAnchorId;
-  }
-
-  // only allow to render one anchor in the same page
-  if (thisAnchorId !== pageUniqueAnchorId) {
-    return null;
-  }
-
-  return anchorListFromContext.length ? (
+  return isTheOnlyAnchorToRender && anchorListFromContext.length ? (
     <ul className={styles.docAnchor}>
-      {anchorListFromContext.map(({ depth, text }, index) => {
+      {anchorListFromContext.map(({ depth, text, id }, index) => {
         return (
           <li key={index}>
             <a
               className={styles.anchor}
               style={{ marginLeft: 16 * (depth - 1) }}
-              href={`#${textToHTMLId(text)}`}
+              href={`#${id || textToHTMLId(text)}`}
             >
               {text}
             </a>

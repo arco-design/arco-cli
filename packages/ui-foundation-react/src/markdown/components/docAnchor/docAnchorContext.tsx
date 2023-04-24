@@ -2,7 +2,7 @@
 import React, { PropsWithChildren, useMemo, useState } from 'react';
 
 export type DocAnchorContextType = {
-  anchorList: Array<{ text: string; depth: number }>;
+  anchorList: Array<{ text: string; depth: number; id?: string }>;
   updateAnchorList: (
     anchorList: DocAnchorContextType['anchorList'],
     method?: 'overwrite' | 'prepend' | 'append'

@@ -175,7 +175,7 @@ function extractHeadings() {
     file.data.headings = headings;
     tree.children.push({
       type: 'jsx',
-      value: `<${COMPONENT_NAME_DOC_ANCHOR} outlineJsonStr={\`${JSON.stringify(headings)}\`} />`,
+      value: `<${COMPONENT_NAME_DOC_ANCHOR} />`,
     });
   };
 }

@@ -2,6 +2,8 @@
 import React, { ComponentType } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
+import { CLASSNAME_MARKDOWN_CONTENT } from '../../constants';
+
 interface DocsContentProps {
   doc?: ComponentType;
 }
@@ -19,7 +21,9 @@ export function Content({ doc }: DocsContentProps) {
   const Content: any = typeof doc === 'function' ? doc : () => null;
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Content />
+      <div className={CLASSNAME_MARKDOWN_CONTENT}>
+        <Content />
+      </div>
     </ErrorBoundary>
   );
 }
