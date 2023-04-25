@@ -1,3 +1,7 @@
 {
-  "extends": "../../../../packages/react/dist/typescript/tsconfig.json"
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "experimentalDecorators": false
+  },
+  "include": ["src"]
 }

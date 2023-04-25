@@ -16,8 +16,10 @@ import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 import { TypescriptCompilerOptions } from './compilerOptions';
 import TypescriptAspect from './typescript.aspect';
 import { tsconfigMergeCustomizer } from './typescriptConfigMutator';
+import { flatTSConfig } from './utils/flatTSConfig';
 
 const FILENAME_TSCONFIG = 'tsconfig.json';
+const FILENAME_TSCONFIG_BUILD = 'tsconfig.build.json';
 
 export class TypescriptCompiler implements Compiler {
   displayName = 'TypeScript';
@@ -67,11 +69,18 @@ export class TypescriptCompiler implements Compiler {
         const tsconfig: Record<string, any> = cloneDeep(this.options.tsconfig);
 
         // try to merge tsconfig.json from component package
+        // we will find file named tsconfig.json/tsconfig.build.json from package dir
         try {
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const tsconfigFromPackage = require(`${packageDirAbs}/tsconfig.json`);
-          mergeWith(tsconfig, tsconfigFromPackage, tsconfigMergeCustomizer);
-        } catch (e) {}
+          const tsconfigPathFromPackage = [FILENAME_TSCONFIG, FILENAME_TSCONFIG_BUILD]
+            .map((filename) => path.join(packageDirAbs, filename))
+            .find((filePathAbs) => fs.existsSync(filePathAbs));
+          if (tsconfigPathFromPackage) {
+            const tsconfigFromPackage = flatTSConfig(tsconfigPathFromPackage);
+            mergeWith(tsconfig, tsconfigFromPackage, tsconfigMergeCustomizer);
+          }
+        } catch (err) {
+          this.logger.consoleFailure(err.toString());
+        }
 
         // avoid change this.options.config directly
         // different components might have different ts configs
@@ -88,19 +97,24 @@ export class TypescriptCompiler implements Compiler {
           tsconfigMergeCustomizer
         );
 
-        // convert tsconfig.extends to absolute path
-        if (tsconfig.extends && !path.isAbsolute(tsconfig.extends)) {
-          tsconfig.extends = path.resolve(packageDirAbs, tsconfig.extends);
-        }
-
-        // convert tsconfig.exclude to absolute path
-        if (Array.isArray(tsconfig.exclude)) {
-          tsconfig.exclude = tsconfig.exclude.map((excludePath) => {
-            return path.isAbsolute(excludePath)
-              ? excludePath
-              : path.resolve(packageDirAbs, excludePath);
+        const convertRelativePathsToAbs = (keysToConvert: string[]) => {
+          Object.entries(tsconfig).forEach(([key, value]) => {
+            if (keysToConvert.indexOf(key) > -1) {
+              if (typeof value === 'string') {
+                tsconfig[key] = path.isAbsolute(value) ? value : path.resolve(packageDirAbs, value);
+              } else if (Array.isArray(value)) {
+                tsconfig[key] = value.map((filePath) => {
+                  return path.isAbsolute(filePath)
+                    ? filePath
+                    : path.resolve(packageDirAbs, filePath);
+                });
+              }
+            }
           });
-        }
+        };
+
+        // convert tsconfig relative paths to absolute path
+        convertRelativePathsToAbs(['include', 'exclude', 'files']);
 
         const tsconfigPath = path.join(
           this.getCacheDir(context),
