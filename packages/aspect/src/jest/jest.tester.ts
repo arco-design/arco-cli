@@ -145,7 +145,10 @@ export class JestTester implements Tester {
           )
         );
         collectCoverageFrom.push(
-          ...[`**/${includeDir}/**/*.[jt]s?(x)`, `!**/${includeDir}/**/{style,__docs__}/*`]
+          ...[
+            path.join('**', includeDir, '**/*.[jt]s?(x)'),
+            path.join('!**', includeDir, '**/{style,__docs__}/*'),
+          ]
         );
       });
 

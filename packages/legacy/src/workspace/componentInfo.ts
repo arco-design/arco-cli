@@ -151,7 +151,7 @@ export class ComponentInfo {
     for (const dirPath of dirsToSearchPkgJson) {
       const packageJsonPath = path.join(dirPath, PACKAGE_JSON);
       if (fs.existsSync(packageJsonPath)) {
-        this.packageDir = path.relative(workspacePath, dirPath);
+        this.packageDir = path.relative(workspacePath, dirPath) || './';
         this.packageDirAbs = dirPath;
         this.packageJson = fs.readJSONSync(packageJsonPath);
         break;
