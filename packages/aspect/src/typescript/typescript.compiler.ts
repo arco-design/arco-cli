@@ -76,6 +76,14 @@ export class TypescriptCompiler implements Compiler {
             .find((filePathAbs) => fs.existsSync(filePathAbs));
           if (tsconfigPathFromPackage) {
             const tsconfigFromPackage = flatTSConfig(tsconfigPathFromPackage);
+            // TSCompilerCJS will compile source files to CommonJS modules
+            // we don't allow package tsconfig to overwrite its module configuration
+            if (
+              tsconfig.compilerOptions.module?.toLowerCase() === 'commonjs' &&
+              tsconfigFromPackage?.compilerOptions?.module
+            ) {
+              delete tsconfigFromPackage.compilerOptions.module;
+            }
             mergeWith(tsconfig, tsconfigFromPackage, tsconfigMergeCustomizer);
           }
         } catch (err) {
