@@ -137,8 +137,10 @@ export class JestTester implements Tester {
       const testMatch: string[] = [];
       const collectCoverageFrom: string[] = [];
 
-      context.components.forEach(({ packageDir, componentDir, entries }) => {
-        const includeDir = context.pattern ? componentDir : packageDir;
+      context.components.forEach(({ rootDir, componentDir, entries }) => {
+        // rootDir is the entry of package source files
+        // find test files from rootDir if no component pattern is specified
+        const includeDir = context.pattern ? componentDir : rootDir;
         testMatch.push(
           ...entries.testFilePatterns.map((testFilePattern) =>
             path.join('**', includeDir, testFilePattern)
