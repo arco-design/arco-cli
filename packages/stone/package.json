@@ -2,6 +2,8 @@
   "name": "@arco-cli/stone",
   "version": "2.0.0-alpha.2",
   "description": "Plugin system for Arco cli",
+  "homepage": "https://github.com/arco-design/arco-cli",
+  "repository": "https://github.com/arco-design/arco-cli",
   "main": "./dist/index.js",
   "scripts": {
     "dev": "sh ../../scripts/build.sh dev",

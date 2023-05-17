@@ -1,6 +1,8 @@
 {
   "name": "@arco-cli/core",
   "version": "2.0.0-alpha.17",
+  "homepage": "https://github.com/arco-design/arco-cli",
+  "repository": "https://github.com/arco-design/arco-cli",
   "main": "./dist/index.js",
   "scripts": {
     "dev": "sh ../../scripts/build.sh dev",

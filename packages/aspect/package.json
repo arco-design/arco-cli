@@ -1,6 +1,8 @@
 {
   "name": "@arco-cli/aspect",
   "version": "2.0.0-alpha.27",
+  "homepage": "https://github.com/arco-design/arco-cli",
+  "repository": "https://github.com/arco-design/arco-cli",
   "main": "./dist/index.js",
   "scripts": {
     "dev": "sh ../../scripts/build.sh dev",
