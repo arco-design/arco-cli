@@ -1,22 +1,6 @@
 .propRow {
   border-bottom: 1px solid var(--preview-color-border);
   padding: 8px 20px;
-
-  &.singleColumn {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-.mobileTitle {
-  display: none;
-
-  &.show {
-    display: flex;
-    min-width: 110px;
-    color: var(--preview-color-text-2);
-    font-weight: bold;
-    text-transform: uppercase;
-  }
 }
 
 .column {

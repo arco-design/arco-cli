@@ -61,10 +61,17 @@ export function PropertiesTable({ doclet }: PropertiesTableProps) {
                 {name}
               </h2>
 
-              {type ? <CodeHighlighter language="typescript">{type}</CodeHighlighter> : null}
+              {type ? (
+                <CodeHighlighter className={styles.highlightCodes} language="typescript">
+                  {type}
+                </CodeHighlighter>
+              ) : null}
 
               {properties.length ? (
-                <Table headings={['name', 'type', 'default', 'description']} rows={properties} />
+                <Table
+                  headings={['name', 'type', 'default', 'description']}
+                  rows={properties.map((p) => ({ ...p, default: p.defaultValue }))}
+                />
               ) : null}
             </div>
           ),
