@@ -1,17 +1,15 @@
-import path from 'path';
-import yaml from 'yaml';
-import glob from 'glob';
 import vfile from 'vfile';
-import fs from 'fs-extra';
 import mdx from '@mdx-js/mdx';
 import detectFrontmatter from 'remark-frontmatter';
-import visit from 'unist-util-visit';
-import remove from 'unist-util-remove';
 import remarkNotes from 'remark-admonitions';
-import { detectiveEs6 } from '@arco-cli/legacy/dist/workspace/component/dependencies/detectives';
 
+import {
+  extractComponentDemos,
+  extractHeadings,
+  extractImports,
+  extractMetadata,
+} from './remarkPlugins';
 import { CompileOutput } from './compileOutput';
-import { ImportSpecifier } from './importSpecifier';
 
 export type MDXCompilerOptions = {
   remarkPlugins: any[];
@@ -95,8 +93,8 @@ function createCompiler(opts: Partial<MDXCompilerOptions>) {
         [detectFrontmatter, ['yaml']],
         extractMetadata,
         extractImports,
-        extractHeadings,
-        extractComponentDemos,
+        extractHeadings.bind(null, COMPONENT_NAME_DOC_ANCHOR),
+        extractComponentDemos.bind(null, COMPONENT_NAME_DEMO_VIEW),
       ]
     : [extractImports];
   const mustRehypePlugins = [];
@@ -109,117 +107,4 @@ function createCompiler(opts: Partial<MDXCompilerOptions>) {
   });
 
   return mdx.createCompiler(compilerOpts);
-}
-
-function extractMetadata() {
-  return function transformer(tree, file) {
-    visit(tree, 'yaml', (node: any) => {
-      try {
-        file.data.frontmatter = yaml.parse(node.value, { prettyErrors: true });
-      } catch (err: any) {
-        throw new Error(
-          `failed extracting metadata/front-matter using Yaml lib, due to an error (please disregard the line/column): ${err.message}`
-        );
-      }
-    });
-
-    remove(tree, 'yaml');
-  };
-}
-
-function extractImports() {
-  return function transformer(tree, file) {
-    visit(tree, 'import', (node: any) => {
-      const es6Import = detectiveEs6(node.value);
-      const imports: ImportSpecifier[] = Object.keys(es6Import).flatMap((dep) => {
-        if (!es6Import[dep].importSpecifiers) {
-          return {
-            fromModule: dep,
-          };
-        }
-        return es6Import[dep].importSpecifiers.map((importSpecifier) => ({
-          fromModule: dep,
-          identifier: importSpecifier.name,
-          isDefault: importSpecifier.isDefault,
-        }));
-      });
-      (file.data.imports ||= []).push(...imports);
-    });
-  };
-}
-
-function extractHeadings() {
-  const headings = [];
-  const getHeadingText = (node, text = '') => {
-    const nodeTypeHasTextValue = ['inlineCode', 'text'];
-    if (Array.isArray(node.children)) {
-      for (const c of node.children) {
-        text += getHeadingText(c);
-      }
-    } else if (nodeTypeHasTextValue.indexOf(node.type) > -1) {
-      text += node.value;
-    }
-    return text;
-  };
-
-  return function transformer(tree, file) {
-    visit(tree, 'heading', (node: any) => {
-      const text = getHeadingText(node);
-      const heading = {
-        text,
-        depth: node.depth,
-      };
-      headings.push(heading);
-    });
-
-    file.data.headings = headings;
-    tree.children.push({
-      type: 'jsx',
-      value: `<${COMPONENT_NAME_DOC_ANCHOR} />`,
-    });
-  };
-}
-
-// TODO try to solve it: demo file content updating won't trigger mdx compiling, then code-text won't update
-function extractComponentDemos() {
-  return function transformer(tree, file) {
-    const imports = file.data.imports || [];
-
-    // this will visit div like below
-    // <div data-arco-demo="BasicDemo">...anything from user</div>
-    visit(tree, 'jsx', (node: any) => {
-      if (/^<div/i.test(node.value)) {
-        const [, attribute] = node.value.match(/^<div([^>]*)>/i) || [];
-        const metadata: { demo?: string } = {};
-
-        (attribute || '').replace(/data-arco-(\w+)="([^"]+)"/i, (_, key, value) => {
-          metadata[key] = value;
-          return '';
-        });
-
-        let demoCode = '';
-        for (const { identifier, fromModule } of imports) {
-          if (identifier === metadata.demo) {
-            let demoPath = path.join(file.dirname, fromModule);
-            if (!/\.[jt]sx?$/.test(demoPath)) {
-              const [globPath] = glob.sync(`${demoPath}.*`);
-              demoPath = globPath || demoPath;
-            }
-            try {
-              demoCode = fs.readFileSync(demoPath).toString();
-            } catch (e) {}
-
-            break;
-          }
-        }
-
-        if (metadata.demo) {
-          const encoder = new TextEncoder();
-          node.value = `<${COMPONENT_NAME_DEMO_VIEW} children={${
-            node.value
-          }}  code={{ needDecode: true, value: '${encoder.encode(demoCode)}' }} />`;
-        }
-      }
-    });
-  };
 }
