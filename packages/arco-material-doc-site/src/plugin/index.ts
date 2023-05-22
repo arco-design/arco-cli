@@ -173,7 +173,7 @@ export default class ArcoSiteModuleInfoPlugin {
             const demoEntryPath = dependencies.find(
               ({ path }) => this.paths.demo.indexOf(path) > -1
             )?.path;
-            const demoSubmodules = moduleExportInfoMap[demoEntryPath];
+            const demoSubmodules = moduleExportInfoMap[demoEntryPath] || [];
             const commentList = demoCommentMap[demoEntryPath];
             const componentInfo = {
               ...(commentList?.[0] || {}),
