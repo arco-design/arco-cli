@@ -5,7 +5,7 @@ import type { WorkspaceConfig } from '@arco-cli/aspect/dist/workspace';
 /**
  * env config transformers allow user to extend
  */
-export type ArcoEnvConfig = {
+export type ArcoReactEnvConfig = {
   /**
    * extend config of Jest
    */
