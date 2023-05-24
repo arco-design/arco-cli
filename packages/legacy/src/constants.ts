@@ -41,6 +41,12 @@ export const DIR_GLOBAL_CONFIG = path.join(DIR_CACHE_ROOT, 'config');
 
 export const DIR_GLOBAL_LOGS = path.join(DIR_CACHE_ROOT, 'logs');
 
+/**
+ * A folder to write artifacts generated during a build task
+ * This folder is used in the core envs and excluded by default from the package tar file
+ */
+export const DIR_ARTIFACTS = 'artifacts';
+
 export const FILE_GLOBAL_CONFIG = 'config.json';
 
 export const FILE_WORKSPACE_JSONC = 'arco.workspace.jsonc';

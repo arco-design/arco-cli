@@ -8,7 +8,6 @@ export {
   BuildTaskResult,
   TaskLocation,
   BuildTaskHelper,
-  ARTIFACTS_DIR,
 } from './buildTask';
 export { TaskResultsList } from './taskResultsList';
 export { mergeComponentResults } from './mergeComponentResults';
