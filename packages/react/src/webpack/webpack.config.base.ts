@@ -182,7 +182,11 @@ export default function (isEnvProduction = false): Configuration {
                   importLoaders: 1,
                 },
                 preProcessLoaderPath: lessLoaderPath,
-                preProcessLoaderOpts: { lessOptions: {} },
+                preProcessLoaderOpts: {
+                  lessOptions: {
+                    javascriptEnabled: true,
+                  },
+                },
               }),
               sideEffects: true,
             },

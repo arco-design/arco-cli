@@ -14,9 +14,11 @@ import {
   MATERIAL_GENERATION,
   DIR_ARTIFACTS,
   PACKAGE_JSON,
+  CFG_HOST_ARCO_KEY,
 } from '@arco-cli/legacy/dist/constants';
 import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 import { zipFiles } from '@arco-cli/legacy/dist/utils/fs/zipFiles';
+import { getSync } from '@arco-cli/legacy/dist/globalConfig';
 
 import { SyncerAspect } from './syncer.aspect';
 import { SyncCmd } from './sync.cmd';
@@ -150,16 +152,25 @@ export class SyncerMain {
     return uploadResults;
   }
 
-  async sync(components: Component[], currentUserName: string): Promise<ComponentResult[]> {
+  async sync({
+    components,
+    currentUser,
+    skipArtifactsUpload,
+  }: {
+    components: Component[];
+    currentUser: string;
+    skipArtifactsUpload?: boolean;
+  }): Promise<ComponentResult[]> {
+    const hostArco = getSync(CFG_HOST_ARCO_KEY);
     const syncResults: ComponentResult[] = [];
-    const uploadResultMap = await this.uploadPackageFiles(components);
+    const uploadResultMap = skipArtifactsUpload ? {} : await this.uploadPackageFiles(components);
 
     await Promise.all(
       components.map(async (component) => {
-        const uploadResult = uploadResultMap[component.packageName];
+        const uploadResult = uploadResultMap[component.packageName] || { errors: [] };
         const syncResult: ComponentResult = {
           id: component.id,
-          errors: uploadResult?.errors.slice() || [],
+          errors: uploadResult.errors.slice() || [],
         };
         const doc = this.docs.getDoc(component);
         const docManifest = await this.docs.getDocsManifestFromArtifact(component);
@@ -171,7 +182,7 @@ export class SyncerMain {
           repository: component.repository,
           uiResource: component.uiResource,
           group: component.group,
-          author: component.author || currentUserName,
+          author: component.author || currentUser,
           package: {
             name: component.packageName,
             version: component.version,
@@ -210,7 +221,9 @@ export class SyncerMain {
           syncResult.errors.push(error);
           this.logger.consoleFailure();
         } else {
-          this.logger.consoleSuccess();
+          this.logger.consoleSuccess(
+            `${component.id} has successfully synced to https://${hostArco}/material/detail?name=${component.id}`
+          );
         }
 
         syncResults.push(syncResult);

@@ -10,6 +10,10 @@ import { checkUserLogin } from '@arco-cli/legacy/dist/cli/user';
 
 import { SyncerMain } from './syncer.main.runtime';
 
+type SyncOptions = {
+  skipArtifactsUpload?: boolean;
+};
+
 export class SyncCmd implements Command {
   name = 'sync [component-pattern]';
 
@@ -21,11 +25,13 @@ export class SyncCmd implements Command {
 
   group = 'collaborate';
 
-  options = [] as CommandOptions;
+  options = [
+    ['', 'skipArtifactsUpload', 'skip uploading artifacts dir to file server'],
+  ] as CommandOptions;
 
   constructor(private logger: Logger, private syncer: SyncerMain, private workspace: Workspace) {}
 
-  async report([pattern]: [string]): Promise<string> {
+  async report([pattern]: [string], { skipArtifactsUpload }: SyncOptions): Promise<string> {
     if (!this.workspace) throw new WorkspaceNotFoundError();
 
     const components = await this.workspace.getManyByPattern(pattern);
@@ -39,7 +45,11 @@ export class SyncCmd implements Command {
       return chalk.red(CLI_LOGIN_FIRST_TIP);
     }
 
-    const results = await this.syncer.sync(components, user.username);
+    const results = await this.syncer.sync({
+      components,
+      currentUser: user.username,
+      skipArtifactsUpload,
+    });
     const errorMsg = formatComponentResultError(results);
 
     if (errorMsg) {
