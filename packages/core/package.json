@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/core",
-  "version": "2.0.0-alpha.18",
+  "version": "2.0.0-alpha.19",
   "homepage": "https://github.com/arco-design/arco-cli",
   "repository": "https://github.com/arco-design/arco-cli",
   "main": "./dist/index.js",
@@ -17,7 +17,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@arco-cli/legacy": "^2.0.0-alpha.15",
+    "@arco-cli/legacy": "^2.0.0-alpha.16",
     "@arco-cli/stone": "^2.0.0-alpha.3",
     "@babel/runtime": "^7.20.6",
     "@graphql-modules/core": "^0.7.17",
