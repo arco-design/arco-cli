@@ -39,7 +39,7 @@ export interface StyleCompilerOptions {
   /**
    * whether to combine all raw style files to one
    */
-  combine?: boolean | { filename: string };
+  combine?: boolean | { filename: string; sorter: (depPathA: string, depPathB: string) => number };
 }
 
 export interface Compiler extends CompilerOptions {

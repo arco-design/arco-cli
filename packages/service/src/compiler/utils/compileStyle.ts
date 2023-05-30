@@ -59,21 +59,27 @@ export async function compileStyle({
         typeof combine === 'object' && combine.filename
           ? combine.filename
           : `style/index.${rawFileExt}`;
+      const sorter = typeof combine === 'object' ? combine.sorter : null;
       combineFileInfo.rawFilePath ||= path.join(component.packageDirAbs, distDir, combineFilename);
       combineFileInfo.cssFilePath ||= getDistPathBySrcPath(combineFileInfo.rawFilePath);
-      const styleDistDir = path.dirname(combineFileInfo.rawFilePath);
-      // we got an error "semicolons aren't allowed in the indented syntax." while compiling scss
-      // so remove semicolon at end of line
-      combineFileInfo.deps.push(
-        `@import '${path.relative(styleDistDir, fileToCompile.pathTarget)}'${
-          rawFileExt === 'less' ? ';' : ''
-        }`
-      );
+      combineFileInfo.deps.push(fileToCompile.pathTarget);
+      if (typeof sorter === 'function') {
+        combineFileInfo.deps = combineFileInfo.deps.sort(sorter);
+      }
     }
   });
 
   if (combineFileInfo.rawFilePath) {
-    const content = combineFileInfo.deps.join(os.EOL);
+    const styleDistDir = path.dirname(combineFileInfo.rawFilePath);
+    const content = combineFileInfo.deps
+      .map((depPath) => {
+        // we got an error "semicolons aren't allowed in the indented syntax." while compiling scss
+        // so remove semicolon at end of line
+        return `@import '${path.relative(styleDistDir, depPath)}'${
+          rawFileExt === 'less' ? ';' : ''
+        }`;
+      })
+      .join(os.EOL);
     await fs.ensureFile(combineFileInfo.rawFilePath);
     await fs.writeFile(combineFileInfo.rawFilePath, content);
     filesToCompile.push({
