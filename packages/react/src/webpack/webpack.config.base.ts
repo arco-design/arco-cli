@@ -1,5 +1,6 @@
 import 'style-loader';
 import { Configuration } from 'webpack';
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import getCSSModuleLocalIdent from 'react-dev-utils/getCSSModuleLocalIdent';
 import * as stylesRegexps from '@arco-cli/legacy/dist/utils/regexp/style';
 import { generateStyleLoaders, GenerateStyleLoadersOptions } from '@arco-cli/aspect/dist/webpack';
@@ -54,10 +55,16 @@ export default function (isEnvProduction = false): Configuration {
         'react/jsx-runtime': require.resolve('react/jsx-runtime.js'),
         '@mdx-js/react': require.resolve('@mdx-js/react'),
       },
+
+      plugins: [new TsconfigPathsPlugin()],
     },
 
     module: {
-      strictExportPresence: true,
+      parser: {
+        javascript: {
+          importExportsPresence: 'warn',
+        },
+      },
       rules: [
         {
           test: /\.m?js/,

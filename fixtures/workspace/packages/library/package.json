@@ -1,6 +1,6 @@
 {
-  "name": "@byted/hello-world",
-  "version": "1.2.1",
+  "name": "test-for-luffy",
+  "version": "1.0.0",
   "peerDependencies": {
     "react": "~17",
     "@arco-design/web-react": "~2"

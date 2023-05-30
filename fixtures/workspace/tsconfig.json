@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES5"
+    "baseUrl": ".",
+    "target": "ES5",
+    "paths": {
+      "test-for-luffy": ["./packages/library/components"]
+    },
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true
   },
   "include": ["packages"]
 }
