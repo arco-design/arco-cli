@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/react",
-  "version": "2.0.0-alpha.29",
+  "version": "2.0.0-alpha.30",
   "homepage": "https://github.com/arco-design/arco-cli",
   "repository": "https://github.com/arco-design/arco-cli",
   "scripts": {
@@ -17,10 +17,10 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@arco-cli/aspect": "^2.0.0-alpha.29",
+    "@arco-cli/aspect": "^2.0.0-alpha.30",
     "@arco-cli/core": "^2.0.0-alpha.19",
     "@arco-cli/legacy": "^2.0.0-alpha.16",
-    "@arco-cli/service": "^2.0.0-alpha.29",
+    "@arco-cli/service": "^2.0.0-alpha.30",
     "@arco-cli/stone": "^2.0.0-alpha.3",
     "@arco-cli/ui-foundation-react": "^2.0.0-alpha.29",
     "@babel/core": "^7.20.5",
@@ -62,8 +62,8 @@
     "strip-ansi": "^7.0.1",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.6",
-    "tsconfig-paths-webpack-plugin": "^4.0.1",
     "ts-document": "^0.8.0",
+    "tsconfig-paths-webpack-plugin": "^4.0.1",
     "typescript": "^4.9.3",
     "webpack": "^5.75.0",
     "webpack-bundle-analyzer": "^4.8.0"
