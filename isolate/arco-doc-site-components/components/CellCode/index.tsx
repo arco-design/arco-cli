@@ -2,12 +2,14 @@ import React, { PropsWithChildren, ReactNode } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button, Message, Tabs, Tooltip } from '@arco-design/web-react';
 import { IconCopy, IconCodepen, IconCodeSandbox, IconCode } from '@arco-design/web-react/icon';
+// @ts-ignore
+import IconJuejin from './juejin.svg';
 import ClipboardJS from 'clipboard';
 import { getParameters } from 'codesandbox/lib/api/define';
 import Css from './css';
 import Short from './short';
 
-// CodePen
+// CodePen + Juejin
 const CODEPEN_ENABLE = (window as any).CODEPEN_ENABLE;
 const HTML =
   (window as any).CODEPEN_HTML ||
@@ -47,6 +49,7 @@ const locales = {
     collapse: '收起代码',
     codePen: '在 CodePen 打开',
     codeSandbox: '在 CodeSandBox 打开',
+    juejin: '在 码上掘金 打开',
   },
   'en-US': {
     copy: 'Copy',
@@ -55,8 +58,14 @@ const locales = {
     collapse: 'Collapse Code',
     codePen: 'Open in CodePen',
     codeSandbox: 'Open in CodeSandBox',
+    juejin: 'Open in JueJin',
   },
 };
+
+enum PLAYGROUND_TYPE {
+  CODEPEN = 'codepen',
+  JUEJIN = 'juejin',
+}
 
 class CellCode extends React.Component<PropsWithChildren<CellCodeProps>, CellCodeState> {
   private btnCopy = null;
@@ -86,10 +95,9 @@ class CellCode extends React.Component<PropsWithChildren<CellCodeProps>, CellCod
     });
   }
 
-  gotoCodepen = () => {
+  gotoPlayground = (type: PLAYGROUND_TYPE) => () => {
     const codeEle: HTMLElement = (findDOMNode(this) as HTMLElement).querySelector('.language-js');
     const code = codeEle.innerText;
-    // codepen
     const postCode = code
       .replace(/import ([.\s\S]*?) from '([.\s\S]*?)'/g, 'const $1 = window.$2')
       .replace(/@arco-design\/web-react/g, 'arco')
@@ -97,36 +105,46 @@ class CellCode extends React.Component<PropsWithChildren<CellCodeProps>, CellCod
       .replace(/react-dom/, 'ReactDOM')
       .replace(/react/, 'React')
       .replace(/export default ([.\s\S]*?)(;|$)/, 'ReactDOM.render(<$1 />, CONTAINER)');
-    this.post(postCode);
-  };
 
-  getData = (code) => {
-    return {
-      title: 'Cool Pen',
+    const isCodepen = type === PLAYGROUND_TYPE.CODEPEN;
+    const playgroundParams = {
+      title: 'Playground',
       html: HTML,
-      js: code,
+      js: postCode,
       css: this.props.cssCode || '',
-      js_pre_processor: 'typescript',
       css_external: CSS_EXTERNAL.join(';'),
       js_external: JS_EXTERNAL.join(';'),
       editors: '001',
+      ...(isCodepen
+        ? {
+            js_pre_processor: 'typescript',
+          }
+        : {
+            js_pre_processor: 'tsx',
+            ignoreTsCheck: true,
+          }),
     };
+
+    const params = {
+      url: isCodepen ? 'https://codepen.io/pen/define' : 'https://code.juejin.cn/api/define',
+      fieldName: 'data',
+      data: JSON.stringify(playgroundParams).replace(/"/g, '&quot;').replace(/'/g, '&apos;'),
+    };
+
+    this.post(params);
   };
 
-  post = (code, codesandbox?: { url?: string; parameters; name?: string }) => {
+  post = (options: { url: string; data: string; fieldName: string }) => {
+    const { url, data, fieldName } = options;
     const form = document.createElement('form');
-    form.action = (codesandbox && codesandbox.url) || 'https://codepen.io/pen/define';
+    form.action = url;
     form.target = '_blank';
     form.method = 'POST';
     form.style.display = 'none';
     const field = document.createElement('input');
-    field.name = (codesandbox && codesandbox.name) || 'data';
+    field.name = fieldName;
     field.type = 'hidden';
-    field.setAttribute(
-      'value',
-      (codesandbox && codesandbox.parameters) ||
-        JSON.stringify(this.getData(code)).replace(/"/g, '&quot;').replace(/'/g, '&apos;')
-    );
+    field.setAttribute('value', data);
     form.appendChild(field);
     document.body.appendChild(form);
     form.submit();
@@ -199,10 +217,10 @@ ${this.props.cssCode ? `import './index.css';\n` : ''}`;
     }
     // to specific demo file
     const query = `file=/demo.${scriptType}`;
-    this.post(undefined, {
+    this.post({
       url: `https://codesandbox.io/api/v1/sandboxes/define?query=${encodeURIComponent(query)}`,
-      parameters: getParameters(sandBoxConfig),
-      name: 'parameters',
+      data: getParameters(sandBoxConfig),
+      fieldName: 'parameters',
     });
   };
 
@@ -253,7 +271,7 @@ ${this.props.cssCode ? `import './index.css';\n` : ''}`;
             <Button
               size="small"
               shape="circle"
-              onClick={this.gotoCodepen}
+              onClick={this.gotoPlayground(PLAYGROUND_TYPE.CODEPEN)}
               type="secondary"
               aria-label={t.codePen}
             >
@@ -270,6 +288,17 @@ ${this.props.cssCode ? `import './index.css';\n` : ''}`;
             aria-label={t.codeSandbox}
           >
             <IconCodeSandbox />
+          </Button>
+        </Tooltip>
+        <Tooltip content={t.juejin}>
+          <Button
+            size="small"
+            shape="circle"
+            onClick={this.gotoPlayground(PLAYGROUND_TYPE.JUEJIN)}
+            type="secondary"
+            aria-label={t.juejin}
+          >
+            <IconJuejin class="arco-icon" />
           </Button>
         </Tooltip>
       </div>
