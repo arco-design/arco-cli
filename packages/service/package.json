@@ -19,6 +19,7 @@
   "dependencies": {
     "@arco-cli/aspect": "^2.0.0-alpha.30",
     "@arco-cli/core": "^2.0.0-alpha.19",
+    "@arco-cli/generator": "^2.0.0-alpha.0",
     "@arco-cli/legacy": "^2.0.0-alpha.16",
     "@arco-cli/stone": "^2.0.0-alpha.3",
     "@arco-cli/ui-foundation-react": "^2.0.0-alpha.29",

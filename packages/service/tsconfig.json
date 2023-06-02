@@ -7,6 +7,7 @@
     "paths": {
       "@service/*": ["src/*"],
       "@arco-cli/stone": ["../stone/src"],
+      "@arco-cli/generator": ["../generator/src"],
       "@arco-cli/legacy/dist/*": ["../legacy/src/*"],
       "@arco-cli/core/dist/*": ["../core/src/*"],
       "@arco-cli/aspect/dist/*": ["../aspect/src/*"],

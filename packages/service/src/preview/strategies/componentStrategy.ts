@@ -14,7 +14,7 @@ import type {
 import type { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
 import {
   toComponentChunkId,
-  toComponentChunkFileName,
+  toComponentChunkFilename,
 } from '@arco-cli/legacy/dist/workspace/componentIdTo';
 import { DIR_ARTIFACTS } from '@arco-cli/legacy/dist/constants';
 
@@ -115,7 +115,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     };
     const entries = {
       [chunks.componentPreview]: {
-        filename: toComponentChunkFileName(component.id, 'preview'),
+        filename: toComponentChunkFilename(component.id, 'preview'),
         import: componentPreviewPath,
         library: { name: chunks.componentPreview, type: 'umd' },
       },
@@ -123,7 +123,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
 
     // if (chunks.component) {
     //   entries[chunks.component] = {
-    //     filename: this.getComponentChunkFileName(component.id, 'component'),
+    //     filename: this.getComponentChunkFilename(component.id, 'component'),
     //     import: componentPath,
     //     library: { name: chunks.component, type: 'umd' },
     //   };

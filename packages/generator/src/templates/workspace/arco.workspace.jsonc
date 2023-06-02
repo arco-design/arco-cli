@@ -1,0 +1,21 @@
+{
+  "arco.aspect/workspace": {
+    "components": {
+      "extends": {
+        "rootDir": "src",
+        "entries": {
+          "main": "index.ts",
+          "style": "style/index.ts",
+          "preview": "__docs__/index.mdx",
+          "jsdoc": [
+            "interface.ts"
+          ]
+        }
+      },
+      "members": []
+    }
+  },
+  "arco.service/generator": {
+    "defaultPath": "src"
+  }
+}

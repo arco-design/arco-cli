@@ -20,6 +20,7 @@ import { TesterAspect } from '@arco-cli/service/dist/tester';
 import { CompilerAspect } from '@arco-cli/service/dist/compiler';
 import { BuilderAspect } from '@arco-cli/service/dist/builder';
 import { SyncerAspect } from '@arco-cli/service/dist/syncer';
+import { GeneratorAspect } from '@arco-cli/service/dist/generator';
 import { ArcoAspect } from './arco.aspect';
 
 export const manifestMap = {
@@ -45,6 +46,7 @@ export const manifestMap = {
   [TesterAspect.id]: TesterAspect,
   [BuilderAspect.id]: BuilderAspect,
   [SyncerAspect.id]: SyncerAspect,
+  [GeneratorAspect.id]: GeneratorAspect,
 };
 
 export function isCoreAspect(id: string) {

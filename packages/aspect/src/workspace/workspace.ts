@@ -1,13 +1,15 @@
 import path from 'path';
-import fs from 'fs-extra';
+import fs, { readFileSync, writeFileSync } from 'fs-extra';
 import { uniqBy, merge } from 'lodash';
 import mapSeries from 'p-map-series';
+import minimatch from 'minimatch';
+import { parse, assign, stringify } from 'comment-json';
 import { SlotRegistry } from '@arco-cli/stone';
 import { AspectLoaderMain, getAspectDef } from '@arco-cli/core/dist/aspect-loader';
 import { ComponentInfo, ComponentConfig } from '@arco-cli/legacy/dist/workspace/componentInfo';
 import { getFilesByDir } from '@arco-cli/legacy/dist/workspace/componentOps/addComponents';
 import { getGitIgnoreForArco } from '@arco-cli/legacy/dist/utils/ignore';
-import minimatch from 'minimatch';
+import { FILE_WORKSPACE_JSONC } from '@arco-cli/legacy/dist/constants';
 
 import { PubsubMain } from '@aspect/pubsub';
 import { ComponentFactory, Component } from '@aspect/component';
@@ -35,6 +37,7 @@ export type OnComponentRemoveSlot = SlotRegistry<OnComponentRemove>;
 export type WorkspaceProps = {
   path: string;
   config: WorkspaceConfig;
+  configFilename: string;
   pubsub: PubsubMain;
   aspectLoader: AspectLoaderMain;
   onComponentAddSlot: OnComponentAddSlot;
@@ -47,6 +50,7 @@ export class Workspace implements ComponentFactory {
   static async load({
     path,
     config,
+    configFilename,
     pubsub,
     aspectLoader,
     onComponentAddSlot,
@@ -57,6 +61,7 @@ export class Workspace implements ComponentFactory {
     const workspace = new Workspace(
       path,
       config,
+      configFilename,
       pubsub,
       aspectLoader,
       onComponentAddSlot,
@@ -71,7 +76,8 @@ export class Workspace implements ComponentFactory {
 
   constructor(
     public path: string,
-    private config: WorkspaceConfig,
+    public config: WorkspaceConfig,
+    private configFilename: string,
     private pubsub: PubsubMain,
     private aspectLoader: AspectLoaderMain,
     private onComponentAddSlot: OnComponentAddSlot,
@@ -137,6 +143,16 @@ export class Workspace implements ComponentFactory {
    */
   setComponentPattern(pattern: string) {
     this.componentPattern = pattern;
+  }
+
+  updateWorkspaceConfigFile(aspectId: string, newConfig: any) {
+    const configFilePath = path.join(this.path, this.configFilename);
+    if (configFilePath.endsWith(FILE_WORKSPACE_JSONC)) {
+      const config = parse(readFileSync(configFilePath, 'utf8'));
+      writeFileSync(configFilePath, stringify(assign(config, { [aspectId]: newConfig }), null, 2));
+    } else {
+      throw new Error(`cannot update config files of this file type '${configFilePath}'`);
+    }
   }
 
   async updateComponentInfo(componentId?: string) {

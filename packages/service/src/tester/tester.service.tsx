@@ -4,6 +4,8 @@ import { Workspace } from '@arco-cli/aspect/dist/workspace';
 import { EnvService, ExecutionContext, EnvDefinition } from '@arco-cli/aspect/dist/envs';
 import { Tester, Tests, TesterOptions } from './tester';
 
+export { TesterOptions };
+
 export type TesterDescriptor = {
   /**
    * id of the tester (e.g. jest/mocha)

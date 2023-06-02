@@ -4,7 +4,7 @@ type ComponentChunkType = 'component' | 'preview';
 
 const PREVIEW_CHUNK_SUFFIX = 'preview';
 
-export function toComponentChunkFileName(componentId: string, type: ComponentChunkType) {
+export function toComponentChunkFilename(componentId: string, type: ComponentChunkType) {
   const fsCompatibleId = toFsCompatible(componentId);
   const fileNameSuffix = type === 'preview' ? `-${PREVIEW_CHUNK_SUFFIX}` : '';
   return `${fsCompatibleId}${fileNameSuffix}.js`;

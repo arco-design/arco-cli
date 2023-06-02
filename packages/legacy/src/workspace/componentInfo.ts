@@ -70,7 +70,7 @@ export type ComponentConfig = {
   /**
    * specifies the aspect configuration applied to component
    */
-  config: ComponentAspectConfig;
+  config?: ComponentAspectConfig;
 };
 
 export type ComponentInfoFiles = {

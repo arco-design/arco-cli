@@ -37,7 +37,7 @@ async function getConfig(cwd = process.cwd()): Promise<Config> {
       shouldThrow: false,
       cwd: workspaceInfo?.path,
     };
-    return Config.load(workspaceInfo.configFileName, configOpts);
+    return Config.load(workspaceInfo.configFilename, configOpts);
   }
   return null;
 }

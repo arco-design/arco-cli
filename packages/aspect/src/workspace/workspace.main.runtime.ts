@@ -73,6 +73,7 @@ export const WorkspaceMain = {
 
     const workspace = await Workspace.load({
       path: workspaceInfo.path,
+      configFilename: workspaceInfo.configFilename,
       config,
       pubsub,
       aspectLoader,

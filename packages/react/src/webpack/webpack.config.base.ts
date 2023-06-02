@@ -56,7 +56,11 @@ export default function (isEnvProduction = false): Configuration {
         '@mdx-js/react': require.resolve('@mdx-js/react'),
       },
 
-      plugins: [new TsconfigPathsPlugin()],
+      plugins: [
+        new TsconfigPathsPlugin({
+          silent: true,
+        }),
+      ],
     },
 
     module: {
