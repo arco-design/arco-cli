@@ -21,9 +21,16 @@ module.exports = function defineConfig(envId) {
           if (mdxLoader) {
             mdxLoader.options.preProcessFile = ({ path: filePath, content }) => {
               const componentStyleEntry = '../style/index.ts';
+              const pathDemoContext = path.join(__dirname, './scripts/initDemoContext.ts');
+
+              // enable editing demo code in codesandbox
+              content += `\nimport '${pathDemoContext}';`;
+
+              // auto import component style
               if (fs.existsSync(path.resolve(path.dirname(filePath), componentStyleEntry))) {
-                return `${content}\nimport '${componentStyleEntry}';`;
+                content += `\nimport '${componentStyleEntry}';`;
               }
+
               return content;
             };
           }

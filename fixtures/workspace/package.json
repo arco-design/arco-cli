@@ -13,9 +13,10 @@
   "devDependencies": {
     "@arco-design/theme-line": "^0.0.3",
     "@arco-plugins/webpack-react": "^1.4.8",
-    "less-plugin-npm-import": "^2.1.0",
     "@testing-library/dom": "^8.19.1",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^12.1.5"
+    "@testing-library/react": "^12.1.5",
+    "codesandbox": "^2.2.3",
+    "less-plugin-npm-import": "^2.1.0"
   }
 }

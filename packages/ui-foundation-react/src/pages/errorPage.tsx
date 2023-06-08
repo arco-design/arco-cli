@@ -26,6 +26,7 @@ const styles: Record<string, CSSProperties> = {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    height: '70vh',
     margin: 'auto',
     padding: '24px',
     textAlign: 'center',

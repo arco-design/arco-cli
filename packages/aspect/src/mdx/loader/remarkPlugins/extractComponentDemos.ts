@@ -23,12 +23,14 @@ export function extractComponentDemos(demoViewComponentName: string) {
         });
 
         let demoCode = '';
+        let demoExtname = '';
         for (const { identifier, fromModule } of imports) {
           if (identifier === metadata.demo) {
             let demoPath = path.join(file.dirname, fromModule);
             if (!/\.[jt]sx?$/.test(demoPath)) {
               const [globPath] = glob.sync(`${demoPath}.*`);
               demoPath = globPath || demoPath;
+              demoExtname = demoPath.split('.').pop();
             }
             try {
               demoCode = fs.readFileSync(demoPath).toString();
@@ -42,7 +44,9 @@ export function extractComponentDemos(demoViewComponentName: string) {
           const encoder = new TextEncoder();
           node.value = `<${demoViewComponentName} children={${
             node.value
-          }}  code={{ needDecode: true, value: '${encoder.encode(demoCode)}' }} />`;
+          }}  code={{ needDecode: true, value: '${encoder.encode(
+            demoCode
+          )}' }} language="${demoExtname}" />`;
         }
       }
     });

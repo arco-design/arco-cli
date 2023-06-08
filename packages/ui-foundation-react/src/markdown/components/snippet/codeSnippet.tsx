@@ -2,6 +2,7 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import copy from 'copy-to-clipboard';
+import { IconCodeSandbox } from '@arco-design/web-react/icon';
 
 import { SyntaxHighlighter, SyntaxHighlighterProps } from '../../../baseUI/highlighter';
 
@@ -13,6 +14,10 @@ import IconExpand from '../asset/icon-expand.svg';
 
 const customStyles = { fontSize: 12 };
 
+export type ArcoDemoContext = {
+  gotoCodeSandbox: (info: { code: string; language: 'js' | 'jsx' | 'ts' | 'tsx' }) => void;
+};
+
 export type CodeSnippetProps = {
   /**
    * the code string to show and to be copied to clipboard
@@ -22,6 +27,10 @@ export type CodeSnippetProps = {
    * a class to override the highlighter class
    */
   frameClass?: string;
+  /**
+   * whether codeSandbox button is needed
+   */
+  codeSandbox?: boolean;
 } & SyntaxHighlighterProps;
 
 /**
@@ -32,6 +41,7 @@ export function CodeSnippet({
   frameClass,
   language = 'tsx',
   children,
+  codeSandbox,
   ...rest
 }: CodeSnippetProps) {
   const [codeCopied, setCodeCopied] = useState(false);
@@ -53,6 +63,8 @@ export function CodeSnippet({
     };
   }, []);
 
+  const demoContext: ArcoDemoContext = (window as any).arcoDemoContext;
+
   return (
     <div className={classNames(styles.snippetWrapper, className)}>
       <SyntaxHighlighter
@@ -65,6 +77,11 @@ export function CodeSnippet({
       </SyntaxHighlighter>
 
       <div className={styles.operationButtons}>
+        {codeSandbox && typeof demoContext?.gotoCodeSandbox === 'function' ? (
+          <button onClick={() => demoContext?.gotoCodeSandbox({ code: trimmedChildren, language })}>
+            <IconCodeSandbox />
+          </button>
+        ) : null}
         <button
           onClick={() => {
             const result = copy(children.toString());

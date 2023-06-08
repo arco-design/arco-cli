@@ -50,4 +50,10 @@
       }
     }
   }
+
+  .empty {
+    display: flex;
+    align-items: center;
+    height: 60vh;
+  }
 }
