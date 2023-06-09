@@ -14,6 +14,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@babel/runtime": "^7.20.6",
     "chalk": "^4.1.2",
     "fs-extra": "^10.1.0",
     "gulp": "^4.0.2",
