@@ -6,7 +6,7 @@ const templateFn: TemplateFunction = function ({ name: componentName }) {
     contents: `import { CSSProperties } from 'react';
 
 /**
- * ${componentName}
+ * @title ${componentName}
  */
 export interface ${componentName}Props {
   style?: CSSProperties;

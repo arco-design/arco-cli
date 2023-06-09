@@ -1,6 +1,6 @@
 import execQuick from './execQuick';
 
-export async function installDependencies(workspacePath: string) {
+export async function installDependencies(workspacePath?: string) {
   let command = 'npm';
   let args = ['install'];
 

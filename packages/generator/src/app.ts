@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import path from 'path';
 import chalk from 'chalk';
 import yargs from 'yargs';
 import fs from 'fs-extra';
@@ -56,7 +57,7 @@ async function newCommandHandler({
   spinner.succeed('workspace files has been successfully copied');
 
   // change cwd to workspace directory
-  process.chdir(workspacePath);
+  process.chdir(path.resolve(workspacePath));
 
   if (!(await isInGitRepository())) {
     try {
@@ -74,7 +75,7 @@ async function newCommandHandler({
 
   try {
     spinner.start('installing workspace npm dependencies, this may take a few minutes...');
-    const { stderr, code, command } = await installDependencies(workspacePath);
+    const { stderr, code, command } = await installDependencies();
     if (code !== 0) {
       spinner.warn(
         `[WARNING] failed to install workspace dependencies via command [${command}]${
@@ -89,17 +90,16 @@ async function newCommandHandler({
   const userGuideTips = chalk.white(
     `${chalk.green(`
 Congrats! A new workspace has been created successfully at '${workspacePath}'`)}
+
 Inside the directory '${workspaceName}' you can run various commands including:
 
-   ${chalk.yellow('npm install')}
-     Install workspace dependencies
-   ${chalk.yellow('arco start')}
+   ${chalk.yellow('npx arco create ComponentName')}
+     Create your first component
+
+   ${chalk.yellow('npx arco start')}
      Starts the workspace in development mode
-   ${chalk.yellow('arco build')}
-     Compiles the components
-   ${chalk.yellow('arco test')}
-     Runs the tests on all your components
-   ${chalk.yellow('arco help')}
+
+   ${chalk.yellow('npx arco help')}
      Shows all available commands
    `
   );
