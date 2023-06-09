@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/service",
-  "version": "2.0.0-alpha.31",
+  "version": "2.0.0-alpha.32",
   "homepage": "https://github.com/arco-design/arco-cli",
   "repository": "https://github.com/arco-design/arco-cli",
   "main": "./dist/index.js",
@@ -17,12 +17,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@arco-cli/aspect": "^2.0.0-alpha.31",
+    "@arco-cli/aspect": "^2.0.0-alpha.32",
     "@arco-cli/core": "^2.0.0-alpha.20",
-    "@arco-cli/generator": "^2.0.0-alpha.1",
+    "@arco-cli/generator": "^2.0.0-alpha.2",
     "@arco-cli/legacy": "^2.0.0-alpha.17",
     "@arco-cli/stone": "^2.0.0-alpha.3",
-    "@arco-cli/ui-foundation-react": "^2.0.0-alpha.30",
+    "@arco-cli/ui-foundation-react": "^2.0.0-alpha.31",
     "@babel/runtime": "^7.20.6",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@svgr/webpack": "^6.5.1",
