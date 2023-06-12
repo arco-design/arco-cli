@@ -5,9 +5,14 @@ export type GeneratorContext = {
   description: string;
 };
 
+export type ComponentExports = {
+  path: string;
+  modules: Array<{ name: string; type?: boolean }>;
+};
+
 export type TemplateFunction = (
   context: GeneratorContext
-) => string | { filename: string; contents: string };
+) => string | { filename: string; contents: string; exports?: ComponentExports['modules'] };
 
 export type TemplateManifest = {
   // same with ComponentConfig.entries

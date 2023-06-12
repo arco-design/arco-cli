@@ -16,6 +16,9 @@
     }
   },
   "arco.service/generator": {
-    "defaultPath": "src"
+    "defaultPath": "src",
+    "hooks": {
+      "afterComponentCreated": "./.scripts/workspaceHooks/afterComponentCreated.js"
+    }
   }
 }

@@ -6,7 +6,7 @@ import gulpIgnore from 'gulp-ignore';
 import gulpRename from 'gulp-rename';
 import through2 from 'through2';
 
-import { GeneratorContext, TemplateFunction, TemplateManifest } from './types';
+import { ComponentExports, GeneratorContext, TemplateFunction, TemplateManifest } from './types';
 
 const TEMPLATE_MANIFEST_NAME = 'arco.template.json';
 
@@ -43,11 +43,20 @@ export class Generator {
     return path.join(this.options.path, this.name);
   }
 
-  async generate(): Promise<null | { path: string; manifest: TemplateManifest }> {
+  async generate(): Promise<null | {
+    path: string;
+    manifest: TemplateManifest;
+    exports: ComponentExports;
+  }> {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     const targetPath = this.getTargetPath();
     const templatePath = this.getTemplatePath();
+
+    let componentExports: ComponentExports = {
+      path: '',
+      modules: [],
+    };
 
     const handleFileTemplate = async (file: GulpFile, _, cb) => {
       try {
@@ -66,6 +75,20 @@ export class Generator {
           } else {
             file.contents = Buffer.from(template.contents);
             that.filenameMapFromTemplate[file.path] = template.filename;
+
+            const isComponentEntry =
+              path.dirname(file.path) === templatePath &&
+              /index\.[jt]sx?/i.test(template.filename || '');
+            if (isComponentEntry && template.exports) {
+              componentExports = {
+                path: path.resolve(
+                  that.CWD,
+                  targetPath,
+                  path.relative(templatePath, path.dirname(file.path))
+                ),
+                modules: template.exports,
+              };
+            }
           }
         }
       } catch (error) {
@@ -82,6 +105,7 @@ export class Generator {
       await new Promise((resolve, reject) => {
         gulp
           .src([`${templatePath}/**/*`], {
+            dot: true,
             base: templatePath,
           })
           .pipe(
@@ -128,6 +152,7 @@ export class Generator {
       return {
         path: targetPath,
         manifest: templateManifest,
+        exports: componentExports,
       };
     } catch (err) {
       throw new Error(

@@ -11,6 +11,9 @@ import { CreateCmd } from './create.cmd';
 
 type GeneratorConfig = {
   defaultPath?: string;
+  hooks?: {
+    afterComponentCreated?: string;
+  };
 };
 
 export type CreateComponentOptions = {
@@ -45,6 +48,7 @@ export class GeneratorMain {
     force,
     path: generatePath = this.config.defaultPath,
   }: CreateComponentOptions): Promise<{ ok: boolean; message: string }> {
+    const { hooks: { afterComponentCreated } = {} } = this.config;
     const generator = new Generator(name, 'component', { path: generatePath });
     const targetPath = generator.getTargetPath();
     const componentRootDir = path.relative(this.workspace.path, targetPath);
@@ -63,7 +67,7 @@ export class GeneratorMain {
     const longProcessLogger = this.logger.createLongProcessLogger(
       `create a new component named ${name} to ${targetPath}`
     );
-    const { manifest } = await generator.generate();
+    const { manifest, exports: componentExports } = await generator.generate();
 
     const newWorkspaceConfig = { ...this.workspace.config };
     const componentConfig = {
@@ -96,6 +100,18 @@ export class GeneratorMain {
 
     this.workspace.updateWorkspaceConfigFile(WorkspaceAspect.id, newWorkspaceConfig);
     longProcessLogger.end();
+
+    if (afterComponentCreated) {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const fn = require(path.join(process.cwd(), afterComponentCreated));
+        await fn(componentExports);
+      } catch (err) {
+        this.logger.consoleFailure(
+          `${GeneratorAspect.id}: failed to execute hook [afterComponentCreated]\n${err.toString()}`
+        );
+      }
+    }
 
     return {
       ok: true,
