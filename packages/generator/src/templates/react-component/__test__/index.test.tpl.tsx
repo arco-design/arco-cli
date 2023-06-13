@@ -1,6 +1,8 @@
 import { TemplateFunction } from '../../../types';
 
 const templateFn: TemplateFunction = function ({ name: componentName }) {
+  componentName = componentName.replace(/-(.)/g, (_, $1) => $1.toUpperCase());
+
   return {
     filename: 'index.test.tsx',
     contents: `/* eslint-disable import/no-extraneous-dependencies */

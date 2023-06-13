@@ -1,6 +1,6 @@
-import { TemplateFunction } from '../../types';
+import { GeneratorContext, TemplateFunction } from '../../types';
 
-const templateFn: TemplateFunction = function () {
+const templateFn: TemplateFunction = function ({ templateArgs }: GeneratorContext) {
   const config = {
     compilerOptions: {
       allowSyntheticDefaultImports: true,
@@ -16,7 +16,7 @@ const templateFn: TemplateFunction = function () {
       target: 'es2015',
       types: ['node', 'jest', '@testing-library/jest-dom'],
     },
-    include: ['src/**/*.{ts,tsx}'],
+    include: [`${templateArgs?.monorepo ? 'packages' : 'src'}/**/*.{ts,tsx}`],
     exclude: ['node_modules'],
   };
   return {

@@ -13,6 +13,8 @@ import { installDependencies } from './utils/installDependencies';
 type NewCommandOptions = {
   name: string;
   path?: string;
+  template?: string;
+  templateArgs?: string;
   packageName?: string;
   packageVersion?: string;
   description?: string;
@@ -26,12 +28,16 @@ async function newCommandHandler({
   packageVersion,
   description,
   force,
+  template = 'react-workspace',
+  templateArgs = '',
 }: NewCommandOptions) {
-  const generator = new Generator(workspaceName, 'workspace', {
+  const generator = new Generator(workspaceName, {
     path: parentDirPath,
     packageName,
     description,
     version: packageVersion,
+    template,
+    templateArgs,
   });
   const workspacePath = generator.getTargetPath();
 
@@ -107,39 +113,6 @@ Inside the directory '${workspaceName}' you can run various commands including:
   console.log(userGuideTips);
 }
 
-async function createCommandHandler({
-  name: componentName,
-  path: parentDirPath = './',
-  force,
-}: NewCommandOptions) {
-  const generator = new Generator(componentName, 'component', { path: parentDirPath });
-  const componentPath = generator.getTargetPath();
-
-  if (fs.existsSync(componentPath)) {
-    if (force) {
-      fs.removeSync(componentPath);
-    } else {
-      console.log(
-        chalk.red(
-          `Already a component-dir exist at ${componentPath}, use the ${chalk.yellow(
-            '--force'
-          )} flag to overwrite it`
-        )
-      );
-      return;
-    }
-  }
-
-  await generator.generate();
-
-  const userGuideTips = chalk.white(
-    `${chalk.green(`
-Congrats! A new component has been created successfully at '${componentPath}'`)}`
-  );
-
-  console.log(userGuideTips);
-}
-
 // eslint-disable-next-line no-unused-expressions
 yargs
   .scriptName('arco-generate')
@@ -172,31 +145,17 @@ yargs
         .option('force', {
           type: 'boolean',
           describe: 'Force overwrite directory, if it already exists',
+        })
+        .option('template', {
+          type: 'string',
+          describe: 'The template to generating a new workspace',
+        })
+        .option('templateArgs', {
+          type: 'string',
+          describe: 'The arguments for template to generating a new workspace',
         });
     },
     // eslint-disable-next-line no-return-await
     async (options) => await newCommandHandler(options)
-  )
-  .command(
-    'create <name>',
-    'create a new component using a template',
-    (yargs) => {
-      return yargs
-        .positional('name', {
-          type: 'string',
-          describe: 'Component directory name',
-        })
-        .option('path', {
-          alias: 'p',
-          type: 'string',
-          describe: 'Path to new component (default to current dir)',
-        })
-        .option('force', {
-          type: 'boolean',
-          describe: 'Force overwrite directory, if it already exists',
-        });
-    },
-    // eslint-disable-next-line no-return-await
-    async (options) => await createCommandHandler(options)
   )
   .help().argv;

@@ -1,42 +1,38 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import path from 'path';
 import fs from 'fs-extra';
 import gulp from 'gulp';
-import gulpIf from 'gulp-if';
 import gulpIgnore from 'gulp-ignore';
 import gulpRename from 'gulp-rename';
 import through2 from 'through2';
+import yargs from 'yargs';
 
-import { ComponentExports, GeneratorContext, TemplateFunction, TemplateManifest } from './types';
+import {
+  GenerateOptions,
+  ComponentExports,
+  GeneratorContext,
+  TemplateDirectoryDescriptionFunction,
+  TemplateFunction,
+  TemplateManifest,
+} from './types';
 
-const TEMPLATE_MANIFEST_NAME = 'arco.template.json';
-
-type GenerateOptions = {
-  path?: string;
-  packageName?: string;
-  version?: string;
-  description?: string;
-};
-
-type GenerateType = 'workspace' | 'component';
+const DEFAULT_TEMPLATE_NAME = 'react-component';
+const FILENAME_TEMPLATE_DESCRIPTION = '__arco.tpl.desc.json';
+const FILENAME_TEMPLATE_DIRECTORY_DESCRIPTION = '__arco.dir.desc.js';
 
 type GulpFile = { path: string; contents: Buffer };
 
 export class Generator {
   private readonly CWD = process.cwd();
 
-  private filenameMapFromTemplate: Record<string, string> = {};
-
-  constructor(
-    private name: string,
-    private type: GenerateType,
-    private options: GenerateOptions = {}
-  ) {
+  constructor(private name: string, private options: GenerateOptions = {}) {
     this.options.path ||= this.CWD;
     this.options.packageName ||= this.name;
+    this.options.template ||= DEFAULT_TEMPLATE_NAME;
   }
 
   private getTemplatePath() {
-    return path.join(__dirname, 'templates', this.type);
+    return path.join(__dirname, 'templates', this.options.template);
   }
 
   getTargetPath() {
@@ -48,8 +44,7 @@ export class Generator {
     manifest: TemplateManifest;
     exports: ComponentExports;
   }> {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const that = this;
+    const CWD = this.CWD;
     const targetPath = this.getTargetPath();
     const templatePath = this.getTemplatePath();
 
@@ -58,85 +53,135 @@ export class Generator {
       modules: [],
     };
 
-    const handleFileTemplate = async (file: GulpFile, _, cb) => {
-      try {
-        const context: GeneratorContext = {
-          name: this.type === 'workspace' ? this.options.packageName : this.name,
-          version: this.options.version,
-          description: this.options.description,
-          path: templatePath,
-        };
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const templateFn: TemplateFunction = require(file.path).default;
-        if (typeof templateFn === 'function') {
-          const template = templateFn(context);
-          if (typeof template === 'string') {
-            file.contents = Buffer.from(template);
-          } else {
-            file.contents = Buffer.from(template.contents);
-            that.filenameMapFromTemplate[file.path] = template.filename;
-
-            const isComponentEntry =
-              path.dirname(file.path) === templatePath &&
-              /index\.[jt]sx?/i.test(template.filename || '');
-            if (isComponentEntry && template.exports) {
-              componentExports = {
-                path: path.resolve(
-                  that.CWD,
-                  targetPath,
-                  path.relative(templatePath, path.dirname(file.path))
-                ),
-                modules: template.exports,
-              };
-            }
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-      cb(null, file);
-    };
-
     try {
-      let templateManifest: TemplateManifest = {
-        entries: {},
+      let templateManifest: TemplateManifest = {};
+      const ignorePathList: string[] = [];
+      const templateTransformResultMap: Record<string, { name: string; contents: string }> = {};
+
+      const readStream = () => {
+        return gulp.src([`${templatePath}/**/*`], {
+          dot: true,
+          base: templatePath,
+        });
       };
 
+      // handle files with template function and find files to ignore
       await new Promise((resolve, reject) => {
-        gulp
-          .src([`${templatePath}/**/*`], {
-            dot: true,
-            base: templatePath,
-          })
+        readStream()
           .pipe(
-            gulpIgnore.include((file: GulpFile) => {
-              const ignoreFilePathTails = ['.d.ts', '.js.map', TEMPLATE_MANIFEST_NAME];
+            through2.obj((file: GulpFile, _, cb) => {
+              const ignoreFilePathTails = [
+                '.d.ts',
+                '.js.map',
+                FILENAME_TEMPLATE_DESCRIPTION,
+                FILENAME_TEMPLATE_DIRECTORY_DESCRIPTION,
+              ];
+
+              const context: GeneratorContext = {
+                name: this.name,
+                packageName: this.options.packageName,
+                version: this.options.version,
+                description: this.options.description,
+                path: templatePath,
+                templateArgs: yargs(this.options.templateArgs || '').argv,
+              };
 
               // get manifest of template here
-              if (file.path.endsWith(TEMPLATE_MANIFEST_NAME)) {
+              if (file.path.endsWith(FILENAME_TEMPLATE_DESCRIPTION)) {
                 try {
                   templateManifest = fs.readJSONSync(file.path);
                 } catch (err) {}
               }
 
-              return !ignoreFilePathTails.find((tail) => file.path.endsWith(tail));
+              // directories ignore
+              if (file.path.endsWith(FILENAME_TEMPLATE_DIRECTORY_DESCRIPTION)) {
+                try {
+                  const fnModule = require(file.path);
+                  const fn: TemplateDirectoryDescriptionFunction =
+                    typeof fnModule === 'function' ? fnModule : fnModule.default;
+                  const { ignore } = fn(context) || {};
+                  if (ignore) {
+                    ignorePathList.push(path.dirname(file.path));
+                  }
+                } catch (error) {
+                  console.error(`\n${error}\n`);
+                }
+              }
+
+              // files ignore
+              if (ignoreFilePathTails.find((tail) => file.path.endsWith(tail))) {
+                ignorePathList.push(file.path);
+              }
+
+              // handle file template
+              if (file.path.endsWith('.tpl.js')) {
+                try {
+                  const fnModule = require(file.path);
+                  const templateFn: TemplateFunction =
+                    typeof fnModule === 'function' ? fnModule : fnModule.default;
+                  if (typeof templateFn === 'function') {
+                    const template = templateFn(context);
+                    if (template === false) {
+                      ignorePathList.push(file.path);
+                    } else {
+                      templateTransformResultMap[file.path] = {
+                        name: template.filename,
+                        contents: template.contents,
+                      };
+
+                      const isComponentEntry =
+                        path.dirname(file.path) === templatePath &&
+                        /index\.[jt]sx?/i.test(template.filename || '');
+                      if (isComponentEntry && template.exports) {
+                        componentExports = {
+                          path: path.resolve(
+                            CWD,
+                            targetPath,
+                            path.relative(templatePath, path.dirname(file.path))
+                          ),
+                          modules: template.exports,
+                        };
+                      }
+                    }
+                  }
+                } catch (error) {
+                  console.error(`\n${error}\n`);
+                }
+              }
+
+              cb(null, file);
             })
           )
-          .pipe(gulpIf((file) => file.path.endsWith('.tpl.js'), through2.obj(handleFileTemplate)))
-          .pipe(
-            gulpRename((filePath: { dirname: string; basename: string; extname: string }) => {
-              if (filePath.basename.endsWith('.tpl') && filePath.extname === '.js') {
-                const fullFilePathAbs = path.join(
-                  templatePath,
-                  filePath.dirname,
-                  `${filePath.basename}${filePath.extname}`
-                );
+          // we need this noop callback to trigger end event
+          // https://github.com/gulpjs/gulp/issues/1637#issuecomment-216963506
+          .on('data', () => null)
+          .on('end', resolve)
+          .on('error', reject);
+      });
 
+      // copy all workspace files
+      await new Promise((resolve, reject) => {
+        readStream()
+          .pipe(
+            gulpIgnore.include((file: GulpFile) => {
+              return !ignorePathList.find((ignorePath) => file.path.startsWith(ignorePath));
+            })
+          )
+          .pipe(
+            through2.obj((file: GulpFile, _, cb) => {
+              if (templateTransformResultMap[file.path]) {
+                file.contents = Buffer.from(templateTransformResultMap[file.path].contents);
+              }
+              cb(null, file);
+            })
+          )
+          .pipe(
+            gulpRename((filePath: { dirname: string; basename: string; extname: string }, file) => {
+              if (templateTransformResultMap[file.path]) {
+                const newFilename = templateTransformResultMap[file.path].name;
                 return {
                   dirname: filePath.dirname,
-                  basename:
-                    this.filenameMapFromTemplate[fullFilePathAbs] ||
-                    filePath.basename.replace(/\.tpl$/, ''),
+                  basename: newFilename,
                   extname: '',
                 };
               }
@@ -156,9 +201,7 @@ export class Generator {
       };
     } catch (err) {
       throw new Error(
-        `failed to generate ${
-          this.type
-        } to ${targetPath}, using template from ${templatePath}, details:\n${err.toString()}`
+        `failed to generate ${targetPath}, using template from ${templatePath}, details:\n${err.toString()}`
       );
     }
   }

@@ -38,6 +38,6 @@ module.exports = function (api) {
     plugins,
     only: ['**/*.ts', '**/*.tsx'],
     //  in generator/src/templates, babel should only compile files NOT ends with tpl.ts
-    ignore: [/generator\/src\/templates\/([^/]+\/)*.+(?<!tpl.)tsx?$/],
+    ignore: [/generator\/src\/templates\/([^/]+\/)*.+(?<!(tpl|desc).)tsx?$/],
   };
 };

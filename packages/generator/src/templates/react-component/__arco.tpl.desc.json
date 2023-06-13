@@ -1,4 +1,6 @@
 {
+  "name": "react-component",
+  "type": "component",
   "entries": {
     "main": "index.ts",
     "style": "style/index.ts",
