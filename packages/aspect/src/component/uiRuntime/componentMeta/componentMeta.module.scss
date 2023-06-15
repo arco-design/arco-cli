@@ -44,5 +44,14 @@
   .usage {
     display: flex;
     justify-content: flex-end;
+
+    > * {
+      margin-left: 12px;
+    }
+
+    .extraStyleSelect {
+      display: inline-flex;
+      width: 160px;
+    }
   }
 }

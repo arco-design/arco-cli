@@ -21,6 +21,14 @@ export default function (componentExtension: ComponentMain) {
 
         # version of the component
         version: String!
+
+        # additional styles of the component
+        extraStyles: [ComponentExtraStyles]!
+      }
+
+      type ComponentExtraStyles {
+        title: String
+        href: String
       }
 
       type ComponentHost {

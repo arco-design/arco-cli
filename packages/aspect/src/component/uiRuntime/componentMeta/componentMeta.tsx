@@ -1,15 +1,16 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
-import { Typography } from '@arco-design/web-react';
+import { Typography, Select } from '@arco-design/web-react';
 import { ComponentModel } from '../componentModel';
 
 import styles from './componentMeta.module.scss';
 
 export interface ComponentMetaProps {
   component: ComponentModel;
+  onComponentExtraStyleChange?: (href: string) => void;
 }
 
-export function ComponentMeta({ component }: ComponentMetaProps) {
+export function ComponentMeta({ component, onComponentExtraStyleChange }: ComponentMetaProps) {
   return (
     <div className={styles.metadata}>
       <h1 className={styles.title}>{component.name}</h1>
@@ -22,9 +23,26 @@ export function ComponentMeta({ component }: ComponentMetaProps) {
             </li>
           ))}
         </ul>
-        <Typography.Text className={styles.usage} code copyable>
-          npm install {component.packageName}
-        </Typography.Text>
+
+        <div className={styles.usage}>
+          <Typography.Text code copyable>
+            npm install {component.packageName}
+          </Typography.Text>
+
+          {component.extraStyles?.length ? (
+            <Select
+              className={styles.extraStyleSelect}
+              allowClear
+              size="mini"
+              placeholder="Choose a style"
+              options={component.extraStyles.map(({ title, href }) => ({
+                label: title,
+                value: href,
+              }))}
+              onChange={onComponentExtraStyleChange}
+            />
+          ) : null}
+        </div>
       </div>
     </div>
   );

@@ -190,6 +190,7 @@ export class SyncerMain {
           },
           outline: doc.outline,
           fileManifest: {
+            extraStyle: component.extraStyles,
             docs: docManifest,
             cdn: uploadResult.data || {},
           },

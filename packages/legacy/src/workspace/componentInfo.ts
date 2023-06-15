@@ -35,6 +35,10 @@ export type ComponentConfig = {
    */
   uiResource?: string;
   /**
+   * additional page styles that can be added
+   */
+  extraStyles?: Array<{ title: string; href: string }>;
+  /**
    * entry file info of component
    */
   entries: {
@@ -92,6 +96,8 @@ export class ComponentInfo {
 
   uiResource: string;
 
+  extraStyles: ComponentConfig['extraStyles'];
+
   files: ComponentInfoFiles[];
 
   entries: ComponentConfig['entries'];
@@ -119,6 +125,7 @@ export class ComponentInfo {
       entries,
       rootDir,
       config,
+      extraStyles,
     }: ComponentConfig,
     workspacePath: string,
     files?: ComponentInfoFiles[]
@@ -142,6 +149,7 @@ export class ComponentInfo {
     this.author = author;
     this.repository = repository;
     this.uiResource = uiResource;
+    this.extraStyles = extraStyles || [];
 
     const dirsToSearchPkgJson = buildPropagationPaths(
       path.resolve(workspacePath, rootDir),

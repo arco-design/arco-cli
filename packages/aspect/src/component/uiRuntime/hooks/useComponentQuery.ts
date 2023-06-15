@@ -24,6 +24,10 @@ const componentOverviewFields = gql`
       title
       content
     }
+    extraStyles {
+      title
+      href
+    }
   }
 `;
 

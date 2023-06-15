@@ -1,4 +1,4 @@
-import React, { IframeHTMLAttributes, useRef } from 'react';
+import React, { IframeHTMLAttributes, useRef, forwardRef, useImperativeHandle } from 'react';
 import { compact } from 'lodash';
 import { usePubsubIframe } from '@arco-cli/aspect/dist/pubsub';
 import { ComponentModel } from '@arco-cli/aspect/dist/component/uiRuntime';
@@ -40,18 +40,25 @@ export interface ComponentPreviewProps
   viewport?: number | null;
 }
 
+export type ComponentPreviewHandle = {
+  appendExtraStyle: (href: string) => void;
+};
+
 /**
  * renders a preview of a component.
  */
-export function ComponentPreview({
-  component,
-  previewName,
-  queryParams,
-  pubsub,
-  viewport = 1280,
-  style,
-  ...rest
-}: ComponentPreviewProps) {
+export const ComponentPreview = forwardRef(function (
+  {
+    component,
+    previewName,
+    queryParams,
+    pubsub,
+    viewport = 1280,
+    style,
+    ...rest
+  }: ComponentPreviewProps,
+  ref
+) {
   const refIframe = useRef<HTMLIFrameElement>(null);
   const height = useIframeHeight(refIframe);
 
@@ -64,6 +71,35 @@ export function ComponentPreview({
   const targetParams = viewport === null ? queryParams : params;
   const url = toPreviewUrl(component, previewName, targetParams);
   const isLoading = !height;
+
+  useImperativeHandle<any, ComponentPreviewHandle>(
+    ref,
+    () => {
+      return {
+        appendExtraStyle: (href: string) => {
+          const contentWindow = refIframe.current?.contentWindow;
+          if (contentWindow) {
+            const eleClassName = '__arco-component-extra-style';
+
+            // clear all append styles at first
+            contentWindow.document
+              .querySelectorAll(`.${eleClassName}`)
+              .forEach((node) => contentWindow.document.body.removeChild(node));
+
+            if (href) {
+              const styleEle = document.createElement('link');
+              styleEle.setAttribute('class', eleClassName);
+              styleEle.setAttribute('type', 'text/css');
+              styleEle.setAttribute('rel', 'stylesheet');
+              styleEle.setAttribute('href', href);
+              contentWindow.document.body.prepend(styleEle);
+            }
+          }
+        },
+      };
+    },
+    []
+  );
 
   return (
     <Spin className={styles.preview} loading={isLoading} tip="preview loading...">
@@ -80,4 +116,4 @@ export function ComponentPreview({
       />
     </Spin>
   );
-}
+});

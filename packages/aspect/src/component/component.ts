@@ -88,6 +88,10 @@ export class Component {
     return this.info.uiResource;
   }
 
+  get extraStyles() {
+    return this.info.extraStyles;
+  }
+
   async upsertExtensionData(extension: string, data: Record<string, any>) {
     if (!data) return;
     const existingExtension = this.extensions.findExtension(extension);

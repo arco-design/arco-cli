@@ -14,6 +14,11 @@ export type ComponentExtraDoc = {
   type?: 'md';
 };
 
+export type ComponentExtraStyle = {
+  title: string;
+  href: string;
+};
+
 export type ComponentModelProps = {
   id: string;
   name: string;
@@ -25,6 +30,7 @@ export type ComponentModelProps = {
   server?: ComponentServer;
   outline?: ComponentOutline[];
   extraDocs?: ComponentExtraDoc[];
+  extraStyles?: ComponentExtraStyle[];
 };
 
 export class ComponentModel {
@@ -38,7 +44,8 @@ export class ComponentModel {
     readonly description = '',
     readonly labels: string[] = [],
     readonly outline: ComponentOutline[] = [],
-    readonly extraDocs: ComponentExtraDoc[] = []
+    readonly extraDocs: ComponentExtraDoc[] = [],
+    readonly extraStyles: ComponentExtraStyle[] = []
   ) {}
 
   static from({
@@ -52,6 +59,7 @@ export class ComponentModel {
     labels,
     outline,
     extraDocs,
+    extraStyles,
   }: ComponentModelProps) {
     return new ComponentModel(
       id,
@@ -63,7 +71,8 @@ export class ComponentModel {
       description,
       labels,
       outline,
-      extraDocs
+      extraDocs,
+      extraStyles
     );
   }
 
