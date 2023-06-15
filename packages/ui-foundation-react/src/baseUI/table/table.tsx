@@ -42,15 +42,7 @@ export function Table({
     <div {...rest} className={classNames(styles.table, className)}>
       <HeadingRow isListView={isListView} colNumber={colNumber} headings={headings} />
       {rows.map((row: RowType, index: number) => {
-        return (
-          <TableRow
-            key={index}
-            isListView={isListView}
-            headings={headings}
-            row={row}
-            colNumber={colNumber}
-          />
-        );
+        return <TableRow key={index} headings={headings} row={row} colNumber={colNumber} />;
       })}
     </div>
   );
