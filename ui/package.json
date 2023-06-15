@@ -1,0 +1,29 @@
+{
+  "name": "@arco-cli/workspace-ui",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "module": "./es/index.js",
+  "types": "./es/index.d.ts",
+  "scripts": {
+    "arco": "node ../packages/arco/dist/app.js",
+    "start": "pnpm arco start",
+    "build": "pnpm arco build",
+    "sync": "pnpm arco sync",
+    "clean": "rm -rf es lib artifacts"
+  },
+  "peerDependencies": {
+    "@arco-design/web-react": "~2",
+    "react": ">=16",
+    "react-dom": "^16.0.1"
+  },
+  "sideEffects": [
+    "{es,lib,src}/**/style/*",
+    "*.less"
+  ],
+  "files": [
+    "es",
+    "lib"
+  ],
+  "license": "MIT"
+}

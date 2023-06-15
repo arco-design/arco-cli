@@ -1,0 +1,32 @@
+{
+  "arco.aspect/workspace": {
+    "name": "Arco Workspace UI",
+    "components": {
+      "extends": {
+        "rootDir": "src",
+        "entries": {
+          "main": "index.ts",
+          "style": "style/index.ts",
+          "preview": "__docs__/index.mdx",
+          "jsdoc": [
+            "interface.ts"
+          ]
+        }
+      },
+      "members": [
+        {
+          "name": "Overview",
+          "entries": {
+            "base": "Overview"
+          }
+        }
+      ]
+    }
+  },
+  "arco.service/generator": {
+    "defaultPath": "src",
+    "hooks": {
+      "afterComponentCreated": "./.scripts/workspaceHooks/afterComponentCreated.js"
+    }
+  }
+}
