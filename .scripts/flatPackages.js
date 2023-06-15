@@ -11,9 +11,9 @@ const PATH_IGNORE_PATTERN = /ui-foundation|app|stone|legacy/;
 const DEFAULT_PACKAGE_JSON = {
   version: '0.1.0',
   scripts: {
-    dev: 'sh ../../scripts/build.sh dev',
-    build: 'sh ../../scripts/build.sh',
-    'build-type': 'sh ../../scripts/build-type.sh',
+    dev: 'sh ../../.scripts/build.sh dev',
+    build: 'sh ../../.scripts/build.sh',
+    'build-type': 'sh ../../.scripts/build-type.sh',
     clean: 'rm -rf dist',
     'clean-type': 'find dist -name *.d.ts |xargs rm -rf',
     prepublishOnly: 'npm run build',

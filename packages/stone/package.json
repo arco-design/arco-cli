@@ -6,9 +6,9 @@
   "repository": "https://github.com/arco-design/arco-cli",
   "main": "./dist/index.js",
   "scripts": {
-    "dev": "sh ../../scripts/build.sh dev",
-    "build": "sh ../../scripts/build.sh",
-    "build-type": "sh ../../scripts/build-type.sh",
+    "dev": "sh ../../.scripts/build.sh dev",
+    "build": "sh ../../.scripts/build.sh",
+    "build-type": "sh ../../.scripts/build-type.sh",
     "clean": "rm -rf dist",
     "clean-type": "find dist -name *.d.ts |xargs rm -rf",
     "prepublishOnly": "npm run build"
