@@ -23,6 +23,17 @@ const FILENAME_TEMPLATE_DIRECTORY_DESCRIPTION = '__arco.dir.desc.js';
 type GulpFile = { path: string; contents: Buffer };
 
 export class Generator {
+  static parseLocalTemplatePath(template: string): null | { prefix: string; path: string } {
+    const match = (template || '').match(/^(file:)(.+)/);
+    if (match) {
+      return {
+        prefix: match[1],
+        path: match[2],
+      };
+    }
+    return null;
+  }
+
   private readonly CWD = process.cwd();
 
   constructor(private name: string, private options: GenerateOptions = {}) {
@@ -32,7 +43,9 @@ export class Generator {
   }
 
   private getTemplatePath() {
-    return path.join(__dirname, 'templates', this.options.template);
+    const template = this.options.template;
+    const localTemplate = Generator.parseLocalTemplatePath(template);
+    return localTemplate?.path || path.join(__dirname, 'templates', template);
   }
 
   getTargetPath() {
@@ -59,6 +72,14 @@ export class Generator {
       const templateTransformResultMap: Record<string, { name: string; contents: string }> = {};
 
       const readStream = () => {
+        if (!fs.existsSync(templatePath)) {
+          throw new Error(
+            `unable to find template from path '${templatePath}'
+please check if this directory exists
+or did you forget to add prefix 'file:' for '--template' if you want to specify a local directory as template`
+          );
+        }
+
         return gulp.src([`${templatePath}/**/*`], {
           dot: true,
           base: templatePath,

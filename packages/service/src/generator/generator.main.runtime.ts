@@ -11,6 +11,7 @@ import { CreateCmd } from './create.cmd';
 
 type GeneratorConfig = {
   defaultPath?: string;
+  defaultTemplate?: string;
   hooks?: {
     afterComponentCreated?: string;
   };
@@ -78,9 +79,22 @@ export class GeneratorMain {
   async create({
     name,
     force,
-    path: generatePath = this.config.defaultPath,
+    path: generatePath,
     ...createComponentOptions
   }: CreateComponentOptions): Promise<{ ok: boolean; message: string }> {
+    generatePath ||= this.config.defaultPath
+      ? path.resolve(this.workspace.path, this.config.defaultPath)
+      : '';
+    createComponentOptions.template ||= (() => {
+      const defaultTemplate = this.config.defaultTemplate;
+      const localTemplate = Generator.parseLocalTemplatePath(defaultTemplate);
+      if (localTemplate) {
+        const { prefix, path: templatePath } = localTemplate;
+        return `${prefix}${path.resolve(this.workspace.path, templatePath)}`;
+      }
+      return defaultTemplate;
+    })();
+
     const { hooks: { afterComponentCreated } = {} } = this.config;
     const generator = new Generator(name, { path: generatePath, ...createComponentOptions });
     const targetPath = generator.getTargetPath();
