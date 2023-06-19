@@ -40,7 +40,7 @@ const templateFn: TemplateFunction = function ({
     },
     dependencies: {},
     devDependencies: {
-      '@arco-cli/arco': '^2.0.0-alpha.29',
+      '@arco-cli/arco': '^2.0.0-beta.0',
       '@arco-plugins/webpack-react': '~1',
       '@babel/runtime': '^7.22.3',
       '@testing-library/dom': '^8.19.1',
