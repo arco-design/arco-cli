@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ComponentPreview, ComponentPreviewHandle } from '@arco-cli/service/dist/preview/uiRuntime';
 import { Tabs } from '@arco-cli/ui-foundation-react/dist/tabs';
 import { MarkdownLive } from '@arco-cli/ui-foundation-react/dist/markdown/live';
@@ -10,7 +10,16 @@ import styles from './overview.module.scss';
 
 export function Overview() {
   const component = useContext(ComponentContext);
+
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [extraStyle, setExtraStyle] = useState<string>(null);
   const refComponentPreview = useRef<ComponentPreviewHandle>(null);
+
+  useEffect(() => {
+    if (iframeLoaded && extraStyle) {
+      refComponentPreview?.current?.appendExtraStyle(extraStyle);
+    }
+  }, [iframeLoaded, extraStyle]);
 
   const titleComponentPreview = 'Preview';
   const eleComponentPreview = (
@@ -22,17 +31,13 @@ export function Overview() {
       previewName="overview"
       viewport={null}
       scrolling="no"
+      onIframeLoad={() => setIframeLoaded(true)}
     />
   );
 
   return (
     <div className={styles.overview}>
-      <ComponentMeta
-        component={component}
-        onComponentExtraStyleChange={(href) => {
-          refComponentPreview?.current?.appendExtraStyle(href);
-        }}
-      />
+      <ComponentMeta component={component} onComponentExtraStyleChange={setExtraStyle} />
 
       <hr className={styles.divider} />
 

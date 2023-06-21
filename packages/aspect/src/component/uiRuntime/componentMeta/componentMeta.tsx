@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Typography, Select } from '@arco-design/web-react';
 import { ComponentModel } from '../componentModel';
 
@@ -11,6 +11,12 @@ export interface ComponentMetaProps {
 }
 
 export function ComponentMeta({ component, onComponentExtraStyleChange }: ComponentMetaProps) {
+  const defaultExtraStyle = component.extraStyles?.[0]?.href;
+
+  useEffect(() => {
+    defaultExtraStyle && onComponentExtraStyleChange?.(defaultExtraStyle);
+  }, []);
+
   return (
     <div className={styles.metadata}>
       <h1 className={styles.title}>{component.name}</h1>
@@ -35,6 +41,7 @@ export function ComponentMeta({ component, onComponentExtraStyleChange }: Compon
               allowClear
               size="mini"
               placeholder="Choose a style"
+              defaultValue={defaultExtraStyle}
               options={component.extraStyles.map(({ title, href }) => ({
                 label: title,
                 value: href,

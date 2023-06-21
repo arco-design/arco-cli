@@ -38,6 +38,11 @@ export interface ComponentPreviewProps
    * viewport
    */
   viewport?: number | null;
+
+  /**
+   * callback for iframe loaded
+   */
+  onIframeLoad?: (event) => void;
 }
 
 export type ComponentPreviewHandle = {
@@ -55,6 +60,7 @@ export const ComponentPreview = forwardRef(function (
     pubsub,
     viewport = 1280,
     style,
+    onIframeLoad,
     ...rest
   }: ComponentPreviewProps,
   ref
@@ -92,7 +98,7 @@ export const ComponentPreview = forwardRef(function (
               styleEle.setAttribute('type', 'text/css');
               styleEle.setAttribute('rel', 'stylesheet');
               styleEle.setAttribute('href', href);
-              contentWindow.document.body.prepend(styleEle);
+              contentWindow.document.body?.prepend(styleEle);
             }
           }
         },
@@ -113,6 +119,7 @@ export const ComponentPreview = forwardRef(function (
         }}
         title="preview-component"
         src={url}
+        onLoad={onIframeLoad}
       />
     </Spin>
   );
