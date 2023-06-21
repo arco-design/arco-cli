@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import ts from 'typescript';
-import { mergeWith, cloneDeep } from 'lodash';
+import { mergeWith, cloneDeep, get, set } from 'lodash';
 import { Logger } from '@arco-cli/core/dist/logger';
 import { Compiler } from '@arco-cli/service/dist/compiler';
 import ArcoError from '@arco-cli/legacy/dist/error/arcoError';
@@ -105,13 +105,28 @@ export class TypescriptCompiler implements Compiler {
           tsconfigMergeCustomizer
         );
 
-        const convertRelativePathsToAbs = (keysToConvert: string[]) => {
-          Object.entries(tsconfig).forEach(([key, value]) => {
+        const convertRelativePathsToAbs = (obj: Record<string, any>, keysToConvert: string[]) => {
+          for (const key of keysToConvert) {
+            const value = get(obj, key);
+            if (typeof value === 'string') {
+              set(obj, key, path.isAbsolute(value) ? value : path.resolve(packageDirAbs, value));
+            } else if (Array.isArray(value)) {
+              set(
+                obj,
+                key,
+                value.map((filePath) =>
+                  path.isAbsolute(filePath) ? filePath : path.resolve(packageDirAbs, filePath)
+                )
+              );
+            }
+          }
+
+          Object.entries(obj).forEach(([key, value]) => {
             if (keysToConvert.indexOf(key) > -1) {
               if (typeof value === 'string') {
-                tsconfig[key] = path.isAbsolute(value) ? value : path.resolve(packageDirAbs, value);
+                obj[key] = path.isAbsolute(value) ? value : path.resolve(packageDirAbs, value);
               } else if (Array.isArray(value)) {
-                tsconfig[key] = value.map((filePath) => {
+                obj[key] = value.map((filePath) => {
                   return path.isAbsolute(filePath)
                     ? filePath
                     : path.resolve(packageDirAbs, filePath);
@@ -122,7 +137,12 @@ export class TypescriptCompiler implements Compiler {
         };
 
         // convert tsconfig relative paths to absolute path
-        convertRelativePathsToAbs(['include', 'exclude', 'files']);
+        convertRelativePathsToAbs(tsconfig, [
+          'include',
+          'exclude',
+          'files',
+          'compilerOptions.baseUrl',
+        ]);
 
         const tsconfigPath = path.join(
           this.getCacheDir(context),
