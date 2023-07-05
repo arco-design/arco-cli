@@ -23,7 +23,7 @@ $navbar-height: 60px;
 .overview {
   flex: 1;
   height: calc(100vh - $navbar-height);
-  padding: 16px 20px;
+  padding: 40px 20px;
   overflow-y: scroll;
 
   iframe {

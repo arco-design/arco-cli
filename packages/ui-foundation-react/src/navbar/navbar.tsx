@@ -29,7 +29,7 @@ export function Navbar({ menu = [], className, title }: NavbarProps) {
         </div>
         <SlotRouter routes={menu} />
       </div>
-      <Button type="outline" target="_blank" size="mini" href={`https://${BASE_DOCS_DOMAIN}`}>
+      <Button type="primary" target="_blank" href={`https://${BASE_DOCS_DOMAIN}`}>
         Get Started
       </Button>
     </div>

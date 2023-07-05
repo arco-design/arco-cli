@@ -2,40 +2,55 @@
 import React, { useContext } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Link } from 'react-router-dom';
-import { Empty } from '@arco-design/web-react';
-import { IconApps } from '@arco-design/web-react/icon';
 import cs from 'classnames';
+import { Avatar, Empty, Tag, Typography } from '@arco-design/web-react';
+import { IconTag } from '@arco-design/web-react/icon';
 import { WorkspaceContext } from '../workspaceContext';
 
 import styles from './workspaceOverview.module.scss';
 
+const AVAILABLE_AVATAR_COLORS = ['#FF7D00', '#FADC19', '#9FDB1D', '#14C9C9', '#165DFF', '#722ED1'];
+
 export function WorkspaceOverview() {
-  const { name, components } = useContext(WorkspaceContext);
+  const { components } = useContext(WorkspaceContext);
   const isEmpty = !components?.length;
 
   return (
-    <div className={styles.workspaceOverview}>
-      <div className={styles.workspaceTitle}>
-        <IconApps />
-        {name}
-      </div>
-
-      <div className={cs(styles.gallery, { [styles.empty]: isEmpty })}>
-        {isEmpty ? (
-          <Empty description="No components found" />
-        ) : (
-          components.map(({ id, name, packageName }) => {
-            return (
-              <Link key={id} className={styles.componentCard} to={`/${id}`}>
-                <span title={name} className={styles.title}>
-                  {name}
-                </span>
-                <span className={styles.packageName}>{packageName}</span>
+    <div className={cs(styles.workspaceOverview, { [styles.empty]: isEmpty })}>
+      {isEmpty ? (
+        <Empty description="No components found" />
+      ) : (
+        components.map(({ id, name, packageName, version, author, description, labels }) => {
+          const avatarText = author || 'Unknown';
+          return (
+            <div key={id} className={styles.componentCard}>
+              <Avatar
+                className={styles.avatar}
+                style={{
+                  background:
+                    AVAILABLE_AVATAR_COLORS[
+                      Math.floor(avatarText.length % AVAILABLE_AVATAR_COLORS.length)
+                    ],
+                }}
+              >
+                {avatarText}
+              </Avatar>
+              <Link title={name} className={styles.title} to={`/${id}`}>
+                <span className={styles.titleText}>{name}</span>
+                <Tag size="small">v{version}</Tag>
               </Link>
-            );
-          })
-        )}
-      </div>
+              <div className={styles.packageName}>{packageName}</div>
+              <Typography.Paragraph className={styles.description} ellipsis={{ rows: 2 }}>
+                {description}
+              </Typography.Paragraph>
+              <div className={styles.labels}>
+                <IconTag />
+                {labels.join(' / ')}
+              </div>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 }

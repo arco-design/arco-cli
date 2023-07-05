@@ -1,14 +1,15 @@
 .snippetWrapper {
   position: relative;
+  border-radius: 4px;
+  overflow: hidden;
 
   code {
     font-family: inherit !important;
   }
 
   .codeSnippet {
-    max-height: 200px;
+    max-height: 240px;
     padding: 16px !important;
-    border-radius: 10px;
     background-color: white;
     font-size: var(--preview-font-size-body-1);
 
@@ -24,34 +25,37 @@
     display: flex;
     align-items: center;
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 20px;
+    right: 20px;
     color: white;
     opacity: 0;
-    transition: opacity 150ms ease-in-out;
+    transition: opacity 0.1s ease-in-out;
 
     button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
       margin-left: 8px;
-      padding: 4px;
-      border: none;
-      border-radius: 4px;
-      line-height: 0;
-      background: rgb(255 255 255 / 95%);
-      color: var(--preview-color-text-1);
+      padding: 0;
+      border: 1px solid #f2f3f51a;
+      border-radius: 2px;
+      background: rgb(255 255 255 / 10%);
+      color: #fff;
+      box-shadow: 0 2px 4px 0 #1f23291a;
       cursor: pointer;
 
       &:hover {
-        background: rgb(255 255 255 / 90%);
+        background: rgb(255 255 255 / 15%);
       }
 
       &:active {
-        background: rgb(255 255 255 / 85%);
+        background: rgb(255 255 255 / 20%);
       }
 
       svg {
         display: inline-block;
-        width: 12px;
-        height: 12px;
         color: inherit;
       }
     }

@@ -24,6 +24,7 @@ export type ComponentModelProps = {
   name: string;
   packageName: string;
   version: string;
+  author?: string;
   description?: string;
   labels?: string[];
   host?: string;
@@ -39,6 +40,7 @@ export class ComponentModel {
     readonly name: string,
     readonly packageName: string,
     readonly version: string,
+    readonly author: string,
     readonly host: string,
     readonly server: ComponentServer | undefined,
     readonly description = '',
@@ -53,6 +55,7 @@ export class ComponentModel {
     name,
     packageName,
     version,
+    author,
     host,
     server,
     description,
@@ -66,6 +69,7 @@ export class ComponentModel {
       name,
       packageName,
       version,
+      author,
       host,
       server,
       description,
@@ -81,6 +85,6 @@ export class ComponentModel {
   }
 
   static empty() {
-    return new ComponentModel('', '', '', '', '', { env: '', url: '' });
+    return new ComponentModel('', '', '', '', '', '', { env: '', url: '' });
   }
 }

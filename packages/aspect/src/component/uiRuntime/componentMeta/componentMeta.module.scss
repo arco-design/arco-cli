@@ -1,49 +1,45 @@
 .metadata {
-  padding: 20px 0 8px;
-
   .flexBetween {
     display: flex;
     justify-content: space-between;
   }
 
   .title {
-    margin: 0 0 20px;
+    margin: 0 0 12px;
     padding: 0;
     font-size: var(--preview-font-size-display-1);
-    font-weight: 700;
-    line-height: 1;
+    font-weight: 600;
+    line-height: 1.3;
     color: var(--preview-color-text-1);
   }
 
   .descriptions {
     margin: 0 0 16px;
-    font-size: var(--preview-font-size-body-2);
+    font-size: var(--preview-font-size-body-3);
     line-height: 1.5;
     color: var(--preview-color-text-2);
   }
 
+  .bottomWrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
   .labels {
     display: flex;
-    margin: 0;
-    padding: 0;
-    font-size: var(--preview-font-size-body-1);
-    line-height: 1;
-    list-style: none;
+    align-items: center;
+    font-size: var(--preview-font-size-body-3);
+    color: var(--preview-color-text-3);
 
-    .label {
-      margin-right: 1em;
-      margin-bottom: 1em;
-      padding: 4px 8px;
-      border-radius: 6px;
-      color: var(--preview-color-text-2);
-      font-weight: 600;
-      background: #dde6fc;
+    :global(.arco-icon) {
+      margin-right: 8px;
     }
   }
 
-  .usage {
+  .rightWrapper {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
 
     > * {
       margin-left: 12px;
@@ -52,6 +48,16 @@
     .extraStyleSelect {
       display: inline-flex;
       width: 160px;
+    }
+
+    .usage {
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 4px;
+      background: var(--color-fill-1);
+      color: var(--color-text-1);
     }
   }
 }

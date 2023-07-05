@@ -1,9 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { CSSProperties } from 'react';
+import Image404 from './assets/404.svg';
 
-// this page is used to render error pages both in browser, and from server endpoints.
-// some of these don't support css, so it is inlined here like so.
-// perf is ok, since this only applies to a small number of components.
+import styles from './style/errorPage.module.scss';
 
 type ErrorPageProps = {
   /**
@@ -20,43 +19,14 @@ type ErrorPageProps = {
   style?: CSSProperties;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-const styles: Record<string, CSSProperties> = {
-  errorPage: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '70vh',
-    margin: 'auto',
-    padding: '24px',
-    textAlign: 'center',
-  },
-  title: {
-    fontWeight: 'bold',
-    margin: '0 0 24px 0',
-  },
-  img: {
-    maxWidth: '700px',
-    marginBottom: '24px',
-    width: '100%',
-  },
-};
-
-const inlineStyles = `
-.arco-error-page-title { font-size: 36px; }
-@media screen and (max-width: 480px) { .arco-error-page-title { font-size: 24px; } }
-`;
-
 /**
  * A component that shows an error page according to the error code
  */
 export function ErrorPage({ code, title, style, children, ...rest }: ErrorPageProps) {
   return (
-    <div {...rest} style={{ ...styles.errorPage, ...style }}>
-      <style>{inlineStyles}</style>
-      <h1 style={styles.title} className="arco-error-page-title">
-        {title}
-      </h1>
+    <div {...rest} className={styles.errorPage} style={style}>
+      {code === 404 ? <Image404 /> : null}
+      <h1 className={styles.title}>{title}</h1>
       {children}
     </div>
   );

@@ -2,8 +2,8 @@
 import React, { ReactNode, useContext, useEffect, useMemo } from 'react';
 
 import { Table } from '../../baseUI/table';
-import { CodeHighlighter } from '../../baseUI/highlighter';
 import { DocAnchorContext } from '../../markdown/components/docAnchor';
+import { CodeSnippet } from '../../markdown/components/snippet/codeSnippet';
 
 import styles from './propertiesTable.module.scss';
 
@@ -61,11 +61,7 @@ export function PropertiesTable({ doclet }: PropertiesTableProps) {
                 {name}
               </h2>
 
-              {type ? (
-                <CodeHighlighter className={styles.highlightCodes} language="typescript">
-                  {type}
-                </CodeHighlighter>
-              ) : null}
+              {type ? <CodeSnippet children={type} /> : null}
 
               {properties.length ? (
                 <Table

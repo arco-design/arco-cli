@@ -9,6 +9,8 @@ const wcComponentFields = gql`
     id
     name
     labels
+    description
+    author
     packageName
     version
   }

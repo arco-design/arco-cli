@@ -145,10 +145,10 @@ export class ComponentInfo {
     this.name = name || '';
     this.labels = labels || [];
     this.files = files || [];
-    this.group = group;
-    this.author = author;
-    this.repository = repository;
-    this.uiResource = uiResource;
+    this.group = group || 0;
+    this.author = author || '';
+    this.repository = repository || '';
+    this.uiResource = uiResource || '';
     this.extraStyles = extraStyles || [];
 
     const dirsToSearchPkgJson = buildPropagationPaths(

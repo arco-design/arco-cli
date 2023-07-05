@@ -1,12 +1,17 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { ReactNode, useContext, useMemo } from 'react';
+import React, { ReactNode, useContext, useMemo, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Link } from 'react-router-dom';
-import { Menu } from '@arco-design/web-react';
-import { IconApps, IconCode, IconFolder } from '@arco-design/web-react/icon';
+import cs from 'classnames';
+import { Divider, Input, Tree } from '@arco-design/web-react';
+import { IconApps, IconSearch } from '@arco-design/web-react/icon';
 import { ComponentModel } from '@arco-cli/aspect/dist/component/uiRuntime';
-
 import { WorkspaceContext } from '../../workspaceContext';
+
+import IconFolder from '../assets/folder.svg';
+import IconFolderOpen from '../assets/folder-open.svg';
+import IconFile from '../assets/file.svg';
+
 import styles from './componentMenu.module.scss';
 
 export interface ComponentMenuProps {
@@ -14,10 +19,10 @@ export interface ComponentMenuProps {
   onComponentChange?: (componentId: string) => void;
 }
 
-const MENU_ITEM_OVERVIEW = '__overview';
-
 export function ComponentMenu({ componentId, onComponentChange }: ComponentMenuProps) {
   const { components } = useContext(WorkspaceContext);
+
+  const [filterText, setFilterText] = useState('');
 
   const routeInfo = useMemo(() => {
     const results: Array<{
@@ -44,60 +49,81 @@ export function ComponentMenu({ componentId, onComponentChange }: ComponentMenuP
         const { id, name } = component;
         return {
           key: id,
-          title: (
-            <Link to={`/${id}`}>
-              <IconCode />
-              {name}
-            </Link>
-          ),
+          title: name,
         };
+      };
+      const filterRule = ({ key, title }: { key: string; title: string }) => {
+        const _searchText = filterText.toLowerCase();
+        return filterText
+          ? key.toLowerCase().indexOf(_searchText) > -1 ||
+              title.toLowerCase().indexOf(_searchText) > -1
+          : true;
       };
 
       if (components.length > 1) {
-        results.push({
-          key: packageName,
-          title: (
-            <>
-              <IconFolder />
-              {packageName}
-            </>
-          ),
-          children: components.map(getMenuItemProps),
-        });
+        const children = components.map(getMenuItemProps).filter(filterRule);
+        children.length &&
+          results.push({
+            key: packageName,
+            title: packageName,
+            children,
+          });
       } else if (components.length) {
-        results.push(getMenuItemProps(components[0]));
+        const routeInfo = getMenuItemProps(components[0]);
+        const filterResult = filterRule(routeInfo);
+        filterResult && results.push(routeInfo);
       }
     }
 
     return results;
-  }, []);
+  }, [filterText]);
 
   return (
-    <Menu
-      className={styles.componentMenu}
-      autoOpen
-      mode="vertical"
-      selectedKeys={[componentId]}
-      onClickMenuItem={onComponentChange}
-    >
-      <Menu.Item key={MENU_ITEM_OVERVIEW}>
-        <Link className={styles.menuItemLink} to="/">
-          <IconApps />
-          Overview
-        </Link>
-      </Menu.Item>
+    <div className={styles.componentMenu}>
+      <Link className={cs(styles.overview, { [styles.active]: !componentId })} to="/">
+        <IconApps />
+        Overview
+      </Link>
 
-      {routeInfo.map(({ key, title, children }) => {
-        return children?.length ? (
-          <Menu.SubMenu key={key} title={title}>
-            {children.map(({ key, title }) => (
-              <Menu.Item key={key}>{title}</Menu.Item>
-            ))}
-          </Menu.SubMenu>
-        ) : (
-          <Menu.Item key={key}>{title}</Menu.Item>
-        );
-      })}
-    </Menu>
+      <Input
+        className={styles.filter}
+        allowClear
+        prefix={<IconSearch />}
+        value={filterText}
+        onChange={setFilterText}
+        placeholder="Filter components"
+      />
+
+      <Divider className={styles.divider} />
+
+      <div className={styles.treeWrapper}>
+        <Tree
+          autoExpandParent
+          blockNode
+          actionOnClick={['select', 'expand']}
+          treeData={routeInfo}
+          selectedKeys={[componentId]}
+          renderTitle={(node) => {
+            const key = node.dataRef.key;
+            const isFolder = Array.isArray(node.dataRef.children);
+            return isFolder ? (
+              <div className={styles.treeNode}>
+                {node.expanded ? <IconFolderOpen /> : <IconFolder />}
+                {node.title}
+              </div>
+            ) : (
+              <Link
+                className={styles.treeNode}
+                to={`/${key}`}
+                onClick={() => onComponentChange(key)}
+              >
+                <IconFile />
+                {node.title}
+              </Link>
+            );
+          }}
+        />
+      </div>
+    </div>
   );
 }

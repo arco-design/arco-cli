@@ -1,1 +1,3 @@
-<svg fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 48 48" aria-hidden="true" focusable="false" stroke-linecap="butt" stroke-linejoin="miter" class="arco-icon arco-icon-shrink" style="font-size: 32px;"><path d="M20 44V29c0-.552-.444-1-.996-1H4M28 4v15c0 .552.444 1 .996 1H44"></path></svg>
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.1719 11.8145L12.2291 12.7573L7.98643 8.51468L3.74378 12.7573L2.80098 11.8145L7.98643 6.62907L13.1719 11.8145ZM13.1719 8.04328L12.2291 8.98608L7.98643 4.74344L3.74379 8.98608L2.80098 8.04327L7.98643 2.85783L13.1719 8.04328Z" fill="currentColor"/>
+</svg>

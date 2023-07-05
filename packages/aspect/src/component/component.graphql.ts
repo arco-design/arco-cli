@@ -22,6 +22,9 @@ export default function (componentExtension: ComponentMain) {
         # version of the component
         version: String!
 
+        # author of the component
+        author: String!
+
         # additional styles of the component
         extraStyles: [ComponentExtraStyles]!
       }
@@ -53,6 +56,7 @@ export default function (componentExtension: ComponentMain) {
         labels: (component: Component) => component.labels,
         version: (component: Component) => component.version,
         packageName: (component: Component) => component.packageName,
+        author: (component: Component) => component.author,
       },
       ComponentHost: {
         id: async (host: ComponentFactory) => {

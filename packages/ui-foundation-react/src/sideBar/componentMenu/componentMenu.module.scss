@@ -1,21 +1,64 @@
 .componentMenu {
-  .menuItemLink::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .overview {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    margin-bottom: 8px;
+    padding: 0 6px;
+    text-decoration: none;
+    color: var(--preview-color-text-1) !important;
+
+    :global(.arco-icon) {
+      margin: 0 8px 0 6px;
+    }
+
+    &:hover {
+      background: var(--preview-color-fill-2);
+    }
+
+    &.active {
+      background: var(--preview-color-fill-2);
+      color: var(--preview-color-primary) !important;
+    }
   }
 
-  :global(.arco-menu-item) {
-    > a:only-child::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
+  .filter {
+    :global(input) {
+      padding-left: 8px;
+    }
+
+    :global(.arco-input-inner-wrapper) {
+      background: none;
+      border-color: var(--preview-color-border);
+    }
+
+    :global(.arco-input-inner-wrapper-focus) {
+      border-color: var(--preview-color-primary);
+    }
+  }
+
+  .divider {
+    margin: 16px 0;
+  }
+
+  .treeWrapper {
+    flex: 1;
+    overflow: auto;
+  }
+
+  .treeNode {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit !important;
+
+    :global(svg) {
+      flex-shrink: 0;
+      margin-right: 4px;
     }
   }
 }
