@@ -1,3 +1,5 @@
+import path from 'path';
+import fs from 'fs-extra';
 import 'style-loader';
 import { Configuration } from 'webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
@@ -23,6 +25,10 @@ const MODULE_FILE_EXTENSIONS = [
 ];
 
 const IMAGE_INLINE_SIZE_LIMIT = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000');
+
+function EmptyPlugin() {
+  this.apply = function () {};
+}
 
 export default function (isEnvProduction = false): Configuration {
   // "postcss" loader applies autoprefixer to our CSS.
@@ -57,9 +63,16 @@ export default function (isEnvProduction = false): Configuration {
       },
 
       plugins: [
-        new TsconfigPathsPlugin({
-          silent: true,
-        }),
+        (() => {
+          // an error will throw if tsconfig.json not exist
+          const defaultTsconfigPath = path.resolve(process.cwd(), 'tsconfig.json');
+          return fs.existsSync(defaultTsconfigPath)
+            ? new TsconfigPathsPlugin({
+                silent: true,
+                configFile: defaultTsconfigPath,
+              })
+            : new EmptyPlugin();
+        })(),
       ],
     },
 
