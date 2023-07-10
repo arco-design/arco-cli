@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useEffect } from 'react';
 import { Typography, Select } from '@arco-design/web-react';
-import { IconTag } from '@arco-design/web-react/icon';
+import { IconTag, IconSkin } from '@arco-design/web-react/icon';
 import { ComponentModel } from '../componentModel';
 
 import styles from './componentMeta.module.scss';
@@ -33,7 +33,7 @@ export function ComponentMeta({ component, onComponentExtraStyleChange }: Compon
             <Select
               className={styles.extraStyleSelect}
               allowClear
-              size="mini"
+              prefix={<IconSkin />}
               placeholder="Choose a style"
               defaultValue={defaultExtraStyle}
               options={component.extraStyles.map(({ title, href }) => ({

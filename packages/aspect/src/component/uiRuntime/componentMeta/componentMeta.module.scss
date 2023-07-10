@@ -47,7 +47,15 @@
 
     .extraStyleSelect {
       display: inline-flex;
-      width: 160px;
+      width: auto;
+
+      :global(.arco-select-prefix) {
+        margin-right: 8px;
+      }
+
+      :global(.arco-select-suffix) {
+        margin-left: 8px;
+      }
     }
 
     .usage {
@@ -55,8 +63,8 @@
       align-items: center;
       height: 32px;
       padding: 0 12px;
-      border-radius: 4px;
-      background: var(--color-fill-1);
+      border-radius: 2px;
+      background: var(--color-fill-2);
       color: var(--color-text-1);
     }
   }

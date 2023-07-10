@@ -11,15 +11,15 @@ import styles from './overview.module.scss';
 export function Overview() {
   const component = useContext(ComponentContext);
 
-  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [iframeLoadTimes, setIframeLoadTimes] = useState(0);
   const [extraStyle, setExtraStyle] = useState<string>(null);
   const refComponentPreview = useRef<ComponentPreviewHandle>(null);
 
   useEffect(() => {
-    if (iframeLoaded && extraStyle) {
+    if (iframeLoadTimes > 0 && extraStyle) {
       refComponentPreview?.current?.appendExtraStyle(extraStyle);
     }
-  }, [iframeLoaded, extraStyle]);
+  }, [iframeLoadTimes, extraStyle]);
 
   const titleComponentPreview = 'Preview';
   const eleComponentPreview = (
@@ -31,7 +31,7 @@ export function Overview() {
       previewName="overview"
       viewport={null}
       scrolling="no"
-      onIframeLoad={() => setIframeLoaded(true)}
+      onIframeLoad={() => setIframeLoadTimes(iframeLoadTimes + 1)}
     />
   );
 
