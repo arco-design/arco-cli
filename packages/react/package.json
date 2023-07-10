@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/react",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "homepage": "https://github.com/arco-design/arco-cli",
   "repository": "https://github.com/arco-design/arco-cli",
   "scripts": {
@@ -17,12 +17,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@arco-cli/aspect": "^2.0.0-beta.1",
-    "@arco-cli/core": "^2.0.0-beta.0",
-    "@arco-cli/legacy": "^2.0.0-beta.0",
-    "@arco-cli/service": "^2.0.0-beta.1",
+    "@arco-cli/aspect": "^2.0.0-beta.2",
+    "@arco-cli/core": "^2.0.0-beta.1",
+    "@arco-cli/legacy": "^2.0.0-beta.1",
+    "@arco-cli/service": "^2.0.0-beta.2",
     "@arco-cli/stone": "^2.0.0-beta.0",
-    "@arco-cli/ui-foundation-react": "^2.0.0-beta.1",
+    "@arco-cli/ui-foundation-react": "^2.0.0-beta.2",
     "@babel/core": "^7.20.5",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-decorators": "^7.20.5",
