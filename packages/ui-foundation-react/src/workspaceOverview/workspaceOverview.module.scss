@@ -41,16 +41,17 @@
       width: 140px;
       height: 140px;
       border-radius: 100px;
-      opacity: 0.03;
     }
 
     &::before {
       right: 10px;
       background: #5addb4;
+      opacity: 0.04;
     }
 
     &::after {
       background: #6aa1ff;
+      opacity: 0.05;
     }
 
     &:hover {
@@ -87,6 +88,7 @@
       margin-bottom: 8px;
       font-size: var(--preview-font-size-body-1);
       font-weight: 500;
+      line-height: 20px;
       color: var(--preview-color-text-2);
     }
 
@@ -94,6 +96,8 @@
       flex: 1;
       overflow: hidden;
       text-overflow: ellipsis;
+      margin: 0;
+      color: var(--preview-color-text-3);
     }
 
     .labels {

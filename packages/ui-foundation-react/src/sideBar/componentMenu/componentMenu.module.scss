@@ -43,6 +43,7 @@
 
   .divider {
     margin: 16px 0;
+    border-color: var(--preview-color-border);
   }
 
   .treeWrapper {
@@ -60,5 +61,15 @@
       flex-shrink: 0;
       margin-right: 4px;
     }
+  }
+
+  .treeNodeText {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :global(.arco-tree-node-title) {
+    overflow: hidden;
   }
 }

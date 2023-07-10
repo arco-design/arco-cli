@@ -106,10 +106,15 @@ export function ComponentMenu({ componentId, onComponentChange }: ComponentMenuP
           renderTitle={(node) => {
             const key = node.dataRef.key;
             const isFolder = Array.isArray(node.dataRef.children);
+            const eleText = (
+              <span title={`${node.title}`} className={styles.treeNodeText}>
+                {node.title}
+              </span>
+            );
             return isFolder ? (
               <div className={styles.treeNode}>
                 {node.expanded ? <IconFolderOpen /> : <IconFolder />}
-                {node.title}
+                {eleText}
               </div>
             ) : (
               <Link
@@ -118,7 +123,7 @@ export function ComponentMenu({ componentId, onComponentChange }: ComponentMenuP
                 onClick={() => onComponentChange(key)}
               >
                 <IconFile />
-                {node.title}
+                {eleText}
               </Link>
             );
           }}

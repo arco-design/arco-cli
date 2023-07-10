@@ -40,7 +40,7 @@ export function WorkspaceOverview() {
                 <Tag size="small">v{version}</Tag>
               </Link>
               <div className={styles.packageName}>{packageName}</div>
-              <Typography.Paragraph className={styles.description} ellipsis={{ rows: 2 }}>
+              <Typography.Paragraph className={styles.description} ellipsis={{ rows: 3 }}>
                 {description}
               </Typography.Paragraph>
               <div className={styles.labels}>
