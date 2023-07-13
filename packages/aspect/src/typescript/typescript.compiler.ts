@@ -105,35 +105,34 @@ export class TypescriptCompiler implements Compiler {
           tsconfigMergeCustomizer
         );
 
-        const convertRelativePathsToAbs = (obj: Record<string, any>, keysToConvert: string[]) => {
+        // this func will change original object directly
+        const convertRelativePathsToAbs = (
+          obj: Record<string, any>,
+          keysToConvert: string[],
+          relativePathChecker?: (str) => boolean
+        ) => {
+          relativePathChecker ||= (str) => !path.isAbsolute(str);
+
           for (const key of keysToConvert) {
             const value = get(obj, key);
             if (typeof value === 'string') {
-              set(obj, key, path.isAbsolute(value) ? value : path.resolve(packageDirAbs, value));
+              set(
+                obj,
+                key,
+                relativePathChecker(value) ? path.resolve(packageDirAbs, value) : value
+              );
             } else if (Array.isArray(value)) {
               set(
                 obj,
                 key,
                 value.map((filePath) =>
-                  path.isAbsolute(filePath) ? filePath : path.resolve(packageDirAbs, filePath)
+                  relativePathChecker(filePath) ? path.resolve(packageDirAbs, filePath) : filePath
                 )
               );
+            } else if (typeof value === 'object' && value !== null) {
+              convertRelativePathsToAbs(value, Object.keys(value), relativePathChecker);
             }
           }
-
-          Object.entries(obj).forEach(([key, value]) => {
-            if (keysToConvert.indexOf(key) > -1) {
-              if (typeof value === 'string') {
-                obj[key] = path.isAbsolute(value) ? value : path.resolve(packageDirAbs, value);
-              } else if (Array.isArray(value)) {
-                obj[key] = value.map((filePath) => {
-                  return path.isAbsolute(filePath)
-                    ? filePath
-                    : path.resolve(packageDirAbs, filePath);
-                });
-              }
-            }
-          });
         };
 
         // convert tsconfig relative paths to absolute path
@@ -142,6 +141,8 @@ export class TypescriptCompiler implements Compiler {
           'exclude',
           'files',
           'compilerOptions.baseUrl',
+          'compilerOptions.paths',
+          'compilerOptions.typeRoots',
         ]);
 
         const tsconfigPath = path.join(
