@@ -1,8 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { useEffect, useState, MutableRefObject } from 'react';
 import { connectToChild } from 'penpal';
 
-import { SizeEvent } from '../../events';
+const SIZE_EVENT_TYPE = 'preview-size';
 
 export function useIframeHeight(refIframe: MutableRefObject<HTMLIFrameElement>) {
   const [height, setHeight] = useState(0);
@@ -13,7 +12,7 @@ export function useIframeHeight(refIframe: MutableRefObject<HTMLIFrameElement>) 
       iframe: refIframe.current,
       methods: {
         pub: (_event, message) => {
-          if (message.type === SizeEvent.TYPE) {
+          if (message.type === SIZE_EVENT_TYPE) {
             setHeight(message.data.height);
           }
         },

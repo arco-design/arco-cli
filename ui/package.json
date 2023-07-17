@@ -1,5 +1,5 @@
 {
-  "name": "@arco-cli/workspace-ui",
+  "name": "@arco-cli/workspace-materials",
   "version": "0.1.0",
   "description": "",
   "main": "./lib/index.js",
@@ -9,6 +9,7 @@
     "arco": "node ../packages/arco/dist/app.js",
     "start": "pnpm arco start",
     "build": "pnpm arco build",
+    "build:esm": "pnpm arco build --tasks=\"TSCompilerESM\"",
     "sync": "pnpm arco sync",
     "clean": "rm -rf es lib artifacts"
   },
@@ -16,6 +17,13 @@
     "@arco-design/web-react": "~2",
     "react": ">=16",
     "react-dom": "^16.0.1"
+  },
+  "dependencies": {
+    "classnames": "^2.3.2",
+    "penpal": "^6.2.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5"
   },
   "sideEffects": [
     "{es,lib,src}/**/style/*",

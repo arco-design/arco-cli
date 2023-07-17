@@ -23,6 +23,7 @@
     "@arco-cli/legacy": "^2.0.0-beta.1",
     "@arco-cli/stone": "^2.0.0-beta.0",
     "@arco-cli/ui-foundation-react": "^2.0.0-beta.3",
+    "@arco-cli/workspace-materials": "*",
     "@babel/runtime": "^7.20.6",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@svgr/webpack": "^6.5.1",

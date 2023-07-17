@@ -1,4 +1,5 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, MutableRefObject } from 'react';
+import { SpinProps } from '@arco-design/web-react';
 
 /**
  * @title Overview
@@ -7,10 +8,34 @@ export interface OverviewProps {
   style?: CSSProperties;
   className?: string | string[];
   /**
-   * @zh 组件尺寸
-   * @en Component Size
-   * @defaultValue default
-   * @version 1.1.0
+   * @zh Iframe 页面地址
+   * @en Iframe src
    */
-  size?: 'small' | 'default' | 'large';
+  src: string;
+  /**
+   * @zh 需要向 Iframe 额外注入的内容
+   * @en Extra style append to iframe
+   */
+  extraStyle?: string;
+  /**
+   * @zh Iframe 引用
+   * @zh Reference of iframe element
+   */
+  iframe?: MutableRefObject<HTMLIFrameElement>;
+  /**
+   * @zh Iframe onLoad 事件触发回调
+   * @en Callback for iframe loaded
+   */
+  onIframeLoad?: (event) => void;
+  /**
+   * @en Pass by SpinProps
+   */
+  spinProps?: Partial<SpinProps>;
 }
+
+/**
+ * @title OverviewHandle
+ */
+export type OverviewHandle = {
+  appendExtraStyle: (href: string) => void;
+};

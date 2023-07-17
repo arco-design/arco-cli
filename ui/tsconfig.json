@@ -16,8 +16,7 @@
     "target": "es2015",
     "types": [
       "node",
-      "jest",
-      "@testing-library/jest-dom"
+      "jest"
     ]
   },
   "include": [
