@@ -8,12 +8,15 @@ import React, {
   useState,
 } from 'react';
 import { Spin } from '@arco-design/web-react';
+import { IconFullscreen, IconFullscreenExit, IconShareInternal } from '@arco-design/web-react/icon';
 
 import { OverviewProps, OverviewHandle } from './interface';
 import { useIframeHeight } from '../utils/useIframeHeight';
 import { findNode } from '../utils/findNode';
 import { on, off } from '../utils/dom';
 import { GLOBAL_METHOD_MAP_KEY } from '../utils/constant';
+
+import styles from './style/index.module.less';
 
 function getContainer(targetContainer?: string | HTMLElement | Window) {
   if (typeof targetContainer === 'string') {
@@ -30,6 +33,7 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
   const refScrollContainer = useRef<HTMLElement | Window>(null);
 
   const [iframeLoadTimes, setIframeLoadTimes] = useState(0);
+  const [iframeFullscreen, setIframeFullscreen] = useState(false);
 
   const height = useIframeHeight(refIframe);
   const isReady = !height;
@@ -97,27 +101,45 @@ ${err.toString()}`);
 
   return (
     <Spin block {...spinProps}>
-      <iframe
-        ref={(ref) => {
-          refIframe.current = ref;
-          if (iframe) {
-            iframe.current = ref;
-          }
-        }}
-        style={{
-          ...style,
-          opacity: isReady ? 0 : 1,
-          height: isReady ? '100vh' : height,
-        }}
-        className={cs(className)}
-        title="material-component-overview"
-        scrolling="no"
-        src={src}
-        onLoad={(event) => {
-          onIframeLoad?.(event);
-          setIframeLoadTimes(iframeLoadTimes > 10e8 ? 0 : iframeLoadTimes + 1);
-        }}
-      />
+      <div className={cs(styles.overview, { [styles.fullscreen]: iframeFullscreen })}>
+        <div className={styles.operationButtons}>
+          <div
+            title="open in new tab"
+            className={styles.button}
+            onClick={() => window.open(src, '_blank')}
+          >
+            <IconShareInternal />
+          </div>
+          <div
+            title="toggle fullscreen"
+            className={styles.button}
+            onClick={() => setIframeFullscreen(!iframeFullscreen)}
+          >
+            {iframeFullscreen ? <IconFullscreenExit /> : <IconFullscreen />}
+          </div>
+        </div>
+        <iframe
+          ref={(ref) => {
+            refIframe.current = ref;
+            if (iframe) {
+              iframe.current = ref;
+            }
+          }}
+          style={{
+            ...style,
+            opacity: isReady ? 0 : 1,
+            height: isReady ? '100vh' : height,
+          }}
+          className={cs(className, styles.iframe)}
+          title="material-component-overview"
+          scrolling={iframeFullscreen ? 'auto' : 'no'}
+          src={src}
+          onLoad={(event) => {
+            onIframeLoad?.(event);
+            setIframeLoadTimes(iframeLoadTimes > 10e8 ? 0 : iframeLoadTimes + 1);
+          }}
+        />
+      </div>
     </Spin>
   );
 });

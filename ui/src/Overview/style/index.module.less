@@ -1,0 +1,77 @@
+.overview {
+  position: relative;
+
+  .iframe {
+    background: #fff;
+  }
+
+  &.fullscreen {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 9999;
+
+    .iframe {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 20px;
+    }
+
+    .operationButtons {
+      top: 20px;
+      right: 20px;
+    }
+  }
+
+  .operationButtons {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: var(--color-text-2);
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+    z-index: 1;
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-left: 8px;
+      padding: 0;
+      border: 1px solid #f2f3f51a;
+      border-radius: 2px;
+      background: rgb(255 255 255 / 10%);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 4px 0 #1f23291a;
+      cursor: pointer;
+
+      &:hover {
+        background: rgb(255 255 255 / 15%);
+      }
+
+      &:active {
+        background: rgb(255 255 255 / 20%);
+      }
+
+      svg {
+        display: inline-block;
+        color: inherit;
+      }
+    }
+  }
+
+  &:hover {
+    .operationButtons {
+      opacity: 1;
+    }
+  }
+}
