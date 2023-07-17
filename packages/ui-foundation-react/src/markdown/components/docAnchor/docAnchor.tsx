@@ -1,9 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { useContext, useEffect, useMemo, useRef } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { textToHTMLId } from '../heading';
 import { DocAnchorContext } from './docAnchorContext';
 import { CLASSNAME_MARKDOWN_CONTENT } from '../../../constants';
+import { PreviewContext } from '../../../preview/previewContext';
 
 import styles from './docAnchor.module.scss';
 
@@ -11,9 +12,11 @@ import styles from './docAnchor.module.scss';
 let pageUniqueAnchorId = null;
 
 export function DocAnchor() {
+  const { registerGlobalMethod } = useContext(PreviewContext);
   const { anchorList: anchorListFromContext, updateAnchorList } = useContext(DocAnchorContext);
 
   const refHeadingQueryTimer = useRef(null);
+  const [pageOffset, setPageOffset] = useState(0);
 
   // only allow to render one anchor in the same page
   const isTheOnlyAnchorToRender = useMemo<boolean>(() => {
@@ -62,8 +65,17 @@ export function DocAnchor() {
     };
   }, []);
 
+  useEffect(() => {
+    registerGlobalMethod('updateAnchorOffset', (nextOffset) => {
+      setPageOffset(nextOffset);
+    });
+  }, []);
+
   return isTheOnlyAnchorToRender && anchorListFromContext.length ? (
-    <ul className={styles.docAnchor}>
+    <ul
+      className={styles.docAnchor}
+      style={pageOffset ? { transform: `translateY(${pageOffset}px)` } : {}}
+    >
       {anchorListFromContext.map(({ depth, text, id }, index) => {
         return (
           <li key={index}>

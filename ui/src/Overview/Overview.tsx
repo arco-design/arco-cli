@@ -1,14 +1,33 @@
 import cs from 'classnames';
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { Spin } from '@arco-design/web-react';
 
 import { OverviewProps, OverviewHandle } from './interface';
 import { useIframeHeight } from '../utils/useIframeHeight';
+import { findNode } from '../utils/findNode';
+import { on, off } from '../utils/dom';
+import { GLOBAL_METHOD_MAP_KEY } from '../utils/constant';
+
+function getContainer(targetContainer?: string | HTMLElement | Window) {
+  if (typeof targetContainer === 'string') {
+    return findNode(document, targetContainer);
+  }
+  return targetContainer || window;
+}
 
 export const Overview = forwardRef(function (props: OverviewProps, ref) {
-  const { style, className, src, iframe, extraStyle, onIframeLoad, spinProps } = props;
+  const { style, className, src, iframe, extraStyle, scrollContainer, spinProps, onIframeLoad } =
+    props;
 
   const refIframe = useRef<HTMLIFrameElement>(null);
+  const refScrollContainer = useRef<HTMLElement | Window>(null);
 
   const [iframeLoadTimes, setIframeLoadTimes] = useState(0);
 
@@ -35,6 +54,30 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
       }
     }
   };
+
+  const scrollHandler = useCallback((event) => {
+    const updateAnchorOffset =
+      refIframe.current?.contentWindow?.[GLOBAL_METHOD_MAP_KEY]?.updateAnchorOffset;
+    if (typeof updateAnchorOffset === 'function') {
+      try {
+        const scrollTop = event.target?.scrollTop;
+        scrollTop && updateAnchorOffset(scrollTop);
+      } catch (err) {
+        console.warn(`Failed to update anchor position in component preview page, details:
+${err.toString()}`);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    refScrollContainer.current = getContainer(scrollContainer);
+
+    on(refScrollContainer.current, 'scroll', scrollHandler);
+
+    return () => {
+      off(refScrollContainer.current, 'scroll', scrollHandler);
+    };
+  }, [scrollContainer]);
 
   useEffect(() => {
     if (iframeLoadTimes > 0 && extraStyle) {

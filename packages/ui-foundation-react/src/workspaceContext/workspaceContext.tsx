@@ -10,11 +10,13 @@ import styles from './workspaceContext.module.scss';
 type WorkspaceContextType = {
   name: string;
   components: ComponentModel[];
+  overviewScrollContainerID: string;
 };
 
 export const WorkspaceContext = createContext<WorkspaceContextType>({
   name: '',
   components: [],
+  overviewScrollContainerID: '',
 });
 
 export function WorkspaceContextProvider(
@@ -22,12 +24,12 @@ export function WorkspaceContextProvider(
     children: ReactNode;
   } & WorkspaceContextType
 ) {
-  const { name, children } = props;
+  const { name, children, overviewScrollContainerID } = props;
   const [loaderApi, isLoading] = useLoaderApi();
 
   const workspaceContextValue = useMemo(() => {
-    return { name, components: props.components };
-  }, [name, JSON.stringify(props.components)]);
+    return { name, overviewScrollContainerID, components: props.components };
+  }, [name, overviewScrollContainerID, JSON.stringify(props.components)]);
 
   return (
     <WorkspaceContext.Provider value={workspaceContextValue}>

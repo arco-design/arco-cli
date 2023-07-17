@@ -1,7 +1,8 @@
-import React, { IframeHTMLAttributes } from 'react';
+import React, { IframeHTMLAttributes, useContext } from 'react';
 import { compact } from 'lodash';
 import { ComponentModel } from '@arco-cli/aspect/dist/component/uiRuntime';
 import { Overview } from '@arco-cli/workspace-materials';
+import { WorkspaceContext } from '@arco-cli/ui-foundation-react';
 
 import { toPreviewUrl } from './urls';
 
@@ -49,6 +50,8 @@ export const ComponentPreview = function ({
   viewport = 1280,
   extraStyle,
 }: ComponentPreviewProps) {
+  const { overviewScrollContainerID } = useContext(WorkspaceContext);
+
   const targetParams =
     viewport === null
       ? queryParams
@@ -57,5 +60,12 @@ export const ComponentPreview = function ({
       : compact([queryParams, `viewport=${viewport}`]);
   const url = toPreviewUrl(component, previewName, targetParams);
 
-  return <Overview src={url} extraStyle={extraStyle} spinProps={{ tip: 'Loading...' }} />;
+  return (
+    <Overview
+      src={url}
+      scrollContainer={`#${overviewScrollContainerID}`}
+      extraStyle={extraStyle}
+      spinProps={{ tip: 'Loading...' }}
+    />
+  );
 };

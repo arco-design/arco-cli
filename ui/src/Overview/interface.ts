@@ -23,14 +23,20 @@ export interface OverviewProps {
    */
   iframe?: MutableRefObject<HTMLIFrameElement>;
   /**
+   * @zh 包裹 iframe 进行滚动的容器
+   * @en Scroll container of iframe
+   */
+  scrollContainer?: string | Window | HTMLElement;
+  /**
+   * @zh Spin 组件属性
+   * @en Pass by SpinProps
+   */
+  spinProps?: Partial<SpinProps>;
+  /**
    * @zh Iframe onLoad 事件触发回调
    * @en Callback for iframe loaded
    */
   onIframeLoad?: (event) => void;
-  /**
-   * @en Pass by SpinProps
-   */
-  spinProps?: Partial<SpinProps>;
 }
 
 /**
