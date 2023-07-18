@@ -28,6 +28,11 @@ export interface OverviewProps {
    */
   scrollContainer?: string | Window | HTMLElement;
   /**
+   * @zh 滚动容器的偏移量
+   * @en Offset of scroll container
+   */
+  scrollContainerOffset?: number;
+  /**
    * @zh Spin 组件属性
    * @en Pass by SpinProps
    */

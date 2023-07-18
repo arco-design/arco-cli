@@ -16,6 +16,7 @@ import { findNode } from '../utils/findNode';
 import { on, off } from '../utils/dom';
 import { GLOBAL_METHOD_MAP_KEY } from '../utils/constant';
 
+// @ts-ignore
 import styles from './style/index.module.less';
 
 function getContainer(targetContainer?: string | HTMLElement | Window) {
@@ -26,8 +27,17 @@ function getContainer(targetContainer?: string | HTMLElement | Window) {
 }
 
 export const Overview = forwardRef(function (props: OverviewProps, ref) {
-  const { style, className, src, iframe, extraStyle, scrollContainer, spinProps, onIframeLoad } =
-    props;
+  const {
+    style,
+    className,
+    src,
+    iframe,
+    extraStyle,
+    scrollContainer,
+    scrollContainerOffset = 0,
+    spinProps,
+    onIframeLoad,
+  } = props;
 
   const refIframe = useRef<HTMLIFrameElement>(null);
   const refScrollContainer = useRef<HTMLElement | Window>(null);
@@ -59,19 +69,22 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
     }
   };
 
-  const scrollHandler = useCallback((event) => {
-    const updateAnchorOffset =
-      refIframe.current?.contentWindow?.[GLOBAL_METHOD_MAP_KEY]?.updateAnchorOffset;
-    if (typeof updateAnchorOffset === 'function') {
-      try {
-        const scrollTop = event.target?.scrollTop;
-        scrollTop && updateAnchorOffset(scrollTop);
-      } catch (err) {
-        console.warn(`Failed to update anchor position in component preview page, details:
+  const scrollHandler = useCallback(
+    (event) => {
+      const updateAnchorOffset =
+        refIframe.current?.contentWindow?.[GLOBAL_METHOD_MAP_KEY]?.updateAnchorOffset;
+      if (typeof updateAnchorOffset === 'function') {
+        try {
+          const scrollTop = (event.target?.scrollTop || 0) - scrollContainerOffset;
+          updateAnchorOffset(Math.max(0, scrollTop));
+        } catch (err) {
+          console.warn(`Failed to update anchor position in component preview page, details:
 ${err.toString()}`);
+        }
       }
-    }
-  }, []);
+    },
+    [scrollContainerOffset]
+  );
 
   useEffect(() => {
     refScrollContainer.current = getContainer(scrollContainer);
