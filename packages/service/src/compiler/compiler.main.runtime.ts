@@ -1,7 +1,7 @@
 import { MainRuntime } from '@arco-cli/core/dist/cli';
 import { CompilerAspect } from './compiler.aspect';
 import { CompilerTask } from './compiler.task';
-import { Compiler } from './types';
+import type { Compiler, CompilerAspectConfig } from './types';
 
 export class CompilerMain {
   static runtime = MainRuntime;
@@ -10,14 +10,14 @@ export class CompilerMain {
 
   static slots = [];
 
-  static provider() {
-    return new CompilerMain();
+  static provider(_deps, config: CompilerAspectConfig = {}) {
+    return new CompilerMain(config);
   }
 
-  constructor() {}
+  constructor(private config: CompilerAspectConfig) {}
 
   createTask(name: string, compiler: Compiler): CompilerTask {
-    return new CompilerTask(CompilerAspect.id, name, compiler);
+    return new CompilerTask(CompilerAspect.id, name, this.config, compiler);
   }
 }
 

@@ -2,6 +2,19 @@ import type { Component } from '@arco-cli/aspect/dist/component';
 
 import { BuildContext, BuildTaskResult, TaskResultsList } from '@service/builder';
 
+export interface CompilerAspectConfig {
+  /**
+   * whether to skip deleting the component product directory before compiling
+   */
+  skipDeleteDistDir?: boolean;
+  /**
+   * specify the component compilation order, receive component id or Glob string
+   * when some components depend on other components, specifying the compilation order is useful
+   * e.g. ['base-package/**', 'second-base-package/**']
+   */
+  componentCompilationOrders?: Array<string>;
+}
+
 export interface CompilerOptions {
   /**
    * name of the compiler.

@@ -5,7 +5,7 @@ import { Component } from '@arco-cli/aspect/dist/component';
 
 import { BuildContext, BuildTask, BuildTaskResult, TaskResultsList } from '@service/builder';
 
-import { Compiler } from './types';
+import type { Compiler, CompilerAspectConfig } from './types';
 
 export class CompilerTask implements BuildTask {
   readonly description = 'compile components';
@@ -13,8 +13,29 @@ export class CompilerTask implements BuildTask {
   constructor(
     readonly aspectId: string,
     readonly name: string,
+    readonly config: CompilerAspectConfig,
     private compilerInstance: Compiler
   ) {}
+
+  private sortContextComponents(components: Component[]) {
+    if (Array.isArray(this.config.componentCompilationOrders)) {
+      // avoid change origin array's order by reverse() and sort()
+      const orderRule = [...this.config.componentCompilationOrders].reverse();
+      return [...components].sort(({ id: idA }, { id: idB }) => {
+        const indexA = orderRule.findIndex(
+          (rule) => idA.indexOf(rule) > -1 || minimatch(idA, rule)
+        );
+        const indexB = orderRule.findIndex(
+          (rule) => idB.indexOf(rule) > -1 || minimatch(idB, rule)
+        );
+        // all components in orderRule should sort to first
+        // then sort them by their index in orderRule
+        return indexB - indexA;
+      });
+    }
+
+    return components;
+  }
 
   private async clearDistDir(component: Component, compiler: Compiler) {
     const distDirAbs = path.resolve(component.packageDirAbs, compiler.distDir);
@@ -54,7 +75,7 @@ export class CompilerTask implements BuildTask {
     // but do NOT change buildContext directly
     const buildResults = await this.compilerInstance.build({
       ...context,
-      components: uniqueComponents,
+      components: this.sortContextComponents(uniqueComponents),
     } as BuildContext);
 
     return buildResults;
@@ -62,9 +83,11 @@ export class CompilerTask implements BuildTask {
 
   async preBuild(context: BuildContext) {
     await Promise.all(
-      context.components.map(async (component) => {
+      this.sortContextComponents(context.components).map(async (component) => {
         // should clear dist dir at first, then do other operations
-        await this.clearDistDir(component, this.compilerInstance);
+        if (!this.config.skipDeleteDistDir) {
+          await this.clearDistDir(component, this.compilerInstance);
+        }
         await this.copyNonSupportedFiles(component, this.compilerInstance);
       })
     );
