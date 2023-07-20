@@ -28,5 +28,8 @@
     "hooks": {
       "afterComponentCreated": "./.scripts/workspaceHooks/afterComponentCreated.js"
     }
+  },
+  "arco.service/compiler": {
+    "skipDeleteDistDir": true
   }
 }

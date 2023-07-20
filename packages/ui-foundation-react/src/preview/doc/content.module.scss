@@ -1,0 +1,16 @@
+.errorBoundary {
+  padding: 20px 26px;
+  border-left: 9px solid #ed3315;
+  background: rgb(237 51 21 / 20%);
+  color: var(--preview-color-text-1);
+
+  .title {
+    margin-top: 0;
+    font-size: var(--preview-font-size-title-1);
+    font-weight: 600;
+  }
+
+  .details {
+    font-size: var(--preview-font-size-body-3);
+  }
+}

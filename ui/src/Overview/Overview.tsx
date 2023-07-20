@@ -46,7 +46,7 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
   const [iframeFullscreen, setIframeFullscreen] = useState(false);
 
   const height = useIframeHeight(refIframe);
-  const isReady = !height;
+  const isLoading = !height;
 
   const appendExtraStyle = (href: string) => {
     const contentWindow = refIframe.current?.contentWindow;
@@ -113,7 +113,7 @@ ${err.toString()}`);
   );
 
   return (
-    <Spin block {...spinProps}>
+    <Spin block loading={isLoading} {...spinProps}>
       <div className={cs(styles.overview, { [styles.fullscreen]: iframeFullscreen })}>
         <div className={styles.operationButtons}>
           <div
@@ -140,8 +140,8 @@ ${err.toString()}`);
           }}
           style={{
             ...style,
-            opacity: isReady ? 0 : 1,
-            height: isReady ? '100vh' : height,
+            opacity: isLoading ? 0.1 : 1,
+            height: isLoading ? '80vh' : height,
           }}
           className={cs(className, styles.iframe)}
           title="material-component-overview"

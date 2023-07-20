@@ -14,6 +14,7 @@
     height: 244px;
     margin: $component-card-margin;
     padding: 24px;
+    text-decoration: none;
     border: 1px solid var(--preview-color-border);
     border-radius: 8px;
     color: var(--preview-color-text-3);
@@ -71,7 +72,6 @@
       font-size: var(--preview-font-size-title-1);
       font-weight: 600;
       color: var(--preview-color-text-1);
-      text-decoration: none;
 
       .titleText {
         overflow: hidden;

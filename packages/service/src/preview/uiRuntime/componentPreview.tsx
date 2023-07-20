@@ -66,6 +66,7 @@ export const ComponentPreview = function ({
       scrollContainer={`#${overviewScrollContainerID}`}
       extraStyle={extraStyle}
       spinProps={{ tip: 'Loading...' }}
+      scrollContainerOffset={220}
     />
   );
 };

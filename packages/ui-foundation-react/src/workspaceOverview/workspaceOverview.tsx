@@ -23,7 +23,7 @@ export function WorkspaceOverview() {
         components.map(({ id, name, packageName, version, author, description, labels }) => {
           const avatarText = author || 'Unknown';
           return (
-            <div key={id} className={styles.componentCard}>
+            <Link key={id} className={styles.componentCard} to={`/${id}`}>
               <Avatar
                 className={styles.avatar}
                 style={{
@@ -35,10 +35,10 @@ export function WorkspaceOverview() {
               >
                 {avatarText}
               </Avatar>
-              <Link title={name} className={styles.title} to={`/${id}`}>
+              <div title={name} className={styles.title}>
                 <span className={styles.titleText}>{name}</span>
                 <Tag size="small">v{version}</Tag>
-              </Link>
+              </div>
               <div className={styles.packageName}>{packageName}</div>
               <Typography.Paragraph className={styles.description} ellipsis={{ rows: 3 }}>
                 {description}
@@ -47,7 +47,7 @@ export function WorkspaceOverview() {
                 <IconTag />
                 {labels.join(' / ')}
               </div>
-            </div>
+            </Link>
           );
         })
       )}

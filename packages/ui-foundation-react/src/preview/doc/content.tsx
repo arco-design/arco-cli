@@ -4,14 +4,16 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import { CLASSNAME_MARKDOWN_CONTENT } from '../../constants';
 
+import styles from './content.module.scss';
+
 interface DocsContentProps {
   doc?: ComponentType;
 }
 
 function ErrorFallback({ error }: { error: Error }) {
   return (
-    <div role="alert">
-      <p>Something went wrong:</p>
+    <div className={styles.errorBoundary} role="alert">
+      <p className={styles.title}>Failed to render. Something went wrong:</p>
       <pre>{error.message}</pre>
     </div>
   );
