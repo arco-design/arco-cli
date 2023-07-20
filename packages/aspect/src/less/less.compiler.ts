@@ -24,10 +24,13 @@ export class LessCompiler implements Compiler {
 
   combine: LessCompilerOptions['combine'];
 
+  userCustomCompileFn: LessCompilerOptions['compile'];
+
   constructor(readonly id: string, options: LessCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
     this.lessOptions = options.lessOptions || {};
     this.combine = options.combine || false;
+    this.userCustomCompileFn = options.compile;
   }
 
   getDistPathBySrcPath(srcPath: string): string {
@@ -57,14 +60,15 @@ export class LessCompiler implements Compiler {
           shouldCopySourceFiles: this.shouldCopySourceFiles,
           rawFileExt: 'less',
           combine: this.combine,
-          compile: async ({ pathOrigin, getContent }) => {
-            const { css } = await render(getContent(), {
-              paths: [path.dirname(pathOrigin), packageNodeModulePath, workspaceNodeModulePath],
+          compile: async ({ pathSource, getContents }) => {
+            const { css } = await render(getContents(), {
+              paths: [path.dirname(pathSource), packageNodeModulePath, workspaceNodeModulePath],
               javascriptEnabled: true,
               ...this.lessOptions,
             });
             return css;
           },
+          userCustomCompileFn: this.userCustomCompileFn,
           filter: (file) => {
             for (const pattern of this.ignorePatterns) {
               if (minimatch(file.path, pattern)) {

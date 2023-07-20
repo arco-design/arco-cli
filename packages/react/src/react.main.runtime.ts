@@ -166,16 +166,16 @@ export class ReactMain {
   useBuildPipe(modifiers: UseBuildPileModifiers = {}) {
     const overrides: any = {};
     const { tsModule, buildConfig: tsConfigTransformers } = modifiers.typescript || {};
-    const { lessOptions, combine: lessCombine } = modifiers.less || {};
-    const { sassOptions, combine: sassCombine } = modifiers.sass || {};
+    const lessCompilerOptions = modifiers.less;
+    const sassCompilerOptions = modifiers.sass;
 
-    if (tsModule || tsConfigTransformers || lessOptions || sassOptions) {
+    if (tsModule || tsConfigTransformers || lessCompilerOptions || sassCompilerOptions) {
       overrides.getBuildPipe = () => {
         return this.defaultReactEnv.getBuildPipe({
           tsModule,
           tsConfigTransformers,
-          lessCompilerOptions: { lessOptions, combine: lessCombine },
-          sassCompilerOptions: { sassOptions, combine: sassCombine },
+          lessCompilerOptions,
+          sassCompilerOptions,
         });
       };
     }

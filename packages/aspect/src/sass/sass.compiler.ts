@@ -24,10 +24,13 @@ export class SassCompiler implements Compiler {
 
   combine: SassCompilerOptions['combine'];
 
+  userCustomCompileFn: SassCompilerOptions['compile'];
+
   constructor(readonly id: string, options: SassCompilerOptions) {
     this.distDir = options.distDir || DEFAULT_DIST_DIRNAME;
     this.sassOptions = options.sassOptions || {};
     this.combine = options.combine || false;
+    this.userCustomCompileFn = options.compile;
   }
 
   getDistPathBySrcPath(srcPath: string): string {
@@ -57,12 +60,13 @@ export class SassCompiler implements Compiler {
           shouldCopySourceFiles: this.shouldCopySourceFiles,
           rawFileExt: 'sass',
           combine: this.combine,
-          compile: async ({ pathOrigin }) => {
-            return compile(pathOrigin, {
-              loadPaths: [path.dirname(pathOrigin), packageNodeModulePath, workspaceNodeModulePath],
+          compile: async ({ pathSource }) => {
+            return compile(pathSource, {
+              loadPaths: [path.dirname(pathSource), packageNodeModulePath, workspaceNodeModulePath],
               ...this.sassOptions,
             }).css;
           },
+          userCustomCompileFn: this.userCustomCompileFn,
           filter: (file) => {
             for (const pattern of this.ignorePatterns) {
               if (minimatch(file.path, pattern)) {

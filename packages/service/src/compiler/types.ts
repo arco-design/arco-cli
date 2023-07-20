@@ -48,7 +48,32 @@ export interface CompilerOptions {
   artifactName?: string;
 }
 
+/**
+ * info of style file to compile
+ */
+export type StyleFileToCompile = {
+  /**
+   * absolute path of source file
+   */
+  pathSource: string;
+  /**
+   * absolute path of compiled file
+   */
+  pathTarget: string;
+  /**
+   * get file contents string to compile
+   */
+  getContents: () => string;
+};
+
 export interface StyleCompilerOptions {
+  /**
+   * compile
+   */
+  compile?: (
+    fileInfo: StyleFileToCompile,
+    defaultCompileFn: (fileInfo: StyleFileToCompile) => Promise<string>
+  ) => Promise<string>;
   /**
    * whether to combine all raw style files to one
    */

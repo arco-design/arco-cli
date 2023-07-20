@@ -4,9 +4,7 @@ import fs from 'fs-extra';
 import { Component } from '@arco-cli/aspect/dist/component';
 import { SourceFile } from '@arco-cli/legacy/dist/workspace/component/sources';
 
-import { StyleCompilerOptions } from '../types';
-
-type FileToCompile = { pathOrigin: string; pathTarget: string; getContent: () => string };
+import type { StyleCompilerOptions, StyleFileToCompile } from '../types';
 
 export type CompileStyleOptions = {
   component: Component;
@@ -14,7 +12,8 @@ export type CompileStyleOptions = {
   shouldCopySourceFiles: boolean;
   rawFileExt: 'sass' | 'less';
   combine: StyleCompilerOptions['combine'];
-  compile: (fileInfo: FileToCompile) => Promise<string>;
+  compile: (fileInfo: StyleFileToCompile) => Promise<string>;
+  userCustomCompileFn: StyleCompilerOptions['compile'];
   filter: (file: SourceFile) => boolean;
 };
 
@@ -24,6 +23,7 @@ export async function compileStyle({
   shouldCopySourceFiles,
   combine,
   compile,
+  userCustomCompileFn,
   filter,
   rawFileExt,
 }: CompileStyleOptions) {
@@ -32,7 +32,7 @@ export async function compileStyle({
     errors: [],
   };
 
-  const filesToCompile: Array<FileToCompile> = [];
+  const filesToCompile: Array<StyleFileToCompile> = [];
   const combineFileInfo: { rawFilePath: string; cssFilePath: string; deps: string[] } = {
     rawFilePath: '',
     cssFilePath: '',
@@ -47,9 +47,9 @@ export async function compileStyle({
     const valid = filter(file);
     if (!valid) return;
 
-    const fileToCompile: FileToCompile = {
-      getContent: () => file.contents.toString(),
-      pathOrigin: file.path,
+    const fileToCompile: StyleFileToCompile = {
+      getContents: () => file.contents.toString(),
+      pathSource: file.path,
       pathTarget: path.join(component.packageDirAbs, distDir, file.relative),
     };
     filesToCompile.push(fileToCompile);
@@ -83,8 +83,8 @@ export async function compileStyle({
     await fs.ensureFile(combineFileInfo.rawFilePath);
     await fs.writeFile(combineFileInfo.rawFilePath, content);
     filesToCompile.push({
-      getContent: () => content,
-      pathOrigin: combineFileInfo.rawFilePath,
+      getContents: () => content,
+      pathSource: combineFileInfo.rawFilePath,
       pathTarget: combineFileInfo.rawFilePath,
     });
   }
@@ -92,10 +92,10 @@ export async function compileStyle({
   // we should copy source file to dist before compiling
   // otherwise not found error will throw while combine-less compiling
   const shouldCopySourceFileBeforeCompile = !!combineFileInfo.rawFilePath;
-  const copySourceFileToTarget = async ({ pathOrigin, pathTarget }: FileToCompile) => {
-    if (shouldCopySourceFiles && pathOrigin !== pathTarget) {
+  const copySourceFileToTarget = async ({ pathSource, pathTarget }: StyleFileToCompile) => {
+    if (shouldCopySourceFiles && pathSource !== pathTarget) {
       await fs.ensureDir(path.dirname(pathTarget));
-      await fs.copyFile(pathOrigin, pathTarget);
+      await fs.copyFile(pathSource, pathTarget);
     }
   };
 
@@ -106,7 +106,10 @@ export async function compileStyle({
   await Promise.all(
     filesToCompile.map(async (file) => {
       try {
-        const cssContent = await compile(file);
+        const cssContent =
+          typeof userCustomCompileFn === 'function'
+            ? await userCustomCompileFn(file, compile)
+            : await compile(file);
         const targetCssPath = getDistPathBySrcPath(file.pathTarget);
 
         await fs.ensureFile(targetCssPath);
