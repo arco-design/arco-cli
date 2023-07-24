@@ -1,4 +1,5 @@
 import cs from 'classnames';
+import debounce from 'lodash-es/debounce';
 import React, {
   forwardRef,
   useCallback,
@@ -70,7 +71,7 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
   };
 
   const scrollHandler = useCallback(
-    (event) => {
+    debounce((event) => {
       const updateAnchorOffset =
         refIframe.current?.contentWindow?.[GLOBAL_METHOD_MAP_KEY]?.updateAnchorOffset;
       if (typeof updateAnchorOffset === 'function') {
@@ -82,7 +83,7 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
 ${err.toString()}`);
         }
       }
-    },
+    }, 200),
     [scrollContainerOffset]
   );
 

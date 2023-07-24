@@ -4,11 +4,13 @@
   position: fixed;
   right: 0;
   top: 40px;
+  max-height: 600px;
   box-sizing: border-box;
   width: $doc-anchor-width;
   padding-left: 6px !important;
   border-left: 2px solid var(--preview-color-border);
   list-style: none;
+  overflow: auto;
 
   .anchor {
     display: block;
