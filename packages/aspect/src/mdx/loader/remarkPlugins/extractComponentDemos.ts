@@ -28,7 +28,7 @@ export function extractComponentDemos(demoViewComponentName: string) {
           if (identifier === metadata.demo) {
             let demoPath = path.join(file.dirname, fromModule);
             if (!/\.[jt]sx?$/.test(demoPath)) {
-              const [globPath] = glob.sync(`${demoPath}.*`);
+              const [globPath] = glob.sync(`${demoPath}{.*,/index.*}`);
               demoPath = globPath || demoPath;
               demoExtname = demoPath.split('.').pop();
             }
