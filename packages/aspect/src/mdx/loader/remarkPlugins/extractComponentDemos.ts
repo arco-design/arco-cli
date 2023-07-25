@@ -30,8 +30,10 @@ export function extractComponentDemos(demoViewComponentName: string) {
             if (!/\.[jt]sx?$/.test(demoPath)) {
               const [globPath] = glob.sync(`${demoPath}{.*,/index.*}`);
               demoPath = globPath || demoPath;
-              demoExtname = demoPath.split('.').pop();
             }
+
+            demoExtname = demoPath.split('.').pop();
+
             try {
               demoCode = fs.readFileSync(demoPath).toString();
             } catch (e) {}
