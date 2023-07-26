@@ -8,6 +8,7 @@ const templateFn: TemplateFunction = ({ templateArgs }: GeneratorContext) => {
         extends: {
           rootDir: 'src',
           entries: {
+            base: './',
             main: 'index.ts',
             style: 'style/index.ts',
             preview: '__docs__/index.mdx',

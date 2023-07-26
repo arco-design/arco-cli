@@ -12,7 +12,7 @@ module.exports = function defineConfig() {
       mdxLoader.options.preProcessFile = ({ path: filePath, content }) => {
         const componentStyleEntry = '../style/index.ts';
         if (fs.existsSync(path.resolve(path.dirname(filePath), componentStyleEntry))) {
-          return `${content}\nimport '${componentStyleEntry}';`;
+          return `${content}\n\nimport '${componentStyleEntry}';`;
         }
         return content;
       };

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Overview } from '..';
 
 export default function Basic() {
-  return <Overview />;
+  return <h1>Basic Demo</h1>;
 }

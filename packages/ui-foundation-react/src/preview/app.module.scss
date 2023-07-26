@@ -1,7 +1,19 @@
-.errorBoundary {
+:global(html),
+:global(body) {
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+
+  :global(*) {
+    box-sizing: border-box;
+  }
+}
+
+.emptyWarning {
   padding: 20px 26px;
-  border-left: 9px solid #ed3315;
-  background: rgb(237 51 21 / 20%);
+  border-left: 9px solid #fbe842;
+  background: #fefebe;
+  line-height: 1.5;
   color: var(--preview-color-text-1);
 
   .title {
@@ -12,9 +24,6 @@
   }
 
   .details {
-    margin: 0;
-    padding: 1em 0;
     font-size: var(--preview-font-size-body-3);
-    overflow: auto;
   }
 }

@@ -14,7 +14,7 @@ function ErrorFallback({ error }: { error: Error }) {
   return (
     <div className={styles.errorBoundary} role="alert">
       <p className={styles.title}>Failed to render. Something went wrong:</p>
-      <pre>{error.message}</pre>
+      <pre className={styles.details}>{error.message}</pre>
     </div>
   );
 }
