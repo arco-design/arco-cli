@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/migration-helper",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0-beta.1",
   "main": "./dist/index.js",
   "bin": {
     "arco-migirate": "./bin/arco-migerate"
@@ -14,7 +14,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@arco-cli/generator": "2.0.0-beta.2",
+    "@arco-cli/generator": "^2.0.0-beta.3",
     "comment-json": "^4.2.3",
     "doctrine": "^3.0.0",
     "fs-extra": "^11.1.0",

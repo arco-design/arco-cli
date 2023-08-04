@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/generator",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.3",
   "main": "./dist/index.js",
   "bin": {
     "arco-generate": "./bin/arco-generate"
