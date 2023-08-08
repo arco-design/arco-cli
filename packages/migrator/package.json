@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/migration-helper",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-y.0",
   "main": "./dist/index.js",
   "bin": {
     "arco-migrate": "./bin/arco-migrate"
