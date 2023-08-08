@@ -3,7 +3,7 @@
   "version": "2.0.0-beta.1",
   "main": "./dist/index.js",
   "bin": {
-    "arco-migirate": "./bin/arco-migerate"
+    "arco-migrate": "./bin/arco-migrate"
   },
   "scripts": {
     "dev": "sh ../../.scripts/build.sh dev",

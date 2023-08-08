@@ -1,6 +1,7 @@
 import { sync as globSync } from 'glob';
 import fs from 'fs-extra';
 import path from 'path';
+import ora from 'ora';
 import { clone } from 'lodash';
 
 import { loadConfig, writeConfig } from './utils';
@@ -35,7 +36,7 @@ export class Migrator {
       'arco.scripts.config.js',
     ];
 
-    const { componentDirPatterns } = this.options;
+    const { componentDirPatterns = [] } = this.options;
     const componentDirs = globSync(
       (Array.isArray(componentDirPatterns) ? componentDirPatterns : [componentDirPatterns]).map(
         (pattern) => path.resolve(pattern)
@@ -97,6 +98,10 @@ export class Migrator {
   }
 
   run() {
+    const spinner = ora();
+
+    const tipAdaptWorkspaceConfig = 'adapt workspace config';
+    spinner.start(tipAdaptWorkspaceConfig);
     // adapt project
     const workspaceAdapter = new WorkspaceAdapter({
       workspaceRoot: this.options.root,
@@ -105,9 +110,15 @@ export class Migrator {
       uselessFilePatterns: this.options.uselessProjectFilePatterns,
     });
     workspaceAdapter.run();
+    spinner.succeed(tipAdaptWorkspaceConfig);
 
     // adapt components
     this.componentDirs.forEach((componentDir) => {
+      const tip = `adapt workspace component in [${path.relative(
+        this.options.root,
+        componentDir
+      )}]`;
+      spinner.start(tip);
       const adapter = new ComponentAdapter({
         workspaceRoot: this.options.root,
         noEmit: this.options.noEmit,
@@ -118,10 +129,13 @@ export class Migrator {
 
       this.componentInfoList.push(clone(adapter.info));
       adapter.run();
+      spinner.succeed(tip);
     });
 
     // adapt component packages
     [...new Set(this.componentInfoList.map((info) => info.package.path))].forEach((packageDir) => {
+      const tip = `adapt component package in [${path.relative(this.options.root, packageDir)}]`;
+      spinner.start(tip);
       const adapter = new PackageAdapter({
         workspaceRoot: this.options.root,
         noEmit: this.options.noEmit,
@@ -129,9 +143,18 @@ export class Migrator {
         uselessFilePatterns: this.options.uselessPackageFilePatterns,
       });
       adapter.run();
+      spinner.succeed(tip);
     });
 
+    const tipRegisterComponents = 'register components to workspace config';
+    spinner.start(tipRegisterComponents);
     // register components to workspace config
-    this.registerWorkspaceComponents();
+    try {
+      this.registerWorkspaceComponents();
+      spinner.succeed(tipRegisterComponents);
+    } catch (err) {
+      spinner.fail(tipRegisterComponents);
+      console.error(err);
+    }
   }
 }

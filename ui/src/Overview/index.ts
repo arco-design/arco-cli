@@ -1,2 +1,2 @@
 export { Overview } from './Overview';
-export type { OverviewProps } from './interface';
+export type { OverviewProps, OverviewHandle } from './interface';

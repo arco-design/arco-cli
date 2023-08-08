@@ -17,11 +17,13 @@ yargs
     'migrate',
     'migrate project to arco cli v2',
     (yargs) => {
+      const includeExample = '"packages/*/src" "components/*"';
       return yargs
         .option('noEmit', { type: 'boolean', describe: 'skip writing files' })
         .options('include', {
           type: 'string',
-          describe: 'glob patterns to the component directories',
+          demandOption: `option [include] is required, pass the glob pattern of component directories that need to be migrated. e.g. ${includeExample}`,
+          describe: `glob patterns to the component directories, e.g. ${includeExample}`,
         });
     },
     (options) => migrate(options)
