@@ -32,12 +32,13 @@ import {
   BUILD_TASK_NAME_COMPILER_ESM,
   BUILD_TASK_NAME_COMPILER_CJS,
 } from '@arco-cli/legacy/dist/constants';
+import type { Doclet } from '@arco-cli/legacy/dist/types';
 
 import { ReactAspect } from './react.aspect';
 import basePreviewConfigFactory from './webpack/webpack.config.base';
 import componentPreviewDevConfigFactory from './webpack/webpack.config.component.dev';
 import componentPreviewProdConfigFactory from './webpack/webpack.config.component.prod';
-import { Doclet, parser } from './tsdoc';
+import { parser } from './tsdoc';
 
 type CreateCompilerTaskOptions = {
   tsModule?: typeof ts;

@@ -1,6 +1,6 @@
 import { DocPropList } from './docPropList';
 import { SerializableMap } from './docProp';
-import { DocOutline } from '../type';
+import { DocOutline, DocSnippet } from '../type';
 
 export class Doc {
   constructor(readonly filePath: string, readonly props: DocPropList) {}
@@ -29,6 +29,10 @@ export class Doc {
 
   get outline(): DocOutline {
     return this.props.get('outline')?.value as [];
+  }
+
+  get snippets(): DocSnippet[] {
+    return this.props.get('snippets')?.value as [];
   }
 
   static from(path: string, propObject: SerializableMap) {

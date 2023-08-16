@@ -18,6 +18,7 @@ export type MDXCompilerOptions = {
   filePath?: string;
   renderer: string;
   arcoFlavour: boolean;
+  extractSnippets?: boolean;
 };
 
 // these components name come from @arco-cli/ui-foundation-react/dist/markdown/components
@@ -39,6 +40,7 @@ const DEFAULT_OPTIONS: Partial<MDXCompilerOptions> = {
   compilers: [],
   renderer: DEFAULT_RENDERER,
   arcoFlavour: true,
+  extractSnippets: false,
 };
 
 /**
@@ -94,7 +96,7 @@ function createCompiler(opts: Partial<MDXCompilerOptions>) {
         extractMetadata,
         extractImports,
         extractHeadings.bind(null, COMPONENT_NAME_DOC_ANCHOR),
-        extractComponentDemos.bind(null, COMPONENT_NAME_DEMO_VIEW),
+        extractComponentDemos.bind(null, COMPONENT_NAME_DEMO_VIEW, options.extractSnippets),
       ]
     : [extractImports];
   const mustRehypePlugins = [];

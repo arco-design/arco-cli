@@ -16,7 +16,7 @@ import {
   toComponentChunkId,
   toComponentChunkFilename,
 } from '@arco-cli/legacy/dist/workspace/componentIdTo';
-import { DIR_ARTIFACTS } from '@arco-cli/legacy/dist/constants';
+import { DIR_ARTIFACTS_PREVIEW } from '@arco-cli/legacy/dist/constants';
 
 import { BundlingStrategy, ComputeTargetsContext } from '../bundlingStrategy';
 import type { PreviewDefinition } from '../types';
@@ -38,11 +38,9 @@ type ComponentEntry = {
 export class ComponentBundlingStrategy implements BundlingStrategy {
   name = 'component';
 
-  constructor(private preview: PreviewMain) {}
+  artifactDir = DIR_ARTIFACTS_PREVIEW;
 
-  get artifactDir() {
-    return join(DIR_ARTIFACTS, 'preview');
-  }
+  constructor(private preview: PreviewMain) {}
 
   async computeTargets(
     context: ComputeTargetsContext,

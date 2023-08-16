@@ -1,6 +1,6 @@
 import { VFile } from 'vfile';
 
-import type { DocOutline } from '@aspect/docs';
+import type { DocOutline, DocSnippet } from '@aspect/docs';
 
 import { ImportSpecifier } from './importSpecifier';
 
@@ -27,6 +27,13 @@ export class CompileOutput {
    */
   getOutline(): DocOutline {
     return (this.file.data as any).headings;
+  }
+
+  /**
+   * get all snippets of doc
+   */
+  getSnippets(): DocSnippet[] {
+    return (this.file.data as any).snippets || [];
   }
 
   /**

@@ -1,32 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { ReactNode, useContext, useEffect, useMemo } from 'react';
+import type { Doclet } from '@arco-cli/legacy/dist/types';
 
 import { Table } from '../../baseUI/table';
 import { DocAnchorContext } from '../../markdown/components/docAnchor';
 import { CodeSnippet } from '../../markdown/components/snippet/codeSnippet';
 
 import styles from './propertiesTable.module.scss';
-
-// Type from @arco-cli/react/dist/tsdoc/types
-export type DocProp = {
-  name: string;
-  description: string;
-  required: boolean;
-  type: string;
-  defaultValue?: string;
-  version?: string;
-};
-
-// Type from @arco-cli/react/dist/tsdoc/types
-export type Doclet = {
-  filePath: string;
-  name: string;
-  description?: string;
-  type?: string;
-  args?: Record<string, any>[];
-  returns?: Record<string, any>;
-  properties?: DocProp[];
-};
 
 type AnchorInfo = { depth: number; text: string };
 

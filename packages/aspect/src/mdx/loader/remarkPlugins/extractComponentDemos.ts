@@ -4,9 +4,12 @@ import path from 'path';
 import glob from 'glob';
 import fs from 'fs-extra';
 
-export function extractComponentDemos(demoViewComponentName: string) {
+import type { DocSnippet } from '@aspect/docs/type';
+
+export function extractComponentDemos(demoViewComponentName: string, extractSnippets = false) {
   return function transformer(tree, file) {
     const imports = file.data.imports || [];
+    const snippets: DocSnippet[] = [];
 
     if (!demoViewComponentName) return;
 
@@ -43,6 +46,13 @@ export function extractComponentDemos(demoViewComponentName: string) {
         }
 
         if (metadata.demo) {
+          if (extractSnippets) {
+            snippets.push({
+              code: demoCode,
+              language: demoExtname,
+            });
+          }
+
           const encoder = new TextEncoder();
           node.value = `<${demoViewComponentName} children={${
             node.value
@@ -50,6 +60,8 @@ export function extractComponentDemos(demoViewComponentName: string) {
             demoCode
           )}' }} language="${demoExtname}" />`;
         }
+
+        file.data.snippets = snippets;
       }
     });
   };

@@ -1,4 +1,4 @@
-export type DocProp = {
+export type APIProperty = {
   name: string;
   description: string;
   required: boolean;
@@ -14,5 +14,5 @@ export type Doclet = {
   type?: string;
   args?: Record<string, any>[];
   returns?: Record<string, any>;
-  properties?: DocProp[];
+  properties?: APIProperty[];
 };

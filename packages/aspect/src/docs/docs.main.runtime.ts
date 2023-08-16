@@ -7,6 +7,9 @@ import { PreviewAspect, PreviewMain } from '@arco-cli/service/dist/preview';
 import { BuilderAspect, BuilderMain } from '@arco-cli/service/dist/builder';
 import { GraphqlAspect, GraphqlMain } from '@arco-cli/core/dist/graphql';
 import { AbstractVinyl } from '@arco-cli/legacy/dist/workspace/component/sources';
+import { Doclet } from '@arco-cli/legacy/dist/types';
+import { DIR_ARTIFACTS_DOCS } from '@arco-cli/legacy/dist/constants';
+import { toComponentManifestFilename } from '@arco-cli/legacy/dist/workspace/componentIdTo';
 
 import { Environment } from '@aspect/envs';
 import { WorkspaceAspect, Workspace } from '@aspect/workspace';
@@ -18,12 +21,7 @@ import { DocsPreviewDefinition } from './docs.previewDefinition';
 import { DocReader } from './type';
 import { FileExtensionNotSupportedError } from './exceptions';
 import { Doc, DocPropList } from './doc';
-import {
-  ComponentManifestMap,
-  DOCS_ARTIFACT_DIR,
-  DOCS_MANIFEST_FILENAME,
-  DocsTask,
-} from './docs.task';
+import { ComponentManifest, DocsTask } from './docs.task';
 
 type DocReaderSlot = SlotRegistry<DocReader>;
 
@@ -66,7 +64,7 @@ export class DocsMain {
       });
     }
 
-    builder.registerBuildTasks([new DocsTask()]);
+    builder.registerBuildTasks([new DocsTask(docsMain)]);
 
     return docsMain;
   }
@@ -111,7 +109,7 @@ export class DocsMain {
    * like component property tables
    */
   getMetadata(components: Component[], env: Environment) {
-    return ComponentMap.as<Record<string, any>>(components, (component) => {
+    return ComponentMap.as<Doclet[]>(components, (component) => {
       let jsdocEntryFiles = [];
 
       if (component.entries.jsdoc) {
@@ -171,23 +169,22 @@ export class DocsMain {
   /**
    * get manifest info from doc artifact
    */
-  async getDocsManifestFromArtifact(
-    component: Component
-  ): Promise<Component['entries']['extraDocs']> {
+  async getDocsManifestFromArtifact(component: Component): Promise<ComponentManifest> {
     const artifactManifestPathAbs = path.join(
       component.packageDirAbs,
-      DOCS_ARTIFACT_DIR,
-      DOCS_MANIFEST_FILENAME
+      DIR_ARTIFACTS_DOCS,
+      toComponentManifestFilename(component.id)
     );
+    const emptyResult: ComponentManifest = { doclets: [], snippets: [], extraDocs: [] };
 
     if (fs.existsSync(artifactManifestPathAbs)) {
       try {
-        const manifest: ComponentManifestMap = await fs.readJSON(artifactManifestPathAbs);
-        return manifest[component.id] || [];
+        const manifest: ComponentManifest = await fs.readJSON(artifactManifestPathAbs);
+        return manifest || emptyResult;
       } catch (err) {}
     }
 
-    return [];
+    return emptyResult;
   }
 }
 

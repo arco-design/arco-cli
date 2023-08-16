@@ -175,18 +175,18 @@ export class SyncerMain {
         const doc = this.docs.getDoc(component);
         const docManifest = await this.docs.getDocsManifestFromArtifact(component);
 
-        // many components may come from the same package
-        // we should only sync file info for the current component, otherwise the data size will be too large
         const pickComponentFileCDNInfo = () => {
           const result: any = {};
-          const keywords = toFsCompatible(component.id);
+          const keyword = toFsCompatible(component.id);
 
           if (uploadResult.data) {
             result.zip = uploadResult.data.zip;
             result.files = {};
 
             Object.entries(uploadResult.data.files || {}).forEach(([filePath, url]) => {
-              if (filePath.indexOf(keywords) > -1) {
+              // many components may come from the same package
+              // we should only sync file info for the current component, otherwise the data size will be too large
+              if (filePath.indexOf(keyword) > -1) {
                 result.files[filePath] = url;
               }
             });
@@ -212,7 +212,7 @@ export class SyncerMain {
           outline: doc.outline,
           fileManifest: {
             extraStyle: component.extraStyles,
-            docs: docManifest,
+            docs: docManifest.extraDocs,
             cdn: pickComponentFileCDNInfo(),
           },
           _generation: MATERIAL_GENERATION,

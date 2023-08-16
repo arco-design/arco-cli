@@ -8,13 +8,12 @@ import {
 } from 'ts-document/lib/interface';
 import logger from '@arco-cli/legacy/dist/logger';
 import { SourceFile } from '@arco-cli/legacy/dist/workspace/component/sources';
-
-import { Doclet, DocProp } from './types';
+import type { Doclet, APIProperty } from '@arco-cli/legacy/dist/types';
 
 /**
  * get doc-prop for preview from parsed ts-property
  */
-function getDocProp({ name, type, isOptional, tags }: PropertyType): DocProp {
+function getDocProp({ name, type, isOptional, tags }: PropertyType): APIProperty {
   const findDescription = (tags: TagType[]): string => {
     return tags.find(({ name }) => name === 'en' || name === 'zh')?.value || '';
   };
