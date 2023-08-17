@@ -92,6 +92,7 @@ export class ReactMain {
     SassMain
   ]) {
     const defaultReactEnv = new ReactEnv(
+      workspace,
       compiler,
       multiCompiler,
       jestMain,

@@ -1,4 +1,5 @@
 import { join, resolve } from 'path';
+import fs from 'fs-extra';
 import { cloneDeep } from 'lodash';
 import ts from 'typescript';
 import { PreviewEnv, TesterEnv, ExecutionContext } from '@arco-cli/aspect/dist/envs';
@@ -33,6 +34,7 @@ import {
   BUILD_TASK_NAME_COMPILER_CJS,
 } from '@arco-cli/legacy/dist/constants';
 import type { Doclet } from '@arco-cli/legacy/dist/types';
+import { Workspace } from '@arco-cli/aspect/dist/workspace';
 
 import { ReactAspect } from './react.aspect';
 import basePreviewConfigFactory from './webpack/webpack.config.base';
@@ -48,6 +50,8 @@ type CreateCompilerTaskOptions = {
   sassCompilerOptions?: SassCompilerOptions;
 };
 
+type DocMetadataCache = Record<string, { hash: string; metadata: Doclet[] }>;
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const defaultTsConfig = require('./typescript/tsconfig.json');
 
@@ -56,6 +60,7 @@ const DEFAULT_CJS_DIR = 'lib';
 
 export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
   constructor(
+    private workspace: Workspace,
     private compiler: CompilerMain,
     private multiCompiler: MultiCompilerMain,
     private jest: JestMain,
@@ -65,8 +70,26 @@ export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
     private sass: SassMain
   ) {}
 
-  // TODO caching logic should be refactored to DocsAspect
-  private docMetadataCache: Record<string, { hash: string; docletList: Doclet[] }> = {};
+  get cacheDir(): string {
+    return this.workspace?.getCacheDir(ReactAspect.id);
+  }
+
+  get docMetadataCachePath(): string {
+    return join(this.cacheDir, 'docMetadataCache.json');
+  }
+
+  private getDocMetadataCache(): DocMetadataCache {
+    try {
+      return fs.readJSONSync(this.docMetadataCachePath);
+    } catch (err) {}
+    return {};
+  }
+
+  private cacheDocMetadata(cache: DocMetadataCache) {
+    try {
+      fs.writeJSONSync(this.docMetadataCachePath, cache);
+    } catch (err) {}
+  }
 
   private createTsCompilerOptions(): TypescriptCompilerOptions {
     const tsconfig = cloneDeep(defaultTsConfig);
@@ -187,21 +210,27 @@ export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
     return require.resolve('@arco-cli/ui-foundation-react/dist/preview/index.js');
   }
 
-  getDocsMetadata(files: SourceFile[]) {
-    return files.reduce((acc, file) => {
+  getDocsMetadata(files: SourceFile[]): Doclet[] {
+    const cache = this.getDocMetadataCache();
+    const result = files.reduce((acc, file) => {
       if (!file?.contents) return acc;
 
       const hash = sha1(file.contents);
-      if (this.docMetadataCache[file.path]?.hash !== hash) {
+
+      if (!cache[file.path] || cache[file.path].hash !== hash) {
         const docletList = parser(file);
-        this.docMetadataCache[file.path] = {
+        cache[file.path] = {
           hash,
-          docletList,
+          metadata: docletList,
         };
       }
 
-      return acc.concat(this.docMetadataCache[file.path].docletList);
+      return acc.concat(cache[file.path]?.metadata);
     }, [] as Doclet[]);
+
+    this.cacheDocMetadata(cache);
+
+    return result;
   }
 
   getPreviewConfig() {
