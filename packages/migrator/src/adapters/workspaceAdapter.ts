@@ -187,6 +187,7 @@ ${artifactsDirName}`
       workspaceConfig: 'arco.workspace.jsonc.tpl.js',
       envConfig: 'arco.env.config.js',
       jestConfig: 'jest.config.js',
+      workspaceHook: '.scripts/workspaceHooks/afterComponentCreated.js',
     };
 
     Object.entries(tplFilePathMap).forEach(([, filePath]) => {
