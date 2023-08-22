@@ -119,9 +119,11 @@ export class DocsMain {
             : [component.entries.jsdoc]
         )
           .map((jsdocEntry) => {
-            return component.files.find(
-              (file) => file.relative === path.join(component.entries.base, jsdocEntry)
-            );
+            return jsdocEntry
+              ? component.files.find(
+                  (file) => file.relative === path.join(component.entries.base, jsdocEntry)
+                )
+              : null;
           })
           .filter(Boolean);
       }
