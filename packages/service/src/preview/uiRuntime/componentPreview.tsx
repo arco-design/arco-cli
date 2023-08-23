@@ -34,6 +34,11 @@ export interface ComponentPreviewProps
    * extra stylesheet apply to iframe
    */
   extraStyle?: string;
+
+  /**
+   * is in dark mode
+   */
+  darkMode?: boolean;
 }
 
 export type ComponentPreviewHandle = {
@@ -49,6 +54,7 @@ export const ComponentPreview = function ({
   queryParams,
   viewport = 1280,
   extraStyle,
+  darkMode,
 }: ComponentPreviewProps) {
   const { overviewScrollContainerID } = useContext(WorkspaceContext);
 
@@ -65,6 +71,7 @@ export const ComponentPreview = function ({
       src={url}
       scrollContainer={`#${overviewScrollContainerID}`}
       extraStyle={extraStyle}
+      darkMode={darkMode}
       spinProps={{ tip: 'Loading...' }}
       scrollContainerOffset={220}
     />

@@ -2,6 +2,11 @@
 
 $navbar-height: 60px;
 
+:global(body[arco-theme='dark']) {
+  color-scheme: dark;
+  background-color: var(--preview-color-bg-1);
+}
+
 .emptyContainer {
   height: 100vh;
 }

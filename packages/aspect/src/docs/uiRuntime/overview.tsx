@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { WorkspaceContext } from '@arco-cli/ui-foundation-react';
 import { ComponentPreview } from '@arco-cli/service/dist/preview/uiRuntime';
 import { Tabs } from '@arco-cli/ui-foundation-react/dist/tabs';
 import { MarkdownLive } from '@arco-cli/ui-foundation-react/dist/markdown/live';
@@ -8,6 +9,7 @@ import { ComponentContext, ComponentMeta } from '@aspect/component/uiRuntime';
 import styles from './overview.module.scss';
 
 export function Overview() {
+  const { darkMode } = useContext(WorkspaceContext);
   const component = useContext(ComponentContext);
   const [extraStyle, setExtraStyle] = useState<string>(null);
 
@@ -18,6 +20,7 @@ export function Overview() {
       previewName="overview"
       viewport={null}
       extraStyle={extraStyle}
+      darkMode={darkMode}
     />
   );
 

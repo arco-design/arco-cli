@@ -34,4 +34,18 @@ $navbar-height: 60px;
       text-overflow: ellipsis;
     }
   }
+
+  .right {
+    display: flex;
+    align-items: center;
+
+    .darkModeSwitcher {
+      margin-right: 12px;
+      background-color: var(--preview-color-fill-4) !important;
+
+      &:global(.arco-switch-checked .arco-switch-text) {
+        color: rgb(249 204 68);
+      }
+    }
+  }
 }

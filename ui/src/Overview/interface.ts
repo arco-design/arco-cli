@@ -18,6 +18,11 @@ export interface OverviewProps {
    */
   extraStyle?: string;
   /**
+   * @zh 是否为 Arco 暗色模式
+   * @en Whether is Arco dark mode
+   */
+  darkMode?: boolean;
+  /**
    * @zh Iframe 引用
    * @zh Reference of iframe element
    */

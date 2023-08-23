@@ -21,7 +21,10 @@ body {
   --preview-color-warning: rgb(255 125 0);
   --preview-color-danger: rgb(245 63 63);
   --preview-color-primary: rgb(22 93 255);
-  --preview-color-bg: #fff;
+  --preview-color-bg-1: #fff;
+  --preview-color-bg-2: #fff;
+  --preview-color-bg-3: #fff;
+  --preview-color-bg-4: #fff;
   --preview-color-border: rgb(242 243 245);
   --preview-color-link: rgb(22 93 255);
   --preview-color-text-1: rgb(29 33 41);
@@ -39,8 +42,11 @@ body[arco-theme='dark'] {
   --preview-color-warning: rgb(251 233 75);
   --preview-color-danger: rgb(247 105 101);
   --preview-color-primary: rgb(60 126 255);
-  --preview-color-bg: #17171a;
-  --preview-color-border: rgb(229 230 235);
+  --preview-color-bg-1: #17171a;
+  --preview-color-bg-2: #232324;
+  --preview-color-bg-3: #2a2a2b;
+  --preview-color-bg-4: #313132;
+  --preview-color-border: #333335;
   --preview-color-link: rgb(60 126 255);
   --preview-color-text-1: rgb(255 255 255 / 90%);
   --preview-color-text-2: rgb(255 255 255 / 70%);

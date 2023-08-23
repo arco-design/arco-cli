@@ -1,5 +1,10 @@
 @import '../style/variable';
 
+:global(body[arco-theme='dark']) {
+  color-scheme: dark;
+  background: var(--preview-color-bg-1);
+}
+
 .mdxContent {
   line-height: 1.5;
   padding-right: calc($doc-anchor-width + 60px);

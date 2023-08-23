@@ -34,6 +34,7 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
     src,
     iframe,
     extraStyle,
+    darkMode,
     scrollContainer,
     scrollContainerOffset = 0,
     spinProps,
@@ -70,6 +71,13 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
     }
   };
 
+  const toggleDarkMode = (dark: boolean) => {
+    const body = refIframe.current?.contentWindow?.document?.body;
+    if (body) {
+      dark ? body.setAttribute('arco-theme', 'dark') : body.removeAttribute('arco-theme');
+    }
+  };
+
   const scrollHandler = useCallback(
     debounce((event) => {
       const updateAnchorOffset =
@@ -102,6 +110,12 @@ ${err.toString()}`);
       appendExtraStyle(extraStyle);
     }
   }, [iframeLoadTimes, extraStyle]);
+
+  useEffect(() => {
+    if (iframeLoadTimes > 0) {
+      toggleDarkMode(darkMode);
+    }
+  }, [iframeLoadTimes, darkMode]);
 
   useImperativeHandle<any, OverviewHandle>(
     ref,
@@ -150,7 +164,7 @@ ${err.toString()}`);
           src={src}
           onLoad={(event) => {
             onIframeLoad?.(event);
-            setIframeLoadTimes(iframeLoadTimes > 10e8 ? 0 : iframeLoadTimes + 1);
+            setIframeLoadTimes(iframeLoadTimes > 10e8 ? 1 : iframeLoadTimes + 1);
           }}
         />
       </div>

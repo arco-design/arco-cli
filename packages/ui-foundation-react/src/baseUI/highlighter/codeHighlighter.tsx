@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import Highlighter from 'react-syntax-highlighter/dist/esm/light';
 import ts from 'react-syntax-highlighter/dist/esm/languages/hljs/typescript';
-import defaultTheme from 'react-syntax-highlighter/dist/esm/styles/hljs/xcode';
+import defaultTheme from 'react-syntax-highlighter/dist/esm/styles/hljs/dark';
 
 Highlighter.registerLanguage('typescript', ts);
 
