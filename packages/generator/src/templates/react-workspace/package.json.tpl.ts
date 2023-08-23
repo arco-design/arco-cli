@@ -41,7 +41,6 @@ const templateFn: TemplateFunction = function ({
     dependencies: {},
     devDependencies: {
       '@arco-cli/arco': '^2.0.0-beta.0',
-      '@arco-plugins/webpack-react': '~1',
       '@babel/runtime': '^7.22.3',
       '@testing-library/dom': '^8.19.1',
       '@testing-library/jest-dom': '^5.16.5',
@@ -66,6 +65,8 @@ const templateFn: TemplateFunction = function ({
       'lint-staged': '^13.1.1',
       'postcss-less': '^6.0.0',
       prettier: '^2.7.1',
+      react: '~17',
+      'react-dom': '~17',
       stylelint: '^15.7.0',
       'stylelint-config-css-modules': '^4.2.0',
       'stylelint-config-standard': '^33.0.0',

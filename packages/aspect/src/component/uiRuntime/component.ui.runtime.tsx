@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import type { RouteProps } from 'react-router-dom';
 import { UIRuntime } from '@arco-cli/service/dist/ui/ui.aspect';

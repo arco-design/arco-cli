@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useContext, useState } from 'react';
 import { ComponentPreview } from '@arco-cli/service/dist/preview/uiRuntime';
 import { Tabs } from '@arco-cli/ui-foundation-react/dist/tabs';

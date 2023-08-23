@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useEffect } from 'react';
 import { Typography, Select } from '@arco-design/web-react';
 import { IconTag, IconSkin } from '@arco-design/web-react/icon';

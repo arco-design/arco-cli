@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useMemo, ReactNode, useEffect } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { RouteProps } from 'react-router-dom';

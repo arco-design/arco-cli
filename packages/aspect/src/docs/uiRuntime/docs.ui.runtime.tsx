@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import { UIRuntime } from '@arco-cli/service/dist/ui/uiRuntime';
 

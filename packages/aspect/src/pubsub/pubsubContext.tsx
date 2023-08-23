@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { createContext, useContext, useEffect, RefObject, ReactNode } from 'react';
 
 export interface PubsubRegistry {
