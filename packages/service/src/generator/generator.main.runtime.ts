@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { get, isObject } from 'lodash';
+import { get, isPlainObject } from 'lodash';
 import { CLIAspect, CLIMain, MainRuntime } from '@arco-cli/core/dist/cli';
 import { LoggerAspect, LoggerMain, Logger } from '@arco-cli/core/dist/logger';
 import { WorkspaceAspect, Workspace } from '@arco-cli/aspect/dist/workspace';
@@ -64,7 +64,7 @@ export class GeneratorMain {
           const propertyPath = parentPath ? `${parentPath}.${key}` : key;
           if (JSON.stringify(get(extendsRule, propertyPath)) === JSON.stringify(value)) {
             delete obj[key];
-          } else if (isObject(value)) {
+          } else if (isPlainObject(value)) {
             deleteExtendProperties(value, propertyPath);
           }
         });
