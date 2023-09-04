@@ -9,6 +9,5 @@ export { Navbar } from './navbar';
 export type { NavbarProps } from './navbar';
 export { ErrorPage, NotFoundPage, ContactFooter } from './pages';
 export { SideBar } from './sideBar';
-export { ThemeSwitcher } from './themeSwitcher';
 export { WorkspaceContext, WorkspaceContextProvider } from './workspaceContext';
 export { WorkspaceOverview } from './workspaceOverview';
