@@ -50,8 +50,15 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
   const height = useIframeHeight(refIframe);
   const isLoading = !height;
 
+  const getIframeWindow = (): Window | null => {
+    if (refIframe.current?.src?.startsWith(window.location.origin)) {
+      return refIframe.current.contentWindow;
+    }
+    return null;
+  };
+
   const appendExtraStyle = (href: string) => {
-    const contentWindow = refIframe.current?.contentWindow;
+    const contentWindow = getIframeWindow();
     if (contentWindow) {
       const eleClassName = '__arco-component-extra-style';
 
@@ -72,23 +79,26 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
   };
 
   const toggleDarkMode = (dark: boolean) => {
-    const body = refIframe.current?.contentWindow?.document?.body;
-    if (body) {
+    const contentWindow = getIframeWindow();
+    if (contentWindow) {
+      const body = contentWindow.document.body;
       dark ? body.setAttribute('arco-theme', 'dark') : body.removeAttribute('arco-theme');
     }
   };
 
   const scrollHandler = useCallback(
     debounce((event) => {
-      const updateAnchorOffset =
-        refIframe.current?.contentWindow?.[GLOBAL_METHOD_MAP_KEY]?.updateAnchorOffset;
-      if (typeof updateAnchorOffset === 'function') {
-        try {
-          const scrollTop = (event.target?.scrollTop || 0) - scrollContainerOffset;
-          updateAnchorOffset(Math.max(0, scrollTop));
-        } catch (err) {
-          console.warn(`Failed to update anchor position in component preview page, details:
+      const contentWindow = getIframeWindow();
+      if (contentWindow) {
+        const updateAnchorOffset = contentWindow[GLOBAL_METHOD_MAP_KEY]?.updateAnchorOffset;
+        if (typeof updateAnchorOffset === 'function') {
+          try {
+            const scrollTop = (event.target?.scrollTop || 0) - scrollContainerOffset;
+            updateAnchorOffset(Math.max(0, scrollTop));
+          } catch (err) {
+            console.warn(`Failed to update anchor position in component preview page, details:
 ${err.toString()}`);
+          }
         }
       }
     }, 200),

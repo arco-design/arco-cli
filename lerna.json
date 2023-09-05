@@ -1,5 +1,6 @@
 {
   "version": "independent",
   "useWorkspaces": true,
-  "npmClient": "pnpm"
+  "npmClient": "pnpm",
+  "ignoreChanges": ["**/ui/**"]
 }
