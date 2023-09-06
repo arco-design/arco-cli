@@ -6,6 +6,7 @@ import { Component } from '@arco-cli/aspect/dist/component';
 import { BuildContext, BuildTask, BuildTaskResult, TaskResultsList } from '@service/builder';
 
 import type { Compiler, CompilerAspectConfig } from './types';
+import { sortPackageBuildOrders } from './utils/sortPackageBuildOrders';
 
 export class CompilerTask implements BuildTask {
   readonly description = 'compile components';
@@ -18,23 +19,33 @@ export class CompilerTask implements BuildTask {
   ) {}
 
   private sortContextComponents(components: Component[]) {
-    if (Array.isArray(this.config.componentCompilationOrders)) {
+    const getSortFn = (orders: string[]) => {
+      orders = Array.isArray(orders) ? orders : [];
       // avoid change origin array's order by reverse() and sort()
-      const orderRule = [...this.config.componentCompilationOrders].reverse();
-      return [...components].sort(({ id: idA }, { id: idB }) => {
-        const indexA = orderRule.findIndex(
-          (rule) => idA.indexOf(rule) > -1 || minimatch(idA, rule)
+      orders = [...orders].reverse();
+      return ({ id: idA }: Component, { id: idB }: Component) => {
+        const indexA = orders.findIndex(
+          (keyword) => idA.indexOf(keyword) > -1 || minimatch(idA, keyword)
         );
-        const indexB = orderRule.findIndex(
-          (rule) => idB.indexOf(rule) > -1 || minimatch(idB, rule)
+        const indexB = orders.findIndex(
+          (keyword) => idB.indexOf(keyword) > -1 || minimatch(idB, keyword)
         );
         // all components in orderRule should sort to first
         // then sort them by their index in orderRule
         return indexB - indexA;
-      });
-    }
+      };
+    };
 
-    return components;
+    const { orders: defaultPackageBuildOrders } = sortPackageBuildOrders(
+      components.map(({ packageName, dependencies }) => ({
+        name: packageName,
+        dependencies: Object.keys(dependencies),
+      }))
+    );
+
+    return [...components]
+      .sort(getSortFn(defaultPackageBuildOrders.map((packageName) => `${packageName}/*`)))
+      .sort(getSortFn(this.config.componentCompilationOrders));
   }
 
   private async clearDistDir(component: Component, compiler: Compiler) {

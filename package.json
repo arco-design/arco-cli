@@ -5,7 +5,8 @@
   "scripts": {
     "prepare": "husky install",
     "init": "pnpm i && npm run build",
-    "build": "lerna run build --parallel",
+    "clean": "lerna run clean --parallel --ignore=\"@arco-cli/workspace-materials\"",
+    "build": "lerna run build --parallel --ignore=\"@arco-cli/workspace-materials\"",
     "link": "node ./scripts/linkLocalPackages.js",
     "format": "prettier --config --write \"packages/**/*.{js,jsx,ts,tsx}\"",
     "eslint": "eslint packages/ --fix --cache --quiet --ext .js,.jsx,.ts,.tsx",
