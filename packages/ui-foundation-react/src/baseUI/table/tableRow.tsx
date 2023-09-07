@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { Grid, GridProps } from '../grid';
 import { TableColumn } from './tableColumn';
 import { CodeHighlighter } from '../../baseUI/highlighter';
+import { MarkdownLive } from '../../markdown/live';
 
 import styles from './tableRow.module.scss';
 
@@ -88,7 +89,7 @@ export function TableRow({ row, colNumber = 4, headings, className, ...rest }: T
         // default
         return (
           <TableColumn className={styles.breakWord} key={index}>
-            {row[title]}
+            <MarkdownLive children={row[title]} />
           </TableColumn>
         );
       })}
