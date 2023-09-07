@@ -41,6 +41,7 @@ import basePreviewConfigFactory from './webpack/webpack.config.base';
 import componentPreviewDevConfigFactory from './webpack/webpack.config.component.dev';
 import componentPreviewProdConfigFactory from './webpack/webpack.config.component.prod';
 import { parser } from './tsdoc';
+import type { TsDocumentOptions } from './tsdoc/parser';
 
 type CreateCompilerTaskOptions = {
   tsModule?: typeof ts;
@@ -210,7 +211,7 @@ export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
     return require.resolve('@arco-cli/ui-foundation-react/dist/preview/index.js');
   }
 
-  getDocsMetadata(files: SourceFile[]): Doclet[] {
+  getDocsMetadata(files: SourceFile[], options?: TsDocumentOptions): Doclet[] {
     const cache = this.getDocMetadataCache();
     const result = files.reduce((acc, file) => {
       if (!file?.contents) return acc;
@@ -218,7 +219,7 @@ export class ReactEnv implements TesterEnv<Tester>, PreviewEnv {
       const hash = sha1(file.contents);
 
       if (!cache[file.path] || cache[file.path].hash !== hash) {
-        const docletList = parser(file);
+        const docletList = parser(file, options);
         cache[file.path] = {
           hash,
           metadata: docletList,

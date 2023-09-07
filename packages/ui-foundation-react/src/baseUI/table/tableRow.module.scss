@@ -67,3 +67,9 @@
 .breakWord {
   word-break: break-word;
 }
+
+.link {
+  color: var(--preview-color-primary) !important;
+  text-decoration: none;
+  opacity: 0.7;
+}

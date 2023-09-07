@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { ReactElement } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import classNames from 'classnames';
 
 import { Grid, GridProps } from '../grid';
@@ -59,11 +59,28 @@ export function TableRow({ row, colNumber = 4, headings, className, ...rest }: T
         }
 
         if (title === 'type' || title === 'default') {
+          const text = row[title] || '-';
+          const matches = text.match(/^\[([^\]]+)]\(([^)]+)\)$/);
+          let columnContent: ReactNode = null;
+
+          if (matches) {
+            const [, typeText, href] = matches;
+            columnContent = (
+              <a className={styles.link} href={href}>
+                {typeText}
+              </a>
+            );
+          } else {
+            columnContent = (
+              <CodeHighlighter language="typescript" className={styles.highlighted}>
+                {text}
+              </CodeHighlighter>
+            );
+          }
+
           return (
             <TableColumn className={classNames(styles.breakWord, styles.typeColumn)} key={index}>
-              <CodeHighlighter language="typescript" className={styles.highlighted}>
-                {row[title] || '-'}
-              </CodeHighlighter>
+              {columnContent}
             </TableColumn>
           );
         }

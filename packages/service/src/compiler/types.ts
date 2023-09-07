@@ -74,6 +74,7 @@ export interface StyleCompilerOptions {
     fileInfo: StyleFileToCompile,
     defaultCompileFn: (fileInfo: StyleFileToCompile) => Promise<string>
   ) => Promise<string>;
+
   /**
    * whether to combine all raw style files to one
    */

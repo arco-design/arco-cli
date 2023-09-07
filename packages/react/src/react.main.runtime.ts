@@ -10,45 +10,19 @@ import {
   Environment,
 } from '@arco-cli/aspect/dist/envs';
 import { JestAspect, JestMain } from '@arco-cli/aspect/dist/jest';
-import {
-  WebpackAspect,
-  WebpackMain,
-  WebpackConfigTransformer,
-} from '@arco-cli/aspect/dist/webpack';
+import { WebpackAspect, WebpackMain } from '@arco-cli/aspect/dist/webpack';
 import { CompilerAspect, CompilerMain } from '@arco-cli/service/dist/compiler';
 import { MultiCompilerAspect, MultiCompilerMain } from '@arco-cli/aspect/dist/multi-compiler';
-import {
-  TsConfigTransformer,
-  TypescriptAspect,
-  TypescriptMain,
-} from '@arco-cli/aspect/dist/typescript';
-import { SassAspect, SassCompilerOptions, SassMain } from '@arco-cli/aspect/dist/sass';
-import { LessAspect, LessCompilerOptions, LessMain } from '@arco-cli/aspect/dist/less';
+import { TypescriptAspect, TypescriptMain } from '@arco-cli/aspect/dist/typescript';
+import { SassAspect, SassMain } from '@arco-cli/aspect/dist/sass';
+import { LessAspect, LessMain } from '@arco-cli/aspect/dist/less';
 import { WorkspaceAspect, Workspace } from '@arco-cli/aspect/dist/workspace';
-import type { BundlerContext, DevServerContext } from '@arco-cli/aspect/dist/bundler';
 import { DEFAULT_ENV_CONFIG_PATH } from '@arco-cli/legacy/dist/constants';
+import type { ArcoEnvConfig } from '@arco-cli/aspect/dist/envs/types';
+import type { BundlerContext, DevServerContext } from '@arco-cli/aspect/dist/bundler';
 
 import { ReactAspect } from './react.aspect';
 import { ReactEnv } from './react.env';
-
-type UseWebpackModifiers = {
-  previewConfig?: WebpackConfigTransformer[];
-  devServerConfig?: WebpackConfigTransformer[];
-};
-
-type UseBuildPileModifiers = {
-  typescript?: {
-    tsModule?: any;
-    buildConfig?: TsConfigTransformer[];
-  };
-  less?: Pick<LessCompilerOptions, 'lessOptions' | 'combine'>;
-  sass?: Pick<SassCompilerOptions, 'sassOptions' | 'combine'>;
-};
-
-type UseJestModifiers = {
-  jestConfigPath?: string;
-  jestModulePath?: string;
-};
 
 export class ReactMain {
   static runtime = MainRuntime;
@@ -133,11 +107,12 @@ export class ReactMain {
 
     if (typeof defineConfig === 'function') {
       try {
-        const userConfig = defineConfig(ReactAspect.id);
+        const userConfig: ArcoEnvConfig = defineConfig(ReactAspect.id);
         const envTransformers: EnvTransformer[] = [];
 
         userConfig.jest && envTransformers.push(this.useJest(userConfig.jest));
         userConfig.webpack && envTransformers.push(this.useWebpack(userConfig.webpack));
+        userConfig.tsDocument && envTransformers.push(this.useTsDocument(userConfig.tsDocument));
 
         if (userConfig.typescript || userConfig.less || userConfig.sass) {
           envTransformers.push(
@@ -164,7 +139,7 @@ export class ReactMain {
    * override the env's build pile config for build time.
    * include typescript / less / sass options
    */
-  useBuildPipe(modifiers: UseBuildPileModifiers = {}) {
+  useBuildPipe(modifiers: Pick<ArcoEnvConfig, 'typescript' | 'less' | 'sass'> = {}) {
     const overrides: any = {};
     const { tsModule, buildConfig: tsConfigTransformers } = modifiers.typescript || {};
     const lessCompilerOptions = modifiers.less;
@@ -188,7 +163,7 @@ export class ReactMain {
    * override the env's dev server and preview webpack configurations.
    * Replaces both overrideDevServerConfig and overridePreviewConfig
    */
-  useWebpack(modifiers: UseWebpackModifiers = {}) {
+  useWebpack(modifiers: ArcoEnvConfig['webpack'] = {}) {
     const overrides: any = {};
     const devServerTransformers = modifiers.devServerConfig;
     if (devServerTransformers) {
@@ -208,10 +183,18 @@ export class ReactMain {
   /**
    * override the jest configuration.
    */
-  useJest(modifiers: UseJestModifiers = {}) {
+  useJest(modifiers: ArcoEnvConfig['jest'] = {}) {
     const { jestConfigPath, jestModulePath } = modifiers;
     return this.envs.override({
       getTester: () => this.defaultReactEnv.getTester(jestConfigPath, jestModulePath),
+    });
+  }
+
+  useTsDocument(modifiers: ArcoEnvConfig['tsDocument']) {
+    const { tsDocumentOptions } = modifiers;
+    return this.envs.override({
+      getDocsMetadata: (files: any) =>
+        this.defaultReactEnv.getDocsMetadata(files, tsDocumentOptions),
     });
   }
 

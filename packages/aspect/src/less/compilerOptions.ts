@@ -1,4 +1,4 @@
-import { CompilerOptions, StyleCompilerOptions } from '@arco-cli/service/dist/compiler';
+import type { CompilerOptions, StyleCompilerOptions } from '@arco-cli/service/dist/compiler';
 
 export type LessCompilerOptions = {
   /**

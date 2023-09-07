@@ -1,4 +1,5 @@
 import { generate, Project } from 'ts-document';
+import type { GenerateConfig } from 'ts-document/lib/interface';
 import {
   InterfaceSchema,
   FunctionSchema,
@@ -10,12 +11,16 @@ import logger from '@arco-cli/legacy/dist/logger';
 import { SourceFile } from '@arco-cli/legacy/dist/workspace/component/sources';
 import type { Doclet, APIProperty } from '@arco-cli/legacy/dist/types';
 
+export type TsDocumentOptions = Partial<GenerateConfig>;
+
 /**
  * get doc-prop for preview from parsed ts-property
  */
 function getDocProp({ name, type, isOptional, tags }: PropertyType): APIProperty {
   const findDescription = (tags: TagType[]): string => {
-    return tags.find(({ name }) => name === 'en' || name === 'zh')?.value || '';
+    const enDesc = tags.find(({ name }) => name === 'en');
+    const zhDesc = tags.find(({ name }) => name === 'zh');
+    return zhDesc?.value || enDesc?.value || '';
   };
   const findDefault = (tags: TagType[]): string => {
     return tags.find(({ name }) => name === 'defaultValue')?.value;
@@ -34,7 +39,7 @@ function getDocProp({ name, type, isOptional, tags }: PropertyType): APIProperty
   };
 }
 
-export function parser(file: SourceFile): Doclet[] {
+export function parser(file: SourceFile, options?: TsDocumentOptions): Doclet[] {
   const filePath = file.relative;
   let doclets: Doclet[] = [];
 
@@ -48,6 +53,8 @@ export function parser(file: SourceFile): Doclet[] {
           jsx: 'react' as any,
         },
       }),
+      defaultTypeMap: {},
+      ...options,
     });
 
     // componentInfo will be an Array when strictDeclarationOrder is true
