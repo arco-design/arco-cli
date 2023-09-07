@@ -9,7 +9,7 @@ import { Generator, TemplateManifest, GenerateOptions } from '@arco-cli/generato
 import { GeneratorAspect } from './generator.aspect';
 import { CreateCmd } from './create.cmd';
 
-type GeneratorConfig = {
+export type GeneratorConfig = {
   defaultPath?: string;
   defaultTemplate?: string;
   hooks?: {
