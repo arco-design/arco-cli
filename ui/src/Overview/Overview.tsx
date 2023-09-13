@@ -48,18 +48,28 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
     darkMode,
     scrollContainer,
     scrollContainerOffset = 0,
+    timeout = 15000,
     spinProps,
+    onTimeout,
     onIframeLoad,
+    onIframeError,
   } = props;
 
   const refIframe = useRef<HTMLIFrameElement>(null);
   const refScrollContainer = useRef<HTMLElement | Window>(null);
+  const refLoadingTimer = useRef<any>(null);
 
   const [iframeLoadTimes, setIframeLoadTimes] = useState(0);
   const [iframeFullscreen, setIframeFullscreen] = useState(false);
 
   const height = useIframeHeight(refIframe);
   const isLoading = !height;
+
+  useEffect(() => {
+    if (!isLoading) {
+      clearTimeout(refLoadingTimer.current);
+    }
+  }, [isLoading]);
 
   const getIframeWindow = (): Window | null => {
     return refIframe.current && canAccessIFrame(refIframe.current)
@@ -185,7 +195,11 @@ ${err.toString()}`);
           onLoad={(event) => {
             onIframeLoad?.(event);
             setIframeLoadTimes(iframeLoadTimes > 10e8 ? 1 : iframeLoadTimes + 1);
+
+            clearTimeout(refLoadingTimer.current);
+            refLoadingTimer.current = setTimeout(() => onTimeout?.(), timeout);
           }}
+          onError={onIframeError}
         />
       </div>
     </Spin>

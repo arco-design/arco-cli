@@ -38,15 +38,31 @@ export interface OverviewProps {
    */
   scrollContainerOffset?: number;
   /**
+   * @zh 物料预览加载超时时间
+   * @en Timeout for loading preview
+   * @default 15000
+   */
+  timeout?: number;
+  /**
    * @zh Spin 组件属性
    * @en Pass by SpinProps
    */
   spinProps?: Partial<SpinProps>;
   /**
+   * @zh 预览加载超时回调
+   * @en Callback for preview loaded timeout
+   */
+  onTimeout?: () => void;
+  /**
    * @zh Iframe onLoad 事件触发回调
    * @en Callback for iframe loaded
    */
   onIframeLoad?: (event) => void;
+  /**
+   * @zh Iframe onError 事件回调
+   * @en Callback for iframe onError
+   */
+  onIframeError?: (event) => void;
 }
 
 /**
