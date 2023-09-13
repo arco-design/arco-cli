@@ -27,6 +27,17 @@ function getContainer(targetContainer?: string | HTMLElement | Window) {
   return targetContainer || window;
 }
 
+function canAccessIFrame(iframe: HTMLIFrameElement) {
+  let html = null;
+  try {
+    // deal with older browsers
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    html = doc.body.innerHTML;
+  } catch (err) {}
+
+  return html !== null;
+}
+
 export const Overview = forwardRef(function (props: OverviewProps, ref) {
   const {
     style,
@@ -51,10 +62,9 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
   const isLoading = !height;
 
   const getIframeWindow = (): Window | null => {
-    if (refIframe.current?.src?.startsWith(window.location.origin)) {
-      return refIframe.current.contentWindow;
-    }
-    return null;
+    return refIframe.current && canAccessIFrame(refIframe.current)
+      ? refIframe.current.contentWindow
+      : null;
   };
 
   const appendExtraStyle = (href: string) => {

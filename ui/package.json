@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/workspace-materials",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "",
   "main": "./lib/index.js",
   "module": "./es/index.js",
@@ -11,7 +11,8 @@
     "build": "pnpm arco build",
     "build:esm": "pnpm arco build --tasks=\"TSCompilerESM\"",
     "sync": "pnpm arco sync",
-    "clean": "rm -rf es lib artifacts"
+    "clean": "rm -rf es lib artifacts",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "@arco-design/web-react": "~2",
