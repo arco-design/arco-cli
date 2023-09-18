@@ -75,7 +75,8 @@ export class DocsTask implements BuildTask {
         await Promise.all(
           component.entries.extraDocs.map(async ({ title, entry }) => {
             const extraDoc = component.files.find(
-              (file) => file.relative === path.join(component.entries.base, entry)
+              (file) =>
+                file.relative === path.relative('./', path.join(component.entries.base, entry))
             );
             if (extraDoc) {
               const targetFilename = `${toFsCompatible(component.id)}-${extraDoc.path
