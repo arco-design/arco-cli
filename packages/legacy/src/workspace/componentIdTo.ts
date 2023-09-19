@@ -6,6 +6,8 @@ const PREVIEW_CHUNK_SUFFIX = 'preview';
 
 const MANIFEST_FILENAME = 'manifest.json';
 
+const FORK_CONFIG_FILENAME = 'config.json';
+
 export function toComponentChunkFilename(componentId: string, type: ComponentChunkType) {
   const fsCompatibleId = toFsCompatible(componentId);
   const fileNameSuffix = type === 'preview' ? `-${PREVIEW_CHUNK_SUFFIX}` : '';
@@ -15,6 +17,11 @@ export function toComponentChunkFilename(componentId: string, type: ComponentChu
 export function toComponentManifestFilename(componentId: string) {
   const fsCompatibleId = toFsCompatible(componentId);
   return `${fsCompatibleId}-${MANIFEST_FILENAME}`;
+}
+
+export function toComponentForkConfigFilename(componentId: string) {
+  const fsCompatibleId = toFsCompatible(componentId);
+  return `${fsCompatibleId}-${FORK_CONFIG_FILENAME}`;
 }
 
 export function toComponentChunkId(componentId: string, type: ComponentChunkType) {

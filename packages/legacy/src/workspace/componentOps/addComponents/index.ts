@@ -1,1 +1,1 @@
-export { AddedComponent, getFilesByDir } from './addComponents';
+export { getFilesByDir } from './addComponents';

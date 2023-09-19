@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.20.6",
+    "axios": "^1.5.0",
     "chalk": "^4.1.2",
+    "compressing": "^1.10.0",
     "fs-extra": "^10.1.0",
     "gulp": "^4.0.2",
     "gulp-if": "^3.0.0",
@@ -24,6 +26,7 @@
     "gulp-replace": "^1.1.3",
     "ora": "^5.4.1",
     "through2": "^4.0.2",
+    "wget-improved": "^3.4.0",
     "yargs": "^17.6.2"
   },
   "devDependencies": {

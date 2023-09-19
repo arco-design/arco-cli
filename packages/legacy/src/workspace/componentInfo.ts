@@ -3,8 +3,6 @@ import path from 'path';
 import { buildPropagationPaths } from '../utils/path';
 import { DEFAULT_TEST_FILE_PATTERNS, PACKAGE_JSON } from '../constants';
 
-export type ComponentAspectConfig = { [aspectId: string]: Record<string, any> | '-' };
-
 export type ComponentConfig = {
   /**
    * root dir of package source code, relative path to workspace
@@ -72,9 +70,13 @@ export type ComponentConfig = {
     extraDocs?: Array<{ title: string; entry: string }>;
   };
   /**
-   * specifies the aspect configuration applied to component
+   * whether this component is allowed to fork
    */
-  config?: ComponentAspectConfig;
+  forkable?:
+    | boolean
+    | {
+        sources: string[];
+      };
 };
 
 export type ComponentInfoFiles = {
@@ -102,9 +104,9 @@ export class ComponentInfo {
 
   entries: ComponentConfig['entries'];
 
-  rootDir: string;
+  forkable: ComponentConfig['forkable'];
 
-  config?: ComponentAspectConfig;
+  rootDir: string;
 
   noFilesError?: Error;
 
@@ -115,7 +117,11 @@ export class ComponentInfo {
   readonly packageDirAbs: string;
 
   constructor(
-    {
+    readonly rawConfig: ComponentConfig,
+    workspacePath: string,
+    files?: ComponentInfoFiles[]
+  ) {
+    const {
       name,
       group,
       author,
@@ -124,12 +130,10 @@ export class ComponentInfo {
       uiResource,
       entries,
       rootDir,
-      config,
       extraStyles,
-    }: ComponentConfig,
-    workspacePath: string,
-    files?: ComponentInfoFiles[]
-  ) {
+      forkable,
+    } = rawConfig;
+
     // set entry to empty string to avoid path.resolve errors
     entries.base ||= './';
     entries.main ||= '';
@@ -141,7 +145,6 @@ export class ComponentInfo {
 
     this.entries = entries;
     this.rootDir = rootDir;
-    this.config = config;
     this.name = name || '';
     this.labels = labels || [];
     this.files = files || [];
@@ -150,6 +153,7 @@ export class ComponentInfo {
     this.repository = repository || '';
     this.uiResource = uiResource || '';
     this.extraStyles = extraStyles || [];
+    this.forkable = forkable || false;
 
     const dirsToSearchPkgJson = buildPropagationPaths(
       path.resolve(workspacePath, rootDir),

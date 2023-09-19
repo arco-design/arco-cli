@@ -8,17 +8,19 @@ import { Doc, DocsAspect, DocsMain } from '@arco-cli/aspect/dist/docs';
 import { Component } from '@arco-cli/aspect/dist/component';
 import request from '@arco-cli/legacy/dist/cli/request';
 import { uploadFile } from '@arco-cli/legacy/dist/cli/uploadFile';
-import { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
+import type { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
 import {
   DEFAULT_MATERIAL_GROUP_ID,
   MATERIAL_GENERATION,
   DIR_ARTIFACTS,
+  DIR_SOURCE,
   PACKAGE_JSON,
   CFG_HOST_ARCO_KEY,
 } from '@arco-cli/legacy/dist/constants';
 import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 import { zipFiles } from '@arco-cli/legacy/dist/utils/fs/zipFiles';
 import { getSync } from '@arco-cli/legacy/dist/globalConfig';
+import { toComponentForkConfigFilename } from '@arco-cli/legacy/dist/workspace/componentIdTo';
 
 import { SyncerAspect } from './syncer.aspect';
 import { SyncCmd } from './sync.cmd';
@@ -54,8 +56,22 @@ export class SyncerMain {
     private workspace: Workspace
   ) {}
 
+  private copingFilePaths: string[] = [];
+
   private getCacheDir() {
     return this.workspace.getCacheDir(SyncerAspect.id);
+  }
+
+  private getTempDirToUpload(component: Component) {
+    return path.join(this.getCacheDir(), toFsCompatible(component.packageName));
+  }
+
+  private async copyIfNotExist(src: string, dest: string) {
+    if (!fs.existsSync(dest) && this.copingFilePaths.indexOf(dest) === -1) {
+      this.copingFilePaths.push(dest);
+      await fs.copy(src, dest);
+      this.copingFilePaths = this.copingFilePaths.filter((filePath) => filePath !== dest);
+    }
   }
 
   private extendSyncParamsWithDefaultMaterialMeta(params: SyncParams) {
@@ -66,19 +82,52 @@ export class SyncerMain {
     });
   }
 
-  private async preparePackageFilesToUpload(component: Component): Promise<string> {
-    const cacheDir = this.getCacheDir();
-    const tempDir = path.join(cacheDir, toFsCompatible(component.packageName));
+  private async preparePackageFilesToUpload(component: Component) {
+    const tempDir = this.getTempDirToUpload(component);
     const artifactsDir = path.join(component.packageDirAbs, DIR_ARTIFACTS);
 
     await fs.ensureDir(tempDir);
-    await fs.copy(
+    await this.copyIfNotExist(
       path.join(component.packageDirAbs, PACKAGE_JSON),
       path.join(tempDir, PACKAGE_JSON)
     );
-    await fs.copy(artifactsDir, path.join(tempDir, DIR_ARTIFACTS));
+    await this.copyIfNotExist(artifactsDir, path.join(tempDir, DIR_ARTIFACTS));
 
-    return tempDir;
+    // prepare files which are needed by forking
+    if (component.forkable) {
+      // user has specified which files are belong to this component
+      if (typeof component.forkable === 'object' && Array.isArray(component.forkable.sources)) {
+        // copy component source files to temp dir
+        await Promise.all(
+          component.forkable.sources.map((sourceDir) =>
+            // keep its origin directory name after copied to dest dir
+            this.copyIfNotExist(
+              path.join(this.workspace.path, component.rootDir, sourceDir),
+              path.join(tempDir, DIR_SOURCE, sourceDir)
+            )
+          )
+        );
+      } else {
+        // copy all package source files to dest dir
+        await this.copyIfNotExist(
+          path.join(this.workspace.path, component.rootDir),
+          path.join(tempDir, DIR_SOURCE)
+        );
+      }
+
+      // write component fork config
+      await fs.writeJSON(
+        path.join(tempDir, DIR_SOURCE, toComponentForkConfigFilename(component.id)),
+        {
+          [WorkspaceAspect.id]: {
+            component: component.rawConfig,
+          },
+        },
+        {
+          spaces: 2,
+        }
+      );
+    }
   }
 
   private async uploadPackageFiles(components: Component[]) {
@@ -98,7 +147,11 @@ export class SyncerMain {
     // clear cache dir at first
     await fs.emptyDir(cacheDir);
 
-    // dist and upload all artifacts files
+    // prepare all component files to upload before uploading
+    // because we only upload once if components come from the same package
+    await Promise.all(components.map(this.preparePackageFilesToUpload.bind(this)));
+
+    // upload all artifacts files
     await Promise.all(
       components.map(async (component) => {
         const { packageName } = component;
@@ -108,7 +161,7 @@ export class SyncerMain {
         if (packagesUploading.indexOf(packageName) === -1) {
           packagesUploading.push(packageName);
 
-          const pathOfDirToUpload = await this.preparePackageFilesToUpload(component);
+          const pathOfDirToUpload = this.getTempDirToUpload(component);
           const pathOfZipToUpload = `${pathOfDirToUpload}.zip`;
 
           let error = null;
@@ -215,6 +268,7 @@ export class SyncerMain {
             docs: docManifest.extraDocs,
             cdn: pickComponentFileCDNInfo(),
           },
+          forkable: !!component.forkable,
           _generation: MATERIAL_GENERATION,
         };
 

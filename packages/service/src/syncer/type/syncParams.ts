@@ -7,6 +7,7 @@ export type SyncParams = {
   uiResource?: string;
   group: number;
   author: string;
+  forkable?: boolean;
   package: {
     name: string;
     version: string;

@@ -51,6 +51,8 @@ export const DIR_ARTIFACTS_PREVIEW = path.join(DIR_ARTIFACTS, 'preview');
 
 export const DIR_ARTIFACTS_DOCS = path.join(DIR_ARTIFACTS, 'docs');
 
+export const DIR_SOURCE = 'source';
+
 export const FILE_GLOBAL_CONFIG = 'config.json';
 
 export const FILE_WORKSPACE_JSONC = 'arco.workspace.jsonc';

@@ -92,6 +92,14 @@ export class Component {
     return this.info.extraStyles;
   }
 
+  get forkable() {
+    return this.info.forkable;
+  }
+
+  get rawConfig() {
+    return this.info.rawConfig;
+  }
+
   async upsertExtensionData(extension: string, data: Record<string, any>) {
     if (!data) return;
     const existingExtension = this.extensions.findExtension(extension);
