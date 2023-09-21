@@ -238,7 +238,20 @@ export class TypescriptCompiler implements Compiler {
       longProcessLogger.logProgress(component.id);
       currentComponentResult.id = component.id;
       currentComponentResult.startTime = Date.now();
-      nextProject.done();
+
+      if (typeof this.options.compile === 'function') {
+        // eslint-disable-next-line no-await-in-loop
+        await this.options.compile(
+          {
+            configFilePath: nextProject.project,
+            compilerOptions: nextProject.getCompilerOptions(),
+          },
+          nextProject.done
+        );
+      } else {
+        nextProject.done();
+      }
+
       currentComponentResult.endTime = Date.now();
       componentsResults.push({ ...currentComponentResult } as ComponentResult);
       currentComponentResult = { errors: [] };

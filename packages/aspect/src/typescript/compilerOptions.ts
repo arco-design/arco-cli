@@ -22,4 +22,12 @@ export type TypescriptCompilerOptions = {
    * or not. It won't change the tsconfig to support or not support jsx files.
    */
   compileJsx?: boolean;
+
+  /**
+   * extend compile function
+   */
+  compile?: (
+    project: { configFilePath: string; compilerOptions: Record<string, any> },
+    originCompileFn: () => void
+  ) => void | Promise<void>;
 } & Partial<CompilerOptions>;
