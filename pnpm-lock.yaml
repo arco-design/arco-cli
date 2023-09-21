@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -168,7 +168,7 @@ importers:
   packages/arco:
     dependencies:
       '@arco-cli/aspect':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../aspect
       '@arco-cli/core':
         specifier: ^2.0.0-beta.2
@@ -177,10 +177,10 @@ importers:
         specifier: ^2.0.0-beta.2
         version: link:../legacy
       '@arco-cli/react':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../react
       '@arco-cli/service':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../service
       '@arco-cli/stone':
         specifier: ^2.0.0-beta.0
@@ -201,13 +201,13 @@ importers:
         specifier: ^2.0.0-beta.2
         version: link:../legacy
       '@arco-cli/service':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../service
       '@arco-cli/stone':
         specifier: ^2.0.0-beta.0
         version: link:../stone
       '@arco-cli/ui-foundation-react':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../ui-foundation-react
       '@arco-design/web-react':
         specifier: ^2.42.2
@@ -644,7 +644,7 @@ importers:
   packages/react:
     dependencies:
       '@arco-cli/aspect':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../aspect
       '@arco-cli/core':
         specifier: ^2.0.0-beta.2
@@ -653,13 +653,13 @@ importers:
         specifier: ^2.0.0-beta.2
         version: link:../legacy
       '@arco-cli/service':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../service
       '@arco-cli/stone':
         specifier: ^2.0.0-beta.0
         version: link:../stone
       '@arco-cli/ui-foundation-react':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../ui-foundation-react
       '@babel/core':
         specifier: ^7.20.5
@@ -797,7 +797,7 @@ importers:
   packages/service:
     dependencies:
       '@arco-cli/aspect':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../aspect
       '@arco-cli/core':
         specifier: ^2.0.0-beta.2
@@ -812,7 +812,7 @@ importers:
         specifier: ^2.0.0-beta.0
         version: link:../stone
       '@arco-cli/ui-foundation-react':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../ui-foundation-react
       '@arco-cli/workspace-materials':
         specifier: ^0.4.0
@@ -923,7 +923,7 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2(graphql@14.7.0)(react-dom@17.0.2)(react@17.0.2)
       '@arco-cli/aspect':
-        specifier: ^2.0.0-beta.13
+        specifier: ^2.0.0-beta.14
         version: link:../aspect
       '@arco-design/web-react':
         specifier: ^2.42.2
@@ -7500,6 +7500,7 @@ packages:
       {
         integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==,
       }
+    requiresBuild: true
     dependencies:
       file-uri-to-path: 1.0.0
     dev: false
@@ -11276,6 +11277,7 @@ packages:
       {
         integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==,
       }
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -16842,6 +16844,7 @@ packages:
       {
         integrity: sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==,
       }
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -20612,6 +20615,7 @@ packages:
       {
         integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==,
       }
+    requiresBuild: true
     dev: false
     optional: true
 
