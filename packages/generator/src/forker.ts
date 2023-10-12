@@ -122,9 +122,10 @@ export class Forker {
 
         if (pathsToCopy.length <= 1) {
           const dirToFlat = pathsToCopy.pop() || sourceDir;
-          (await fs.readdir(dirToFlat, { withFileTypes: true })).forEach((dir) => {
-            if (!dir.name.endsWith(CONFIG_FILENAME_SUFFIX)) {
-              pathsToCopy.push(resolve(sourceDir, dir.name));
+          const currentDirName = path.basename(dirToFlat);
+          (await fs.readdir(dirToFlat, { withFileTypes: true })).forEach((child) => {
+            if (!child.name.endsWith(CONFIG_FILENAME_SUFFIX)) {
+              pathsToCopy.push(resolve(sourceDir, currentDirName, child.name));
             }
           });
         }
