@@ -136,12 +136,12 @@ export class TypescriptCompiler implements Compiler {
         };
 
         // convert tsconfig relative paths to absolute path
+        // don't convert compilerOptions.paths to absolute, because they are relative to compilerOption.baseUrl
         convertRelativePathsToAbs(tsconfig, [
           'include',
           'exclude',
           'files',
           'compilerOptions.baseUrl',
-          'compilerOptions.paths',
           'compilerOptions.typeRoots',
         ]);
 
