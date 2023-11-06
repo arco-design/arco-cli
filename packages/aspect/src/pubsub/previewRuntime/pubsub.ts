@@ -4,7 +4,7 @@ import { EventEmitter2 } from 'eventemitter2';
 import { connectToParent, ErrorCode } from 'penpal';
 
 import { PubsubNoParentError } from '../exceptions';
-import { ArcoBaseEvent, SizeEvent } from '../events';
+import { ArcoBaseEvent, SizeEvent, LocationHashEvent } from '../events';
 
 type Callback = (event: ArcoBaseEvent<any>) => void;
 
@@ -92,5 +92,13 @@ export class Pubsub {
     );
 
     this.resizeObserver.observe(document.body);
+  }
+
+  reportLocationChange(topic: string) {
+    if (!this.inIframe()) return;
+
+    window.addEventListener('hashchange', () => {
+      this.pub(topic, new LocationHashEvent({ hash: window.location.hash }));
+    });
   }
 }

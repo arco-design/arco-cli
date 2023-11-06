@@ -49,6 +49,11 @@ export interface OverviewProps {
    */
   spinProps?: Partial<SpinProps>;
   /**
+   * @zh 预览加载就绪回调
+   * @en Callback for preview content loaded
+   */
+  onReady?: () => void;
+  /**
    * @zh 预览加载超时回调
    * @en Callback for preview loaded timeout
    */
@@ -63,11 +68,17 @@ export interface OverviewProps {
    * @en Callback for iframe onError
    */
   onIframeError?: (event) => void;
+  /**
+   * @zh Iframe location.hash 改变的回调
+   * @en Callback for Iframe location.hash change
+   */
+  onIframeLocationHashChange?: (hash: string) => void;
 }
 
 /**
  * @title OverviewHandle
  */
 export type OverviewHandle = {
+  scrollIntoView: (selector: string, scrollOption?: any) => void;
   appendExtraStyle: (href: string) => void;
 };

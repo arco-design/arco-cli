@@ -12,7 +12,7 @@ import { Spin } from '@arco-design/web-react';
 import { IconFullscreen, IconFullscreenExit, IconShareInternal } from '@arco-design/web-react/icon';
 
 import { OverviewProps, OverviewHandle } from './interface';
-import { useIframeHeight } from '../utils/useIframeHeight';
+import { useConnectIframe } from '../utils/useConnectIframe';
 import { findNode } from '../utils/findNode';
 import { on, off } from '../utils/dom';
 import { GLOBAL_METHOD_MAP_KEY } from '../utils/constant';
@@ -50,9 +50,11 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
     scrollContainerOffset = 0,
     timeout = 15000,
     spinProps,
+    onReady,
     onTimeout,
     onIframeLoad,
     onIframeError,
+    onIframeLocationHashChange,
   } = props;
 
   const refIframe = useRef<HTMLIFrameElement>(null);
@@ -62,14 +64,21 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
   const [iframeLoadTimes, setIframeLoadTimes] = useState(0);
   const [iframeFullscreen, setIframeFullscreen] = useState(false);
 
-  const height = useIframeHeight(refIframe);
+  const { height, locationHash } = useConnectIframe(refIframe);
   const isLoading = !height;
 
   useEffect(() => {
     if (!isLoading) {
+      onReady?.();
       clearTimeout(refLoadingTimer.current);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      onIframeLocationHashChange?.(locationHash);
+    }
+  }, [locationHash]);
 
   const getIframeWindow = (): Window | null => {
     return refIframe.current && canAccessIFrame(refIframe.current)
@@ -103,6 +112,15 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
     if (contentWindow) {
       const body = contentWindow.document.body;
       dark ? body.setAttribute('arco-theme', 'dark') : body.removeAttribute('arco-theme');
+    }
+  };
+
+  const scrollIntoView = (selector: string, options: any) => {
+    const contentWindow = getIframeWindow();
+    if (contentWindow) {
+      try {
+        contentWindow.document.body?.querySelector(selector)?.scrollIntoView(options);
+      } catch (err) {}
     }
   };
 
@@ -151,6 +169,7 @@ ${err.toString()}`);
     ref,
     () => {
       return {
+        scrollIntoView,
         appendExtraStyle,
       };
     },

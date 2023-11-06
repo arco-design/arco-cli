@@ -11,6 +11,7 @@ import type { DocsRootProps } from '@arco-cli/aspect/dist/docs/previewRuntime';
 import { App } from './app';
 
 const MOUNT_ROOT_SELECTOR = '#root';
+const PUBSUB_TOPIC = 'preview';
 
 export default function ({
   mountRoot = MOUNT_ROOT_SELECTOR,
@@ -18,7 +19,8 @@ export default function ({
 }: DocsRootProps & { mountRoot: string | HTMLElement }) {
   const pubsub = new Pubsub();
 
-  pubsub.reportSize('preview');
+  pubsub.reportSize(PUBSUB_TOPIC);
+  pubsub.reportLocationChange(PUBSUB_TOPIC);
 
   ReactDOM.render(
     <App {...rest} />,
