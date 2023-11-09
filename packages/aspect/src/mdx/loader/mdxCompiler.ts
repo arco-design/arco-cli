@@ -24,7 +24,6 @@ export type MDXCompilerOptions = {
 // these components name come from @arco-cli/ui-foundation-react/dist/markdown/components
 // can not import from package above, because that's a pure ESM package
 const COMPONENT_NAME_DEMO_VIEW = 'ArcoDemoView';
-const COMPONENT_NAME_DOC_ANCHOR = 'ArcoDocAnchor';
 
 const DEFAULT_RENDERER = `
 // @ts-nocheck
@@ -95,7 +94,7 @@ function createCompiler(opts: Partial<MDXCompilerOptions>) {
         [detectFrontmatter, ['yaml']],
         extractMetadata,
         extractImports,
-        extractHeadings.bind(null, COMPONENT_NAME_DOC_ANCHOR),
+        extractHeadings.bind(null),
         extractComponentDemos.bind(null, COMPONENT_NAME_DEMO_VIEW, options.extractSnippets),
       ]
     : [extractImports];

@@ -63,7 +63,7 @@ export class DocsTask implements BuildTask {
 
         // handle snippets/doclets bellow
         try {
-          const doclets = componentMetadataMap.getValueByComponentId(component.id);
+          const doclets = componentMetadataMap.getValueByComponentId(component.id).doclets;
           const doc = this.docsMain.getDoc(component);
           manifest.doclets.push(...doclets);
           manifest.snippets.push(...doc.snippets);

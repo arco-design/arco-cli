@@ -1,9 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { ReactNode, useContext, useEffect, useMemo } from 'react';
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { createPortal } from 'react-dom';
 import type { Doclet } from '@arco-cli/legacy/dist/types';
 
 import { Table } from '../../baseUI/table';
-import { DocAnchorContext } from '../../markdown/components/docAnchor';
 import { CodeSnippet } from '../../markdown/components/snippet/codeSnippet';
 
 import styles from './propertiesTable.module.scss';
@@ -12,10 +13,12 @@ type AnchorInfo = { depth: number; text: string };
 
 interface PropertiesTableProps {
   doclet: Doclet[];
+  placeholderID?: string;
 }
 
-export function PropertiesTable({ doclet }: PropertiesTableProps) {
-  const { updateAnchorList } = useContext(DocAnchorContext);
+export function PropertiesTable({ doclet, placeholderID }: PropertiesTableProps) {
+  const [, forceUpdate] = useState(0);
+  const refPortal = useRef(null);
 
   const anchorList = useMemo<Array<AnchorInfo & { content: ReactNode }>>(() => {
     const list = [];
@@ -58,11 +61,27 @@ export function PropertiesTable({ doclet }: PropertiesTableProps) {
     return list;
   }, [doclet]);
 
-  useEffect(() => {
-    updateAnchorList(anchorList.map(({ text, depth }) => ({ text, depth })));
-  }, [doclet]);
-
-  return anchorList.length ? (
+  const eleTable = anchorList.length ? (
     <div className={styles.propertiesTable}>{anchorList.map(({ content }) => content)}</div>
   ) : null;
+
+  useEffect(() => {
+    if (!placeholderID) return null;
+
+    const observer = new MutationObserver(() => {
+      const placeholder = document.querySelector(`#${placeholderID}`);
+      if (placeholder) {
+        refPortal.current = createPortal(eleTable, placeholder);
+        forceUpdate(Math.random());
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [placeholderID]);
+
+  return placeholderID ? refPortal.current : eleTable;
 }

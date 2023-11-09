@@ -69,10 +69,15 @@ export interface OverviewProps {
    */
   onIframeError?: (event) => void;
   /**
-   * @zh Iframe location.hash 改变的回调
-   * @en Callback for Iframe location.hash change
+   * @zh Iframe location hash 改变的回调
+   * @en Callback for Iframe location hash change
    */
   onIframeLocationHashChange?: (hash: string) => void;
+  /**
+   * @zh Iframe 内部子 Tab 切换的回调
+   * @en Callback for tab switch inside iframe
+   */
+  onIframeActiveTabChange?: (activeTabKey: string) => void;
 }
 
 /**
@@ -81,4 +86,5 @@ export interface OverviewProps {
 export type OverviewHandle = {
   scrollIntoView: (selector: string, scrollOption?: any) => void;
   appendExtraStyle: (href: string) => void;
+  updateMDXPreviewActiveTab: (tab: string) => void;
 };

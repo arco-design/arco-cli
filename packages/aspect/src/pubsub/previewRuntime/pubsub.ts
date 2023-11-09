@@ -1,10 +1,16 @@
-// import debounce from lodash-es/debounce to enable tree-shaking
-import debounce from 'lodash-es/debounce';
 import { EventEmitter2 } from 'eventemitter2';
 import { connectToParent, ErrorCode } from 'penpal';
 
 import { PubsubNoParentError } from '../exceptions';
-import { ArcoBaseEvent, SizeEvent, LocationHashEvent } from '../events';
+import {
+  ArcoBaseEvent,
+  SizeEvent,
+  LocationHashEvent,
+  SizeEventType,
+  LocationHashEventType,
+  ActiveTabEventType,
+  ActiveTabEvent,
+} from '../events';
 
 type Callback = (event: ArcoBaseEvent<any>) => void;
 
@@ -16,8 +22,6 @@ export class Pubsub {
   private events = new EventEmitter2();
 
   private parentPubsub?: ParentMethods;
-
-  private resizeObserver: ResizeObserver;
 
   constructor() {
     if (this.inIframe()) {
@@ -76,29 +80,15 @@ export class Pubsub {
     });
   }
 
-  reportSize(topic: string) {
-    if (!this.inIframe()) return;
-
-    this.resizeObserver ||= new ResizeObserver(
-      debounce(() => {
-        this.pub(
-          topic,
-          new SizeEvent({
-            width: window.document.body.offsetWidth,
-            height: window.document.body.offsetHeight,
-          })
-        );
-      }, 300)
-    );
-
-    this.resizeObserver.observe(document.body);
+  reportSize(topic: string, data: SizeEventType) {
+    this.pub(topic, new SizeEvent(data));
   }
 
-  reportLocationChange(topic: string) {
-    if (!this.inIframe()) return;
+  reportLocationHash(topic: string, data: LocationHashEventType) {
+    this.pub(topic, new LocationHashEvent(data));
+  }
 
-    window.addEventListener('hashchange', () => {
-      this.pub(topic, new LocationHashEvent({ hash: window.location.hash }));
-    });
+  reportActiveTab(topic: string, data: ActiveTabEventType) {
+    this.pub(topic, new ActiveTabEvent(data));
   }
 }

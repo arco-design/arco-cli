@@ -1,0 +1,30 @@
+.tabs {
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    overflow: auto;
+
+    .title {
+      display: inline-block;
+      padding: 3px 12px;
+      max-width: 180px;
+      border-radius: 20px;
+      border: 1px solid var(--preview-color-border);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      cursor: pointer;
+
+      &:not(:last-child) {
+        margin-right: 12px;
+      }
+
+      &.active {
+        font-weight: 500;
+        border-color: var(--preview-color-primary);
+        color: var(--preview-color-primary);
+      }
+    }
+  }
+}

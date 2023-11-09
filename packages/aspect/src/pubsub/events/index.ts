@@ -1,3 +1,4 @@
 export { ArcoBaseEvent } from './arcoBaseEvent';
-export { SizeEvent } from './sizeEvent';
-export { LocationHashEvent } from './locationHashEvent';
+export { SizeEvent, SizeEventType } from './sizeEvent';
+export { LocationHashEvent, LocationHashEventType } from './locationHashEvent';
+export { ActiveTabEvent, ActiveTabEventType } from './activeTabEvent';

@@ -1,6 +1,6 @@
 import visit from 'unist-util-visit';
 
-export function extractHeadings(docAnchorComponentName: string) {
+export function extractHeadings() {
   const headings = [];
   const getHeadingText = (node, text = '') => {
     const nodeTypeHasTextValue = ['inlineCode', 'text'];
@@ -25,12 +25,5 @@ export function extractHeadings(docAnchorComponentName: string) {
     });
 
     file.data.headings = headings;
-
-    if (docAnchorComponentName) {
-      tree.children.push({
-        type: 'jsx',
-        value: `<${docAnchorComponentName} />`,
-      });
-    }
   };
 }

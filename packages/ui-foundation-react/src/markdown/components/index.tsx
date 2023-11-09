@@ -6,10 +6,13 @@ import { Snippet } from './snippet';
 import { DemoView } from './demoView';
 import { DocAnchor } from './docAnchor';
 import { Heading } from './heading';
+import { Tabs } from './tabs';
 
 export const COMPONENT_NAME_DEMO_VIEW = 'ArcoDemoView';
 
 export const COMPONENT_NAME_DOC_ANCHOR = 'ArcoDocAnchor';
+
+export const COMPONENT_NAME_TABS = 'ArcoMDXPreviewSplit';
 
 export const DEFAULT_MDX_COMPONENTS: MDXProviderComponents = {
   a: Anchor,
@@ -22,4 +25,5 @@ export const DEFAULT_MDX_COMPONENTS: MDXProviderComponents = {
   h6: (props) => <Heading {...props} depth={6} />,
   [COMPONENT_NAME_DEMO_VIEW]: DemoView,
   [COMPONENT_NAME_DOC_ANCHOR]: DocAnchor,
+  [COMPONENT_NAME_TABS]: Tabs,
 };

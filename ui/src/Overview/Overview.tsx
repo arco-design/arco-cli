@@ -55,6 +55,7 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
     onIframeLoad,
     onIframeError,
     onIframeLocationHashChange,
+    onIframeActiveTabChange,
   } = props;
 
   const refIframe = useRef<HTMLIFrameElement>(null);
@@ -64,7 +65,7 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
   const [iframeLoadTimes, setIframeLoadTimes] = useState(0);
   const [iframeFullscreen, setIframeFullscreen] = useState(false);
 
-  const { height, locationHash } = useConnectIframe(refIframe);
+  const { height, locationHash, activeTab } = useConnectIframe(refIframe);
   const isLoading = !height;
 
   useEffect(() => {
@@ -79,6 +80,12 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
       onIframeLocationHashChange?.(locationHash);
     }
   }, [locationHash]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      onIframeActiveTabChange?.(activeTab);
+    }
+  }, [activeTab]);
 
   const getIframeWindow = (): Window | null => {
     return refIframe.current && canAccessIFrame(refIframe.current)
@@ -112,15 +119,6 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
     if (contentWindow) {
       const body = contentWindow.document.body;
       dark ? body.setAttribute('arco-theme', 'dark') : body.removeAttribute('arco-theme');
-    }
-  };
-
-  const scrollIntoView = (selector: string, options: any) => {
-    const contentWindow = getIframeWindow();
-    if (contentWindow) {
-      try {
-        contentWindow.document.body?.querySelector(selector)?.scrollIntoView(options);
-      } catch (err) {}
     }
   };
 
@@ -169,8 +167,29 @@ ${err.toString()}`);
     ref,
     () => {
       return {
-        scrollIntoView,
         appendExtraStyle,
+        scrollIntoView: (selector: string, options: any) => {
+          const contentWindow = getIframeWindow();
+          if (contentWindow) {
+            try {
+              contentWindow.document.body?.querySelector(selector)?.scrollIntoView(options);
+            } catch (err) {}
+          }
+        },
+        updateMDXPreviewActiveTab: (tab: string) => {
+          const contentWindow = getIframeWindow();
+          if (contentWindow) {
+            const updateFn = contentWindow[GLOBAL_METHOD_MAP_KEY]?.updateMDXPreviewActiveTab;
+            if (typeof updateFn === 'function') {
+              try {
+                updateFn(tab);
+              } catch (err) {
+                console.warn(`Failed to update MDX active tab in component preview page, details:
+${err.toString()}`);
+              }
+            }
+          }
+        },
       };
     },
     []

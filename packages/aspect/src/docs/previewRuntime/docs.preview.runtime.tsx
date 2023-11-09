@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentType } from 'react';
+import type { Doclet } from '@arco-cli/legacy/dist/types';
 import type { RenderingContext, PreviewModule } from '@arco-cli/service/dist/preview';
 import {
   PreviewAspect,
@@ -13,7 +14,10 @@ export type DocsRootProps = {
   componentId: string;
   doc: ComponentType | undefined;
   context: RenderingContext;
-  metadata: Record<string, any>;
+  metadata: {
+    doclets: Doclet[];
+    apiPlaceholderElementId?: string;
+  };
 };
 
 export class DocsPreview {
@@ -54,11 +58,12 @@ export class DocsPreview {
       doc = (await dynamicImportModule()).default;
     }
 
+    const metadata: any = modules.componentMetadataMap[componentId] || {};
     const docsProps: DocsRootProps = {
       context,
       componentId,
       doc,
-      metadata: modules.componentMetadataMap[componentId],
+      metadata,
     };
 
     modules.mainModule.default(docsProps);

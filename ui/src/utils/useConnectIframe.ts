@@ -1,12 +1,10 @@
 import { useEffect, useState, MutableRefObject } from 'react';
 import { connectToChild } from 'penpal';
 
-const EVENT_TYPE_SIZE = 'preview-size';
-const EVENT_TYPE_LOCATION_HASH = 'preview-location-hash';
-
 export function useConnectIframe(refIframe: MutableRefObject<HTMLIFrameElement>) {
   const [height, setHeight] = useState(0);
   const [locationHash, setLocationHash] = useState('');
+  const [activeTab, setActiveTab] = useState<string>(null);
 
   useEffect(() => {
     if (!refIframe.current) return;
@@ -15,11 +13,14 @@ export function useConnectIframe(refIframe: MutableRefObject<HTMLIFrameElement>)
       methods: {
         pub: (_event, message) => {
           switch (message.type) {
-            case EVENT_TYPE_SIZE:
+            case 'preview-size':
               setHeight(message.data.height);
               break;
-            case EVENT_TYPE_LOCATION_HASH:
+            case 'preview-location-hash':
               setLocationHash(message.data.hash);
+              break;
+            case 'preview-active-tab':
+              setActiveTab(message.data.activeTab || '');
               break;
             default:
               break;
@@ -32,5 +33,6 @@ export function useConnectIframe(refIframe: MutableRefObject<HTMLIFrameElement>)
   return {
     height,
     locationHash,
+    activeTab,
   };
 }

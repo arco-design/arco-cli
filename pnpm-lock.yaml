@@ -953,6 +953,9 @@ importers:
       copy-to-clipboard:
         specifier: ^3.3.3
         version: 3.3.3
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       react-error-boundary:
         specifier: ^3.1.4
         version: 3.1.4(react@17.0.2)

@@ -109,27 +109,36 @@ export class DocsMain {
    * like component property tables
    */
   getMetadata(components: Component[], env: Environment) {
-    return ComponentMap.as<Doclet[]>(components, (component) => {
-      let jsdocEntryFiles = [];
+    return ComponentMap.as<{ doclets: Doclet[]; apiPlaceholderElementId?: string }>(
+      components,
+      (component) => {
+        let jsdocEntryFiles = [];
 
-      if (component.entries.jsdoc) {
-        jsdocEntryFiles = (
-          Array.isArray(component.entries.jsdoc)
-            ? component.entries.jsdoc
-            : [component.entries.jsdoc]
-        )
-          .map((jsdocEntry) => {
-            return jsdocEntry
-              ? component.files.find(
-                  (file) => file.relative === path.join(component.entries.base, jsdocEntry)
-                )
-              : null;
-          })
-          .filter(Boolean);
+        if (component.entries.jsdoc) {
+          jsdocEntryFiles = (
+            Array.isArray(component.entries.jsdoc)
+              ? component.entries.jsdoc
+              : [component.entries.jsdoc]
+          )
+            .map((jsdocEntry) => {
+              return jsdocEntry
+                ? component.files.find(
+                    (file) => file.relative === path.join(component.entries.base, jsdocEntry)
+                  )
+                : null;
+            })
+            .filter(Boolean);
+        }
+
+        const doc = this.getDoc(component);
+
+        return {
+          doclets: env.getDocsMetadata?.(jsdocEntryFiles),
+          apiPlaceholderElementId:
+            doc.props.get('apiPlaceholderElementId')?.value?.toString() || '',
+        };
       }
-
-      return env.getDocsMetadata?.(jsdocEntryFiles);
-    });
+    );
   }
 
   /**

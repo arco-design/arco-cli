@@ -21,6 +21,7 @@
     "@types/mdx-js__react": "^1.5.5",
     "classnames": "^2.3.2",
     "copy-to-clipboard": "^3.3.3",
+    "lodash-es": "^4.17.21",
     "react-error-boundary": "^3.1.4",
     "react-markdown": "^8.0.6",
     "react-syntax-highlighter": "^15.5.0",
