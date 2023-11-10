@@ -15,10 +15,21 @@ import { OverviewProps, OverviewHandle } from './interface';
 import { useConnectIframe } from '../utils/useConnectIframe';
 import { findNode } from '../utils/findNode';
 import { on, off } from '../utils/dom';
-import { GLOBAL_METHOD_MAP_KEY } from '../utils/constant';
 
 // @ts-ignore
 import styles from './style/index.module.less';
+import {
+  PREVIEW_IFRAME_GLOBAL_VARIABLES_KEY,
+  PUBSUB_TOPIC_PARENT_TO_CHILD,
+} from '../utils/constant';
+
+const enum IFRAME_VALID_MESSAGE_TYPE {
+  updateAnchorOffset = 'updateAnchorOffset',
+  appendExtraStyle = 'appendExtraStyle',
+  switchDarkMode = 'switchDarkMode',
+  scrollIntoView = 'scrollIntoView',
+  switchActiveTab = 'switchActiveTab',
+}
 
 function getContainer(targetContainer?: string | HTMLElement | Window) {
   if (typeof targetContainer === 'string') {
@@ -65,7 +76,7 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
   const [iframeLoadTimes, setIframeLoadTimes] = useState(0);
   const [iframeFullscreen, setIframeFullscreen] = useState(false);
 
-  const { height, locationHash, activeTab } = useConnectIframe(refIframe);
+  const { height, locationHash, activeTab, connection } = useConnectIframe(refIframe);
   const isLoading = !height;
 
   useEffect(() => {
@@ -87,58 +98,90 @@ export const Overview = forwardRef(function (props: OverviewProps, ref) {
     }
   }, [activeTab]);
 
-  const getIframeWindow = (): Window | null => {
-    return refIframe.current && canAccessIFrame(refIframe.current)
-      ? refIframe.current.contentWindow
-      : null;
-  };
+  const operateIframe = useCallback(
+    ({ type, data }: { type: IFRAME_VALID_MESSAGE_TYPE; data: Record<string, any> }) => {
+      if (!refIframe.current) return;
 
-  const appendExtraStyle = (href: string) => {
-    const contentWindow = getIframeWindow();
-    if (contentWindow) {
-      const eleClassName = '__arco-component-extra-style';
+      const contentWindow = canAccessIFrame(refIframe.current)
+        ? refIframe.current.contentWindow
+        : null;
 
-      // clear all append styles at first
-      contentWindow.document
-        .querySelectorAll(`.${eleClassName}`)
-        .forEach((node) => contentWindow.document.body.removeChild(node));
+      // compatible with preview logic before 2.1.0, directly operate iframe DOM nodes
+      if (
+        contentWindow &&
+        !(contentWindow as any)[PREVIEW_IFRAME_GLOBAL_VARIABLES_KEY]?.parentMessageIsSubscribed
+      ) {
+        switch (type) {
+          case IFRAME_VALID_MESSAGE_TYPE.updateAnchorOffset: {
+            const updateAnchorOffset = (contentWindow as any).__arcoPreviewMethods
+              ?.updateAnchorOffset;
+            if (typeof updateAnchorOffset === 'function') {
+              try {
+                updateAnchorOffset(data.offset);
+              } catch (err) {
+                console.warn(`Failed to update anchor position in component preview page, details:
+${err.toString()}`);
+              }
+            }
+            break;
+          }
 
-      if (href) {
-        const styleEle = document.createElement('link');
-        styleEle.setAttribute('class', eleClassName);
-        styleEle.setAttribute('type', 'text/css');
-        styleEle.setAttribute('rel', 'stylesheet');
-        styleEle.setAttribute('href', href);
-        contentWindow.document.body?.prepend(styleEle);
+          case IFRAME_VALID_MESSAGE_TYPE.appendExtraStyle: {
+            const eleClassName = '__arco-component-extra-style';
+            // clear all append styles at first
+            contentWindow.document
+              .querySelectorAll(`.${eleClassName}`)
+              .forEach((node) => contentWindow.document.body.removeChild(node));
+            if (data.href) {
+              const styleEle = document.createElement('link');
+              styleEle.setAttribute('class', eleClassName);
+              styleEle.setAttribute('type', 'text/css');
+              styleEle.setAttribute('rel', 'stylesheet');
+              styleEle.setAttribute('href', data.href);
+              contentWindow.document.body?.prepend(styleEle);
+            }
+            break;
+          }
+
+          case IFRAME_VALID_MESSAGE_TYPE.switchDarkMode: {
+            const body = contentWindow.document.body;
+            data.dark
+              ? body.setAttribute('arco-theme', 'dark')
+              : body.removeAttribute('arco-theme');
+            break;
+          }
+
+          case IFRAME_VALID_MESSAGE_TYPE.scrollIntoView: {
+            try {
+              contentWindow.document.body
+                ?.querySelector(data.selector)
+                ?.scrollIntoView(data.options);
+            } catch (err) {}
+            break;
+          }
+
+          default:
+            break;
+        }
+      } else if (connection) {
+        connection.pub(PUBSUB_TOPIC_PARENT_TO_CHILD, { type, data });
       }
-    }
-  };
-
-  const toggleDarkMode = (dark: boolean) => {
-    const contentWindow = getIframeWindow();
-    if (contentWindow) {
-      const body = contentWindow.document.body;
-      dark ? body.setAttribute('arco-theme', 'dark') : body.removeAttribute('arco-theme');
-    }
-  };
+    },
+    [connection]
+  );
 
   const scrollHandler = useCallback(
     debounce((event) => {
-      const contentWindow = getIframeWindow();
-      if (contentWindow) {
-        const updateAnchorOffset = contentWindow[GLOBAL_METHOD_MAP_KEY]?.updateAnchorOffset;
-        if (typeof updateAnchorOffset === 'function') {
-          try {
-            const scrollTop = (event.target?.scrollTop || 0) - scrollContainerOffset;
-            updateAnchorOffset(Math.max(0, scrollTop));
-          } catch (err) {
-            console.warn(`Failed to update anchor position in component preview page, details:
-${err.toString()}`);
-          }
-        }
+      if (connection) {
+        const scrollTop = (event.target?.scrollTop || 0) - scrollContainerOffset;
+        const offset = Math.max(0, scrollTop);
+        operateIframe({
+          type: IFRAME_VALID_MESSAGE_TYPE.updateAnchorOffset,
+          data: { offset },
+        });
       }
     }, 200),
-    [scrollContainerOffset]
+    [scrollContainerOffset, operateIframe]
   );
 
   useEffect(() => {
@@ -149,50 +192,45 @@ ${err.toString()}`);
     return () => {
       off(refScrollContainer.current, 'scroll', scrollHandler);
     };
-  }, [scrollContainer]);
+  }, [scrollContainer, scrollHandler]);
 
   useEffect(() => {
     if (iframeLoadTimes > 0 && extraStyle) {
-      appendExtraStyle(extraStyle);
+      operateIframe({
+        type: IFRAME_VALID_MESSAGE_TYPE.appendExtraStyle,
+        data: { href: extraStyle },
+      });
     }
-  }, [iframeLoadTimes, extraStyle]);
+  }, [iframeLoadTimes, extraStyle, operateIframe]);
 
   useEffect(() => {
     if (iframeLoadTimes > 0) {
-      toggleDarkMode(darkMode);
+      operateIframe({
+        type: IFRAME_VALID_MESSAGE_TYPE.switchDarkMode,
+        data: { dark: darkMode },
+      });
     }
-  }, [iframeLoadTimes, darkMode]);
+  }, [iframeLoadTimes, darkMode, operateIframe]);
 
   useImperativeHandle<any, OverviewHandle>(
     ref,
     () => {
       return {
-        appendExtraStyle,
         scrollIntoView: (selector: string, options: any) => {
-          const contentWindow = getIframeWindow();
-          if (contentWindow) {
-            try {
-              contentWindow.document.body?.querySelector(selector)?.scrollIntoView(options);
-            } catch (err) {}
-          }
+          operateIframe({
+            type: IFRAME_VALID_MESSAGE_TYPE.scrollIntoView,
+            data: { selector, options },
+          });
         },
         updateMDXPreviewActiveTab: (tab: string) => {
-          const contentWindow = getIframeWindow();
-          if (contentWindow) {
-            const updateFn = contentWindow[GLOBAL_METHOD_MAP_KEY]?.updateMDXPreviewActiveTab;
-            if (typeof updateFn === 'function') {
-              try {
-                updateFn(tab);
-              } catch (err) {
-                console.warn(`Failed to update MDX active tab in component preview page, details:
-${err.toString()}`);
-              }
-            }
-          }
+          operateIframe({
+            type: IFRAME_VALID_MESSAGE_TYPE.switchActiveTab,
+            data: { tab },
+          });
         },
       };
     },
-    []
+    [operateIframe]
   );
 
   return (

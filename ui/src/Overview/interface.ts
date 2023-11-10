@@ -85,6 +85,11 @@ export interface OverviewProps {
  */
 export type OverviewHandle = {
   scrollIntoView: (selector: string, scrollOption?: any) => void;
-  appendExtraStyle: (href: string) => void;
   updateMDXPreviewActiveTab: (tab: string) => void;
+};
+
+// ArcoBaseEvent from aspect/pubsub/events
+export type PubsubMessageType = {
+  type: string;
+  data: Record<string, any>;
 };

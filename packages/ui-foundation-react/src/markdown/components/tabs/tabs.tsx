@@ -10,7 +10,7 @@ export interface TabsProps {
 }
 
 export function Tabs({ panes = [] }: TabsProps) {
-  const { pubsub, pubsubTopic, registerGlobalMethod } = useContext(PreviewContext);
+  const { pubsub, pubsubTopic, pubsubTopicParent } = useContext(PreviewContext);
   const [activeKey, setActiveKey] = useState<string>('0');
 
   useEffect(() => {
@@ -18,10 +18,13 @@ export function Tabs({ panes = [] }: TabsProps) {
   }, [activeKey]);
 
   useEffect(() => {
-    registerGlobalMethod('updateMDXPreviewActiveTab', (activeKey: string) => {
-      setActiveKey(`${activeKey}`);
+    pubsub?.sub(pubsubTopicParent, (message) => {
+      const { type, data } = message;
+      if (type === 'switchActiveTab' && data.tab) {
+        setActiveKey(data.tab);
+      }
     });
-  }, []);
+  }, [pubsub]);
 
   return (
     <div className={styles.tabs}>

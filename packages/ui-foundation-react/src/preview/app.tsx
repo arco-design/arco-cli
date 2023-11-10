@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 // import debounce from lodash-es/debounce to enable tree-shaking
 import debounce from 'lodash-es/debounce';
 import type { DocsRootProps } from '@arco-cli/aspect/dist/docs/previewRuntime';
@@ -19,9 +19,10 @@ export function App({ doc, metadata }: DocsRootProps) {
   const { doclets, apiPlaceholderElementId } = metadata || {};
   const isEmpty = !doc && (!doclets || (Array.isArray(doclets) && doclets.length === 0));
 
-  const { pubsub, pubsubTopic } = useMemo(() => {
+  const { pubsub, pubsubTopic, pubsubTopicParent } = useMemo(() => {
     const pubsub = new Pubsub();
     const pubsubTopic = 'preview';
+    const pubsubTopicParent = 'preview-host';
 
     try {
       // in iframe
@@ -41,11 +42,54 @@ export function App({ doc, metadata }: DocsRootProps) {
       }
     } catch (err) {}
 
-    return { pubsub, pubsubTopic };
+    return { pubsub, pubsubTopic, pubsubTopicParent };
   }, []);
 
+  useEffect(() => {
+    pubsub?.sub(pubsubTopicParent, (message) => {
+      const { type, data } = message;
+      switch (type) {
+        case 'switchDarkMode': {
+          const body = document.body;
+          data.dark ? body.setAttribute('arco-theme', 'dark') : body.removeAttribute('arco-theme');
+          break;
+        }
+        case 'appendExtraStyle': {
+          const eleClassName = '__arco-component-extra-style';
+          // clear all append styles at first
+          document
+            .querySelectorAll(`.${eleClassName}`)
+            .forEach((node) => document.body.removeChild(node));
+          // insert new stylesheet
+          if (data.href) {
+            const styleEle = document.createElement('link');
+            styleEle.setAttribute('class', eleClassName);
+            styleEle.setAttribute('type', 'text/css');
+            styleEle.setAttribute('rel', 'stylesheet');
+            styleEle.setAttribute('href', data.href);
+            document.body?.prepend(styleEle);
+          }
+          break;
+        }
+        case 'scrollIntoView': {
+          const { selector, options } = data;
+          if (selector) {
+            document.body.querySelector(selector)?.scrollIntoView(options);
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    });
+  }, [pubsub]);
+
   return (
-    <PreviewContextProvider pubsub={pubsub} pubsubTopic={pubsubTopic}>
+    <PreviewContextProvider
+      pubsub={pubsub}
+      pubsubTopic={pubsubTopic}
+      pubsubTopicParent={pubsubTopicParent}
+    >
       <Theme>
         <MDXLayout>
           {isEmpty ? (

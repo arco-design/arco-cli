@@ -7,7 +7,7 @@ import { PreviewContext } from '../../../preview/previewContext';
 import styles from './docAnchor.module.scss';
 
 export function DocAnchor() {
-  const { registerGlobalMethod } = useContext(PreviewContext);
+  const { pubsub, pubsubTopicParent } = useContext(PreviewContext);
   const [anchorList, setAnchorList] = useState<Array<{ text: string; depth: number; id?: string }>>(
     []
   );
@@ -39,10 +39,13 @@ export function DocAnchor() {
   }, []);
 
   useEffect(() => {
-    registerGlobalMethod('updateAnchorOffset', (nextOffset) => {
-      setPageOffset(nextOffset);
+    pubsub?.sub(pubsubTopicParent, (message) => {
+      const { type, data } = message;
+      if (type === 'updateAnchorOffset' && typeof data.offset === 'number') {
+        setPageOffset(data.offset);
+      }
     });
-  }, []);
+  }, [pubsub]);
 
   return anchorList.length ? (
     <ul

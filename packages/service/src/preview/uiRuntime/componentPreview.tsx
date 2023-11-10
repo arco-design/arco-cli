@@ -41,10 +41,6 @@ export interface ComponentPreviewProps
   darkMode?: boolean;
 }
 
-export type ComponentPreviewHandle = {
-  appendExtraStyle: (href: string) => void;
-};
-
 /**
  * renders a preview of a component.
  */
