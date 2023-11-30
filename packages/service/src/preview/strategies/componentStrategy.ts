@@ -4,12 +4,11 @@ import { Component } from '@arco-cli/aspect/dist/component';
 import { flatten, isEmpty, chunk } from 'lodash';
 import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
 import type {
+  Asset,
+  Target,
   BundlerResult,
   BundlerContext,
-  Asset,
   BundlerEntryMap,
-  EntriesAssetsMap,
-  Target,
 } from '@arco-cli/aspect/dist/bundler';
 import type { ComponentResult } from '@arco-cli/legacy/dist/workspace/componentResult';
 import {
@@ -162,11 +161,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
 
     return Promise.all(
       context.components.map(async (component) => {
-        const files = this.findAssetsForComponent(
-          component,
-          result.assets,
-          result.entriesAssetsMap || {}
-        );
+        const files = this.findAssetsForComponent(component, result);
 
         if (!files) return;
 
@@ -189,9 +184,10 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
 
   private findAssetsForComponent(
     component: Component,
-    assets: Asset[],
-    entriesAssetsMap: EntriesAssetsMap
+    bundlerResult: BundlerResult
   ): Asset[] | undefined {
+    const { assets, entriesAssetsMap = {}, chunks = [] } = bundlerResult;
+
     if (!assets) return undefined;
 
     const componentEntryId = component.id;
@@ -202,10 +198,28 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     const componentPreviewAuxiliaryFiles =
       entriesAssetsMap[componentPreviewEntryId]?.auxiliaryAssets || [];
 
-    return componentFiles
+    const result = componentFiles
       .concat(componentAuxiliaryFiles)
       .concat(componentPreviewFiles)
       .concat(componentPreviewAuxiliaryFiles);
+
+    // find asset which belong to component runtime but not exist in its assets
+    chunks.forEach((chunk) => {
+      if (
+        chunk.runtime.indexOf(componentEntryId) > -1 ||
+        chunk.runtime.indexOf(componentPreviewEntryId) > -1
+      ) {
+        chunk.files.forEach((chunkFileName) => {
+          // if chunk-asset is not in component asset list, add it
+          if (!result.find((asset) => asset.name === chunkFileName)) {
+            const chunkFileAsset = assets.find((asset) => asset.name === chunkFileName);
+            chunkFileAsset && result.push(chunkFileAsset);
+          }
+        });
+      }
+    });
+
+    return result;
   }
 
   private computeComponentMetadata(

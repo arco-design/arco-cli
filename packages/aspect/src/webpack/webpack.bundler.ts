@@ -75,6 +75,7 @@ export class WebpackBundler implements Bundler {
             warnings: true,
             errors: true,
             assets: true,
+            chunks: true,
             chunkGroupAuxiliary: true,
             relatedAssets: true,
             cachedAssets: true,
@@ -83,6 +84,7 @@ export class WebpackBundler implements Bundler {
           const entriesAssetsMap = this.getEntriesAssetsMap(info, assetsMap);
 
           return resolve({
+            chunks: info.chunks,
             assets: Object.values(assetsMap),
             assetsByChunkName: info.assetsByChunkName,
             entriesAssetsMap,

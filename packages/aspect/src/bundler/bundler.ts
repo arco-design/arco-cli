@@ -17,6 +17,12 @@ export type Asset = {
   compressedSize?: number;
 };
 
+export type Chunk = {
+  runtime: string[];
+  files: string[];
+  auxiliaryFiles: string[];
+};
+
 export type ChunksAssetsMap = {
   [assetName: string]: string[];
 };
@@ -49,6 +55,11 @@ export type BundlerResult = {
    * A map of assets for each entry point
    */
   entriesAssetsMap?: EntriesAssetsMap;
+
+  /**
+   * Chunks info for built assets
+   */
+  chunks?: Chunk[];
 
   /**
    * errors thrown during the bundling process.

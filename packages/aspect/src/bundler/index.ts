@@ -12,6 +12,7 @@ export {
   BundlerResult,
   BundlerMode,
   Asset,
+  Chunk,
   ChunksAssetsMap,
   EntriesAssetsMap,
   EntryAssets,

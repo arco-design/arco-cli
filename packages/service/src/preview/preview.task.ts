@@ -33,7 +33,6 @@ export class PreviewTask implements BuildTask {
 
     const bundlerContext: BundlerContext = Object.assign(context, {
       targets,
-      compress: bundlingStrategy.name !== 'env' && splitComponentBundle,
       entry: [],
       publicPath: this.getPreviewDirectory(context),
       rootPath: url,
