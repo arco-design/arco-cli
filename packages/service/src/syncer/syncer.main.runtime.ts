@@ -17,7 +17,7 @@ import {
   PACKAGE_JSON,
   CFG_HOST_ARCO_KEY,
 } from '@arco-cli/legacy/dist/constants';
-import { toFsCompatible } from '@arco-cli/legacy/dist/utils';
+import { toFsCompatible, TaskManager } from '@arco-cli/legacy/dist/utils';
 import { zipFiles } from '@arco-cli/legacy/dist/utils/fs/zipFiles';
 import { getSync } from '@arco-cli/legacy/dist/globalConfig';
 import { toComponentForkConfigFilename } from '@arco-cli/legacy/dist/workspace/componentIdTo';
@@ -130,7 +130,7 @@ export class SyncerMain {
     }
   }
 
-  private async uploadPackageFiles(components: Component[]) {
+  private async uploadPackageFiles(components: Component[], parallelTaskCount: number) {
     const uploadResults: Record<
       string,
       {
@@ -152,55 +152,58 @@ export class SyncerMain {
     await Promise.all(components.map(this.preparePackageFilesToUpload.bind(this)));
 
     // upload all artifacts files
-    await Promise.all(
-      components.map(async (component) => {
-        const { packageName } = component;
-        uploadResults[packageName] ||= { errors: [] };
+    await new TaskManager({
+      parallelTaskCount,
+      tasks: components.map((component) => {
+        return async () => {
+          const { packageName } = component;
+          uploadResults[packageName] ||= { errors: [] };
 
-        // components may come from the same package, upload the package files only once
-        if (packagesUploading.indexOf(packageName) === -1) {
-          packagesUploading.push(packageName);
+          // components may come from the same package, upload the package files only once
+          if (packagesUploading.indexOf(packageName) === -1) {
+            packagesUploading.push(packageName);
 
-          const pathOfDirToUpload = this.getTempDirToUpload(component);
-          const pathOfZipToUpload = `${pathOfDirToUpload}.zip`;
+            const pathOfDirToUpload = this.getTempDirToUpload(component);
+            const pathOfZipToUpload = `${pathOfDirToUpload}.zip`;
 
-          let error = null;
-          const longProcessLogger = this.logger.createLongProcessLogger(
-            `upload artifacts of ${packageName} to material market`
-          );
+            let error = null;
+            const longProcessLogger = this.logger.createLongProcessLogger(
+              `upload artifacts of ${packageName} to material market`
+            );
 
-          try {
-            await zipFiles({
-              sourceDir: pathOfDirToUpload,
-              targetPath: pathOfZipToUpload,
-            });
-          } catch (err) {
-            error = err.toString();
-          }
+            try {
+              await zipFiles({
+                sourceDir: pathOfDirToUpload,
+                targetPath: pathOfZipToUpload,
+              });
+            } catch (err) {
+              error = err.toString();
+            }
 
-          if (fs.existsSync(pathOfZipToUpload)) {
-            const { code, data, msg } = await uploadFile({
-              filePath: pathOfZipToUpload,
-              cdnGlobs: [`${DIR_ARTIFACTS}/**/*.*`],
-            });
-            if (code === 0) {
-              uploadResults[packageName].data = data;
+            if (fs.existsSync(pathOfZipToUpload)) {
+              const { code, data, msg } = await uploadFile({
+                filePath: pathOfZipToUpload,
+                cdnGlobs: [`${DIR_ARTIFACTS}/**/*.*`],
+              });
+              if (code === 0) {
+                uploadResults[packageName].data = data;
+              } else {
+                error = msg;
+              }
+            }
+
+            longProcessLogger.end();
+
+            if (error) {
+              uploadResults[packageName].errors.push(error);
+              this.logger.consoleFailure();
             } else {
-              error = msg;
+              this.logger.consoleSuccess();
             }
           }
-
-          longProcessLogger.end();
-
-          if (error) {
-            uploadResults[packageName].errors.push(error);
-            this.logger.consoleFailure();
-          } else {
-            this.logger.consoleSuccess();
-          }
-        }
-      })
-    );
+        };
+      }),
+    }).runAll();
 
     return uploadResults;
   }
@@ -208,103 +211,110 @@ export class SyncerMain {
   async sync({
     components,
     currentUser,
+    parallelTaskCount,
     skipArtifactsUpload,
   }: {
     components: Component[];
     currentUser: string;
+    parallelTaskCount: number;
     skipArtifactsUpload?: boolean;
   }): Promise<ComponentResult[]> {
     const hostArco = getSync(CFG_HOST_ARCO_KEY);
     const syncResults: ComponentResult[] = [];
-    const uploadResultMap = skipArtifactsUpload ? {} : await this.uploadPackageFiles(components);
+    const uploadResultMap = skipArtifactsUpload
+      ? {}
+      : await this.uploadPackageFiles(components, parallelTaskCount);
 
-    await Promise.all(
-      components.map(async (component) => {
-        const uploadResult = uploadResultMap[component.packageName] || { errors: [] };
-        const syncResult: ComponentResult = {
-          id: component.id,
-          errors: uploadResult.errors.slice() || [],
-        };
-        const doc = this.docs.getDoc(component);
-        const docManifest = await this.docs.getDocsManifestFromArtifact(component);
+    await new TaskManager({
+      parallelTaskCount,
+      tasks: components.map((component) => {
+        return async () => {
+          const uploadResult = uploadResultMap[component.packageName] || { errors: [] };
+          const syncResult: ComponentResult = {
+            id: component.id,
+            errors: uploadResult.errors.slice() || [],
+          };
+          const doc = this.docs.getDoc(component);
+          const docManifest = await this.docs.getDocsManifestFromArtifact(component);
 
-        const pickComponentFileCDNInfo = () => {
-          const result: any = {};
-          const keyword = toFsCompatible(component.id);
+          const pickComponentFileCDNInfo = () => {
+            const result: any = {};
+            const keyword = toFsCompatible(component.id);
 
-          if (uploadResult.data) {
-            result.zip = uploadResult.data.zip;
-            result.files = {};
+            if (uploadResult.data) {
+              result.zip = uploadResult.data.zip;
+              result.files = {};
 
-            Object.entries(uploadResult.data.files || {}).forEach(([filePath, url]) => {
-              // many components may come from the same package
-              // we should only sync file info for the current component, otherwise the data size will be too large
-              if (filePath.indexOf(keyword) > -1) {
-                result.files[filePath] = url;
-              }
-            });
-          }
+              Object.entries(uploadResult.data.files || {}).forEach(([filePath, url]) => {
+                // many components may come from the same package
+                // we should only sync file info for the current component, otherwise the data size will be too large
+                if (filePath.indexOf(keyword) > -1) {
+                  result.files[filePath] = url;
+                }
+              });
+            }
 
-          return result;
-        };
+            return result;
+          };
 
-        const meta: SyncParams = {
-          name: component.id,
-          title: doc.title || component.name,
-          description: doc.description,
-          category: Doc.mergeDocProperty(doc.labels || [], component.labels),
-          repository: component.repository,
-          uiResource: component.uiResource,
-          group: component.group,
-          author: component.author || currentUser,
-          package: {
-            name: component.packageName,
-            version: component.version,
-            peerDependencies: Object.keys(component.peerDependencies),
-          },
-          outline: doc.outline,
-          fileManifest: {
-            extraStyle: component.extraStyles,
-            docs: docManifest.extraDocs,
-            cdn: pickComponentFileCDNInfo(),
-          },
-          forkable: !!component.forkable,
-          _generation: MATERIAL_GENERATION,
-        };
+          const meta: SyncParams = {
+            name: component.id,
+            title: doc.title || component.name,
+            description: doc.description,
+            category: Doc.mergeDocProperty(doc.labels || [], component.labels),
+            repository: component.repository,
+            uiResource: component.uiResource,
+            group: component.group,
+            author: component.author || currentUser,
+            package: {
+              name: component.packageName,
+              version: component.version,
+              peerDependencies: Object.keys(component.peerDependencies),
+            },
+            outline: doc.outline,
+            fileManifest: {
+              extraStyle: component.extraStyles,
+              docs: docManifest.extraDocs,
+              cdn: pickComponentFileCDNInfo(),
+            },
+            forkable: !!component.forkable,
+            _generation: MATERIAL_GENERATION,
+          };
 
-        this.extendSyncParamsWithDefaultMaterialMeta(meta);
+          this.extendSyncParamsWithDefaultMaterialMeta(meta);
 
-        let error = null;
-        const longProcessLogger = this.logger.createLongProcessLogger(
-          `sync metadata of ${component.id} to material market`
-        );
-
-        try {
-          const { ok, msg } = await request.post('material/update', {
-            meta,
-            createIfNotExists: true,
-          });
-          if (!ok) {
-            error = msg;
-          }
-        } catch (err) {
-          error = err.toString();
-        }
-
-        longProcessLogger.end();
-
-        if (error) {
-          syncResult.errors.push(error);
-          this.logger.consoleFailure();
-        } else {
-          this.logger.consoleSuccess(
-            `${component.id} has successfully synced to https://${hostArco}/material/detail?name=${component.id}`
+          let error = null;
+          const longProcessLogger = this.logger.createLongProcessLogger(
+            `sync metadata of ${component.id} to material market`
           );
-        }
 
-        syncResults.push(syncResult);
-      })
-    );
+          try {
+            const { ok, msg } = await request.post('material/update', {
+              meta,
+              createIfNotExists: true,
+            });
+            if (!ok) {
+              error = msg;
+            }
+          } catch (err) {
+            error = err.toString();
+          }
+
+          longProcessLogger.end();
+
+          if (error) {
+            syncResult.errors.push(error);
+            this.logger.consoleFailure();
+          } else {
+            this.logger.consoleSuccess(
+              `${component.id} has successfully synced to https://${hostArco}/material/detail?name=${component.id}`
+            );
+          }
+
+          syncResults.push(syncResult);
+        };
+      }),
+    }).runAll();
 
     return syncResults;
   }

@@ -6,6 +6,7 @@ import buildCommandMessage from './buildCommandMessage';
 import packCommand from './packCommand';
 import sha1 from './encryption/sha1';
 import { getCliVersion, setCliVersion } from './cliVersion';
+import { TaskManager } from './taskManager';
 import * as eol from './eol';
 
 export {
@@ -19,4 +20,5 @@ export {
   eol,
   setCliVersion,
   getCliVersion,
+  TaskManager,
 };

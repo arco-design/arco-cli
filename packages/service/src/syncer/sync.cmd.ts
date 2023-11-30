@@ -12,6 +12,7 @@ import { SyncerMain } from './syncer.main.runtime';
 
 type SyncOptions = {
   skipArtifactsUpload?: boolean;
+  parallelTaskCount?: number;
 };
 
 export class SyncCmd implements Command {
@@ -27,11 +28,19 @@ export class SyncCmd implements Command {
 
   options = [
     ['', 'skipArtifactsUpload', 'skip uploading artifacts dir to file server'],
+    [
+      '',
+      'parallelTaskCount <parallel-task-count>',
+      'count of upload tasks executed in parallel (default to 10)',
+    ],
   ] as CommandOptions;
 
   constructor(private logger: Logger, private syncer: SyncerMain, private workspace: Workspace) {}
 
-  async report([pattern]: [string], { skipArtifactsUpload }: SyncOptions): Promise<string> {
+  async report(
+    [pattern]: [string],
+    { skipArtifactsUpload, parallelTaskCount }: SyncOptions
+  ): Promise<string> {
     if (!this.workspace) throw new WorkspaceNotFoundError();
 
     const components = await this.workspace.getManyByPattern(pattern);
@@ -49,6 +58,7 @@ export class SyncCmd implements Command {
       components,
       currentUser: user.username,
       skipArtifactsUpload,
+      parallelTaskCount: Number(parallelTaskCount) > 0 ? Number(parallelTaskCount) : 10,
     });
     const errorMsg = formatComponentResultError(results);
 
