@@ -6,6 +6,7 @@ import { MarkdownLive } from '@arco-cli/ui-foundation-react/dist/markdown/live';
 
 import { ComponentContext, ComponentMeta } from '@aspect/component/uiRuntime';
 
+import '@arco-cli/ui-foundation-react/dist/markdown/style/markdown.css';
 import styles from './overview.module.scss';
 
 export function Overview() {
