@@ -1,5 +1,5 @@
-import { ComponentType } from 'react';
-import { ProxyEntry } from './uiRoot';
+import type { ComponentType } from 'react';
+import type { ProxyEntry } from './uiRoot';
 
 export type StartPluginOptions = {
   /**

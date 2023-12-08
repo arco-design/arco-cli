@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Text } from 'ink';
+import React, { ReactElement } from 'react';
+import { Box, Text, render } from 'ink';
 import { Logger } from '@arco-cli/core/dist/logger';
 import { Command, CommandOptions } from '@arco-cli/legacy/dist/cli/command';
 import { Timer } from '@arco-cli/legacy/dist/utils/timer';
@@ -31,6 +31,10 @@ export class TestCmd implements Command {
   ] as CommandOptions;
 
   constructor(private tester: TesterMain, private logger: Logger, private workspace: Workspace) {}
+
+  inkRender(element: ReactElement) {
+    return render(element);
+  }
 
   async render([pattern]: [string], { watch, rawTesterArgs }: TestFlags) {
     this.logger.console(`testing components in workspace in workspace`);

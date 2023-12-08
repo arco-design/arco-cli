@@ -1,5 +1,3 @@
-import type { ReactElement } from 'react';
-import { render } from 'ink';
 import logger, { LoggerLevel } from '@arco-cli/legacy/dist/logger';
 import { CLIArgs, Command, Flags, RenderResult } from '@arco-cli/legacy/dist/cli/command';
 import { parseCommandName } from '@arco-cli/legacy/dist/cli/commandRegistry';
@@ -46,13 +44,19 @@ export class CommandRunner {
   }
 
   private async runRenderHandler() {
-    if (!this.command.render)
+    if (!this.command.render) {
       throw new Error('runRenderHandler expects command.render to be implemented');
+    }
+
     const result = await this.command.render(this.args, this.flags);
     loader.off();
     const { data, code } = toRenderResult(result);
-    const { waitUntilExit } = render(data);
-    await waitUntilExit();
+
+    if (this.command.inkRender) {
+      const { waitUntilExit } = this.command.inkRender(data);
+      await waitUntilExit?.();
+    }
+
     return logger.exitAfterFlush(code, this.commandName);
   }
 
@@ -130,7 +134,7 @@ export class CommandRunner {
   }
 }
 
-function toRenderResult(obj: RenderResult | ReactElement) {
+function toRenderResult(obj: RenderResult | any) {
   return isRenderResult(obj) ? obj : { data: obj, code: 0 };
 }
 

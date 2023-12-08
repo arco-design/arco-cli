@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
+import { render } from 'ink';
 import { Logger } from '@arco-cli/core/dist/logger';
 import { Command, CommandOptions } from '@arco-cli/legacy/dist/cli/command';
 import { CLI_COMPONENT_PATTERN_HELP } from '@arco-cli/legacy/dist/constants';
@@ -32,6 +33,10 @@ export class StartCmd implements Command {
 
     private logger: Logger
   ) {}
+
+  inkRender(element: ReactElement) {
+    return render(element);
+  }
 
   async render([pattern]: [string], { port }: StartFlags): Promise<React.ReactElement> {
     this.logger.off();

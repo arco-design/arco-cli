@@ -44,6 +44,18 @@ export default function (isEnvProduction = false): Configuration {
   const lessLoaderPath = require.resolve('less-loader');
   const sassLoaderPath = require.resolve('sass-loader');
 
+  const webpackResolveAlias = {
+    '@mdx-js/react': require.resolve('@mdx-js/react'),
+  };
+
+  // react/jsx-dev-runtime.js is not exist in React 18
+  try {
+    Object.assign(webpackResolveAlias, {
+      'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime.js'),
+      'react/jsx-runtime': require.resolve('react/jsx-runtime.js'),
+    });
+  } catch (err) {}
+
   return {
     devtool: false,
 
@@ -56,11 +68,7 @@ export default function (isEnvProduction = false): Configuration {
       // for React Native Web.
       extensions: MODULE_FILE_EXTENSIONS.map((ext) => `.${ext}`),
 
-      alias: {
-        'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime.js'),
-        'react/jsx-runtime': require.resolve('react/jsx-runtime.js'),
-        '@mdx-js/react': require.resolve('@mdx-js/react'),
-      },
+      alias: webpackResolveAlias,
 
       plugins: [
         (() => {

@@ -119,6 +119,14 @@ export interface Command {
   render?(args: CLIArgs, flags: Flags): Promise<RenderResult | ReactElement>;
 
   /**
+   * render method from ink
+   * https://www.npmjs.com/package/ink
+   * package ink depends on react
+   * mount its render method on Command instance to ensure that there is only one copy of React
+   */
+  inkRender?: (element: ReactElement) => { waitUntilExit: () => Promise<void> };
+
+  /**
    * Command handler which is called for legacy commands or when process.isTTY is false
    * @param args  - arguments object as defined in name.
    * @param flags - command flags as described in options.

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { PropsWithChildren } from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
