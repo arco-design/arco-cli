@@ -1,4 +1,5 @@
 import type { Component } from '@arco-cli/aspect/dist/component';
+import type { Logger } from '@arco-cli/core/dist/logger';
 
 import { BuildContext, BuildTaskResult, TaskResultsList } from '@service/builder';
 
@@ -13,6 +14,10 @@ export interface CompilerAspectConfig {
    * e.g. ['base-package/**', 'second-base-package/**']
    */
   componentCompilationOrders?: Array<string>;
+  /**
+   * postBuild
+   */
+  postBuild?: string | ((context: BuildContext, logger: Logger) => void | Promise<void>);
 }
 
 export interface CompilerOptions {

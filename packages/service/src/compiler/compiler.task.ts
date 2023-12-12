@@ -1,11 +1,13 @@
 import path from 'path';
 import fs from 'fs-extra';
 import minimatch from 'minimatch';
-import { Component } from '@arco-cli/aspect/dist/component';
+import type { Logger } from '@arco-cli/core/dist/logger';
+import type { Component } from '@arco-cli/aspect/dist/component';
 
 import { BuildContext, BuildTask, BuildTaskResult, TaskResultsList } from '@service/builder';
 
 import type { Compiler, CompilerAspectConfig } from './types';
+import CompilerAspect from './compiler.aspect';
 import { sortPackageBuildOrders } from './utils/sortPackageBuildOrders';
 
 export class CompilerTask implements BuildTask {
@@ -15,6 +17,7 @@ export class CompilerTask implements BuildTask {
     readonly aspectId: string,
     readonly name: string,
     readonly config: CompilerAspectConfig,
+    private logger: Logger,
     private compilerInstance: Compiler
   ) {}
 
@@ -107,5 +110,31 @@ export class CompilerTask implements BuildTask {
 
   async postBuild?(context: BuildContext, tasksResults: TaskResultsList): Promise<void> {
     await this.compilerInstance.postBuild?.(context, tasksResults);
+
+    // execute post-build task specify via env config
+    const aspectPostBuildConfig = this.config.postBuild;
+    let aspectPostBuildFn = (_context, _logger) => null;
+    if (typeof aspectPostBuildConfig === 'function') {
+      aspectPostBuildFn = aspectPostBuildConfig;
+    } else if (typeof aspectPostBuildConfig === 'string') {
+      try {
+        aspectPostBuildFn = require(path.join(context.workspace.path, aspectPostBuildConfig));
+      } catch (err) {
+        this.logger.consoleFailure(
+          `${
+            CompilerAspect.id
+          }: failed to load the postBuild function defined in workspace config file.\n${err.toString()}`
+        );
+      }
+    }
+    try {
+      await aspectPostBuildFn?.(context, this.logger);
+    } catch (err) {
+      this.logger.consoleFailure(
+        `${
+          CompilerAspect.id
+        }: failed to execute the postBuild function defined in workspace config file.\n${err.toString()}`
+      );
+    }
   }
 }
