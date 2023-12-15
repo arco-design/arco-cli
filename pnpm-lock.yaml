@@ -168,7 +168,7 @@ importers:
   packages/arco:
     dependencies:
       '@arco-cli/aspect':
-        specifier: ^2.3.0
+        specifier: ^2.3.1
         version: link:../aspect
       '@arco-cli/core':
         specifier: ^2.2.0
@@ -177,10 +177,10 @@ importers:
         specifier: ^2.2.0
         version: link:../legacy
       '@arco-cli/react':
-        specifier: ^2.3.0
+        specifier: ^2.3.1
         version: link:../react
       '@arco-cli/service':
-        specifier: ^2.3.0
+        specifier: ^2.3.1
         version: link:../service
       '@arco-cli/stone':
         specifier: ^2.0.0-beta.0
@@ -201,7 +201,7 @@ importers:
         specifier: ^2.2.0
         version: link:../legacy
       '@arco-cli/service':
-        specifier: ^2.3.0
+        specifier: ^2.3.1
         version: link:../service
       '@arco-cli/stone':
         specifier: ^2.0.0-beta.0
@@ -644,7 +644,7 @@ importers:
   packages/react:
     dependencies:
       '@arco-cli/aspect':
-        specifier: ^2.3.0
+        specifier: ^2.3.1
         version: link:../aspect
       '@arco-cli/core':
         specifier: ^2.2.0
@@ -653,7 +653,7 @@ importers:
         specifier: ^2.2.0
         version: link:../legacy
       '@arco-cli/service':
-        specifier: ^2.3.0
+        specifier: ^2.3.1
         version: link:../service
       '@arco-cli/stone':
         specifier: ^2.0.0-beta.0
@@ -794,7 +794,7 @@ importers:
   packages/service:
     dependencies:
       '@arco-cli/aspect':
-        specifier: ^2.3.0
+        specifier: ^2.3.1
         version: link:../aspect
       '@arco-cli/core':
         specifier: ^2.2.0

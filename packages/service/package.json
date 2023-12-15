@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/service",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "homepage": "https://github.com/arco-design/arco-cli",
   "repository": "https://github.com/arco-design/arco-cli",
   "main": "./dist/index.js",
@@ -17,7 +17,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@arco-cli/aspect": "^2.3.0",
+    "@arco-cli/aspect": "^2.3.1",
     "@arco-cli/core": "^2.2.0",
     "@arco-cli/generator": "^2.1.0",
     "@arco-cli/legacy": "^2.2.0",
