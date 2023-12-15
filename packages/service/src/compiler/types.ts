@@ -17,7 +17,9 @@ export interface CompilerAspectConfig {
   /**
    * postBuild
    */
-  postBuild?: string | ((context: BuildContext, logger: Logger) => void | Promise<void>);
+  postBuild?:
+    | string
+    | ((info: { taskName: string; context: BuildContext; logger: Logger }) => void | Promise<void>);
 }
 
 export interface CompilerOptions {

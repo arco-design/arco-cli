@@ -113,7 +113,7 @@ export class CompilerTask implements BuildTask {
 
     // execute post-build task specify via env config
     const aspectPostBuildConfig = this.config.postBuild;
-    let aspectPostBuildFn = (_context, _logger) => null;
+    let aspectPostBuildFn = (_info) => null;
     if (typeof aspectPostBuildConfig === 'function') {
       aspectPostBuildFn = aspectPostBuildConfig;
     } else if (typeof aspectPostBuildConfig === 'string') {
@@ -128,7 +128,11 @@ export class CompilerTask implements BuildTask {
       }
     }
     try {
-      await aspectPostBuildFn?.(context, this.logger);
+      await aspectPostBuildFn?.({
+        taskName: this.name,
+        logger: this.logger,
+        context,
+      });
     } catch (err) {
       this.logger.consoleFailure(
         `${
