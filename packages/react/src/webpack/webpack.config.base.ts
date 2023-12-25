@@ -140,6 +140,9 @@ export default function (isEnvProduction = false): Configuration {
                       require.resolve('@babel/preset-react'),
                       require.resolve('@babel/preset-typescript'),
                     ],
+                    plugins: [
+                      [require.resolve('@babel/plugin-proposal-decorators'), { version: 'legacy' }],
+                    ],
                   },
                 },
                 {
