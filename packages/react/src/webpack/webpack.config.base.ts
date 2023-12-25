@@ -122,6 +122,9 @@ export default function (isEnvProduction = false): Configuration {
                 cacheDirectory: true,
                 cacheCompression: false,
                 compact: isEnvProduction,
+                plugins: [
+                  [require.resolve('@babel/plugin-proposal-decorators'), { version: 'legacy' }],
+                ],
               },
             },
 
@@ -139,9 +142,6 @@ export default function (isEnvProduction = false): Configuration {
                       require.resolve('@babel/preset-env'),
                       require.resolve('@babel/preset-react'),
                       require.resolve('@babel/preset-typescript'),
-                    ],
-                    plugins: [
-                      [require.resolve('@babel/plugin-proposal-decorators'), { version: 'legacy' }],
                     ],
                   },
                 },
