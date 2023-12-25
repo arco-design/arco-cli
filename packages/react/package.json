@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/react",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "homepage": "https://github.com/arco-design/arco-cli",
   "repository": "https://github.com/arco-design/arco-cli",
   "scripts": {
