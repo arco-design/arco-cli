@@ -57,6 +57,10 @@ export type ComponentConfig = {
      */
     preview?: string;
     /**
+     * file path of ContextProvider for component preview
+     */
+    previewContextProvider?: string;
+    /**
      * entries for component TS document parsing
      */
     jsdoc?: string | string[];
@@ -139,6 +143,7 @@ export class ComponentInfo {
     entries.main ||= '';
     entries.style ||= '';
     entries.preview ||= '';
+    entries.previewContextProvider ||= '';
     entries.jsdoc ||= '';
     entries.testFilePatterns ||= DEFAULT_TEST_FILE_PATTERNS;
     entries.extraDocs ||= [];

@@ -183,9 +183,14 @@ export class PreviewMain {
 
       const prefix = previewDef.prefix;
       const templatePath = await previewDef.renderTemplatePath?.(context.env);
-      const componentMap = (await previewDef.getModuleMap(components)).map((files) => {
-        return files.map((file) => file.path);
-      });
+      const componentMap = (await previewDef.getModuleMap(components)).map(
+        ({ previews, previewContextProvider }) => {
+          return {
+            previews: previews.map((file) => file.path),
+            previewContextProvider: previewContextProvider?.path,
+          };
+        }
+      );
       const componentMetadataMap = await previewDef.getMetadataMap?.(components, context.env);
 
       const contents = generateLink({

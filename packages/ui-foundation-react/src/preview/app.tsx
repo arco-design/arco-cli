@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import React, { useEffect, useMemo } from 'react';
+import React, { Fragment, useEffect, useMemo } from 'react';
 // import debounce from lodash-es/debounce to enable tree-shaking
 import debounce from 'lodash-es/debounce';
 import type { DocsRootProps } from '@arco-cli/aspect/dist/docs/previewRuntime';
@@ -15,9 +15,10 @@ import { PreviewContextProvider } from './previewContext';
 import '../style/colors.scss';
 import styles from './app.module.scss';
 
-export function App({ doc, metadata }: DocsRootProps) {
+export function App({ doc, metadata, docContextProvider }: DocsRootProps) {
   const { doclets, apiPlaceholderElementId } = metadata || {};
   const isEmpty = !doc && (!doclets || (Array.isArray(doclets) && doclets.length === 0));
+  const ContextProvider = typeof docContextProvider === 'function' ? docContextProvider : Fragment;
 
   const { pubsub, pubsubTopic, pubsubTopicParent } = useMemo(() => {
     const pubsub = new Pubsub();
@@ -100,11 +101,11 @@ export function App({ doc, metadata }: DocsRootProps) {
               </div>
             </div>
           ) : (
-            <>
+            <ContextProvider>
               <DocContent doc={doc} />
               <PropertiesTable doclet={doclets as any} placeholderID={apiPlaceholderElementId} />
               <DocAnchor />
-            </>
+            </ContextProvider>
           )}
         </MDXLayout>
       </Theme>

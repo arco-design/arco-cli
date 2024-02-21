@@ -13,6 +13,7 @@ import { DocsAspect } from '../docs.aspect';
 export type DocsRootProps = {
   componentId: string;
   doc: ComponentType | undefined;
+  docContextProvider: ComponentType | undefined;
   context: RenderingContext;
   metadata: {
     doclets: Doclet[];
@@ -52,10 +53,18 @@ export class DocsPreview {
     context: RenderingContext
   ) => {
     let doc = null;
+    let docContextProvider = null;
 
+    // import document preview module
     const dynamicImportModule = this.selectPreviewModel(componentId, modules);
     if (typeof dynamicImportModule === 'function') {
       doc = (await dynamicImportModule()).default;
+    }
+
+    // import context-provider for component preview
+    const dynamicImportContextProvider = modules.componentContextProviderMap[componentId];
+    if (typeof dynamicImportContextProvider === 'function') {
+      docContextProvider = (await dynamicImportContextProvider()).default;
     }
 
     const metadata: any = modules.componentMetadataMap[componentId] || {};
@@ -64,6 +73,7 @@ export class DocsPreview {
       componentId,
       doc,
       metadata,
+      docContextProvider,
     };
 
     modules.mainModule.default(docsProps);

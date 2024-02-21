@@ -26,7 +26,9 @@ export interface PreviewDefinition {
   /**
    * get all files to require in the preview runtime.
    */
-  getModuleMap(components: Component[]): Promise<ComponentMap<AbstractVinyl[]>>;
+  getModuleMap(
+    components: Component[]
+  ): Promise<ComponentMap<{ previews: AbstractVinyl[]; previewContextProvider?: AbstractVinyl }>>;
 
   /**
    * get all component metadata needed in the preview runtime.

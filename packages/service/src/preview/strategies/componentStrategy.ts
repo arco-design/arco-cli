@@ -298,9 +298,9 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
     component: Component
   ): Promise<string> {
     const moduleMapsPromise = defs.map(async (previewDef) => {
-      const previewFiles = (await previewDef.getModuleMap([component])).getValueByComponentId(
-        component.id
-      );
+      const { previews: previewFiles, previewContextProvider: previewContextProviderFile } = (
+        await previewDef.getModuleMap([component])
+      ).getValueByComponentId(component.id);
 
       if (!previewFiles) {
         return { prefix: previewDef.prefix, previewPaths: [] };
@@ -315,6 +315,7 @@ export class ComponentBundlingStrategy implements BundlingStrategy {
       return {
         prefix: previewDef.prefix,
         previewPaths,
+        previewContextProviderPath: previewContextProviderFile?.path,
         renderPath,
         metadata,
       };

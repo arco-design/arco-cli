@@ -6,7 +6,7 @@ export function pathNormalizeToLinux(pathToNormalize?: string): string {
 }
 
 export function toWindowsCompatiblePath(path: string): string {
-  return path.replace(/\\/g, '\\\\');
+  return typeof path === 'string' ? path.replace(/\\/g, '\\\\') : '';
 }
 
 export function isParentDir(parent: string, child: string) {

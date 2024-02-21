@@ -18,6 +18,11 @@ export type PreviewModule<T = any> = {
   componentMetadataMap: Record<string, unknown>;
 
   /**
+   * Dictionary mapping components to their context-providers
+   */
+  componentContextProviderMap: Record<string, ModuleImportFunction<T>>;
+
+  /**
    * The 'main file' for this Preview type
    */
   mainModule: {

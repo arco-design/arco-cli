@@ -3,6 +3,7 @@ import { toWindowsCompatiblePath } from '@arco-cli/legacy/dist/utils/path';
 export type ModuleVar = {
   prefix: string;
   previewPaths: string[];
+  previewContextProviderPath?: string;
   renderPath?: string;
   metadata?: unknown;
 };
@@ -17,6 +18,18 @@ export function generatePreviewBundleEntry(modules: ModuleVar[]): string {
       })),
     };
   });
+
+  const previewContextProviders = modules
+    .filter(({ previewContextProviderPath }) => previewContextProviderPath)
+    .map(({ prefix, previewContextProviderPath }) => {
+      return {
+        name: prefix,
+        entry: {
+          path: toWindowsCompatiblePath(previewContextProviderPath),
+          importedName: `${prefix}_context_provider`,
+        },
+      };
+    });
 
   const renders = modules
     .filter(({ renderPath }) => renderPath)
@@ -39,6 +52,11 @@ export function generatePreviewBundleEntry(modules: ModuleVar[]): string {
     )
     .join(';\n');
 
+  // import per preview-context-provider file
+  const importPreviewContextProviderStr: string = previewContextProviders
+    .map(({ entry: { path, importedName } }) => `import ${importedName} from '${path}'`)
+    .join(';\n');
+
   // import per render function file
   const importRenderStr: string = renders
     .map(({ entry: { path, importedName } }) => `import ${importedName} from '${path}'`)
@@ -50,6 +68,11 @@ export function generatePreviewBundleEntry(modules: ModuleVar[]): string {
       ({ name, entries }) =>
         `export const ${name} = [${entries.map((entry) => entry.importedName).join(', ')}]`
     )
+    .concat(
+      previewContextProviders.map(
+        ({ name, entry }) => `export const ${name}ContextProvider = ${entry.importedName}`
+      )
+    )
     .concat(renders.map(({ name, entry }) => `export const ${name}Render = ${entry.importedName}`))
     .join(';\n');
 
@@ -60,7 +83,9 @@ export function generatePreviewBundleEntry(modules: ModuleVar[]): string {
 
   return `${importPreviewStr};
   
-${importRenderStr}
+${importPreviewContextProviderStr};
+
+${importRenderStr};
 
 ${exportsString};
 
