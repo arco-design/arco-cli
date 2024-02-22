@@ -60,6 +60,7 @@
     "strict": 0,
     "radix": 0,
     "class-methods-use-this": 0,
+    "import/no-extraneous-dependencies": 1,
     "import/no-dynamic-require": 0,
     "import/no-mutable-exports": 0,
     "import/no-unresolved": 0,

@@ -11,6 +11,8 @@ import { Content as DocContent } from './doc/content';
 import { PropertiesTable } from './doc/propertiesTable';
 import { DocAnchor } from '../markdown/components/docAnchor';
 import { PreviewContextProvider } from './previewContext';
+import { VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW } from '../constants';
+import { SlotRegister } from './SlotRegister';
 
 import '../style/colors.scss';
 import styles from './app.module.scss';
@@ -19,6 +21,25 @@ export function App({ doc, metadata, docContextProvider }: DocsRootProps) {
   const { doclets, apiPlaceholderElementId } = metadata || {};
   const isEmpty = !doc && (!doclets || (Array.isArray(doclets) && doclets.length === 0));
   const ContextProvider = typeof docContextProvider === 'function' ? docContextProvider : Fragment;
+
+  const userEventListenerSlots = useMemo<
+    Record<string, SlotRegister<(event: { type: string; data: any }) => void>>
+  >(() => {
+    const slots = {};
+
+    Object.values(VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW).forEach((type) => {
+      slots[type] = new SlotRegister();
+    });
+
+    (window as any).__registerArcoPreviewEventListener = (
+      event: VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW,
+      handler: () => void
+    ) => {
+      return slots[event]?.register(handler);
+    };
+
+    return slots;
+  }, []);
 
   const { pubsub, pubsubTopic, pubsubTopicParent } = useMemo(() => {
     const pubsub = new Pubsub();
@@ -50,12 +71,12 @@ export function App({ doc, metadata, docContextProvider }: DocsRootProps) {
     pubsub?.sub(pubsubTopicParent, (message) => {
       const { type, data } = message;
       switch (type) {
-        case 'switchDarkMode': {
+        case VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW.switchDarkMode: {
           const body = document.body;
           data.dark ? body.setAttribute('arco-theme', 'dark') : body.removeAttribute('arco-theme');
           break;
         }
-        case 'appendExtraStyle': {
+        case VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW.appendExtraStyle: {
           const eleClassName = '__arco-component-extra-style';
           // clear all append styles at first
           document
@@ -72,7 +93,7 @@ export function App({ doc, metadata, docContextProvider }: DocsRootProps) {
           }
           break;
         }
-        case 'scrollIntoView': {
+        case VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW.scrollIntoView: {
           const { selector, options } = data;
           if (selector) {
             document.body.querySelector(selector)?.scrollIntoView(options);
@@ -81,6 +102,12 @@ export function App({ doc, metadata, docContextProvider }: DocsRootProps) {
         }
         default:
           break;
+      }
+
+      if (Object.values(VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW).indexOf(type as any) > -1) {
+        userEventListenerSlots[type]?.values().forEach((callback) => {
+          callback(message);
+        });
       }
     });
   }, [pubsub]);

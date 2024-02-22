@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
+import { VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW } from '../../../constants';
 import { textToHTMLId } from '../heading';
 import { PreviewContext } from '../../../preview/previewContext';
 
@@ -41,7 +42,10 @@ export function DocAnchor() {
   useEffect(() => {
     pubsub?.sub(pubsubTopicParent, (message) => {
       const { type, data } = message;
-      if (type === 'updateAnchorOffset' && typeof data.offset === 'number') {
+      if (
+        type === VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW.updateAnchorOffset &&
+        typeof data.offset === 'number'
+      ) {
         setPageOffset(data.offset);
       }
     });

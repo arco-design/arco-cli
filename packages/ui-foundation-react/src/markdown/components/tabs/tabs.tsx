@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import cs from 'classnames';
+import { VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW } from '../../../constants';
 import { PreviewContext } from '../../../preview/previewContext';
 
 import styles from './tabs.module.scss';
@@ -20,7 +21,7 @@ export function Tabs({ panes = [] }: TabsProps) {
   useEffect(() => {
     pubsub?.sub(pubsubTopicParent, (message) => {
       const { type, data } = message;
-      if (type === 'switchActiveTab' && data.tab) {
+      if (type === VALID_MESSAGE_TYPE_FROM_PARENT_WINDOW.switchActiveTab && data.tab) {
         setActiveKey(data.tab);
       }
     });
