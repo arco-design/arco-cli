@@ -66,7 +66,7 @@ export function PropertiesTable({ doclet, placeholderID }: PropertiesTableProps)
   ) : null;
 
   useEffect(() => {
-    if (!placeholderID) return null;
+    if (!placeholderID) return undefined;
 
     const observer = new MutationObserver(() => {
       const placeholder = document.querySelector(`#${placeholderID}`);
