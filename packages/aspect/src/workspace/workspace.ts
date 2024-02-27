@@ -118,16 +118,39 @@ export class Workspace implements ComponentFactory {
   }
 
   private filterComponentInfoList(pattern = this.componentPattern): ComponentInfo[] {
+    pattern = pattern.trim();
     let filterFn: (info: ComponentInfo) => boolean;
 
     if (!pattern) {
       filterFn = () => true;
-    } else if (!pattern.includes('*') && !pattern.includes(',')) {
-      // if there is no "*" or ",", treat it as a component id
-      filterFn = (info) => info.id.includes(pattern.trim());
     } else {
-      const patternList = pattern.split(',');
-      filterFn = (info) => !!patternList.find((p) => minimatch(info.id, p.trim()));
+      let hasUserSpecifiedRuleType = false;
+
+      pattern.replace(/^(glob|reg|is):(.+)/, (_, type: string, value: string) => {
+        hasUserSpecifiedRuleType = true;
+        const rules = value.split(',');
+        switch (type) {
+          case 'is':
+            filterFn = (info) => rules.indexOf(info.id) > -1;
+            break;
+          case 'glob':
+            filterFn = (info) => !!rules.find((rule) => minimatch(info.id, rule));
+            break;
+          case 'reg':
+            filterFn = (info) => !!rules.find((rule) => info.id.match(new RegExp(rule)));
+            break;
+          default:
+        }
+        return '';
+      });
+
+      if (!hasUserSpecifiedRuleType) {
+        filterFn = (info) =>
+          !!pattern.split(',').find((rule) =>
+            // if there is a '*' in user-given string, treat it as a glob string
+            rule.indexOf('*') > -1 ? minimatch(info.id, rule) : info.id.includes(rule)
+          );
+      }
     }
 
     return this.componentInfoList.filter(filterFn);
