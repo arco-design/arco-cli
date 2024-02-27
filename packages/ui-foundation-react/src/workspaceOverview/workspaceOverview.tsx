@@ -18,7 +18,7 @@ export function WorkspaceOverview() {
   return (
     <div className={cs(styles.workspaceOverview, { [styles.empty]: isEmpty })}>
       {isEmpty ? (
-        <Empty description="No components found" />
+        <Empty className={styles.emptyPlaceholder} description="No components found" />
       ) : (
         components.map(({ id, name, packageName, version, author, description, labels }) => {
           const avatarText = author || 'Unknown';

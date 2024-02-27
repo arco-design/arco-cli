@@ -303,7 +303,7 @@ export class Workspace implements ComponentFactory {
     if (throwForNoMatch) {
       throw new NoIdMatchPatternError(pattern);
     } else {
-      return this.list();
+      return Promise.resolve([]);
     }
   }
 

@@ -6,6 +6,10 @@
   min-height: 100%;
   margin: 0 (-$component-card-margin);
 
+  .emptyPlaceholder {
+    margin-top: 20vh;
+  }
+
   .componentCard {
     position: relative;
     display: flex;
