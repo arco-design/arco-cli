@@ -103,7 +103,7 @@ export class Workspace implements ComponentFactory {
 
   private componentConfigList: ComponentConfig[] = [];
 
-  private componentPattern: string = null;
+  private componentPattern = '';
 
   private get modulesPath() {
     return path.join(this.path, 'node_modules');
@@ -118,7 +118,7 @@ export class Workspace implements ComponentFactory {
   }
 
   private filterComponentInfoList(pattern = this.componentPattern): ComponentInfo[] {
-    pattern = pattern.trim();
+    pattern = (pattern || '').trim();
     let filterFn: (info: ComponentInfo) => boolean;
 
     if (!pattern) {
