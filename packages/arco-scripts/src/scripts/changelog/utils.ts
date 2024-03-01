@@ -69,6 +69,9 @@ const componentList = [
   'Upload',
   'Mentions',
   'Image',
+  'Watermark',
+  'ColorPicker',
+  'VerificationCode',
 ];
 
 export const isValidComponent = (component: string) => {
