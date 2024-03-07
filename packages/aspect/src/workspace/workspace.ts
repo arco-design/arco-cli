@@ -290,7 +290,7 @@ export class Workspace implements ComponentFactory {
     return Promise.all(ids.map((id) => this.get(id, filteredComponentInfoList)));
   }
 
-  getManyByPattern(pattern: string, throwForNoMatch?: boolean) {
+  getManyByPattern(pattern: string, throwForNoMatch?: boolean): Promise<Component[]> {
     if (!pattern) {
       return this.list();
     }
