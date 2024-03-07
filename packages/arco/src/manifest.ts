@@ -21,6 +21,7 @@ import { CompilerAspect } from '@arco-cli/service/dist/compiler';
 import { BuilderAspect } from '@arco-cli/service/dist/builder';
 import { SyncerAspect } from '@arco-cli/service/dist/syncer';
 import { ForkAspect } from '@arco-cli/service/dist/fork';
+import { ListAspect } from '@arco-cli/service/dist/list';
 import { GeneratorAspect } from '@arco-cli/service/dist/generator';
 import { ArcoAspect } from './arco.aspect';
 
@@ -49,6 +50,7 @@ export const manifestMap = {
   [SyncerAspect.id]: SyncerAspect,
   [ForkAspect.id]: ForkAspect,
   [GeneratorAspect.id]: GeneratorAspect,
+  [ListAspect.id]: ListAspect,
 };
 
 export function isCoreAspect(id: string) {
