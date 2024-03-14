@@ -168,7 +168,7 @@ importers:
   packages/arco:
     dependencies:
       '@arco-cli/aspect':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../aspect
       '@arco-cli/core':
         specifier: ^2.3.0
@@ -177,10 +177,10 @@ importers:
         specifier: ^2.3.0
         version: link:../legacy
       '@arco-cli/react':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../react
       '@arco-cli/service':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../service
       '@arco-cli/stone':
         specifier: ^2.0.0-beta.0
@@ -201,13 +201,13 @@ importers:
         specifier: ^2.3.0
         version: link:../legacy
       '@arco-cli/service':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../service
       '@arco-cli/stone':
         specifier: ^2.0.0-beta.0
         version: link:../stone
       '@arco-cli/ui-foundation-react':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../ui-foundation-react
       '@arco-design/web-react':
         specifier: ^2.42.2
@@ -644,7 +644,7 @@ importers:
   packages/react:
     dependencies:
       '@arco-cli/aspect':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../aspect
       '@arco-cli/core':
         specifier: ^2.3.0
@@ -653,13 +653,13 @@ importers:
         specifier: ^2.3.0
         version: link:../legacy
       '@arco-cli/service':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../service
       '@arco-cli/stone':
         specifier: ^2.0.0-beta.0
         version: link:../stone
       '@arco-cli/ui-foundation-react':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../ui-foundation-react
       '@babel/core':
         specifier: ^7.23.5
@@ -794,7 +794,7 @@ importers:
   packages/service:
     dependencies:
       '@arco-cli/aspect':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../aspect
       '@arco-cli/core':
         specifier: ^2.3.0
@@ -809,7 +809,7 @@ importers:
         specifier: ^2.0.0-beta.0
         version: link:../stone
       '@arco-cli/ui-foundation-react':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../ui-foundation-react
       '@arco-cli/workspace-materials':
         specifier: ~0
@@ -920,7 +920,7 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2(graphql@14.7.0)(react-dom@17.0.2)(react@17.0.2)
       '@arco-cli/aspect':
-        specifier: ^2.4.2
+        specifier: ^2.4.3
         version: link:../aspect
       '@arco-design/web-react':
         specifier: ^2.42.2
