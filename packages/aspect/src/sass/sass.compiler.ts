@@ -65,8 +65,13 @@ export class SassCompiler implements Compiler {
         combine: this.combine,
         compile: async ({ pathSource }) => {
           return compile(pathSource, {
-            loadPaths: [path.dirname(pathSource), packageNodeModulePath, workspaceNodeModulePath],
             ...this.sassOptions,
+            loadPaths: [
+              path.dirname(pathSource),
+              packageNodeModulePath,
+              workspaceNodeModulePath,
+              ...(this.sassOptions?.loadPaths || []),
+            ],
           }).css;
         },
         userCustomCompileFn: this.userCustomCompileFn,

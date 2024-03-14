@@ -65,9 +65,14 @@ export class LessCompiler implements Compiler {
         combine: this.combine,
         compile: async ({ pathSource, getContents }) => {
           const { css } = await render(getContents(), {
-            paths: [path.dirname(pathSource), packageNodeModulePath, workspaceNodeModulePath],
             javascriptEnabled: true,
             ...this.lessOptions,
+            paths: [
+              path.dirname(pathSource),
+              packageNodeModulePath,
+              workspaceNodeModulePath,
+              ...(this.lessOptions?.paths || []),
+            ],
           });
           return css;
         },
