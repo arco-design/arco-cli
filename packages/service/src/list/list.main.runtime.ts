@@ -10,7 +10,7 @@ export class ListMain {
   static dependencies = [CLIAspect, WorkspaceAspect];
 
   static provider([cli, workspace]: [CLIMain, Workspace]) {
-    console.log('test');
+    console.log('test test');
 
     const list = new ListMain(workspace);
 
