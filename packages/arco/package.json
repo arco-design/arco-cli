@@ -1,6 +1,6 @@
 {
   "name": "@arco-cli/arco",
-  "version": "2.4.3-alpha.0",
+  "version": "2.4.4-alpha.0",
   "description": "Main entry for arco cli",
   "homepage": "https://github.com/arco-design/arco-cli",
   "repository": "https://github.com/arco-design/arco-cli",
@@ -17,11 +17,11 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@arco-cli/aspect": "^2.4.3-alpha.0",
+    "@arco-cli/aspect": "^2.4.4-alpha.0",
     "@arco-cli/core": "^2.3.0",
     "@arco-cli/legacy": "^2.3.0",
-    "@arco-cli/react": "^2.4.3-alpha.0",
-    "@arco-cli/service": "^2.4.3-alpha.0",
+    "@arco-cli/react": "^2.4.4-alpha.0",
+    "@arco-cli/service": "^2.4.4-alpha.0",
     "@arco-cli/stone": "^2.0.0-beta.0",
     "fs-extra": "^10.1.0"
   },
