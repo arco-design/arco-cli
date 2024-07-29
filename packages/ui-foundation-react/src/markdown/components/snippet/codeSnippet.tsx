@@ -78,6 +78,7 @@ export function CodeSnippet({
 
       <div className={styles.operationButtons}>
         {codeSandbox && typeof demoContext?.gotoCodeSandbox === 'function' ? (
+          // eslint-disable-next-line jsx-a11y/control-has-associated-label
           <button onClick={() => demoContext?.gotoCodeSandbox({ code: trimmedChildren, language })}>
             <IconCodeSandbox />
           </button>
