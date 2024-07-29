@@ -42,7 +42,7 @@ export async function uploadFile(options: {
     const {
       data: { code, msg, data },
     } = await axios.post(`https://${hostArco}/files/uploadFiles`, form, {
-      timeout: 1200000,
+      timeout: 1000 * 60 * 10,
       headers: {
         ...form.getHeaders(),
         [CFG_USER_TOKEN_KEY]: userToken,

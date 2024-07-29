@@ -3,7 +3,7 @@ import logger from '../logger';
 import { getSync } from '../globalConfig';
 import { CFG_HOST_ARCO_KEY, CFG_ACCESS_TOKEN_KEY, CFG_USER_TOKEN_KEY } from '../constants';
 
-const TIMEOUT_REQUEST = 1000 * 15;
+const TIMEOUT_REQUEST = 1000 * 60;
 
 const request = (
   method: 'all' | 'get' | 'delete' | 'post' | 'put',
